@@ -286,7 +286,7 @@
                     android:background="@color/deep_gray" />
 
                 <TextView
-                    android:id="@+id/ruzhuren_tv"
+                    android:id="@+id/ruzhuren_tv2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -301,7 +301,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="30dp"
-                    android:layout_toRightOf="@id/ruzhuren_tv"
+                    android:layout_toRightOf="@id/ruzhuren_tv2"
                     android:background="@null"
                     android:drawableRight="@drawable/delete_selector"
                     android:hint="请输入第2间入住人姓名"
@@ -320,13 +320,12 @@
                 android:visibility="gone" >
 
                 <View
-                    android:id="@+id/top_divid_line"
                     android:layout_width="fill_parent"
                     android:layout_height="1px"
                     android:background="@color/deep_gray" />
 
                 <TextView
-                    android:id="@+id/ruzhuren_tv"
+                    android:id="@+id/ruzhuren_tv3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -341,7 +340,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="30dp"
-                    android:layout_toRightOf="@id/ruzhuren_tv"
+                    android:layout_toRightOf="@id/ruzhuren_tv3"
                     android:background="@null"
                     android:drawableRight="@drawable/delete_selector"
                     android:hint="请输入第3间入住人姓名"
@@ -360,13 +359,12 @@
                 android:visibility="gone" >
 
                 <View
-                    android:id="@+id/top_divid_line"
                     android:layout_width="fill_parent"
                     android:layout_height="1px"
                     android:background="@color/deep_gray" />
 
                 <TextView
-                    android:id="@+id/ruzhuren_tv"
+                    android:id="@+id/ruzhuren_tv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -381,7 +379,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="30dp"
-                    android:layout_toRightOf="@id/ruzhuren_tv"
+                    android:layout_toRightOf="@id/ruzhuren_tv4"
                     android:background="@null"
                     android:drawableRight="@drawable/delete_selector"
                     android:hint="请输入第4间入住人姓名"
@@ -400,13 +398,12 @@
                 android:visibility="gone" >
 
                 <View
-                    android:id="@+id/top_divid_line"
                     android:layout_width="fill_parent"
                     android:layout_height="1px"
                     android:background="@color/deep_gray" />
 
                 <TextView
-                    android:id="@+id/ruzhuren_tv"
+                    android:id="@+id/ruzhuren_tv5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -421,7 +418,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="30dp"
-                    android:layout_toRightOf="@id/ruzhuren_tv"
+                    android:layout_toRightOf="@id/ruzhuren_tv5"
                     android:background="@null"
                     android:drawableRight="@drawable/delete_selector"
                     android:hint="请输入第5间入住人姓名"
@@ -440,13 +437,12 @@
                 android:visibility="gone" >
 
                 <View
-                    android:id="@+id/top_divid_line"
                     android:layout_width="fill_parent"
                     android:layout_height="1px"
                     android:background="@color/deep_gray" />
 
                 <TextView
-                    android:id="@+id/ruzhuren_tv"
+                    android:id="@+id/ruzhuren_tv6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -461,7 +457,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="30dp"
-                    android:layout_toRightOf="@id/ruzhuren_tv"
+                    android:layout_toRightOf="@id/ruzhuren_tv6"
                     android:background="@null"
                     android:drawableRight="@drawable/delete_selector"
                     android:hint="请填写一个身份证号"
@@ -648,7 +644,7 @@
                     android:paddingRight="10dp" >
 
                     <TextView
-                        android:id="@+id/ruzhuren_tv"
+                        android:id="@+id/ruzhuren_tv7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -663,7 +659,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
-                        android:layout_toRightOf="@id/ruzhuren_tv"
+                        android:layout_toRightOf="@id/ruzhuren_tv7"
                         android:background="@null"
                         android:drawableRight="@drawable/delete_selector"
                         android:hint="请输入信用卡号"
@@ -684,13 +680,12 @@
                     android:paddingRight="10dp" >
 
                     <View
-                        android:id="@+id/top_divid_line"
                         android:layout_width="fill_parent"
                         android:layout_height="1px"
                         android:background="@color/deep_gray" />
 
                     <TextView
-                        android:id="@+id/ruzhuren_tv"
+                        android:id="@+id/ruzhuren_tv8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -705,7 +700,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
-                        android:layout_toRightOf="@id/ruzhuren_tv"
+                        android:layout_toRightOf="@id/ruzhuren_tv8"
                         android:gravity="center_vertical"
                         android:hint="MM/YY"
                         android:paddingLeft="15dp"
@@ -731,13 +726,12 @@
                     android:paddingRight="10dp" >
 
                     <View
-                        android:id="@+id/top_divid_line"
                         android:layout_width="fill_parent"
                         android:layout_height="1px"
                         android:background="@color/deep_gray" />
 
                     <TextView
-                        android:id="@+id/ruzhuren_tv"
+                        android:id="@+id/ruzhuren_tv9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -752,7 +746,7 @@
                         android:layout_width="150dp"
                         android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
-                        android:layout_toRightOf="@id/ruzhuren_tv"
+                        android:layout_toRightOf="@id/ruzhuren_tv9"
                         android:background="@null"
                         android:drawableRight="@drawable/delete_selector"
                         android:hint="卡背后末三位数字"
@@ -781,13 +775,12 @@
                     android:paddingRight="10dp" >
 
                     <View
-                        android:id="@+id/top_divid_line"
                         android:layout_width="fill_parent"
                         android:layout_height="1px"
                         android:background="@color/deep_gray" />
 
                     <TextView
-                        android:id="@+id/ruzhuren_tv"
+                        android:id="@+id/ruzhuren_tv10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -802,7 +795,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="40dp"
-                        android:layout_toRightOf="@id/ruzhuren_tv"
+                        android:layout_toRightOf="@id/ruzhuren_tv10"
                         android:background="@null"
                         android:drawableRight="@drawable/delete_selector"
                         android:hint="请输入持卡人姓名"
@@ -820,13 +813,12 @@
                     android:paddingRight="10dp" >
 
                     <View
-                        android:id="@+id/top_divid_line"
                         android:layout_width="fill_parent"
                         android:layout_height="1px"
                         android:background="@color/deep_gray" />
 
                     <TextView
-                        android:id="@+id/ruzhuren_tv"
+                        android:id="@+id/ruzhuren_tv11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -841,7 +833,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="20dp"
-                        android:layout_toRightOf="@id/ruzhuren_tv"
+                        android:layout_toRightOf="@id/ruzhuren_tv11"
                         android:gravity="center_vertical"
                         android:text="身份证"
                         android:textColor="@color/blue_title_color"
@@ -867,13 +859,12 @@
                     android:paddingRight="10dp" >
 
                     <View
-                        android:id="@+id/top_divid_line"
                         android:layout_width="fill_parent"
                         android:layout_height="1px"
                         android:background="@color/deep_gray" />
 
                     <TextView
-                        android:id="@+id/ruzhuren_tv"
+                        android:id="@+id/ruzhuren_tv12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -888,7 +879,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="20dp"
-                        android:layout_toRightOf="@id/ruzhuren_tv"
+                        android:layout_toRightOf="@id/ruzhuren_tv12"
                         android:background="@null"
                         android:drawableRight="@drawable/delete_selector"
                         android:hint="证件号码"

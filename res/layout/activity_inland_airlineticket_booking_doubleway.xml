@@ -924,7 +924,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
-                android:paddingRight="10dp" >
+                android:paddingRight="10dp" 
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -1154,7 +1155,7 @@
                 android:visibility="gone" >
 
                 <ImageView
-                    android:id="@+id/baoxiaopingzheng_icon_iv"
+                    android:id="@+id/baoxiaopingzheng_icon_iv1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="5dp"
@@ -1165,13 +1166,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/baoxiaopingzheng_icon_iv"
+                    android:layout_toRightOf="@id/baoxiaopingzheng_icon_iv1"
                     android:text="报销凭证配送"
                     android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_title_textsize" />
 
                 <ImageView
-                    android:id="@+id/baoxian_right_icon_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -1180,7 +1180,6 @@
                     android:background="@drawable/rightsmallarrow" />
 
                 <TextView
-                    android:id="@+id/baoxian_price_and_count_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

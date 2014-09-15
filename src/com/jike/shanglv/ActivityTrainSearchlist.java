@@ -423,7 +423,7 @@ public class ActivityTrainSearchlist extends Activity {
 			start_station_tv.setText(str.get(position).getStationS());
 			end_station_tv.setText(str.get(position).getStationE());
 			seat_grad_tv.setText(str.get(position).getSeat_Type());
-			price_tv.setText("+" + str.get(position).getPrice());
+			price_tv.setText("£§" + str.get(position).getPrice());
 			remain_count_tv.setText("”‡∆± " + str.get(position).getRemain_Count()
 					+ "’≈");
 

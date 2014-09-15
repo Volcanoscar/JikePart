@@ -147,7 +147,6 @@
         </TextView>
 
         <ImageView
-            android:id="@+id/flight_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
@@ -243,14 +242,12 @@
     </RelativeLayout>
 
     <View
-        android:id="@+id/line3"
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_below="@id/line2"
         android:background="@color/deep_gray" />
 
     <RelativeLayout
-        android:id="@+id/city_rl"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_below="@id/line3"

@@ -196,6 +196,9 @@ public class ActivityOrderList extends Activity implements
 	};
 	
 	private void startQuery() {
+		if (HttpUtils.showNetCannotUse(context)) {
+			return;
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {//type=1:²éº½°àºÅ	type=2:²éº½¶Î£¬  air º½¿Õ¹«Ë¾

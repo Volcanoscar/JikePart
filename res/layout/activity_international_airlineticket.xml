@@ -235,7 +235,6 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/flight_takeoff"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:gravity="center"
@@ -275,7 +274,7 @@
         android:visibility="invisible" >
 
         <LinearLayout
-            android:id="@+id/startdate_choose_ll"
+            android:id="@+id/startdate_choose_ll1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/city_txt_ll"

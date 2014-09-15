@@ -99,7 +99,6 @@
         android:visibility="gone" >
 
         <TextView
-            android:id="@+id/singleline_tv"
             android:layout_width="fill_parent"
             android:layout_height="36dp"
             android:layout_weight="1"
@@ -110,7 +109,6 @@
         </TextView>
 
         <TextView
-            android:id="@+id/doubleline_tv"
             android:layout_width="fill_parent"
             android:layout_height="36dp"
             android:layout_weight="1"
@@ -143,7 +141,6 @@
             android:id="@+id/startcity_choose_ll"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/city_txt_ll"
              android:layout_toLeftOf="@id/swith_city_iv"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
@@ -261,13 +258,11 @@
             android:id="@+id/startdate_choose_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/city_txt_ll"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/flight_takeoff"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:gravity="center"
@@ -307,10 +302,9 @@
         android:visibility="invisible" >
 
         <LinearLayout
-            android:id="@+id/startdate_choose_ll"
+            android:id="@+id/startdate_choose_ll1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/city_txt_ll"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
