@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/content_bg" >
+    
+    <RelativeLayout
+	     android:id="@+id/title_RL"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_gravity="center_vertical"
+	     android:background="@drawable/titile_bg" >
+	     
+         <ImageView  
+            android:id="@+id/back_iv"
+            android:visibility="gone"
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"  
+	        android:layout_centerVertical="true"
+	        android:src="@drawable/back" /> 
+	     <TextView  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"  
+            android:layout_centerVertical="true"  
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:text="我  的"  
+            android:textSize="20sp"
+            android:textColor="@color/black" /> 
+	 </RelativeLayout>
+
+ 	<RelativeLayout 
+ 	    android:id="@+id/RLgnjp"
+	    android:layout_width="fill_parent"  
+	    android:layout_height="wrap_content"  
+	    android:orientation="horizontal"
+	    android:layout_marginTop="8dp"
+	    android:layout_gravity="center_vertical"
+	     >  
+	    <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"  
+	        android:layout_marginLeft="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/user_gnjp_icon" />  
+        <TextView  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:text="用户名"  
+            android:layout_marginLeft="48dp"
+             android:layout_centerVertical="true"
+            android:textColor="@color/item_gray"/>
+         <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"  
+	        android:layout_marginRight="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/xuanzejt_icon" /> 
+	</RelativeLayout>  
+	<ImageView   
+        android:layout_width="310dp"  
+        android:layout_height="1dp" 
+        android:layout_gravity="right" 
+        android:background="@color/item_gray"   
+        /> 
+	<RelativeLayout 
+ 	    android:id="@+id/RLgjjp"
+ 	    android:layout_marginTop="3dp"
+	    android:layout_width="fill_parent"  
+	    android:layout_height="wrap_content"  
+	    android:orientation="horizontal"
+	    android:layout_gravity="center_vertical"
+	     >  
+	    <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"  
+	        android:layout_marginLeft="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/user_gjjp_icon" />  
+        <TextView  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:text="余额：0.0"  
+            android:layout_marginLeft="48dp"
+             android:layout_centerVertical="true"
+            android:textColor="@color/item_gray"/>
+         <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"  
+	        android:layout_marginRight="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/xuanzejt_icon" /> 
+	</RelativeLayout>  
+	<ImageView   
+        android:layout_width="310dp"  
+        android:layout_height="1dp" 
+        android:layout_gravity="right" 
+        android:background="@color/item_gray"  
+        /> 
+	<RelativeLayout 
+ 	    android:id="@+id/RLjd"
+ 	    android:layout_marginTop="20dp"
+	    android:layout_width="fill_parent"  
+	    android:layout_height="wrap_content"  
+	    android:orientation="horizontal"
+	    android:layout_gravity="center_vertical"
+	     >  
+	    <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"  
+	        android:layout_marginLeft="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/user_jd_icon" />  
+        <TextView  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:text="全部订单"  
+            android:layout_marginLeft="48dp"
+             android:layout_centerVertical="true"
+            android:textColor="@color/item_gray" />
+         <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"  
+	        android:layout_marginRight="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/xuanzejt_icon" /> 
+	</RelativeLayout>  
+	<ImageView   
+        android:layout_width="310dp"  
+        android:layout_height="1dp" 
+        android:layout_gravity="right" 
+        android:background="@color/item_gray"    
+        /> 
+	<RelativeLayout 
+ 	    android:id="@+id/RLhcp"
+ 	    android:layout_marginTop="20dp"
+	    android:layout_width="fill_parent"  
+	    android:layout_height="wrap_content"  
+	    android:orientation="horizontal"
+	    android:layout_gravity="center_vertical"
+	     >  
+	    <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"  
+	        android:layout_marginLeft="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/user_hcp_icon" />  
+        <TextView  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"    
+            android:text="我的账户"  
+            android:layout_marginLeft="48dp"
+             android:layout_centerVertical="true"
+            android:textColor="@color/item_gray"/>
+         <ImageView  
+	        android:layout_width="wrap_content"  
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"  
+	        android:layout_marginRight="20dp"
+	         android:layout_centerVertical="true"
+	        android:src="@drawable/xuanzejt_icon" /> 
+	</RelativeLayout>  
+	<ImageView   
+        android:layout_width="310dp"  
+        android:layout_height="1dp" 
+        android:layout_gravity="right" 
+        android:background="@color/item_gray"    
+        />
+
+</LinearLayout>
