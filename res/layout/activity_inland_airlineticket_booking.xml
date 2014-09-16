@@ -676,7 +676,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="45dp"
-                    android:gravity="right"
+                    android:gravity="right|center_vertical"
                     android:text="￥20"
                     android:textColor="@color/price_yellow"
                     android:textSize="@dimen/booking_item_content_textsize" />

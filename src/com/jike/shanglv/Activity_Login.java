@@ -156,8 +156,12 @@ public class Activity_Login extends Activity {
 						sp.edit().putString(SPkeys.username.getString(),user.getUsername()).commit();
 						sp.edit().putString(SPkeys.amount.getString(),user.getAmmount()).commit();
 						sp.edit().putString(SPkeys.siteid.getString(),user.getSiteid()).commit();
+						sp.edit().putString(SPkeys.userphone.getString(),user.getMobile()).commit();
+						sp.edit().putString(SPkeys.useremail.getString(),user.getEmail()).commit();
 						//其他信息以后用时再增加
-						
+						// 登录后将登录状态置为true
+						sp.edit().putBoolean(SPkeys.loginState.getString(), true)
+								.commit();
 						finish();
 					} else {
 						String message = jsonObject.getString("msg");
@@ -197,8 +201,8 @@ public class Activity_Login extends Activity {
 				startActivity(new Intent(context, Activity_Register.class));
 				break;
 			case R.id.forgetpassword_tv:// 找回密码
-				startActivity(new Intent(context,
-						Activity_RetrievePassword.class));
+//				startActivity(new Intent(context,
+//						Activity_RetrievePassword.class));
 				break;
 			case R.id.login_btn:
 				if (uername_input_et.getText().toString().trim().length() == 0) {
@@ -260,10 +264,6 @@ public class Activity_Login extends Activity {
 					}
 				});
 				progressdialog.show();
-
-				// 登录后将登录状态置为true
-				sp.edit().putBoolean(SPkeys.loginState.getString(), true)
-						.commit();
 				break;
 			default:
 				break;

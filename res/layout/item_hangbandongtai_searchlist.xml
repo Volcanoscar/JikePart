@@ -49,11 +49,10 @@
 
     <LinearLayout
         android:id="@+id/time_ll"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="110dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/flight_company_ll"
         android:gravity="left"
         android:orientation="vertical" >
 
@@ -91,6 +90,7 @@
             style="@style/InlandAirlineListTimeTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="2dp"
             android:text="上海虹桥(T2)"
             android:textColor="@color/black6"
             android:textSize="15sp" >
@@ -101,6 +101,7 @@
             style="@style/InlandAirlineListTimeTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="3dp"
             android:text="北京(T2)"
             android:textColor="@color/black6"
             android:textSize="15sp" >

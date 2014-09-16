@@ -631,7 +631,21 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.back_imgbtn:
-				finish();
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);  
+		        builder.setTitle("提示");  
+		        builder.setMessage("您的订单尚未完成，确认放弃填写吗？");  
+		        builder.setPositiveButton("确认放弃",  
+		                new DialogInterface.OnClickListener() {  
+		                    public void onClick(DialogInterface dialog, int whichButton) {  
+		                    	finish();  
+		                    }  
+		                });  
+		        builder.setNegativeButton("继续填写",  
+		                new DialogInterface.OnClickListener() {  
+		                    public void onClick(DialogInterface dialog, int whichButton) {  
+		                    }  
+		                });  
+		        builder.show();
 				break;
 			case R.id.home_imgbtn:
 				startActivity(new Intent(context, MainActivity.class));

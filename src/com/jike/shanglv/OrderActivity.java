@@ -1,7 +1,10 @@
 package com.jike.shanglv;
 
+import com.jike.shanglv.Enums.SPkeys;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,18 +18,20 @@ import android.widget.RelativeLayout;
 @SuppressWarnings("unused")
 public class OrderActivity extends Activity {
 
-	private ImageView back_iv;
+	private ImageButton back_iv;
+	private SharedPreferences sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_order);
+		sp=getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		
-	    back_iv = (ImageView) findViewById(R.id.back_iv);
+	    back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
 	    back_iv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				finish();
+				startActivity(new Intent(OrderActivity.this, MainActivity.class));
 			}
 		});
 	    ((RelativeLayout)findViewById(R.id.gnjp_rl)).setOnClickListener(btnClickListner);
@@ -43,6 +48,10 @@ public class OrderActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			Intent intent=new Intent(OrderActivity.this,ActivityOrderList.class);
+			if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+				startActivity(new Intent(OrderActivity.this,Activity_Login.class));
+				return;
+			}
 			switch (v.getId()) {
 			case R.id.gnjp_rl:
 				intent.putExtra(ActivityOrderList.ACTION_TOKENNAME, ActivityOrderList.FLIGHT_ORDERLIST);

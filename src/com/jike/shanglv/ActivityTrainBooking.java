@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
@@ -366,10 +367,14 @@ public class ActivityTrainBooking extends Activity {
 						intent.putExtra(Activity_Web_Pay.TITLE, "火车票订单支付");
 						startActivity(intent);
 					}else {
-						getValidCodePic();//提交失败后需刷新验证码
-						yanzhengma_input_et.setText("");
 						new AlertDialog.Builder(context).setTitle(jsonObject.getString("msg"))
-							.setPositiveButton("确定", null).show();
+							.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface arg0, int arg1) {
+									getValidCodePic();//提交失败后需刷新验证码
+									yanzhengma_input_et.setText("");
+								}
+							}).show();
 					} 
 //					else {
 //						Toast.makeText(context, "发生异常，提交订单失败！", 0).show();
@@ -435,6 +440,11 @@ public class ActivityTrainBooking extends Activity {
 				if (passengerList.size() == 0) {
 					new AlertDialog.Builder(context).setTitle("乘客不能为空")
 							.setMessage("请添加乘客信息！")
+							.setPositiveButton("确定", null).show();
+					break;
+				}
+				if (yanzhengma_input_et.getText().toString().length()!=4) {
+					new AlertDialog.Builder(context).setTitle("请输入验证码")
 							.setPositiveButton("确定", null).show();
 					break;
 				}
@@ -526,7 +536,15 @@ public class ActivityTrainBooking extends Activity {
 			if (b != null && b.containsKey(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING)) {
 				String baoxian = b.getString(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING);
 				baoxian_price_and_count_tv.setText(baoxian);
+				if (baoxian.equals(ActivityTrainBaoxian.No_Baoxian)) {
+					baoxian_unitPrice=0;
+				}else if (baoxian.equals(ActivityTrainBaoxian.Baoxian_Five)) {
+					baoxian_unitPrice=5;
+				}else if (baoxian.equals(ActivityTrainBaoxian.Baoxian_Ten)) {
+					baoxian_unitPrice=10;
+				}
 			}
+			caculateMoney();
 		}
 	}
 	
@@ -601,6 +619,7 @@ public class ActivityTrainBooking extends Activity {
 								R.string.add_passenger));
 						passenger_head_divid_line.setVisibility(View.GONE);
 					}
+					caculateMoney();
 				}
 			});
 

@@ -106,7 +106,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				LayoutParams.FILL_PARENT, 420, true);
 		popupWindow_idtype.setBackgroundDrawable(new BitmapDrawable());
 		// 设置PopupWindow的弹出和消失效果
-		popupWindow_idtype.setAnimationStyle(R.style.popupAnimation);
+		popupWindow_idtype.setAnimationStyle(R.style.AnimBottomPopup);
 		shenfenzheng_btn = (Button) popupWindowView_idtype
 				.findViewById(R.id.shenfenzheng_btn);
 		huzhao_btn = (Button) popupWindowView_idtype
@@ -128,7 +128,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				LayoutParams.FILL_PARENT, 280, true);
 		popupWindow_ptype.setBackgroundDrawable(new BitmapDrawable());
 		// 设置PopupWindow的弹出和消失效果
-		popupWindow_ptype.setAnimationStyle(R.style.popupAnimation);
+		popupWindow_ptype.setAnimationStyle(R.style.AnimBottomPopup);
 		chengren_btn = (Button) popupWindowView_ptype
 				.findViewById(R.id.chengren_btn);
 		ertongpiao_btn = (Button) popupWindowView_ptype

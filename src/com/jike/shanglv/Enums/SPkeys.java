@@ -9,6 +9,8 @@ public enum SPkeys {
 	
 	userid("userid"),
 	username("username"),
+	userphone("userphone"),
+	useremail("useremail"),
 	amount("amount"),//ĞéÄâÕËºÅ½ğ¶î
 	siteid("siteid"),//ÏµÍ³id
 	

@@ -13,13 +13,13 @@
         android:layout_gravity="center_vertical"
         android:background="@drawable/titile_bg" >
 
-        <ImageView
-            android:id="@+id/back_iv"
+        <ImageButton
+            android:id="@+id/back_imgbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/back"
-            android:visibility="gone" />
+            android:background="@drawable/back"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,18 +28,19 @@
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:text="订   单"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp" />
     </RelativeLayout>
-
+   <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="@color/deep_gray" />
     <RelativeLayout
         android:id="@+id/gnjp_rl"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -55,7 +56,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/gnjp_iv"
@@ -73,15 +74,15 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
-
+   <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
     <RelativeLayout
         android:id="@+id/gjjp_xqd_rl"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -97,7 +98,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/gjjp_xqd_iv"
@@ -115,15 +116,15 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
-    
+       <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
     <RelativeLayout
         android:id="@+id/gjjp_rl"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -139,7 +140,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/gjjp_iv"
@@ -157,15 +158,15 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
-
+   <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
     <RelativeLayout
         android:id="@+id/jd_rl"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -181,7 +182,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/jd_iv"
@@ -199,15 +200,15 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
-
+   <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
     <RelativeLayout
         android:id="@+id/hcp_rl"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -223,7 +224,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/hcp_iv"
@@ -241,15 +242,15 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
-
+   <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
     <RelativeLayout
         android:id="@+id/hfcz_rl"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -265,7 +266,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/hfcz_iv"
@@ -283,16 +284,16 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
-    
+       <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
      <RelativeLayout
         android:id="@+id/zhcz_rl"
         android:visibility="gone"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/corners_bg"
+        android:layout_height="50dp"
+        android:background="@drawable/list_item_color_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
@@ -308,7 +309,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/zhcz_iv"
@@ -326,5 +327,9 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
+       <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/deep_gray" />
 
 </LinearLayout>

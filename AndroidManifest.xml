@@ -108,6 +108,27 @@
             android:screenOrientation="portrait"
              >
         </activity>
+        <!-- 我的账户 -->
+        <activity
+            android:name=".ActivityMyAccout"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+         <!-- 修改密码 -->
+        <activity
+            android:name=".ActivityChangePsw"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+         <!-- 修改支付密码：获取验证码 -->
+        <activity
+            android:name=".ActivityConfirmInfoBeforeFindZfpsw"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+             >
+        </activity>
         <!-- “更多”菜单页面 -->
         <activity
             android:name=".MoreActivity"

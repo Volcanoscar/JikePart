@@ -308,12 +308,12 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 			final ImageButton select_imgbtn = (ImageButton) convertView
 					.findViewById(R.id.select_imgbtn);
 			select_imgbtn.setTag(position + "");
-			if (!isHasBookingPassenger&&position == 0) {//第一次添加乘机人，默认选中第一个
-				select_imgbtn.setSelected(true);
-				if (!selectedPassengerList.contains(passengerList.get(0)))
-					selectedPassengerList.add(passengerList.get(0));
-			}
-			else if(isHasBookingPassenger){//订单页面已有乘机人，则选中这些乘机人(根据姓名和证件号判断)
+//			if (!isHasBookingPassenger&&position == 0) {//第一次添加乘机人，默认选中第一个
+//				select_imgbtn.setSelected(true);
+//				if (!selectedPassengerList.contains(passengerList.get(0)))
+//					selectedPassengerList.add(passengerList.get(0));
+//			}else 
+			if(isHasBookingPassenger){//订单页面已有乘机人，则选中这些乘机人(根据姓名和证件号判断)
 				for (int i = 0; i < bookingPassengerList.size(); i++) {
 					if (bookingPassengerList.get(i).getPassengerName().equals(passengerList.get(position).getPassengerName())&&
 							bookingPassengerList.get(i).getIdentificationNum().equals(passengerList.get(position).getIdentificationNum())) {

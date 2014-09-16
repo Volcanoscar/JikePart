@@ -75,7 +75,6 @@ public class ActivityTrainBaoxian extends Activity {
 					break;
 				}
 				setResult(0, getIntent().putExtra(BAOXIAN_BUNDSTRING,curentBaoxian));
-				finish();
 			}
 		});
 	}

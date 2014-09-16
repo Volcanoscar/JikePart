@@ -253,9 +253,11 @@ public class ActivityHotel extends Activity {
 				if (city_tv.getText().toString().equals("我附近的酒店")) {
 					 isNearby=true;
 				}
-				if (myaddress.equals("")||myaddress.equals(null)) {//定位失败
+				if (city_tv.getText().toString().equals("我附近的酒店")&&(myaddress==null||myaddress.equals(""))) {//定位失败
 					city_tv.setText("上海");
-					Toast.makeText(context, "定位失败，请选择入住城市", 0).show();
+					isNearby=false;
+					Toast.makeText(context, "定位失败，请选择城市进行查询", 0).show();
+					break;
 				}
 				Intent intents=new Intent(context,ActivityHotelSearchlist.class);
 				intents.putExtra("nearby", isNearby);

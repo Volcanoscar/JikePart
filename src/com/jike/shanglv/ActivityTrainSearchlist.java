@@ -419,7 +419,7 @@ public class ActivityTrainSearchlist extends Activity {
 			train_type_tv.setText(str.get(position).getTrainType());
 			start_time_tv.setText(str.get(position).getGoTime());
 			arrive_time_tv.setText(str.get(position).getETime());
-			used_time_tv.setText("ºÄÊ±£º " + str.get(position).getRunTime());
+			used_time_tv.setText("ÀúÊ±£º " + str.get(position).getRunTime());
 			start_station_tv.setText(str.get(position).getStationS());
 			end_station_tv.setText(str.get(position).getStationE());
 			seat_grad_tv.setText(str.get(position).getSeat_Type());
