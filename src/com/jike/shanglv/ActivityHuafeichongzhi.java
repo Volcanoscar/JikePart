@@ -11,6 +11,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,12 +41,13 @@ public class ActivityHuafeichongzhi extends Activity {
 	private com.jike.shanglv.Common.ClearEditText phonenum_et,
 			confirm_phonenum_et;
 	private Button chongzhi_button;
-	private ImageView contact_person_phone_iv;
+	private ImageView contact_person_phone_iv,frame_ani_iv;
 	private RelativeLayout choose_mianzhi_rl;
 	private Context context;
 	private SharedPreferences sp;
 	private CustomProgressDialog progressdialog;
 	String[] mianzhi_list = new String[] { "10元", "20元", "30元", "50元", "100元" };
+	private LinearLayout loading_ll,hedui_ll;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +56,33 @@ public class ActivityHuafeichongzhi extends Activity {
 		initView();
 	}
 
+//	@Override
+//	public void onWindowFocusChanged(boolean hasFocus) {
+//		super.onWindowFocusChanged(hasFocus);
+//		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani_small);
+//		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+//				.getBackground();
+//		anim.setOneShot(false);
+//		anim.start();
+//	}
+	
+	private void startLoadingAni() {
+		loading_ll.setVisibility(View.VISIBLE);
+		hedui_ll.setVisibility(View.GONE);
+		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani_small);
+		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+				.getBackground();
+		anim.setOneShot(false);
+		anim.start();
+	}
+	
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 
+		loading_ll=(LinearLayout) findViewById(R.id.loading_ll);
+		hedui_ll=(LinearLayout) findViewById(R.id.hedui_ll);
+		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
 		back_imgbtn.setOnClickListener(clickListener);
@@ -237,6 +263,7 @@ public class ActivityHuafeichongzhi extends Activity {
 	}
 
 	private void startQueryPhonepro() {
+		startLoadingAni();
 		if (HttpUtils.showNetCannotUse(context)) {
 			return;
 		}
@@ -335,6 +362,8 @@ public class ActivityHuafeichongzhi extends Activity {
 								.setText("￥" + jsonObject.getString("price"));
 						prodid = jsonObject.getString("prodid");
 						chongzhi_button.setEnabled(true);
+						loading_ll.setVisibility(View.GONE);
+						hedui_ll.setVisibility(View.VISIBLE);
 					} else {
 						String message = jsonObject.getString("msg");
 						new AlertDialog.Builder(context).setTitle("验证价格失败")
@@ -356,7 +385,6 @@ public class ActivityHuafeichongzhi extends Activity {
 					if (state.equals("0000")) {
 						jsonObject=jsonObject.getJSONObject("d");
 						orderId=jsonObject.getString("msg");
-						Toast.makeText(context, orderId, 0).show();
 						
 						String userid=sp.getString(SPkeys.userid.getString(), "");
 						int paysystype=14;

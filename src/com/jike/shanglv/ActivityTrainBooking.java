@@ -347,25 +347,15 @@ public class ActivityTrainBooking extends Activity {
 				jsonParser = new JSONTokener(commitReturnJson);
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
-					String state = jsonObject.getString("code");
+					String state = jsonObject.getString("c");
 
 					if (state.equals("0000")) {
 						String orderID = jsonObject.getString("msg");
-//						Intent intent = new Intent(context,
-//								ActivityInlandAirlineticketOrderDetail.class);
-//						intent.putExtra(ActivityInlandAirlineticketOrderDetail.ORDERRECEIPT,orderID);
-//						startActivityForResult(intent, NEW_ORDER_DETAIL_CODE);
+						Intent intent = new Intent(context,
+								ActivityTrainOrderDetail.class);
+						intent.putExtra(ActivityTrainOrderDetail.ORDERRECEIPT,orderID);
+						startActivityForResult(intent, NEW_ORDER_DETAIL_CODE);
 						
-						String userid=sp.getString(SPkeys.userid.getString(), "");
-						int paysystype=14;
-						String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-						String sign=CommonFunc. MD5(orderID + totalPrice + userid + paysystype + siteid);
-						MyApp ma = new MyApp(context);
-						String url=String.format(ma.getPayServeUrl(),orderID, totalPrice,userid,paysystype,siteid,sign);
-						Intent intent=new Intent(context,Activity_Web_Pay.class);
-						intent.putExtra(Activity_Web_Pay.URL, url);
-						intent.putExtra(Activity_Web_Pay.TITLE, "火车票订单支付");
-						startActivity(intent);
 					}else {
 						new AlertDialog.Builder(context).setTitle(jsonObject.getString("msg"))
 							.setPositiveButton("确定", new OnClickListener() {

@@ -547,12 +547,12 @@
                 android:layout_marginLeft="15dp"
                 android:background="@color/deep_gray"
                 android:visibility="invisible" />
-
+<!--  android:divider="@null" -->
             <ListView
                 android:id="@+id/passenger_listview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:divider="@null" >
+                >
             </ListView>
 
             <View

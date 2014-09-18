@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,10 +54,12 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 	private String passengerString = "";// 所有联系人信息反序列化后传过来
 	private int index = 0;// 当前编辑联系人在所有联系人列表中的序号
 	private String systype = "0";// "systype":"0国内 1国际 2火车票"
+	private Boolean saveAsContact = true;//保存为常用联系人
 
 	// 国际机票乘机人编辑
 	private TextView IDdeadline_et, nation_et, gender_et, birthDay_et;
-	private RelativeLayout IDdeadline_rl, nation_rl, gender_rl, birthDay_rl;
+	private RelativeLayout IDdeadline_rl, nation_rl, gender_rl, birthDay_rl,savecontact_rl;
+	private ImageView savecontact_checkbox_iv;
 	private String IDdeadline = "", nation = "", gender = "", birthDay = "",
 			issueAt = "";
 	String genderValue = "男", genderKey = "1";// 性别选择，用户不选择默认时的值
@@ -93,11 +96,14 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 		passengerName_et = (ClearEditText) findViewById(R.id.passengerName_et);
 		identificationNum_et = (ClearEditText) findViewById(R.id.identificationNum_et);
 		phoneNum_et = (ClearEditText) findViewById(R.id.phoneNum_et);
+		savecontact_rl=(RelativeLayout) findViewById(R.id.savecontact_rl);
+		savecontact_checkbox_iv=(ImageView) findViewById(R.id.savecontact_checkbox_iv);
 
 		cancel_tv.setOnClickListener(clickListener);
 		finish_tv.setOnClickListener(clickListener);
 		identificationType_tv.setOnClickListener(clickListener);
 		passengerType_tv.setOnClickListener(clickListener);
+		savecontact_rl.setOnClickListener(clickListener);
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		popupWindowView_idtype = inflater.inflate(
@@ -155,6 +161,17 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				e.printStackTrace();
 			}
 			editPassenger = passengerList.get(index);
+			if (editPassenger.getAddto() != null
+					&& !editPassenger.getAddto().equals("null")){
+				saveAsContact = editPassenger.getAddto()=="1"?true:false;
+				if (saveAsContact) {
+					savecontact_checkbox_iv.setBackground(context.getResources().getDrawable(
+							R.drawable.fuxuankuang_yes));
+				} else {
+					savecontact_checkbox_iv.setBackground(context.getResources().getDrawable(
+							R.drawable.fuxuankuang_no));
+				}
+			}
 			if (editPassenger.getPassengerType() != null
 					&& !editPassenger.getPassengerType().equals("null"))
 				passengerType_tv.setText(editPassenger.getPassengerType());
@@ -191,6 +208,12 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				if (editPassenger.getBirthDay() != null
 						&& !editPassenger.getBirthDay().equals("null"))
 					birthDay_et.setText(editPassenger.getBirthDay());
+			}
+			
+			if (passengerName_et.getText().toString().trim().equals("")) {//新建联系人，默认选中保存为常用联系人
+				saveAsContact=true;
+				savecontact_checkbox_iv.setBackground(context.getResources().getDrawable(
+							R.drawable.fuxuankuang_yes));
 			}
 		}
 	}
@@ -241,10 +264,21 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			case R.id.cancel_tv://
 				 finish();
 				 break;
+			case R.id.savecontact_rl:
+				saveAsContact = !saveAsContact;
+				if (saveAsContact) {
+					savecontact_checkbox_iv.setBackground(context.getResources().getDrawable(
+							R.drawable.fuxuankuang_yes));
+				} else {
+					savecontact_checkbox_iv.setBackground(context.getResources().getDrawable(
+							R.drawable.fuxuankuang_no));
+				}
+				break;
 			case R.id.finish_tv:
 				if (!validInput())
 					break;
 				Passenger passenger = new Passenger();
+				passenger.setAddto(saveAsContact?"1":"0");
 				passenger.setPassengerName(passengerName_et.getText()
 						.toString().trim());
 				passenger.setIdentificationNum(identificationNum_et.getText()

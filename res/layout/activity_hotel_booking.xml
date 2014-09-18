@@ -478,10 +478,9 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/list_item_color_bg"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:background="@color/white"
                 android:padding="10dp" >
 
                 <TextView
@@ -507,8 +506,10 @@
                     android:singleLine="true" />
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:id="@+id/contact_person_phone_iv"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:padding="5dp"
                     android:layout_marginLeft="5dp"
                     android:background="@drawable/mobile_icon" />
             </LinearLayout>

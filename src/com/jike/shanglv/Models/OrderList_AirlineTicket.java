@@ -26,7 +26,7 @@ public class OrderList_AirlineTicket {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		}else if(inland_inter_train==2) {//国际
+		}else if(inland_inter_train==2) {//国际需求单
 			try {
 				this.OrderID=object.getString("Orderid");
 				this.Amount=object.getString("Yusuan");
@@ -45,6 +45,19 @@ public class OrderList_AirlineTicket {
 				this.StartCity=object.getString("SCity");
 				this.endCity=object.getString("ECity");
 				this.StartOffDate=object.getString("SDate");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}else if (inland_inter_train==4) {//国际机票
+			try {
+//{"OrderState":"新订单","orderPrice":"3886.00","Info":[{"startTime":"2014-09-18 11:00","startPortName":"北海","endPortName":"广州","OrderDate":"2014-9-15 18:19:11","OrderId":"B1409151818366050","endPort":"CAN","startPort":"BHY"},{"startTime":"2014-09-18 16:20","startPortName":"广州","endPortName":"首尔","endPort":"ICN","startPort":"CAN"},{"startTime":"2014-09-30 11:15","startPortName":"首尔","endPortName":"广州","endPort":"CAN","startPort":"ICN"},{"startTime":"2014-09-30 16:45","startPortName":"广州","endPortName":"北海","endPort":"BHY","startPort":"CAN"}]}
+				this.OrderID=object.getString("OrderId");
+				this.Amount=object.getString("orderPrice");
+				this.OrderStatus=object.getString("OrderState");
+				this.StartCity=object.getString("StartCity");
+				this.endCity=object.getString("EndCity");
+				this.StartOffDate=object.getJSONArray("Info")
+						.getJSONObject(0).getString("startTime");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -118,7 +131,7 @@ public class OrderList_AirlineTicket {
         }
     ]	}
     */
-	 /*国际
+	 /*国际需求单
 	  *"Orderid": "BX1409121558527602",
       "Startname": "北京",
       "Startcode": "BJS",

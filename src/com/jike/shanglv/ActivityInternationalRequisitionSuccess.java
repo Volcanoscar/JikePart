@@ -41,7 +41,7 @@ public class ActivityInternationalRequisitionSuccess extends Activity {
 				orderId =bundle.getString((RECEIPT_ORDER_ID));
 		}
 		
-		order_no_tv.setText("¶©µ¥ºÅ£º"+orderId);
+		order_no_tv.setText("¶©µ¥ºÅ£º\n"+orderId);
 	}
 
 }

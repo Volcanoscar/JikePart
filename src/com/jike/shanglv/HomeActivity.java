@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.DisplayMetrics;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnHoverListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
@@ -22,15 +24,20 @@ import android.app.Activity;
 import android.app.ActivityGroup;
 import android.app.LocalActivityManager;
 import android.view.Display;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity  implements AnimationListener{
 
 	public static HomeActivity instance = null;
 	private SharedPreferences sp;
 	private ImageButton btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg, btn_hfcz,
 			btn_jdmp, btn_zhcz, btn_hcp;
-
+	
+	Animation animScal;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +62,55 @@ public class HomeActivity extends Activity {
 		btn_jdmp.setOnClickListener(btnClickListner);
 		btn_zhcz.setOnClickListener(btnClickListner);
 		btn_hcp.setOnClickListener(btnClickListner);
+		
+		btn_gnjp.setOnHoverListener(new OnHoverListener() {
+			@Override
+			public boolean onHover(View arg0, MotionEvent arg1) {
+				btn_gnjp.startAnimation(animScal);
+				return true;
+			}
+		});
+		
+		animScal = AnimationUtils.loadAnimation(getApplicationContext(),
+	            R.anim.home_drawable_zoom_out);
+		animScal.setAnimationListener(new AnimationListener() {
+            
+            @Override
+            public void onAnimationStart(Animation animation) {
+                    
+            }
+            
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                    
+            }
+            
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                    //动画执行完后的动作
+            }
+    });
 	}
+	
+	
+	@Override
+	public void onAnimationEnd(Animation arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAnimationStart(Animation arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 	@Override
 	protected void onStart() {

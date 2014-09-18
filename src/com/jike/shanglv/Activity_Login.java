@@ -201,8 +201,8 @@ public class Activity_Login extends Activity {
 				startActivity(new Intent(context, Activity_Register.class));
 				break;
 			case R.id.forgetpassword_tv:// ’“ªÿ√‹¬Î
-//				startActivity(new Intent(context,
-//						Activity_RetrievePassword.class));
+				startActivity(new Intent(context,
+						Activity_RetrievePassword.class));
 				break;
 			case R.id.login_btn:
 				if (uername_input_et.getText().toString().trim().length() == 0) {

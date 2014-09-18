@@ -29,6 +29,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -50,6 +51,7 @@ public class ActivityHotelBooking extends Activity {
 	protected static final int ORDER_MSG = 2;
 	private final int ruzhudate = 0, lidiandate = 1;//选择日期请求参数
 	private ImageButton back_imgbtn, home_imgbtn;
+	private ImageView contact_person_phone_iv;
 	private TextView commit_order_tv, hotel_name_tv, xingji_tv, ruzhu_date_tv,
 			lidian_date_tv, room_count_tv, will_arrive_time_tv, roomType_tv,
 			total_price_tv, garantee_desc_tv, creadit_card_validity_tv,
@@ -162,6 +164,8 @@ public class ActivityHotelBooking extends Activity {
 		ruzhuren_rl4 = (RelativeLayout) findViewById(R.id.ruzhuren_rl4);
 		ruzhuren_rl5 = (RelativeLayout) findViewById(R.id.ruzhuren_rl5);
 		ruzhurenID_rl = (RelativeLayout) findViewById(R.id.ruzhurenID_rl);
+		contact_person_phone_iv=(ImageView) findViewById(R.id.contact_person_phone_iv);
+		contact_person_phone_iv.setOnClickListener(clickListener);
 		commit_order_tv.setOnClickListener(clickListener);
 		room_count_tv.setOnClickListener(clickListener);
 
@@ -265,6 +269,13 @@ public class ActivityHotelBooking extends Activity {
 				break;
 			case R.id.home_imgbtn:
 				startActivity(new Intent(context, MainActivity.class));
+				break;
+			case R.id.contact_person_phone_iv:
+				startActivityForResult(
+						new Intent(
+								context,
+								com.jike.shanglv.SeclectCity.ContactListActivity.class),
+						13);
 				break;
 			case R.id.ruzhu_date_ll:
 				Intent dateIntent = new Intent();
@@ -539,6 +550,13 @@ public class ActivityHotelBooking extends Activity {
 					if (state.equals("0000")) {
 						successOrderId = jsonObject.getString("d");
 						Toast.makeText(context, "订单提交成功，OrderId："+successOrderId, 0).show();
+//						String orderID = jsonObject.getJSONObject("d").getString("orderid");
+						Intent intent = new Intent(context,
+								ActivityHotelOrderDetail.class);
+						intent.putExtra(
+								ActivityHotelOrderDetail.ORDERRECEIPT,
+								successOrderId);
+						startActivityForResult(intent, 22);
 					} else {
 						String message = jsonObject.getString("msg");
 						new AlertDialog.Builder(context).setTitle("提交订单失败")
@@ -741,6 +759,18 @@ public class ActivityHotelBooking extends Activity {
 			break;
 		default:
 			break;
+		}
+		
+		if (requestCode == 13) {
+			if (data != null&&b != null && b.containsKey("pickedPhoneNum")) {
+				String myNum = b.getString("pickedPhoneNum");
+				if (myNum.startsWith("17951")) {
+					myNum=myNum.substring(5);
+				}else if (myNum.startsWith("+86")) {
+					myNum=myNum.substring(3);
+				}
+				contact_person_phone_cet.setText(myNum);
+			}
 		}
 	}
 }

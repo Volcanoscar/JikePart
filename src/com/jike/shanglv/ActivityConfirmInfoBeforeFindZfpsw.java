@@ -7,10 +7,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
@@ -33,7 +31,8 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 	private SharedPreferences sp;
 	private TextView username_tv,phone_tv;
 	private com.jike.shanglv.Common.ClearEditText yanzhengma_cet;
-	private String yanzhengmaReturnJson = "";
+	private String yanzhengmaReturnJson = "",verifyReturnJson = "";
+	private CustomProgressDialog progressdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,9 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 		nextstep_button.setOnClickListener(btnClickListner);
 		username_tv=(TextView) findViewById(R.id.username_tv); 
 		phone_tv=(TextView) findViewById(R.id.phone_tv);
-		nextstep_button.setEnabled(false);
+		username_tv.setText(sp.getString(SPkeys.username.getString(), ""));
+		phone_tv.setText(sp.getString(SPkeys.userphone.getString(), ""));
+		yanzhengma_cet=(ClearEditText) findViewById(R.id.yanzhengma_cet);
 		((TextView)findViewById(R.id.get_yanzhengma_tv)).setOnClickListener(btnClickListner);
 	}
 
@@ -61,8 +62,13 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 				startActivity(new Intent(context,ActivityMyAccout.class));
 				break;
 			case R.id.nextstep_button:
-
-				break;
+				if(yanzhengma_cet.getText().toString().trim().length()==0){
+					new AlertDialog.Builder(context).setTitle("请输入验证码")
+						.setPositiveButton("确定", null).show();
+					break;
+				}else {
+					startVerify();
+				}
 			case R.id.get_yanzhengma_tv:
 				startGetYanzhengma();
 				break;
@@ -94,7 +100,39 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 				handler.sendMessage(msg);
 			}
 		}).start();
-
+	}
+	
+	private void startVerify() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MyApp ma = new MyApp(getApplicationContext());
+				String str = "{\"userID\":\""
+						+ sp.getString(SPkeys.userid.getString(), "")
+						+ "\",\"siteID\":\""
+						+ sp.getString(SPkeys.siteid.getString(), "")
+						+ "\",\"cdk\":\"" +yanzhengma_cet.getText().toString().trim()
+						+ "\"}";
+				String param = "action=chenkedcode&str=" + str + "&userkey="
+						+ MyApp.userkey + "&sign="
+						+ CommonFunc.MD5(MyApp.userkey + "chenkedcode" + str)
+						+ "&sitekey=" + MyApp.sitekey;
+				verifyReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
+				Message msg = new Message();
+				msg.what = 2;
+				handler.sendMessage(msg);
+			}
+		}).start();
+		progressdialog = CustomProgressDialog.createDialog(context);
+		progressdialog.setMessage("正在核对验证码，请稍候...");
+		progressdialog.setCancelable(true);
+		progressdialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+			}
+		});
+		progressdialog.show();
 	}
 
 	private Handler handler = new Handler() {
@@ -121,6 +159,32 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 								.setPositiveButton("确认", null).show();
 					} else {
 						new AlertDialog.Builder(context).setTitle("验证码发送失败")
+								.setMessage(message)
+								.setPositiveButton("确认", null).show();
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
+			case 2://校验验证码的正确与否
+				jsonParser = new JSONTokener(verifyReturnJson);
+				try {
+					progressdialog.dismiss();
+					if (verifyReturnJson.length() == 0) {
+						new AlertDialog.Builder(context)
+								.setTitle("验证码校验出错")
+								.setPositiveButton("确认", null).show();
+						break;
+					}
+					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+					String state = jsonObject.getString("c");
+					String message = jsonObject.getString("d");
+					if (state.equals("0000")) {
+						Intent intent=new Intent(context,ActivityResetZfPsw.class);
+						intent.putExtra(ActivityResetZfPsw.ISRESETLOGINPSW, false);
+						startActivity(intent);
+					} else {
+						new AlertDialog.Builder(context).setTitle("验证码不正确")
 								.setMessage(message)
 								.setPositiveButton("确认", null).show();
 					}

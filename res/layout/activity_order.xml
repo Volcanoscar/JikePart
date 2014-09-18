@@ -288,48 +288,6 @@
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:background="@color/deep_gray" />
-     <RelativeLayout
-        android:id="@+id/zhcz_rl"
-        android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/list_item_color_bg"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
 
-        <ImageView
-            android:id="@+id/zhcz_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/user_hfcz_icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/zhcz_iv"
-            android:gravity="center_vertical"
-            android:text="账户充值订单"
-            android:textColor="@color/item_gray"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/xuanzejt_icon" />
-    </RelativeLayout>
-       <View
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="@color/deep_gray" />
 
 </LinearLayout>

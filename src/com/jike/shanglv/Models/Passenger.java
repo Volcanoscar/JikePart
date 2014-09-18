@@ -20,7 +20,7 @@ public class Passenger  implements Serializable {
 	String passengerType,passengerName,identificationType,identificationNum;
 //	String mobile; //"手机号码，可选",
 	String isunum; //"保险数量，必填，默认请传0",
-	String addto; //是否保存到系统中的常用乘机人，必填，0不保存，1保存"
+	String addto="1"; //是否保存到系统中的常用乘机人，必填，0不保存，1保存"
 	
 	String CName; //中文名
 	String CusCardNo; //身份证

@@ -1,4 +1,4 @@
-//÷ÿ÷√÷ß∏∂√‹¬Î
+//÷ÿ÷√µ«¬º/÷ß∏∂√‹¬Î
 package com.jike.shanglv;
 
 import org.json.JSONException;
@@ -25,7 +25,7 @@ import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
 public class ActivityResetZfPsw extends Activity {
-
+	public static final String ISRESETLOGINPSW="ISRESETLOGINPSW"; 
 	private Context context;
 	private ImageButton back_iv;
 	private Button ok_button;
@@ -33,6 +33,7 @@ public class ActivityResetZfPsw extends Activity {
 	private CustomProgressDialog progressdialog;
 	private com.jike.shanglv.Common.ClearEditText  newpsw_cet,confirmpsw_cet;
 	private String changePswReturnJson = "";
+	private Boolean isResetLoginPsw=true;//÷ÿ÷√µ«¬º√‹¬Î£¨falseŒª÷ÿ÷√÷ß∏∂√‹¬Î
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,12 @@ public class ActivityResetZfPsw extends Activity {
 		ok_button.setOnClickListener(btnClickListner);
 		newpsw_cet = (ClearEditText) findViewById(R.id.newpsw_cet);
 		confirmpsw_cet = (ClearEditText) findViewById(R.id.confirmpsw_cet);
+		Bundle bundle=getIntent().getExtras();
+		if (bundle!=null) {
+			if (bundle.containsKey(ISRESETLOGINPSW)) {
+				isResetLoginPsw=bundle.getBoolean(ISRESETLOGINPSW);
+			}
+		}
 	}
 
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
@@ -91,9 +98,12 @@ public class ActivityResetZfPsw extends Activity {
 						+ sp.getString(SPkeys.siteid.getString(), "")
 						+ "\",\"newpass\":\"" + newpsw_cet.getText().toString()
 						+ "\"}";
-				String param = "action=restpaypass&str=" + str + "&userkey="
+				String actionNameString="";
+				if (isResetLoginPsw)actionNameString="restloginpass";
+				else actionNameString="restpaypass";
+				String param = "action="+actionNameString+"&str=" + str + "&userkey="
 						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "restpaypass" + str)
+						+ CommonFunc.MD5(MyApp.userkey + actionNameString+ str)
 						+ "&sitekey=" + MyApp.sitekey;
 				changePswReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);

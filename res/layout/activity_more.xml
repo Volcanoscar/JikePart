@@ -32,12 +32,6 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:src="@drawable/xuanzejt_icon" />
     </RelativeLayout>
 
     <View
@@ -203,7 +197,7 @@
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/gyslgj_iv"
             android:gravity="center_vertical"
-            android:text="关于商旅管家"
+            android:text="关 于"
             android:textColor="@color/item_gray"
             android:textSize="18sp" />
 

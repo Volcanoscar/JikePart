@@ -3,7 +3,10 @@ package com.jike.shanglv;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -48,32 +51,34 @@ import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 
 public class ActivityOrderList extends Activity implements
-	RefreshListView.IOnRefreshListener, RefreshListView.IOnLoadMoreListener{
-	//action
-	public static final String HOTEL_ORDERLIST="hotelorderlist";//酒店订单列表
-	public static final String TRAIN_ORDERLIST="trainorderlist";//火车票订单列表
-	public static final String PHONE_ORDERLIST="phoneorderlist";//手机充值订单列表
-	public static final String FLIGHT_ORDERLIST="flightorderlist";//国内机票订单信息
-	public static final String DEMAND_ORDERLIST="demandorder";//需求单订单列表
-	public static final String INTFLIGHT_ORDERLIST="intflightorderlist";// 国际机票列表
-	
-	public static final String ORDERID_TOKENNAME="QUERY_WITH_ORDERID";
-	public static final String ACTION_TOKENNAME="ACTION_TOKENNAME";
-	public static final String TITLE_TOKENNAME="TITLE_TOKENNAME";
+		RefreshListView.IOnRefreshListener, RefreshListView.IOnLoadMoreListener {
+	// action
+	public static final String HOTEL_ORDERLIST = "hotelorderlist";// 酒店订单列表
+	public static final String TRAIN_ORDERLIST = "trainorderlist";// 火车票订单列表
+	public static final String PHONE_ORDERLIST = "phoneorderlist";// 手机充值订单列表
+	public static final String FLIGHT_ORDERLIST = "flightorderlist";// 国内机票订单信息
+	public static final String DEMAND_ORDERLIST = "demandorderlist";// 需求单订单列表
+	public static final String INTFLIGHT_ORDERLIST = "intflightorderlistv2";// 国际机票列表
 
-	private TextView singleline_tv, doubleline_tv,title;
+	public static final String ORDERID_TOKENNAME = "QUERY_WITH_ORDERID";
+	public static final String ACTION_TOKENNAME = "ACTION_TOKENNAME";
+	public static final String TITLE_TOKENNAME = "TITLE_TOKENNAME";
+
+	private TextView singleline_tv, doubleline_tv, title;
 	private ImageView scrollbar_iv;
-	private ImageButton back_imgbtn,home_imgbtn;
+	private ImageButton back_imgbtn, home_imgbtn;
 	private com.jike.shanglv.Common.RefreshListView listview;
 	private Context context;
 	private float screenWidth;// 手机屏幕宽度
 	private int bmpW;// 动画图片宽度
 	private int offset = 0;// 动画图片偏移量
-	private SingleOrDouble wayType = SingleOrDouble.singleWay; // 单程:一个月内  or  往返：一个月前
+	private SingleOrDouble wayType = SingleOrDouble.singleWay; // 单程:一个月内 or
+																// 往返：一个月前
 	private SharedPreferences sp;
 	private CustomProgressDialog progressdialog;
-	private String actionName="",orderlistReturnJson="",startDate="",endDate="",orderID="";
-	private int pageSize=20,pageIndex=1,count=0;//页大小、当前页、返回的数据总条数
+	private String actionName = "", orderlistReturnJson = "", startDate = "",
+			endDate = "", orderID = "";
+	private int pageSize = 20, pageIndex = 1, count = 0;// 页大小、当前页、返回的数据总条数
 	private Adapter adapter;
 	private ArrayList<OrderList_AirlineTicket> order_List_airlineticket;
 	private ArrayList<OrderList_Hotel> order_List_hotel;
@@ -87,11 +92,11 @@ public class ActivityOrderList extends Activity implements
 	}
 
 	private void initView() {
-		order_List_airlineticket=new ArrayList<OrderList_AirlineTicket>();
-		order_List_hotel=new ArrayList<OrderList_Hotel>();
-		order_List_phone=new ArrayList<OrderList_Phone>();
+		order_List_airlineticket = new ArrayList<OrderList_AirlineTicket>();
+		order_List_hotel = new ArrayList<OrderList_Hotel>();
+		order_List_phone = new ArrayList<OrderList_Phone>();
 		context = this;
-		sp=getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		screenWidth = dm.widthPixels; // 获取分辨率宽度
@@ -106,8 +111,8 @@ public class ActivityOrderList extends Activity implements
 		scrollbar_iv.setImageMatrix(matrix);// 设置动画初始位置
 
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
-		home_imgbtn=(ImageButton) findViewById(R.id.home_imgbtn);
-		title=(TextView) findViewById(R.id.title);
+		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
+		title = (TextView) findViewById(R.id.title);
 		listview = (com.jike.shanglv.Common.RefreshListView) findViewById(R.id.listview);
 		listview.setOnRefreshListener(this);
 		listview.setOnLoadMoreListener(this);
@@ -118,16 +123,16 @@ public class ActivityOrderList extends Activity implements
 		doubleline_tv.setOnClickListener(btnClickListner);
 		back_imgbtn.setOnClickListener(btnClickListner);
 		home_imgbtn.setOnClickListener(btnClickListner);
-		//默认查一月内的数据
-		startDate=DateUtil.GetDateAfterToday(-30);
-		endDate=DateUtil.GetTodayDate();
-		Bundle bundle=getIntent().getExtras();
-		if (bundle!=null) {
+		// 默认查一月内的数据
+		startDate = DateUtil.GetDateAfterToday(-30);
+		endDate = DateUtil.GetTodayDate();
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null) {
 			if (bundle.containsKey(ACTION_TOKENNAME)) {
-				actionName=bundle.getString(ACTION_TOKENNAME);
+				actionName = bundle.getString(ACTION_TOKENNAME);
 			}
 			if (bundle.containsKey(ORDERID_TOKENNAME)) {
-				orderID=bundle.getString(ORDERID_TOKENNAME);
+				orderID = bundle.getString(ORDERID_TOKENNAME);
 			}
 			if (bundle.containsKey(TITLE_TOKENNAME)) {
 				title.setText(bundle.getString(TITLE_TOKENNAME));
@@ -160,9 +165,9 @@ public class ActivityOrderList extends Activity implements
 				animation.setFillAfter(true);// True:图片停在动画结束位置
 				animation.setDuration(200);
 				scrollbar_iv.startAnimation(animation);
-				
-				startDate=DateUtil.GetDateAfterToday(-30);
-				endDate=DateUtil.GetTodayDate();
+
+				startDate = DateUtil.GetDateAfterToday(-30);
+				endDate = DateUtil.GetTodayDate();
 				startQuery();
 
 				break;
@@ -177,16 +182,16 @@ public class ActivityOrderList extends Activity implements
 				animation.setFillAfter(true);// True:图片停在动画结束位置
 				animation.setDuration(200);
 				scrollbar_iv.startAnimation(animation);
-				
-				startDate="2000-01-01";
-				endDate=DateUtil.GetDateAfterToday(-30);
+
+				startDate = "";
+				endDate = DateUtil.GetDateAfterToday(-30);
 				startQuery();
 
 				break;
-			case R.id.back_imgbtn://返回
+			case R.id.back_imgbtn:// 返回
 				finish();
 				break;
-			case R.id.home_imgbtn://主页
+			case R.id.home_imgbtn:// 主页
 				startActivity(new Intent(context, MainActivity.class));
 				break;
 			default:
@@ -194,28 +199,28 @@ public class ActivityOrderList extends Activity implements
 			}
 		}
 	};
-	
+
 	private void startQuery() {
 		if (HttpUtils.showNetCannotUse(context)) {
 			return;
 		}
 		new Thread(new Runnable() {
 			@Override
-			public void run() {//type=1:查航班号	type=2:查航段，  air 航空公司
+			public void run() {// type=1:查航班号 type=2:查航段， air 航空公司
 				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
 				MyApp ma = new MyApp(context);
 				String str = "{\"orderID:\":\"" + orderID + "\",\"tm1\":\""
 						+ startDate + "\",\"tm2\":\"" + endDate
-						+ "\",\"userID\":\"" + sp.getString(SPkeys.userid.getString(), "")
+						+ "\",\"userID\":\""
+						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"pageSize\":\"" + pageSize
-						+ "\",\"pageIndex\":\"" + pageIndex
-						+"\"}";
-				String param = "action="+actionName+"&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey="
-								+ MyApp.sitekey + "&sign="
+						+ "\",\"pageIndex\":\"" + pageIndex + "\"}";
+				String param = "action=" + actionName + "&str=" + str
+						+ "&userkey=" + MyApp.userkey + "&sitekey="
+						+ MyApp.sitekey + "&sign="
 						+ CommonFunc.MD5(MyApp.userkey + actionName + str);
-				orderlistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+				orderlistReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
 				Message msg = new Message();
 				msg.what = 1;
 				handler.sendMessage(msg);
@@ -231,7 +236,7 @@ public class ActivityOrderList extends Activity implements
 		});
 		progressdialog.show();
 	}
-	
+
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -242,35 +247,105 @@ public class ActivityOrderList extends Activity implements
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
-					count=Integer.parseInt(jsonObject.getString("recordcount"));
 
 					if (state.equals("0000")) {
+						count = Integer.parseInt(jsonObject
+								.getString("recordcount"));
 						JSONArray jsonArray = jsonObject.getJSONArray("d");
+						if (jsonArray.length() == 0) {
+							new AlertDialog.Builder(context)
+									.setTitle("未查询到相关数据")
+									.setPositiveButton("确认", null).show();
+							// 不能这么干，因为动态加载更多时，也会清除数据
+							// if (actionName.equals(FLIGHT_ORDERLIST))
+							// {//国内机票或需求单
+							// order_List_airlineticket.clear();
+							// }else if (actionName.equals(DEMAND_ORDERLIST))
+							// {//需求单
+							// order_List_airlineticket.clear();
+							// }else if (actionName.equals(HOTEL_ORDERLIST)) {
+							// order_List_hotel.clear();
+							// }else if (actionName.equals(TRAIN_ORDERLIST))
+							// {//火车票
+							// order_List_airlineticket.clear();
+							// }else if (actionName.equals(PHONE_ORDERLIST)) {
+							// order_List_phone.clear();
+							// }
+						}
 						createList(jsonArray);
-						if (actionName.equals(FLIGHT_ORDERLIST)||actionName.equals(DEMAND_ORDERLIST)||actionName.equals(TRAIN_ORDERLIST)) {
-							adapter = new AirlineTicketListAdapter(context, order_List_airlineticket);
-						}else if (actionName.equals(HOTEL_ORDERLIST)) {
-							adapter = new HotelListAdapter(context, order_List_hotel);
-						}else if (actionName.equals(PHONE_ORDERLIST)) {
-							adapter = new PhoneListAdapter(context, order_List_phone);
+						if (actionName.equals(FLIGHT_ORDERLIST)
+								|| actionName.equals(DEMAND_ORDERLIST)
+								|| actionName.equals(TRAIN_ORDERLIST)) {
+							adapter = new AirlineTicketListAdapter(context,
+									order_List_airlineticket);
+						} else if (actionName.equals(HOTEL_ORDERLIST)) {
+							adapter = new HotelListAdapter(context,
+									order_List_hotel);
+						} else if (actionName.equals(PHONE_ORDERLIST)) {
+							adapter = new PhoneListAdapter(context,
+									order_List_phone);
 						}
 						listview.setAdapter((ListAdapter) adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-//								Intent intents = new Intent(
-//										context,
-//										ActivityHangbandongtaiDetail.class);
-//								intents.putExtra(
-//										ActivityHangbandongtaiDetail.FLIGHTINFO,
-//										JSONHelper.toJSON(ql));
-//								startActivity(intents);
+								if (actionName.equals(FLIGHT_ORDERLIST)) {// 国内机票
+									OrderList_AirlineTicket order = order_List_airlineticket
+											.get(position - 1);
+									Intent intent = new Intent(
+											context,
+											ActivityInlandAirlineticketOrderDetail.class);
+									intent.putExtra(
+											ActivityInlandAirlineticketOrderDetail.ORDERRECEIPT,
+											order.getOrderID());
+									startActivity(intent);
+								} else if (actionName.equals(DEMAND_ORDERLIST)) {// 需求单
+									OrderList_AirlineTicket order = order_List_airlineticket
+											.get(position - 1);
+								} else if (actionName.equals(HOTEL_ORDERLIST)) {// 酒店订单
+									OrderList_Hotel order = order_List_hotel
+											.get(position - 1);
+									Intent intent = new Intent(
+											context,
+											ActivityHotelOrderDetail.class);
+									intent.putExtra(
+											ActivityHotelOrderDetail.ORDERRECEIPT,
+											order.getOrderID());
+									startActivity(intent);
+								} else if (actionName.equals(TRAIN_ORDERLIST)) {// 火车票
+									OrderList_AirlineTicket order = order_List_airlineticket
+											.get(position - 1);
+									Intent intent = new Intent(
+											context,
+											ActivityTrainOrderDetail.class);
+									intent.putExtra(
+											ActivityTrainOrderDetail.ORDERRECEIPT,
+											order.getOrderID());
+									startActivity(intent);
+								} else if (actionName.equals(PHONE_ORDERLIST)) {// 话费充值
+									OrderList_Phone order = order_List_phone
+											.get(position - 1);
+									String orderId=order.getOrderid();
+									String money=order.getAmount();
+									String userid=sp.getString(SPkeys.userid.getString(), "");
+									if(!order.getStatus().equals("未付款"))return;
+									int paysystype=14;
+									String siteid=sp.getString(SPkeys.siteid.getString(), "65");
+									String sign=CommonFunc. MD5(orderId + money + userid + paysystype + siteid);
+									MyApp ma = new MyApp(context);
+									// <string name="test_pay_server_url">http://gatewayceshi.51jp.cn/PayMent/BeginPay.aspx?orderID=%1$s&amp;amount=%2$s&amp;userid=%3$s&amp;paysystype=%4$s&amp;siteid=%5$s&amp;sign=%6$s</string>
+									String url=String.format(ma.getPayServeUrl(),orderId, money,userid,paysystype,siteid,sign);
+									Intent intent=new Intent(context,Activity_Web_Pay.class);
+									intent.putExtra(Activity_Web_Pay.URL, url);
+									intent.putExtra(Activity_Web_Pay.TITLE, "话费充值支付");
+									startActivity(intent);
+								}
 							}
 						});
-						
 					} else {
-						String message = jsonObject.getString("msg");
+						String message = jsonObject.getJSONObject("d")
+								.getString("msg");
 						new AlertDialog.Builder(context).setTitle("查询失败")
 								.setMessage(message)
 								.setPositiveButton("确认", null).show();
@@ -286,55 +361,73 @@ public class ActivityOrderList extends Activity implements
 
 	/**
 	 * 构建list对象
+	 * 
 	 * @param flist_list
 	 */
 	private void createList(JSONArray flist_list) {
-		if (actionName.equals(FLIGHT_ORDERLIST)) {//国内机票或需求单
+		if (actionName.equals(FLIGHT_ORDERLIST)) {// 国内机票
 			for (int i = 0; i < flist_list.length(); i++) {
 				try {
-					OrderList_AirlineTicket inland=new OrderList_AirlineTicket(flist_list.getJSONObject(i), 1);
+					OrderList_AirlineTicket inland = new OrderList_AirlineTicket(
+							flist_list.getJSONObject(i), 1);
 					order_List_airlineticket.add(inland);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}else if (actionName.equals(DEMAND_ORDERLIST)) {//需求单
+		}else if (actionName.equals(INTFLIGHT_ORDERLIST))  {//国际
 			for (int i = 0; i < flist_list.length(); i++) {
 				try {
-					OrderList_AirlineTicket inland=new OrderList_AirlineTicket(flist_list.getJSONObject(i), 2);
+					OrderList_AirlineTicket inland = new OrderList_AirlineTicket(
+							flist_list.getJSONObject(i), 4);
 					order_List_airlineticket.add(inland);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}else if (actionName.equals(HOTEL_ORDERLIST)) {
+		}
+		else if (actionName.equals(DEMAND_ORDERLIST)) {// 需求单
 			for (int i = 0; i < flist_list.length(); i++) {
 				try {
-					OrderList_Hotel hotel=JSONHelper.parseObject(flist_list.getJSONObject(i), OrderList_Hotel.class);
+					OrderList_AirlineTicket inland = new OrderList_AirlineTicket(
+							flist_list.getJSONObject(i), 2);
+					order_List_airlineticket.add(inland);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} else if (actionName.equals(HOTEL_ORDERLIST)) {
+			for (int i = 0; i < flist_list.length(); i++) {
+				try {
+					OrderList_Hotel hotel = JSONHelper.parseObject(
+							flist_list.getJSONObject(i), OrderList_Hotel.class);
 					order_List_hotel.add(hotel);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}else if (actionName.equals(TRAIN_ORDERLIST)) {//火车票
+		} else if (actionName.equals(TRAIN_ORDERLIST)) {// 火车票
 			for (int i = 0; i < flist_list.length(); i++) {
 				try {
-					OrderList_AirlineTicket train=new OrderList_AirlineTicket(flist_list.getJSONObject(i), 3);
+					OrderList_AirlineTicket train = new OrderList_AirlineTicket(
+							flist_list.getJSONObject(i), 3);
 					order_List_airlineticket.add(train);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}else if (actionName.equals(PHONE_ORDERLIST)) {
+		} else if (actionName.equals(PHONE_ORDERLIST)) {
 			for (int i = 0; i < flist_list.length(); i++) {
 				try {
-					OrderList_Phone phone=JSONHelper.parseObject(flist_list.getJSONObject(i), OrderList_Phone.class);
+					OrderList_Phone phone = JSONHelper.parseObject(
+							flist_list.getJSONObject(i), OrderList_Phone.class);
 					order_List_phone.add(phone);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
+		removeDuplicteOrders();
 	}
 
 	@SuppressLint("ResourceAsColor")
@@ -342,11 +435,12 @@ public class ActivityOrderList extends Activity implements
 		private LayoutInflater inflater;
 		private List<OrderList_AirlineTicket> str;
 
-		public AirlineTicketListAdapter(Context context, List<OrderList_AirlineTicket> list1) {
+		public AirlineTicketListAdapter(Context context,
+				List<OrderList_AirlineTicket> list1) {
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
 		}
-		
+
 		public void refreshData(List<OrderList_AirlineTicket> data) {
 			this.str = data;
 			notifyDataSetChanged();
@@ -390,37 +484,37 @@ public class ActivityOrderList extends Activity implements
 					.findViewById(R.id.startoff_date_tv);
 			TextView state_tv = (TextView) convertView
 					.findViewById(R.id.state_tv);
-			
+
 			orderId_tv.setText(str.get(position).getOrderID());
 			try {
-				startoff_date_tv.setText(DateUtil.getDate(str.get(position).getStartOffDate()));
+				startoff_date_tv.setText(DateUtil.getDate(str.get(position)
+						.getStartOffDate()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 			startCity_tv.setText(str.get(position).getStartCity());
 			endCity_tv.setText(str.get(position).getEndCity());
-			price_tv.setText("￥"+str.get(position).getAmount());
+			price_tv.setText("￥" + str.get(position).getAmount());
 			state_tv.setText(str.get(position).getOrderStatus());
-		
-			String red="需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款",
-					green="确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功",
-					blue="出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中",
-					gray="已取消 退票  已退款";
+
+			String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
 			if (red.contains(str.get(position).getOrderStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.red));
-			}else if (green.contains(str.get(position).getOrderStatus())) {
+			} else if (green.contains(str.get(position).getOrderStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.green));
-			}else if (blue.contains(str.get(position).getOrderStatus())){
-				state_tv.setTextColor(getResources().getColor(R.color.state_blue));
-			}else if (gray.contains(str.get(position).getOrderStatus())) {
+			} else if (blue.contains(str.get(position).getOrderStatus())) {
+				state_tv.setTextColor(getResources().getColor(
+						R.color.state_blue));
+			} else if (gray.contains(str.get(position).getOrderStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.gray));
-			}else {
-				state_tv.setTextColor(getResources().getColor(R.color.state_blue));
+			} else {
+				state_tv.setTextColor(getResources().getColor(
+						R.color.state_blue));
 			}
 			return convertView;
 		}
 	}
-	
+
 	private class HotelListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		private List<OrderList_Hotel> str;
@@ -429,7 +523,7 @@ public class ActivityOrderList extends Activity implements
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
 		}
-		
+
 		public void refreshData(List<OrderList_Hotel> data) {
 			this.str = data;
 			notifyDataSetChanged();
@@ -458,52 +552,51 @@ public class ActivityOrderList extends Activity implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = inflater.inflate(
-						R.layout.item_orderlist_hotel, null);
+				convertView = inflater.inflate(R.layout.item_orderlist_hotel,
+						null);
 			}
 			TextView orderId_tv = (TextView) convertView
 					.findViewById(R.id.orderId_tv);
 			TextView hotel_name_tv = (TextView) convertView
 					.findViewById(R.id.hotel_name_tv);
-			TextView bed_tv = (TextView) convertView
-					.findViewById(R.id.bed_tv);
+			TextView bed_tv = (TextView) convertView.findViewById(R.id.bed_tv);
 			TextView price_tv = (TextView) convertView
 					.findViewById(R.id.price_tv);
 			TextView ruzhu_date_tv = (TextView) convertView
 					.findViewById(R.id.ruzhu_date_tv);
 			TextView state_tv = (TextView) convertView
 					.findViewById(R.id.state_tv);
-			
+
 			orderId_tv.setText(str.get(position).getOrderID());
 			try {
-				ruzhu_date_tv.setText(DateUtil.getDate(str.get(position).getInDate()));
+				ruzhu_date_tv.setText(DateUtil.getDate(str.get(position)
+						.getInDate()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 			hotel_name_tv.setText(str.get(position).getHotelName());
 			bed_tv.setText(str.get(position).getRoomName());
-			price_tv.setText("￥"+str.get(position).getOrderAmount());
+			price_tv.setText("￥" + str.get(position).getOrderAmount());
 			state_tv.setText(str.get(position).getOrderStatus());
-		
-			String red="需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款",
-					green="确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功",
-					blue="出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中",
-					gray="已取消 退票  已退款";
+
+			String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
 			if (red.contains(str.get(position).getOrderStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.red));
-			}else if (green.contains(str.get(position).getOrderStatus())) {
+			} else if (green.contains(str.get(position).getOrderStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.green));
-			}else if (blue.contains(str.get(position).getOrderStatus())){
-				state_tv.setTextColor(getResources().getColor(R.color.state_blue));
-			}else if (gray.contains(str.get(position).getOrderStatus())) {
+			} else if (blue.contains(str.get(position).getOrderStatus())) {
+				state_tv.setTextColor(getResources().getColor(
+						R.color.state_blue));
+			} else if (gray.contains(str.get(position).getOrderStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.gray));
-			}else {
-				state_tv.setTextColor(getResources().getColor(R.color.state_blue));
+			} else {
+				state_tv.setTextColor(getResources().getColor(
+						R.color.state_blue));
 			}
 			return convertView;
 		}
 	}
-	
+
 	private class PhoneListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		private List<OrderList_Phone> str;
@@ -512,7 +605,7 @@ public class ActivityOrderList extends Activity implements
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
 		}
-		
+
 		public void refreshData(List<OrderList_Phone> data) {
 			this.str = data;
 			notifyDataSetChanged();
@@ -541,8 +634,8 @@ public class ActivityOrderList extends Activity implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = inflater.inflate(
-						R.layout.item_orderlist_phone, null);
+				convertView = inflater.inflate(R.layout.item_orderlist_phone,
+						null);
 			}
 			TextView phone_num_tv = (TextView) convertView
 					.findViewById(R.id.phone_num_tv);
@@ -552,31 +645,30 @@ public class ActivityOrderList extends Activity implements
 					.findViewById(R.id.chongzhi_time_tv);
 			TextView state_tv = (TextView) convertView
 					.findViewById(R.id.state_tv);
-			
+
 			phone_num_tv.setText(str.get(position).getPhone());
 			chongzhi_time_tv.setText(str.get(position).getAddtime());
-			price_tv.setText("￥"+str.get(position).getAmount());
+			price_tv.setText("￥" + str.get(position).getAmount());
 			state_tv.setText(str.get(position).getStatus());
-		
-			String red="需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款",
-					green="确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功",
-					blue="出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中",
-					gray="已取消 退票  已退款";
+
+			String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
 			if (red.contains(str.get(position).getStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.red));
-			}else if (green.contains(str.get(position).getStatus())) {
+			} else if (green.contains(str.get(position).getStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.green));
-			}else if (blue.contains(str.get(position).getStatus())){
-				state_tv.setTextColor(getResources().getColor(R.color.state_blue));
-			}else if (gray.contains(str.get(position).getStatus())) {
+			} else if (blue.contains(str.get(position).getStatus())) {
+				state_tv.setTextColor(getResources().getColor(
+						R.color.state_blue));
+			} else if (gray.contains(str.get(position).getStatus())) {
 				state_tv.setTextColor(getResources().getColor(R.color.gray));
-			}else {
-				state_tv.setTextColor(getResources().getColor(R.color.state_blue));
+			} else {
+				state_tv.setTextColor(getResources().getColor(
+						R.color.state_blue));
 			}
 			return convertView;
 		}
 	}
-	
+
 	@Override
 	public void OnLoadMore() {
 		LoadMoreDataAsynTask mLoadMoreAsynTask = new LoadMoreDataAsynTask();
@@ -604,11 +696,14 @@ public class ActivityOrderList extends Activity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (actionName.equals(FLIGHT_ORDERLIST)||actionName.equals(DEMAND_ORDERLIST)||actionName.equals(TRAIN_ORDERLIST)) {
-				((AirlineTicketListAdapter) adapter).refreshData(order_List_airlineticket);
-			}else if (actionName.equals(HOTEL_ORDERLIST)) {
+			if (actionName.equals(FLIGHT_ORDERLIST)
+					|| actionName.equals(DEMAND_ORDERLIST)
+					|| actionName.equals(TRAIN_ORDERLIST)) {
+				((AirlineTicketListAdapter) adapter)
+						.refreshData(order_List_airlineticket);
+			} else if (actionName.equals(HOTEL_ORDERLIST)) {
 				((HotelListAdapter) adapter).refreshData(order_List_hotel);
-			}else if (actionName.equals(PHONE_ORDERLIST)) {
+			} else if (actionName.equals(PHONE_ORDERLIST)) {
 				((PhoneListAdapter) adapter).refreshData(order_List_phone);
 			}
 			listview.onRefreshComplete();
@@ -630,21 +725,24 @@ public class ActivityOrderList extends Activity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (actionName.equals(FLIGHT_ORDERLIST)||actionName.equals(DEMAND_ORDERLIST)||actionName.equals(TRAIN_ORDERLIST)) {
-				((AirlineTicketListAdapter) adapter).refreshData(order_List_airlineticket);
+			if (actionName.equals(FLIGHT_ORDERLIST)
+					|| actionName.equals(DEMAND_ORDERLIST)
+					|| actionName.equals(TRAIN_ORDERLIST)) {
+				((AirlineTicketListAdapter) adapter)
+						.refreshData(order_List_airlineticket);
 				if (order_List_airlineticket.size() == Integer.valueOf(count)) {
 					listview.onLoadMoreComplete(true);
 				} else {
 					listview.onLoadMoreComplete(false);
 				}
-			}else if (actionName.equals(HOTEL_ORDERLIST)) {
+			} else if (actionName.equals(HOTEL_ORDERLIST)) {
 				((HotelListAdapter) adapter).refreshData(order_List_hotel);
 				if (order_List_hotel.size() == Integer.valueOf(count)) {
 					listview.onLoadMoreComplete(true);
 				} else {
 					listview.onLoadMoreComplete(false);
 				}
-			}else if (actionName.equals(PHONE_ORDERLIST)) {
+			} else if (actionName.equals(PHONE_ORDERLIST)) {
 				((PhoneListAdapter) adapter).refreshData(order_List_phone);
 				if (order_List_phone.size() == Integer.valueOf(count)) {
 					listview.onLoadMoreComplete(true);
@@ -653,5 +751,40 @@ public class ActivityOrderList extends Activity implements
 				}
 			}
 		}
+	}
+
+	// 去除重复的订单
+	private void removeDuplicteOrders() {
+		Set<OrderList_AirlineTicket> s = new TreeSet<OrderList_AirlineTicket>(
+				new Comparator<OrderList_AirlineTicket>() {
+					@Override
+					public int compare(OrderList_AirlineTicket o1,
+							OrderList_AirlineTicket o2) {
+						return o1.getOrderID().compareTo(o2.getOrderID());
+					}
+				});
+		s.addAll(order_List_airlineticket);
+		order_List_airlineticket = new ArrayList<OrderList_AirlineTicket>(s);
+
+		Set<OrderList_Hotel> s1 = new TreeSet<OrderList_Hotel>(
+				new Comparator<OrderList_Hotel>() {
+					@Override
+					public int compare(OrderList_Hotel o1, OrderList_Hotel o2) {
+						return o1.getOrderID().compareTo(o2.getOrderID());
+					}
+				});
+		s1.addAll(order_List_hotel);
+		order_List_hotel = new ArrayList<OrderList_Hotel>(s1);
+
+		Set<OrderList_Phone> s2 = new TreeSet<OrderList_Phone>(
+				new Comparator<OrderList_Phone>() {
+					@Override
+					public int compare(OrderList_Phone o1, OrderList_Phone o2) {
+						return o1.getOrderid().compareTo(o2.getOrderid());
+					}
+				});
+		s2.addAll(order_List_phone);
+		order_List_phone = new ArrayList<OrderList_Phone>(s2);
+
 	}
 }

@@ -134,7 +134,7 @@
                     android:hint="请输入乘客姓名"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:textColor="@color/huise_txt_color"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_content_textsize" >
                 </com.jike.shanglv.Common.ClearEditText>
 
@@ -298,6 +298,38 @@
                 android:layout_height="1px"
                 android:background="@color/deep_gray" />
               
+            
+            
+
+        <RelativeLayout
+            android:id="@+id/savecontact_rl"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="40dp" >
+
+            <ImageView
+                android:id="@+id/savecontact_checkbox_iv"
+                android:layout_width="22dp"
+                android:layout_height="23dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/fuxuankuang_yes" >
+            </ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/savecontact_checkbox_iv"
+                android:text="保存为常用联系人"
+                android:textColor="#565656"
+                android:textSize="16sp" >
+            </TextView>
+        </RelativeLayout>
+
+            
         </LinearLayout>
     </ScrollView>
 

@@ -1,5 +1,7 @@
 package com.jike.shanglv.Models;
 
+import org.json.JSONArray;
+
 public class InterDemandStr {
 	private String uid; //用户ID
 	private String sid;//网站ID
@@ -17,7 +19,8 @@ public class InterDemandStr {
 	private String mobile;//":"联系人手机";"
 	private String email;//":"联系人邮箱";"
 	private String remark;//":"预订备注";"
-	private String psgInfo;//":"乘机人信息"}
+	
+	private JSONArray psgInfo;//":"乘机人信息"}
 
 	public String getUid() {
 		return uid;
@@ -147,11 +150,11 @@ public class InterDemandStr {
 		this.remark = remark;
 	}
 
-	public String getPsgInfo() {
+	public JSONArray getPsgInfo() {
 		return psgInfo;
 	}
 
-	public void setPsgInfo(String psgInfo) {
+	public void setPsgInfo(JSONArray psgInfo) {
 		this.psgInfo = psgInfo;
 	}
 }

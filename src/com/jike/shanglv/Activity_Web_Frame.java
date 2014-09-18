@@ -1,8 +1,9 @@
-//web支付页面
+//使用WebView加载内容：只需要提供标题和加载的url即可
 package com.jike.shanglv;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,13 +16,11 @@ import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class Activity_Web_Pay extends Activity {
+public class Activity_Web_Frame extends Activity {
 
-	public static final String URL = "zhifu_url";
+	public static final String URL = "redire_url";
 	public static final String TITLE = "activity_title";
-	private ImageButton back;
-	private TextView chongzhi_finish;
-	private WebView webView_zhifu;
+	private WebView webView;
 
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
@@ -29,30 +28,28 @@ public class Activity_Web_Pay extends Activity {
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_web_pay);
+		setContentView(R.layout.activity_web_frame);
 
-		back = (ImageButton) findViewById(R.id.back);
-		back.setOnClickListener(new OnClickListener() {
+		((ImageButton) findViewById(R.id.back)).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		chongzhi_finish = (TextView) findViewById(R.id.chongzhi_finish);
-		chongzhi_finish.setOnClickListener(new OnClickListener() {
+		((ImageButton) findViewById(R.id.home)).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				finish();
+				startActivity(new Intent(Activity_Web_Frame.this, MainActivity.class));
 			}
 		});
 
-		webView_zhifu = new WebView(this);
-		webView_zhifu = (WebView) findViewById(R.id.webView_zhifu);
-		WebSettings webSettings = webView_zhifu.getSettings();
+		webView = new WebView(this);
+		webView = (WebView) findViewById(R.id.webView);
+		WebSettings webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);// 在WebView中使用JavaScript，若页面中用了JavaScript，必须为WebView使能JavaScript
-		String url = (String) getIntent().getExtras().get(URL);
-		String title = (String) getIntent().getExtras().get(TITLE);
-		if(!title.equals(""))((TextView)findViewById(R.id.title)).setText(title);
+		String url = getIntent().getExtras().getString(URL);
+		String title = getIntent().getExtras().getString(TITLE);
+		((TextView)findViewById(R.id.title)).setText(title);
 
-		webView_zhifu.setWebViewClient(new WebViewClient() {/// 不重写的话，会跳到手机浏览器中
+		webView.setWebViewClient(new WebViewClient() {/// 不重写的话，会跳到手机浏览器中
 
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) { // Handle the error
@@ -63,13 +60,9 @@ public class Activity_Web_Pay extends Activity {
 				return true;
 			}
 		});
-		webView_zhifu.loadUrl(url);
+		webView.loadUrl(url);
 	}
 
-	// http://gatewayv3.51jp.cn/PayMent/BeginPay.aspx?
-	// orderID=&amount=657&userid=12369&paysystype=15&siteid=65
-	// &sign=d0c12d722788cd73e433aba2a6ddbd32
-	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 

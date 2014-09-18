@@ -76,6 +76,13 @@ public class MyApp {
 			return context.getResources().getString(R.string.formal_flight_company_logo);
 		else return context.getResources().getString(R.string.test_flight_company_logo);
 	}
+	/**关于软件说明Url
+	 */
+	public String getAbout() {
+		if(RELEASE)
+			return context.getResources().getString(R.string.formal_about);
+		else return context.getResources().getString(R.string.test_about);
+	}	
 
 	/**构建不同厂家的打包数据
 	 */

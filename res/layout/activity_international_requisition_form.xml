@@ -252,7 +252,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -263,7 +263,8 @@
 
                 <TextView
                     android:layout_width="110dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical|left"
                     android:text="备注信息"
                     android:textColor="@color/black6"
                     android:textSize="20sp" >
@@ -342,12 +343,12 @@
                 android:layout_marginLeft="15dp"
                 android:background="@color/deep_gray"
                 android:visibility="invisible" />
-
+<!--  android:divider="@null" -->
             <ListView
                 android:id="@+id/passenger_listview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:divider="@null" >
+                >
             </ListView>
 
             <View

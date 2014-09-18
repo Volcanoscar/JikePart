@@ -356,6 +356,15 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 		};
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		for (int i = 0; i < passengerList.size(); i++) {//从编辑页面点击取消后会有空值，去除空值
+			if(passengerList.get(i).getPassengerName()==null||passengerList.get(i).getPassengerName().equals(""))
+				passengerList.remove(i);
+		}
+	}
+
 	//来自新增或编辑乘机人页面
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
@@ -376,6 +385,10 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 				passengerList = (ArrayList<Passenger>) JSONHelper
 						.parseCollection(modifiedpassengerList, List.class,
 								Passenger.class);
+				for (int i = 0; i < passengerList.size(); i++) {//去除空值
+					if(passengerList.get(i).getPassengerName()==null||passengerList.get(i).getPassengerName().equals(""))
+						passengerList.remove(i);
+				}
 				ListAdapter adapter = new ListAdapter(context,
 						ActivityInlandAirlineticketSelectPassengers.this,
 						passengerList);

@@ -385,12 +385,12 @@
                 android:layout_marginLeft="15dp"
                 android:background="@color/deep_gray"
                 android:visibility="invisible" />
-
+<!-- android:divider="@null" -->
             <ListView
                 android:id="@+id/passenger_listview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:divider="@null" >
+                 >
             </ListView>
 
             <View
@@ -543,7 +543,7 @@
 
                 <com.jike.shanglv.Common.ClearEditText
                     android:id="@+id/yanzhengma_input_et"
-                    android:layout_width="60dp"
+                    android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/yzm_tv"

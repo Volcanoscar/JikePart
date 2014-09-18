@@ -196,89 +196,120 @@
         android:layout_marginLeft="10dp"
         android:background="@color/black6" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/loading_ll"
+        android:visibility="gone"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/list_item_color_bg" >
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/heduihaoma_tv"
-            android:layout_width="80dp"
+        <ImageView
+            android:id="@+id/frame_ani_iv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:gravity="left"
-            android:text="核对号码"
-            android:textColor="@color/black6"
-            android:textSize="20sp" >
-        </TextView>
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/thephonenum_tv"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/heduihaoma_tv"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:maxLength="11"
-            android:paddingLeft="10dp"
-            android:textColor="#8CC044"
-            android:textSize="19sp" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/guishudi_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/thephonenum_tv"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:maxLength="11"
-            android:textColor="@color/blue_title_color"
-            android:textSize="19sp" >
-        </TextView>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="15dp"
-        android:background="@color/deep_gray" />
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/list_item_color_bg" >
-
-        <TextView
-            android:id="@+id/zhifujine_tv"
-            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:gravity="left"
-            android:text="支付金额"
-            android:textColor="@color/black6"
-            android:textSize="20sp" >
-        </TextView>
+            android:layout_gravity="center_horizontal"
+            android:text="正在校对价格，请稍候。。。"
+            android:textSize="15dp" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/paymoney_tv"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/hedui_ll"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/zhifujine_tv"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:maxLength="11"
-            android:paddingLeft="10dp"
-            android:textColor="@color/price_yellow"
-            android:textSize="19sp" >
-        </TextView>
-    </RelativeLayout>
+            android:background="@drawable/list_item_color_bg" >
 
+            <TextView
+                android:id="@+id/heduihaoma_tv"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:gravity="left"
+                android:text="核对号码"
+                android:textColor="@color/black6"
+                android:textSize="20sp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/thephonenum_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/heduihaoma_tv"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:maxLength="11"
+                android:paddingLeft="10dp"
+                android:textColor="#8CC044"
+                android:textSize="19sp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/guishudi_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/thephonenum_tv"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:maxLength="11"
+                android:textColor="@color/blue_title_color"
+                android:textSize="19sp" >
+            </TextView>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:background="@color/deep_gray" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/list_item_color_bg" >
+
+            <TextView
+                android:id="@+id/zhifujine_tv"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:gravity="left"
+                android:text="支付金额"
+                android:textColor="@color/black6"
+                android:textSize="20sp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/paymoney_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/zhifujine_tv"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:maxLength="11"
+                android:paddingLeft="10dp"
+                android:textColor="@color/price_yellow"
+                android:textSize="19sp" >
+            </TextView>
+        </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="fill_parent"

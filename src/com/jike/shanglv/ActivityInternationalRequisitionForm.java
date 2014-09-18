@@ -40,6 +40,7 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
+import com.jike.shanglv.Models.InterDemandPassenger;
 import com.jike.shanglv.Models.InterDemandStr;
 import com.jike.shanglv.Models.Passenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -267,9 +268,9 @@ public class ActivityInternationalRequisitionForm extends Activity {
 //						+ "&sign="
 //						+ CommonFunc.MD5(MyApp.userkey + "intdemand" + str)+"&str=" + str;
 //				commitReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),param);
-				String param = "?action=intdemand&sitekey=&userkey=" + MyApp.userkey
-						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "intdemand" + str);
+				String param = "?action=createDemandOrder&sitekey="+ MyApp.sitekey
+						+"&userkey=" + MyApp.userkey+ "&sign="
+						+ CommonFunc.MD5(MyApp.userkey + "createDemandOrder" + str);
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -293,7 +294,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		String str="";
 		InterDemandStr interDemandStr=new InterDemandStr();
 		interDemandStr.setUid(sp.getString(SPkeys.userid.getString(),""));
-		interDemandStr.setSid("65");
+		interDemandStr.setSid(sp.getString(SPkeys.siteid.getString(), "65"));
 		interDemandStr.setsCity(startcity);
 		interDemandStr.setsCode(startcity_code);
 		if (wayType == SingleOrDouble.singleWay) {
@@ -313,36 +314,42 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		interDemandStr.setMobile(contact_person_phone_et.getText().toString().trim());
 		interDemandStr.setEmail("");
 		interDemandStr.setRemark(remark_et.getText().toString().trim());
-		interDemandStr.setPsgInfo(getPsgInfo());
 //		str=JSONHelper.toJSON(interDemandStr);//TODO 直接转化成json String失败，只有部分属性，暂先使用以下拼接方式
 		str="{\"uid\":\""+interDemandStr.getUid()+"\",\"sid\":\""+interDemandStr.getSid()+"\",\"sCity\":\""+interDemandStr.getsCity()+"\",\"sCode\":\""+interDemandStr.getsCode()
 		+"\",\"sDate\":\""+interDemandStr.getsDate()+"\",\"sTime\":\""+interDemandStr.getsTime()+"\",\"eCity\":\""+interDemandStr.geteCity()+"\",\"eCode\":\"" +interDemandStr.geteCode()
 		+"\",\"eDate\":\""+interDemandStr.geteDate()+"\",\"eTime\":\""+interDemandStr.geteTime()+"\",\"fType\":\""+interDemandStr.getfType()
 		+"\",\"yusuan\":\""+interDemandStr.getYusuan()+"\",\"contactor\":\""+interDemandStr.getContactor()+"\",\"mobile\":\""+interDemandStr.getMobile()
-		+"\",\"email\":\""+interDemandStr.getEmail()+"\",\"remark\":\""+interDemandStr.getRemark()+"\",\"psgInfo\":\""+interDemandStr.getPsgInfo()+"\"}";
+		+"\",\"email\":\""+interDemandStr.getEmail()+"\",\"remark\":\""+interDemandStr.getRemark()+"\",\"psgInfo\":"+getPsgInfo()+"}";
 		return str;
 	}
 
 	private String getPsgInfo() {//URLEncoder.encode( , "utf-8");
-		//姓名_证件号_性别_证件类型_生日_证件有效期_国籍_签发地_保险分数_false^
 		String str = "";
-		ArrayList<Passenger> cpList = new ArrayList<Passenger>();
+		ArrayList<InterDemandPassenger> cpList = new ArrayList<InterDemandPassenger>();
 		for (int i = 0; i < passengerList.size(); i++) {
 			Passenger passenger=passengerList.get(i);
-			str+=passenger.getPassengerName();
-			str+="_"+passenger.getIdentificationNum();
-			str+="_"+passenger.getGender();
-			str+="_"+String.valueOf(IdType.IdTypeReverse.get(passenger.getIdentificationType()));
-			str+="_"+passenger.getBirthDay();
-			str+="_"+passenger.getIDdeadline();
+			InterDemandPassenger interDemandPassenger=new InterDemandPassenger();
+			String[] name=passenger.getPassengerName().split("/");
+			if (name.length==2) {
+				interDemandPassenger.setSurname(name[0]);
+				interDemandPassenger.setGivenname(name[1]);
+			}
+			interDemandPassenger.setCardNo(passenger.getIdentificationNum());
+			interDemandPassenger.setSex(passenger.getGender());
+			interDemandPassenger.setCardType(String.valueOf(IdType.IdTypeReverse.get(passenger.getIdentificationType())));
+			interDemandPassenger.setCusBirth(passenger.getBirthDay());
+			interDemandPassenger.setNumberValiddate(passenger.getIDdeadline());
 			try {
-				str+="_"+URLEncoder.encode(passenger.getNation(), "utf-8");
-				str+="_"+URLEncoder.encode(passenger.getIssueAt(), "utf-8");
+				interDemandPassenger.setCountry(URLEncoder.encode(passenger.getNation(), "utf-8"));
+				interDemandPassenger.setQianfadi(URLEncoder.encode(passenger.getIssueAt(), "utf-8"));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			str+="_"+needBaoxianString+"_true^";
+			interDemandPassenger.setInsurance(needBaoxianString);
+			interDemandPassenger.setSavePsg(passenger.getAddto().equals("1")?"true":"false");
+			cpList.add(interDemandPassenger);
 		}
+		str=JSONHelper.toJSON(cpList);	
 		return str;
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

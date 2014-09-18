@@ -71,6 +71,7 @@
      
      <View
          android:id="@+id/divid_line"
+         android:visibility="gone"
          android:layout_width="fill_parent"
          android:layout_height="1px"
          android:background="@color/deep_gray" />

@@ -40,7 +40,6 @@ public class OrderActivity extends Activity {
 	    ((RelativeLayout)findViewById(R.id.hcp_rl)).setOnClickListener(btnClickListner);
 	    ((RelativeLayout)findViewById(R.id.hfcz_rl)).setOnClickListener(btnClickListner);
 	    ((RelativeLayout)findViewById(R.id.gjjp_xqd_rl)).setOnClickListener(btnClickListner);
-	    ((RelativeLayout)findViewById(R.id.zhcz_rl)).setOnClickListener(btnClickListner);
 	}
 	
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
@@ -76,8 +75,6 @@ public class OrderActivity extends Activity {
 			case R.id.hfcz_rl:
 				intent.putExtra(ActivityOrderList.ACTION_TOKENNAME, ActivityOrderList.PHONE_ORDERLIST);
 				intent.putExtra(ActivityOrderList.TITLE_TOKENNAME,"话费充值订单");
-				break;
-			case R.id.zhcz_rl:
 				break;
 			default:
 				break;

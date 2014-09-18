@@ -597,7 +597,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		ArrayList<CuandanPassenger> cpList = new ArrayList<CuandanPassenger>();
 		for (int i = 0; i < passengerList.size(); i++) {
 			CuandanPassenger cp = new CuandanPassenger();
-			cp.setAddto("1");
+			cp.setAddto(passengerList.get(i).getAddto());
 			cp.setIdno(passengerList.get(i).getIdentificationNum());
 			String idtypeString = passengerList.get(i).getIdentificationType();
 			cp.setIdtype(String.valueOf(IdType.IdTypeReverse.get(idtypeString)));

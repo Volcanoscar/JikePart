@@ -76,7 +76,17 @@ public class ActivityZhanghuchongzhi extends Activity {
 				break;
 			case R.id.chongzhi_button:
 				if (HttpUtils.showNetCannotUse(context)) {
-					return;
+					break;
+				}
+				if (chongzhijine_et.getText().toString().trim().length()==0) {
+					new AlertDialog.Builder(context).setTitle("请输入充值金额")
+					.setPositiveButton("确认", null).show();
+					break;
+				}
+				if (!CommonFunc.isNumber(chongzhijine_et.getText().toString().trim())) {
+					new AlertDialog.Builder(context).setTitle("请输入合法的充值金额")
+					.setPositiveButton("确认", null).show();
+					break;
 				}
 				
 				String userid=sp.getString(SPkeys.userid.getString(), "");
@@ -90,6 +100,7 @@ public class ActivityZhanghuchongzhi extends Activity {
 				intent.putExtra(Activity_Web_Pay.URL, url);
 				intent.putExtra(Activity_Web_Pay.TITLE, "账户充值支付");
 				startActivity(intent);
+				break;
 			default:
 
 				break;
