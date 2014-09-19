@@ -459,7 +459,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询酒店列表，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

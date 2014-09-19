@@ -300,7 +300,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("’˝‘⁄≤È—Ø£¨«Î…‘∫Ú...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

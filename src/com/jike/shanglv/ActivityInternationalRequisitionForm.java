@@ -170,6 +170,8 @@ public class ActivityInternationalRequisitionForm extends Activity {
 						ActivityInlandAirlineticketSelectPassengers.class);
 				intent.putExtra(ActivityInlandAirlineticketSelectPassengers.SYSTYPE,
 						"1");
+				intent.putExtra(ActivityInlandAirlineticketSelectPassengers.TITLE_NAME,
+						"选择乘机人");
 				intent.putExtra(ALLPASSENGERSLIST,
 						JSONHelper.toJSON(allPassengerList));
 				intent.putExtra(SELECTEDPASSENGERSLIST,
@@ -281,7 +283,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交需求单，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

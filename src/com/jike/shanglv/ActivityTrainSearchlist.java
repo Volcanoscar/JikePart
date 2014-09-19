@@ -33,7 +33,8 @@ import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Enums.SPkeys;
-import com.jike.shanglv.Models.TrainInfo;
+import com.jike.shanglv.Models.TrainListItem;
+import com.jike.shanglv.Models.TrainListItem;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 
@@ -52,7 +53,7 @@ public class ActivityTrainSearchlist extends Activity {
 	private String trainsReturnJson;// 返回的查询列表json
 
 	private ListAdapter adapter;
-	private ArrayList<TrainInfo> train_List;
+	private ArrayList<TrainListItem> train_List;
 	private Boolean byTimeAsc=false,byTypeAsc=false;
 
 	@Override
@@ -67,7 +68,7 @@ public class ActivityTrainSearchlist extends Activity {
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		train_List = new ArrayList<TrainInfo>();
+		train_List = new ArrayList<TrainListItem>();
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		listview = (ListView) findViewById(R.id.listview);
 		title_tv = (TextView) findViewById(R.id.title_tv);
@@ -132,11 +133,11 @@ public class ActivityTrainSearchlist extends Activity {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								TrainInfo ti = train_List.get(position);
+								TrainListItem ti = train_List.get(position);
 								Intent intents = new Intent(
 										context,
 										ActivityTrainBooking.class);
-								intents.putExtra("TrainInfoString", JSONHelper.toJSON(ti));
+								intents.putExtra("TrainListItemString", JSONHelper.toJSON(ti));
 								intents.putExtra("startcity", startcity);
 								intents.putExtra("arrivecity", arrivecity);
 								intents.putExtra("startdate",startoff_date);
@@ -168,79 +169,18 @@ public class ActivityTrainSearchlist extends Activity {
 		train_List.clear();
 		for (int i = 0; i < flist_list.length(); i++) {
 			try {
-				TrainInfo ti = JSONHelper.parseObject(
-						flist_list.getJSONObject(i), TrainInfo.class);
-				if (!ti.getWZ_Y().toString().equals("null")
-						&& !ti.getWZ_Y().toString().equals("0")
-						&& !ti.getWZ_Y().toString().equals("")) {
-					TrainInfo ti1 = (TrainInfo) ti.clone();
-					ti1.setRemain_Count(ti.getWZ_Y().toString());
-					ti1.setPrice(ti.getWZ());
-					ti1.setSeat_Type("无座");
+				TrainListItem ti = JSONHelper.parseObject(
+						flist_list.getJSONObject(i), TrainListItem.class);
+				JSONArray seatListArray=flist_list.getJSONObject(i).getJSONArray("SeatList");
+				for (int j = 0; j < seatListArray.length(); j++) {
+					TrainListItem ti1=ti.clone();
+					ti1.setSeat_Type(seatListArray.getJSONObject(j).getString("type"));
+					ti1.setPrice(seatListArray.getJSONObject(j).getString("price"));
+					ti1.setRemain_Count(seatListArray.getJSONObject(j).getString("shengyu"));
 					train_List.add(ti1);
 				}
-
-				if ((!ti.getRW_Y().toString().equals("null")
-						&& !ti.getRW_Y().toString().equals("0") && !ti
-						.getRW_Y().toString().equals(""))) {
-					TrainInfo ti2 = (TrainInfo) ti.clone();
-					ti2.setRemain_Count(ti.getRW_Y().toString());
-					ti2.setPrice(ti.getRW());
-					ti2.setSeat_Type("软卧");
-					train_List.add(ti2);
-				}
-
-				if ((!ti.getYW_Y().toString().equals("null")
-						&& !ti.getYW_Y().toString().equals("0") && !ti
-						.getYW_Y().toString().equals(""))) {
-					TrainInfo ti3 = (TrainInfo) ti.clone();
-					ti3.setRemain_Count(ti.getYW_Y().toString());
-					ti3.setPrice(ti.getYW());
-					ti3.setSeat_Type("硬卧");
-					train_List.add(ti3);
-				}
-
-				if ((ti.getTrainType().equals("动车组") || ti.getTrainType()
-						.equals("高速动车"))
-						&& (!ti.getYZ_Y().toString().equals("null")
-								&& !ti.getYZ_Y().toString().equals("0") && !ti
-								.getYZ_Y().toString().equals(""))) {
-					TrainInfo ti4 = (TrainInfo) ti.clone();
-					ti4.setRemain_Count(ti.getYZ_Y().toString());
-					ti4.setPrice(ti.getYZ());
-					ti4.setSeat_Type("二等座");
-					train_List.add(ti4);
-				} else if ((!ti.getYZ_Y().toString().equals("null")
-						&& !ti.getYZ_Y().toString().equals("0") && !ti
-						.getYZ_Y().toString().equals(""))) {
-					TrainInfo ti5 = (TrainInfo) ti.clone();
-					ti5.setRemain_Count(ti.getYZ_Y().toString());
-					ti5.setPrice(ti.getYZ());
-					ti5.setSeat_Type("硬座");
-					train_List.add(ti5);
-				}
-
-				if ((ti.getTrainType().equals("动车组") || ti.getTrainType()
-						.equals("高速动车"))
-						&& (!ti.getRZ_Y().toString().equals("null")
-								&& !ti.getRZ_Y().toString().equals("0") && !ti
-								.getRZ_Y().toString().equals(""))) {
-					TrainInfo ti6 = (TrainInfo) ti.clone();
-					ti6.setRemain_Count(ti.getRZ_Y().toString());
-					ti6.setPrice(ti.getRZ());
-					ti6.setSeat_Type("一等座");
-					train_List.add(ti6);
-				} else if ((!ti.getRZ_Y().toString().equals("null")
-						&& !ti.getRZ_Y().toString().equals("0") && !ti
-						.getRZ_Y().toString().equals(""))) {
-					TrainInfo ti7 = (TrainInfo) ti.clone();
-					ti7.setRemain_Count(ti.getRZ_Y().toString());
-					ti7.setPrice(ti.getRZ());
-					ti7.setSeat_Type("软座");
-					train_List.add(ti7);
-				}
 			} catch (Exception e) {
-			}
+		}
 		}
 	}
 
@@ -254,9 +194,9 @@ public class ActivityTrainSearchlist extends Activity {
 				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
 						+ arrivecity_code + "\",\"t\":\"" + startoff_date
 						+ "\"}";
-				String param = "action=trainlist&str=" + str + "&userkey="
+				String param = "action=trainlistv2&str=" + str + "&userkey="
 						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "trainlist" + str)
+						+ CommonFunc.MD5(MyApp.userkey + "trainlistv2" + str)
 						+ "&sitekey=" + MyApp.sitekey;
 				trainsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
@@ -267,7 +207,7 @@ public class ActivityTrainSearchlist extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -275,23 +215,23 @@ public class ActivityTrainSearchlist extends Activity {
 		});
 		progressdialog.show();
 	}
-	Comparator<TrainInfo> comparator_time_asc = new Comparator<TrainInfo>() {
-		public int compare(TrainInfo s1, TrainInfo s2) {
+	Comparator<TrainListItem> comparator_time_asc = new Comparator<TrainListItem>() {
+		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s2.getGoTime().compareTo(s1.getGoTime());
 		}
 	};
-	Comparator<TrainInfo> comparator_time_desc = new Comparator<TrainInfo>() {
-		public int compare(TrainInfo s1, TrainInfo s2) {
+	Comparator<TrainListItem> comparator_time_desc = new Comparator<TrainListItem>() {
+		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s1.getGoTime().compareTo(s2.getGoTime());
 		}
 	};
-	Comparator<TrainInfo> comparator_type_asc = new Comparator<TrainInfo>() {
-		public int compare(TrainInfo s1, TrainInfo s2) {
+	Comparator<TrainListItem> comparator_type_asc = new Comparator<TrainListItem>() {
+		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s1.getTrainID().compareTo(s2.getTrainID());
 		}
 	};
-	Comparator<TrainInfo> comparator_type_desc = new Comparator<TrainInfo>() {
-		public int compare(TrainInfo s1, TrainInfo s2) {
+	Comparator<TrainListItem> comparator_type_desc = new Comparator<TrainListItem>() {
+		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s2.getTrainID().compareTo(s1.getTrainID());
 		}
 	};
@@ -358,14 +298,14 @@ public class ActivityTrainSearchlist extends Activity {
 
 	private class ListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
-		private List<TrainInfo> str;
+		private List<TrainListItem> str;
 
-		public ListAdapter(Context context, List<TrainInfo> list1) {
+		public ListAdapter(Context context, List<TrainListItem> list1) {
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
 		}
 
-		public void updateBitmap(List<TrainInfo> list1) {
+		public void updateBitmap(List<TrainListItem> list1) {
 			this.str = list1;
 		}
 

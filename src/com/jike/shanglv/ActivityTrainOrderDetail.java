@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,14 +49,17 @@ public class ActivityTrainOrderDetail extends Activity {
 		start_station_tv, end_station_tv, start_time_tv,
 		end_time_tv, startoffdate_tv,
 		contact_person_phone_tv, baoxian_tv;
-	private ImageView start_station_icon_iv,end_station_icon_iv;
+	private ImageView start_station_icon_iv,end_station_icon_iv,frame_ani_iv;
 	private ListView passenger_listview;
 	private Button pay_now_btn;
+	private RelativeLayout loading_ll;
+	private ScrollView scrollview;
 	private SharedPreferences sp;
 	private ArrayList<Passenger> passengerList;// 乘客列表
 	private String orderID = "",  amount = "";// amount为订单金额
 	private String orderDetailReturnJson;
 	private JSONObject orderDetailObject;// 返回的订单详情对象
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +74,24 @@ public class ActivityTrainOrderDetail extends Activity {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+				.getBackground();
+		anim.setOneShot(false);
+		anim.start();
+	}
 
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		passengerList = new ArrayList<Passenger>();
+		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
+		loading_ll=(RelativeLayout) findViewById(R.id.loading_ll);
+		scrollview=(ScrollView) findViewById(R.id.scrollview);
 
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
@@ -150,6 +168,8 @@ public class ActivityTrainOrderDetail extends Activity {
 			case ORDERDETAIL_MSG_CODE:
 				jsonParser = new JSONTokener(orderDetailReturnJson);
 				try {
+					loading_ll.setVisibility(View.GONE);
+					scrollview.setVisibility(View.VISIBLE);
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
 

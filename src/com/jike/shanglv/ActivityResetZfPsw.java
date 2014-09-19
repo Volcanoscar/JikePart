@@ -114,7 +114,7 @@ public class ActivityResetZfPsw extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交重置密码请求，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

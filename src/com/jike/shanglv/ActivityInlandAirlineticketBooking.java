@@ -476,7 +476,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交订单，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -678,6 +678,8 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						ActivityInlandAirlineticketSelectPassengers.class);
 				intent.putExtra(ActivityInlandAirlineticketSelectPassengers.SYSTYPE,
 						"0");
+				intent.putExtra(ActivityInlandAirlineticketSelectPassengers.TITLE_NAME,
+						"选择乘机人");
 				intent.putExtra(ALLPASSENGERSLIST,
 						JSONHelper.toJSON(allPassengerList));
 				intent.putExtra(SELECTEDPASSENGERSLIST,

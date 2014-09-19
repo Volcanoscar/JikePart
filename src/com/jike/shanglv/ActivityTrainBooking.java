@@ -1,5 +1,6 @@
 package com.jike.shanglv;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,10 +14,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,18 +34,17 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Enums.SPkeys;
-import com.jike.shanglv.Enums.SingleOrDouble;
 import com.jike.shanglv.LazyList.ImageLoader;
 import com.jike.shanglv.Models.Passenger;
-import com.jike.shanglv.Models.TrainInfo;
+import com.jike.shanglv.Models.TrainListItem;
+import com.jike.shanglv.Models.TrainOrderPassenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
-import com.jike.shanglv.SeclectCity.ContactListActivity;
 
 public class ActivityTrainBooking extends Activity {
 	
@@ -71,7 +71,7 @@ public class ActivityTrainBooking extends Activity {
 	private SharedPreferences sp;
 	private ImageLoader imageLoader;
 	
-	private TrainInfo ti = new TrainInfo();//从列表传过来的车票信息
+	private TrainListItem ti = new TrainListItem();//从列表传过来的车票信息
 	private String startdate,commitReturnJson;
 	private float ticket_price,baoxian_unitPrice=10,totalPrice;//保费：0、5、10
 	private Bitmap validCodeBitmap;
@@ -138,7 +138,7 @@ public class ActivityTrainBooking extends Activity {
 		getIntentTrainInfo();
 		train_num_tv.setText(ti.getTrainID());
 		train_type_tv.setText(ti.getTrainType());
-		runtime_tv.setText("耗时:"+ti.getRunTime());
+		runtime_tv.setText("历时:"+ti.getRunTime());
 		start_station_tv.setText(ti.getStationS());
 		end_station_tv.setText(ti.getStationE());
 		seat_grad_tv.setText(ti.getSeat_Type());
@@ -195,9 +195,9 @@ public class ActivityTrainBooking extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		try {
 			if (bundle!=null) {
-				if (bundle.containsKey("TrainInfoString")) {
-					JSONObject jsonObject = new JSONObject(bundle.getString("TrainInfoString"));
-					ti =JSONHelper.parseObject(jsonObject, TrainInfo.class);
+				if (bundle.containsKey("TrainListItemString")) {
+					JSONObject jsonObject = new JSONObject(bundle.getString("TrainListItemString"));
+					ti =JSONHelper.parseObject(jsonObject, TrainListItem.class);
 				}
 				if (bundle.containsKey("startdate")) {
 					Calendar c = Calendar.getInstance();
@@ -236,31 +236,26 @@ public class ActivityTrainBooking extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				//url?action=traincity&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				//{"XPsgInfo":"郭文科$成人票$0$410823198601299310$18539291772$5.0$236.5$",
-				//"TicketCount":"1","Email":"18539291772","Mobile":"18539291772","Name":"郭科","SCity":"郑州","TrainNo":"D288","SDate":"2014-09-06","STime":"15:09","vcode":"bb7c","sid":"65","uid":"34945","Amount":241.5,"ECity":"上海虹桥","ETime":"22:55",}
 				MyApp ma = new MyApp(context);
 				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "{\"uid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
+				String str = "{\"uid\":\""+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"Amount\": \"" + totalPrice
 						+ "\",\"sid\":\""+siteid
 						+"\",\"vcode\":\""+yanzhengma_input_et.getText().toString().trim()
-						+ "\",\"ECity\":\"" + ti.getStationE() + "\",\"ETime\":\""+ti.getETime()
-						+ "\",\"STime\":\"" + ti.getGoTime() + "\",\"SDate\":\""+startdate
-						+ "\",\"TrainNo\":\"" + ti.getTrainID() + "\",\"SCity\":\""+ti.getStationS()
+						+ "\",\"TrainNo\":\"" + ti.getTrainID() 
+						+ "\",\"SCity\":\""+ti.getStationS()
+						+ "\",\"ECity\":\"" + ti.getStationE() 
+						+ "\",\"ETime\":\""+ti.getETime()
+						+ "\",\"STime\":\"" + ti.getGoTime() 
+						+ "\",\"SDate\":\""+startdate
 						+ "\",\"Mobile\":\"" +contact_person_phone_et.getText().toString().trim()
 						+ "\",\"Email\":\"123@163.com\",\"Name\":\""+sp.getString(SPkeys.username.getString(), "")
-						+ "\",\"TicketCount\":\""+ passengerList.size()+ "\",\"XPsgInfo\":\""
-						+getPassengers()+ "\"}";
+						+ "\",\"TicketCount\":\""+ passengerList.size()+ "\",\"PsgInfo\":"
+						+getPassengers()+ "}";
 				str=str.replace("null", "\"\"");
-//				String param = "action=trainorder&str=" + str +"&userkey=" + MyApp.userkey
-//						+ "&sitekey=" + MyApp.sitekey
-//						+ "&sign="+ CommonFunc.MD5(MyApp.userkey + "trainorder" + str);
-//				commitReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),param);
-				String param = "?action=trainorder&userkey=" + MyApp.userkey
+				String param = "?action=trainorderv2&userkey=" + MyApp.userkey
 						+ "&sitekey=" + MyApp.sitekey
-						+ "&sign="+ CommonFunc.MD5(MyApp.userkey + "trainorder" + str);
+						+ "&sign="+ CommonFunc.MD5(MyApp.userkey + "trainorderv2" + str);
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -270,7 +265,7 @@ public class ActivityTrainBooking extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交订单，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -278,51 +273,27 @@ public class ActivityTrainBooking extends Activity {
 		});
 		progressdialog.show();
 	}
-	//张三,李四$成人票,成人票$身份证,身份证$111,111$138***,138***$5,5$100,100$是否保存常旅客(true,false),是否保存常旅客(true,false)$硬座,硬座$
-	//乘客名(多个,分开)$票类型(多个,分开)$证件类型(多个,分开)$证件号(多个,分开)$手机号(多个,分开)$保险价格(多个,分开)$火车价格(多个,分开)$是否保存常旅客(true,false)(多个,分开)$席别类型(多个,分开)
+	
 	private String getPassengers() {
 		String psgsString="";
-		for (int i = 0; i < passengerList.size(); i++) {//乘客名
-			Passenger passenger=passengerList.get(i);
-			psgsString+=passenger.getPassengerName()+",";
+		ArrayList<TrainOrderPassenger> trainOrderPassengerList=new ArrayList<TrainOrderPassenger>();
+		for (int i = 0; i <passengerList.size(); i++) {
+			TrainOrderPassenger trainOrderPassenger=new TrainOrderPassenger();
+			trainOrderPassenger.setCardNo(passengerList.get(i).getIdentificationNum());
+			trainOrderPassenger.setCardType(passengerList.get(i).getIdentificationType());
+			trainOrderPassenger.setIncAmount(String.valueOf(baoxian_unitPrice));
+			trainOrderPassenger.setPhone(passengerList.get(i).getMobie());
+			trainOrderPassenger.setSaleprice(ti.getPrice());
+			trainOrderPassenger.setSeatType(ti.getSeat_Type());
+			try {
+				trainOrderPassenger.setPsgName(URLEncoder.encode(passengerList.get(i).getPassengerName(), "utf-8"));
+				trainOrderPassenger.setTicketType(URLEncoder.encode(passengerList.get(i).getPassengerType(), "utf-8"));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			trainOrderPassengerList.add(trainOrderPassenger);
 		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//票类型
-			Passenger passenger=passengerList.get(i);
-			psgsString+=passenger.getPassengerType()+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//证件类型
-			Passenger passenger=passengerList.get(i);
-			psgsString+=passenger.getIdentificationType()+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//证件号码
-			Passenger passenger=passengerList.get(i);
-			psgsString+=passenger.getIdentificationNum()+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//手机号
-			Passenger passenger=passengerList.get(i);
-			psgsString+=passenger.getMobie()+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//保险价格
-			psgsString+=baoxian_unitPrice+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//车票价格
-			psgsString+=ti.getPrice()+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//保存为常用旅客
-			psgsString+="true,";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
-		for (int i = 0; i < passengerList.size(); i++) {//席别
-			psgsString+=ti.getSeat_Type()+",";
-		}
-		psgsString=psgsString.substring(0,psgsString.length()-1)+"$";
+		psgsString=JSONHelper.toJSON(trainOrderPassengerList);
 		return psgsString;
 	}
 	
@@ -350,21 +321,17 @@ public class ActivityTrainBooking extends Activity {
 					String state = jsonObject.getString("c");
 
 					if (state.equals("0000")) {
-						String orderID = jsonObject.getString("msg");
+						String orderID = jsonObject.getJSONObject("d").getString("msg");
 						Intent intent = new Intent(context,
 								ActivityTrainOrderDetail.class);
 						intent.putExtra(ActivityTrainOrderDetail.ORDERRECEIPT,orderID);
 						startActivityForResult(intent, NEW_ORDER_DETAIL_CODE);
 						
 					}else {
-						new AlertDialog.Builder(context).setTitle(jsonObject.getString("msg"))
-							.setPositiveButton("确定", new OnClickListener() {
-								@Override
-								public void onClick(DialogInterface arg0, int arg1) {
-									getValidCodePic();//提交失败后需刷新验证码
-									yanzhengma_input_et.setText("");
-								}
-							}).show();
+						new AlertDialog.Builder(context).setTitle(jsonObject.getJSONObject("d").getString("msg"))
+							.setPositiveButton("确定", null).show();
+						getValidCodePic();//提交失败后需刷新验证码
+						yanzhengma_input_et.setText("");
 					} 
 //					else {
 //						Toast.makeText(context, "发生异常，提交订单失败！", 0).show();
@@ -402,7 +369,7 @@ public class ActivityTrainBooking extends Activity {
 								CONTANCT_REQUEST_CODE);
 				break;
 			case R.id.modify_seat_tv:
-				
+				finish();
 				break;
 			case R.id.djsx_tv:
 			case R.id.yanzhengma_iv:
@@ -413,6 +380,8 @@ public class ActivityTrainBooking extends Activity {
 						ActivityInlandAirlineticketSelectPassengers.class);
 				intent.putExtra(ActivityInlandAirlineticketSelectPassengers.SYSTYPE,
 						"2");
+				intent.putExtra(ActivityInlandAirlineticketSelectPassengers.TITLE_NAME,
+						"选择旅客");
 				intent.putExtra(ALLPASSENGERSLIST,
 						JSONHelper.toJSON(allPassengerList));
 				intent.putExtra(SELECTEDPASSENGERSLIST,
@@ -490,8 +459,7 @@ public class ActivityTrainBooking extends Activity {
 					add_passager_tv.setText("修改乘客");
 					passenger_head_divid_line.setVisibility(View.VISIBLE);
 				} else if (passengerList.size() == 0) {
-					add_passager_tv.setText(getResources().getString(
-							R.string.add_passenger));
+					add_passager_tv.setText("新增乘客");
 					passenger_head_divid_line.setVisibility(View.GONE);
 				}
 				ListAdapter adapter = new PassengerListAdapter(context,

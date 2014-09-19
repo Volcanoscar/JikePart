@@ -54,17 +54,8 @@ public class ActivityHuafeichongzhi extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_huafeichongzhi);
 		initView();
+		chongzhi_button.setEnabled(false);
 	}
-
-//	@Override
-//	public void onWindowFocusChanged(boolean hasFocus) {
-//		super.onWindowFocusChanged(hasFocus);
-//		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani_small);
-//		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-//				.getBackground();
-//		anim.setOneShot(false);
-//		anim.start();
-//	}
 	
 	private void startLoadingAni() {
 		loading_ll.setVisibility(View.VISIBLE);
@@ -314,8 +305,13 @@ public class ActivityHuafeichongzhi extends Activity {
 				//&str={"phone":"","amount":"","pid":"","value":"","sid":"","uid":""}
 				MyApp ma = new MyApp(context);
 				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
+				String czAmount="";
+				czAmount=paymoney_tv.getText().toString().trim();
+				if (czAmount.length()>0) {
+					czAmount=czAmount.substring(1);
+				}
 				String str = "{\"phone\":\"" + phonenum_et.getText().toString().trim() 
-						+ "\",\"amount\":\""+ paymoney_tv.getText().toString().trim().substring(1)
+						+ "\",\"amount\":\""+ czAmount
 						+ "\",\"pid\":\"" + prodid
 						+ "\",\"value\":\"" + chongzhijine_tv.getText().toString().trim().substring(0,chongzhijine_tv.getText().toString().trim().length() - 1)
 						+ "\",\"uid\":\""+ sp.getString(SPkeys.userid.getString(), "")
@@ -333,7 +329,7 @@ public class ActivityHuafeichongzhi extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交话费充值订单，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

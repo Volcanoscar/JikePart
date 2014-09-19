@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="酒店订单详情"
+            android:text="国际机票订单详情"
             android:textColor="#FFFFFFFF"
             android:textSize="20sp" >
         </TextView>
@@ -56,6 +56,7 @@
             android:id="@+id/pay_now_btn"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/button_height"
+            android:layout_below="@id/date_choose_double_rl"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="@dimen/button_margin"
             android:layout_marginRight="@dimen/button_margin"
@@ -194,55 +195,14 @@
                 android:layout_marginTop="0dp"
                 android:background="@color/deep_gray" />
 
-            <TableLayout
+            <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:padding="10dp" >
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="支付方式"
-                        android:textColor="@color/black6"
-                        android:textSize="@dimen/booking_item_title_textsize" />
-
-                    <TextView
-                        android:id="@+id/pay_type_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/booking_item_title_textsize" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="担保情况"
-                        android:textColor="@color/black6"
-                        android:textSize="@dimen/booking_item_title_textsize" />
-
-                    <TextView
-                        android:id="@+id/guarantee_state_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/booking_item_title_textsize" />
-                </TableRow>
-            </TableLayout>
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="航班信息"
+                android:textColor="@color/black"
+                android:textSize="@dimen/booking_item_title_textsize" />
 
             <View
                 android:layout_width="fill_parent"
@@ -250,201 +210,16 @@
                 android:layout_marginTop="0dp"
                 android:background="@color/deep_gray" />
 
-            <TextView
+            <ListView
+                android:id="@+id/flightInfo_listview"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:text="酒店信息"
-                android:textColor="@color/black"
-                android:textSize="@dimen/booking_item_title_textsize" />
+                android:layout_height="wrap_content" >
+            </ListView>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:background="@color/deep_gray" />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@color/white" >
-
-                <TextView
-                    android:id="@+id/hotelName_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rightsmallarrow" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@color/white" >
-
-                <TextView
-                    android:id="@+id/roomType_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/black6"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/roomCount_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/black6"
-                    android:textSize="@dimen/booking_item_title_textsize" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="100dp"
-                android:background="@color/white"
-                android:paddingLeft="10dp" >
-
-                <TextView
-                    android:id="@+id/roomNights_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="101dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center"
-                    android:paddingLeft="15dp" />
-
-                <View
-                    android:id="@+id/middle_line"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1px"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/roomNights_tv"
-                    android:background="@color/deep_gray" />
-
-                <TextView
-                    android:id="@+id/inDate_tv"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:layout_above="@id/middle_line"
-                    android:layout_toLeftOf="@id/roomNights_tv"
-                    android:gravity="center_vertical|left"
-                    android:text="入住时间 "
-                    android:textColor="@color/black6"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/outDate_tv"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/middle_line"
-                    android:layout_toLeftOf="@id/roomNights_tv"
-                    android:gravity="center_vertical|left"
-                    android:text="离店时间 "
-                    android:textColor="@color/black6"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
-
-            <TextView
-                android:id="@+id/latetime_tv"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:text="最晚到店时间  "
-                android:textColor="@color/black6"
-                android:textSize="@dimen/booking_item_title_textsize" >
-            </TextView>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
-
-            <RelativeLayout
-                android:id="@+id/adress_map_ll"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/list_item_color_bg"
-                android:clickable="true"
-                android:gravity="center_vertical"
-                android:paddingRight="10dp"
-                android:visibility="gone" >
-
-                <ImageView
-                    android:id="@+id/city_wz_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/hotel_address" >
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/hotel_adress_tv"
-                    android:layout_width="210dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/city_wz_iv"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/black6"
-                    android:textSize="16sp" >
-                </TextView>
-
-                <ImageView
-                    android:id="@+id/arrow_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/rightsmallarrow" >
-                </ImageView>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
+                android:layout_below="@id/flightInfo_rl"
                 android:background="@color/deep_gray" />
 
             <TextView
@@ -452,7 +227,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:padding="10dp"
-                android:text="入住信息"
+                android:text="登机人信息"
                 android:textColor="@color/black"
                 android:textSize="@dimen/booking_item_title_textsize" />
 
@@ -464,29 +239,24 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@color/white"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
+                    android:background="@color/white"
                     android:padding="10dp"
-                    android:text="入住人"
+                    android:text="登机人"
                     android:textColor="@color/black6"
                     android:textSize="@dimen/booking_item_title_textsize" >
                 </TextView>
 
-                <TextView
-                    android:id="@+id/passengers_tv"
+                <ListView
+                    android:id="@+id/passenger_listview"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/black6"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
+                    android:layout_height="wrap_content" >
+                </ListView>
             </LinearLayout>
 
             <View
@@ -497,16 +267,15 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="10dp" >
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="联系人手机"
+                    android:text="联系手机"
                     android:textColor="@color/black6"
                     android:textSize="@dimen/booking_item_title_textsize" >
                 </TextView>

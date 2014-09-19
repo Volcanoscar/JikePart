@@ -30,7 +30,7 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/back" >
         </ImageButton>
-      
+
         <ImageButton
             android:id="@+id/home_imgbtn"
             android:layout_width="wrap_content"
@@ -41,38 +41,39 @@
             android:background="#00000000"
             android:src="@drawable/home" >
         </ImageButton>
-        
     </RelativeLayout>
-    
-     <RelativeLayout
+
+    <RelativeLayout
         android:id="@+id/bottom_rl"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="#E9ECF1"
-        android:gravity="center_vertical" >
-       
+        android:gravity="center_vertical"
+        android:visibility="gone" >
+
         <Button
-           android:id="@+id/pay_now_btn"
-           android:layout_width="fill_parent"
-	        android:layout_height="@dimen/button_height"
-	        android:layout_below="@id/date_choose_double_rl"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginLeft="@dimen/button_margin"
-	        android:layout_marginRight="@dimen/button_margin"
-	        android:background="@drawable/btn_3"
-	        android:text="立即支付"
-	        android:textColor="#FFF0F0F0"
-	        android:textSize="20sp" />
-        
+            android:id="@+id/pay_now_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_below="@id/date_choose_double_rl"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:background="@drawable/btn_3"
+            android:text="立即支付"
+            android:textColor="#FFF0F0F0"
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/scrollview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/text_bg"
         android:layout_above="@id/bottom_rl"
-        android:paddingBottom="10dp" >
+        android:layout_below="@id/text_bg"
+        android:paddingBottom="10dp"
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -212,10 +213,10 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:gravity="center_vertical"
                 android:background="@color/white"
-                android:orientation="horizontal" >
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="10dp" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -265,11 +266,11 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
-                android:paddingTop="10dp"
+                android:background="@color/white"
                 android:gravity="center_vertical"
-                 android:background="@color/white"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/carrinerName_tv"
@@ -320,11 +321,11 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
-                android:paddingTop="10dp"
-                 android:background="@color/white"
+                android:background="@color/white"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/offTime_tv"
@@ -334,7 +335,6 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_title_textsize"
                     android:textStyle="bold" >
-
                 </TextView>
 
                 <TextView
@@ -351,11 +351,11 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
-                android:paddingTop="10dp"
-                 android:background="@color/white"
+                android:background="@color/white"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/arriveTime_tv"
@@ -365,7 +365,6 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_title_textsize"
                     android:textStyle="bold" >
-
                 </TextView>
 
                 <TextView
@@ -388,8 +387,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:gravity="center_vertical"
-                 android:background="@color/white"
                 android:paddingLeft="30dp"
                 android:paddingTop="10dp" >
 
@@ -412,7 +411,6 @@
 
                 <TextView
                     android:id="@+id/fanMoney_tv"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -421,7 +419,8 @@
                     android:text="返￥24"
                     android:textAlignment="center"
                     android:textColor="@color/price_yellow_transparent"
-                    android:textSize="@dimen/booking_item_small_textsize" />
+                    android:textSize="@dimen/booking_item_small_textsize"
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -484,14 +483,13 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                
                 android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="fill_parent"
+                    android:background="@color/white"
                     android:padding="10dp"
-                     android:background="@color/white"
                     android:text="登机人"
                     android:textColor="@color/black6"
                     android:textSize="@dimen/booking_item_title_textsize" >
@@ -513,8 +511,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:orientation="horizontal"
-                 android:background="@color/white"
                 android:padding="10dp" >
 
                 <TextView
@@ -539,56 +537,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:background="@color/deep_gray" />
-<!-- 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:text="其他信息"
-                android:textColor="@color/black"
-                android:textSize="@dimen/booking_item_title_textsize" />
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="0dp"
-                android:background="@color/deep_gray" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="保险"
-                    android:textColor="@color/black6"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/baoxian_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="20元"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/booking_item_title_textsize" >
-                </TextView>
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:background="@color/deep_gray" />
-  -->
         </LinearLayout>
     </ScrollView>
 
-   
+    <RelativeLayout
+        android:id="@+id/loading_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/frame_ani_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/loading_eight_icon" />
+    </RelativeLayout>
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="1px"

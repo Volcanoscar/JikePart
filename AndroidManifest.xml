@@ -179,6 +179,13 @@
             android:windowSoftInputMode="adjustPan"
             >
         </activity>
+         <!--国际机票订单详情-->
+        <activity
+            android:name=".ActivityInternationalAirlineticketOrderDetail"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            >
+        </activity>
         <!-- 国内机选择登记人-->
         <activity
             android:name=".ActivityInlandAirlineticketSelectPassengers"

@@ -107,7 +107,7 @@ public class TrainCityActivity extends Activity {
 						getIntent().putExtra("pickedCity",
 								((TrainCityModel)adapter.getItem(position)).getName()+
 								"#"+
-								((TrainCityModel)adapter.getItem(position)).getPinyin()));
+								((TrainCityModel)adapter.getItem(position)).getCode()));
 				finish();
 			}
 		});
@@ -165,11 +165,12 @@ public class TrainCityActivity extends Activity {
 		ArrayList<TrainCityModel> names = new ArrayList<TrainCityModel>();
 		try {
 			String jsonStr = getJson("traincity");
-			JSONTokener jsonParser = new JSONTokener(jsonStr);
-			JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
-			String cities = jsonObject.getString("d");
-
-			JSONArray array = new JSONArray(cities);
+//			JSONTokener jsonParser = new JSONTokener(jsonStr);
+//			JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+//			String cities = jsonObject.getString("d");
+//			JSONArray array = new JSONArray(cities);
+			
+			JSONArray array = new JSONArray(jsonStr);
 			int len = array.length();
 			Map<String, String> map;
 			List<Map<String, String>> data;
@@ -177,9 +178,11 @@ public class TrainCityActivity extends Activity {
 				JSONObject object = array.getJSONObject(i);
 				TrainCityModel acm = new TrainCityModel();
 				acm.name = object.getString("name");
-				acm.shortchar = object.getString("shortchar");
+				acm.suoxie = object.getString("suoxie");
 				acm.pinyin = object.getString("pinyin");
-				acm.ishot = object.getString("ishot");
+//				acm.ishot = object.getString("ishot");
+				acm.code=object.getString("code");
+				acm.ishot="0";
 				acm.abcd = acm.pinyin.substring(0, 1).toUpperCase();
 				
 				if (acm.ishot.equals("1")) {

@@ -183,7 +183,7 @@ public class ActivityOrderList extends Activity implements
 				animation.setDuration(200);
 				scrollbar_iv.startAnimation(animation);
 
-				startDate = "";
+				startDate = "2000-01-01";
 				endDate = DateUtil.GetDateAfterToday(-30);
 				startQuery();
 
@@ -228,7 +228,7 @@ public class ActivityOrderList extends Activity implements
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -275,7 +275,8 @@ public class ActivityOrderList extends Activity implements
 						createList(jsonArray);
 						if (actionName.equals(FLIGHT_ORDERLIST)
 								|| actionName.equals(DEMAND_ORDERLIST)
-								|| actionName.equals(TRAIN_ORDERLIST)) {
+								|| actionName.equals(TRAIN_ORDERLIST)
+								|| actionName.equals(INTFLIGHT_ORDERLIST)) {
 							adapter = new AirlineTicketListAdapter(context,
 									order_List_airlineticket);
 						} else if (actionName.equals(HOTEL_ORDERLIST)) {
@@ -300,7 +301,17 @@ public class ActivityOrderList extends Activity implements
 											ActivityInlandAirlineticketOrderDetail.ORDERRECEIPT,
 											order.getOrderID());
 									startActivity(intent);
-								} else if (actionName.equals(DEMAND_ORDERLIST)) {// 需求单
+								}else if (actionName.equals(INTFLIGHT_ORDERLIST)) {// 国际机票
+									OrderList_AirlineTicket order = order_List_airlineticket
+											.get(position - 1);
+									Intent intent = new Intent(
+											context,
+											ActivityInternationalAirlineticketOrderDetail.class);
+									intent.putExtra(
+											ActivityInternationalAirlineticketOrderDetail.ORDERRECEIPT,
+											order.getOrderID());
+									startActivity(intent);
+								}else if (actionName.equals(DEMAND_ORDERLIST)) {// 需求单
 									OrderList_AirlineTicket order = order_List_airlineticket
 											.get(position - 1);
 								} else if (actionName.equals(HOTEL_ORDERLIST)) {// 酒店订单
@@ -489,7 +500,7 @@ public class ActivityOrderList extends Activity implements
 			try {
 				startoff_date_tv.setText(DateUtil.getDate(str.get(position)
 						.getStartOffDate()));
-			} catch (ParseException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			startCity_tv.setText(str.get(position).getStartCity());

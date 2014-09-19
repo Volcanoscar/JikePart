@@ -41,27 +41,27 @@ public class HomeActivity extends Activity  implements AnimationListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.activity_home1);
 
 		sp=this.getSharedPreferences("mySPData",Activity.MODE_PRIVATE);
 		btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
 		btn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);
 		btn_hbdt = (ImageButton) findViewById(R.id.imgBtn_hbdt);
-		btn_jd = (ImageButton) findViewById(R.id.imgBtn_jd);
-		btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg);
 		btn_hfcz = (ImageButton) findViewById(R.id.imgBtn_hfcz);
-		btn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp);
 		btn_zhcz = (ImageButton) findViewById(R.id.imgBtn_zhcz);
 		btn_hcp = (ImageButton) findViewById(R.id.imgBtn_hcp);
+		btn_jd = (ImageButton) findViewById(R.id.imgBtn_jd);
+//		btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg);
+//		btn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp);
 		btn_gnjp.setOnClickListener(btnClickListner);
 		btn_gjjp.setOnClickListener(btnClickListner);
 		btn_hbdt.setOnClickListener(btnClickListner);
 		btn_jd.setOnClickListener(btnClickListner);
-		btn_tg.setOnClickListener(btnClickListner);
 		btn_hfcz.setOnClickListener(btnClickListner);
-		btn_jdmp.setOnClickListener(btnClickListner);
 		btn_zhcz.setOnClickListener(btnClickListner);
 		btn_hcp.setOnClickListener(btnClickListner);
+//		btn_tg.setOnClickListener(btnClickListner);
+//		btn_jdmp.setOnClickListener(btnClickListner);
 		
 		btn_gnjp.setOnHoverListener(new OnHoverListener() {
 			@Override

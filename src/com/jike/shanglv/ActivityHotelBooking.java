@@ -14,8 +14,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +40,7 @@ import android.widget.Toast;
 
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.IDCard;
 import com.jike.shanglv.Enums.SPkeys;
@@ -81,6 +84,7 @@ public class ActivityHotelBooking extends Activity {
 			orderReturnJson,roomsriReturnJson,successOrderId;//提交订单后返回的订单号
 	private HotelRoom roomInfoObject;
 	private HotelRoomComfirm hotelRoomComfirm;
+	private CustomProgressDialog progressdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -426,6 +430,15 @@ public class ActivityHotelBooking extends Activity {
 				handler.sendMessage(msg);
 			}
 		}).start();
+		progressdialog = CustomProgressDialog.createDialog(context);
+		progressdialog.setMessage("正在提交订单，请稍候...");
+		progressdialog.setCancelable(false);
+		progressdialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+			}
+		});
+		progressdialog.show();
 	}
 	
 	private String getPassengers(){
@@ -542,6 +555,7 @@ public class ActivityHotelBooking extends Activity {
 				}
 				break;
 			case ORDER_MSG:
+				progressdialog.dismiss();
 				jsonParser = new JSONTokener(orderReturnJson);
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="选择乘机人"
+            android:text="选择乘客"
             android:textColor="#FFFFFFFF"
             android:textSize="20sp" >
         </TextView>
@@ -75,7 +75,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/add_passenger_icon_iv"
-                android:text="新增乘机人"
+                android:text="新增乘客"
                 android:textColor="@color/black6"
                 android:textSize="@dimen/booking_item_content_textsize" />
 
@@ -100,6 +100,22 @@
             android:layout_centerVertical="true"
             android:layout_weight="11" >
         </ListView>
+
+        <LinearLayout
+            android:id="@+id/loading_ll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/frame_ani_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/loading_eight_icon" />
+        </LinearLayout>
 
         <View
             android:layout_width="fill_parent"

@@ -255,7 +255,7 @@ public class Activity_Login extends Activity {
 				}).start();
 				progressdialog = CustomProgressDialog.createDialog(context);
 				progressdialog.setMessage("ÕýÔÚµÇÂ¼£¬ÇëÉÔºò...");
-				progressdialog.setCancelable(true);
+				progressdialog.setCancelable(false);
 				progressdialog.setOnCancelListener(new OnCancelListener() {
 
 					@Override

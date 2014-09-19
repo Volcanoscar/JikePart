@@ -204,7 +204,7 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -242,7 +242,7 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 		
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询航班动态信息，请稍候...");
-		progressdialog.setCancelable(true);
+		progressdialog.setCancelable(false);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

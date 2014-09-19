@@ -105,7 +105,7 @@
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:text="beijing"
+                android:text="BJP"
                 android:textColor="#FFFFFF"
                 android:visibility="gone" >
             </TextView>
@@ -154,7 +154,7 @@
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:text="shanghai"
+                android:text="SHH"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:visibility="gone" >

@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +20,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,10 +35,13 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 
 	protected static final int SELECTED_FINISH = 12;
 	protected static final String SYSTYPE="Inland0_International1_Train2";
+	protected static final String TITLE_NAME = "TITLE_NAME";
 	private ImageButton back_imgbtn;
 	private TextView finish_tv;
 	private RelativeLayout add_new_passager_rl;
 	private ListView history_passenger_listview;
+	private ImageView frame_ani_iv;
+	private LinearLayout loading_ll;
 	private Context context;
 	private SharedPreferences sp;
 	private ArrayList<Passenger> passengerList;//所有联系人列表
@@ -44,8 +50,8 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 	private String passengersReturnJson;// 服务端返回的常用联系人列表json
 	private JSONArray plist;// 查询到的常用联系人列表
 	private ListAdapter adapter;
-	private Boolean isHasBookingPassenger=false;
-	private Boolean isVisitNetwork=true;
+	private Boolean isHasBookingPassenger=false;//是否有选中乘客
+	private Boolean isVisitNetwork=true;//是否需要访问网络数据，第一次访问，以后不访问了
 	private String systype="0";//"systype":"0国内 1国际 2火车票"
 
 	@Override
@@ -55,13 +61,28 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 		initView();
 		isHasBookingPassenger=getBookingPassengerList();
 		if(!isVisitNetwork){//如果没有访问网络，则直接绑定intent中的数据到联系人列表的listview中
+			stopLoadingAni();
 			adapter = new ListAdapter(
 					context,
 					ActivityInlandAirlineticketSelectPassengers.this,
 					passengerList);
 			history_passenger_listview.setAdapter(adapter);
-
 		}
+	}
+	
+	private void loadingAni(){
+		history_passenger_listview.setVisibility(View.GONE);
+		loading_ll.setVisibility(View.VISIBLE);
+		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+				.getBackground();
+		anim.setOneShot(false);
+		anim.start();
+	}
+
+	private void stopLoadingAni(){
+		history_passenger_listview.setVisibility(View.VISIBLE);
+		loading_ll.setVisibility(View.GONE);
 	}
 
 	private void initView() {
@@ -72,6 +93,8 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 		bookingPassengerList = new ArrayList<Passenger>();
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		finish_tv = (TextView) findViewById(R.id.finish_tv);
+		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
+		loading_ll=(LinearLayout) findViewById(R.id.loading_ll);
 		add_new_passager_rl = (RelativeLayout) findViewById(R.id.add_new_passager_rl);
 		history_passenger_listview = (ListView) findViewById(R.id.history_passenger_listview);
 
@@ -89,6 +112,9 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 			String passengerString="",allPassengersListString="";
 			if (intent.hasExtra(SYSTYPE)) {
 				systype=intent.getStringExtra(SYSTYPE);
+			}
+			if (intent.hasExtra(TITLE_NAME)) {
+				((TextView)findViewById(R.id.title_tv)).setText(intent.getStringExtra(TITLE_NAME));
 			}
 			if (intent.hasExtra(ActivityInlandAirlineticketBooking.ALLPASSENGERSLIST)) {
 				allPassengersListString=intent.getStringExtra(ActivityInlandAirlineticketBooking.ALLPASSENGERSLIST);
@@ -171,6 +197,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
+				stopLoadingAni();
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(passengersReturnJson);
 				try {
@@ -185,7 +212,6 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 								ActivityInlandAirlineticketSelectPassengers.this,
 								passengerList);
 						history_passenger_listview.setAdapter(adapter);
-
 					} else {// "查询失败"
 					}
 				} catch (JSONException e) {
@@ -210,6 +236,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 	}
 
 	private void startQueryCommonPassengers() {
+		loadingAni();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

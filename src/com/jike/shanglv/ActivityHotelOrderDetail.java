@@ -8,13 +8,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.Common.CommonFunc;
@@ -33,6 +36,9 @@ public class ActivityHotelOrderDetail extends Activity {
 			roomCount_tv,inDate_tv,outDate_tv,roomNights_tv,latetime_tv,
 			hotel_adress_tv,passengers_tv;
 	private Button pay_now_btn;
+	private ImageView frame_ani_iv;
+	private RelativeLayout loading_ll;
+	private ScrollView scrollview;
 	private SharedPreferences sp;
 	private String orderID = "",  amount = "";// amountÎª¶©µ¥½ð¶î
 	private String orderDetailReturnJson;
@@ -51,6 +57,16 @@ public class ActivityHotelOrderDetail extends Activity {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+				.getBackground();
+		anim.setOneShot(false);
+		anim.start();
+	}
 
 	private void initView() {
 		context = this;
@@ -60,6 +76,9 @@ public class ActivityHotelOrderDetail extends Activity {
 		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
 		back_imgbtn.setOnClickListener(btnClickListner);
 		home_imgbtn.setOnClickListener(btnClickListner);
+		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
+		loading_ll=(RelativeLayout) findViewById(R.id.loading_ll);
+		scrollview=(ScrollView)findViewById(R.id.scrollview);
 		pay_now_btn = (Button) findViewById(R.id.pay_now_btn);
 		pay_now_btn.setOnClickListener(btnClickListner);
 		pay_type_tv = (TextView) findViewById(R.id.pay_type_tv);
@@ -129,6 +148,8 @@ public class ActivityHotelOrderDetail extends Activity {
 			JSONTokener jsonParser;
 			switch (msg.what) {
 			case ORDERDETAIL_MSG_CODE:
+				loading_ll.setVisibility(View.GONE);
+				scrollview.setVisibility(View.VISIBLE);
 				jsonParser = new JSONTokener(orderDetailReturnJson);
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
@@ -201,6 +222,4 @@ public class ActivityHotelOrderDetail extends Activity {
 			}
 		}).start();
 	}
-
-
 }
