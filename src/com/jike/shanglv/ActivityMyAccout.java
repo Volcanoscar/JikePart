@@ -1,6 +1,10 @@
 package com.jike.shanglv;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,12 +20,14 @@ public class ActivityMyAccout extends Activity {
 	private Button logout_button;
 	private TextView username_tv,zhanghuyue_tv,chongzhi_tv,phone_tv,email_tv;
 	private SharedPreferences sp;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_myaccount);
 
+		context=this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
 		back_iv.setOnClickListener(btnClickListner);
@@ -52,10 +58,17 @@ public class ActivityMyAccout extends Activity {
 				startActivity(new Intent(ActivityMyAccout.this, MineActivity.class));
 				break;
 			case R.id.logout_button:
-				sp.edit().putString(SPkeys.userid.getString(),"").commit();
-				sp.edit().putString(SPkeys.username.getString(),"").commit();
-				sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
-				finish();
+				new AlertDialog.Builder(context).setTitle("确认注销").setNegativeButton("取消", null)
+				.setMessage("确认注销当前用户？").setPositiveButton("注销", new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						sp.edit().putString(SPkeys.userid.getString(),"").commit();
+						sp.edit().putString(SPkeys.username.getString(),"").commit();
+						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
+						finish();
+					}
+				}).show();
+				
 				break;
 			case R.id.chongzhi_tv:
 				startActivity(new Intent(ActivityMyAccout.this, ActivityZhanghuchongzhi.class));
