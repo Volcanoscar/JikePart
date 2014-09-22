@@ -175,18 +175,14 @@ public class ActivityHangbandongtai extends Activity {
 				endcity_code_tv.setText(tempCityCode);
 				break;
 			case R.id.chongzhi_button://搜索
-				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
-					startActivity(new Intent(context,Activity_Login.class));
-					break;
-				}
+//				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+//					startActivity(new Intent(context,Activity_Login.class));
+//					break;
+//				}
 				if (startcity_tv.getText().toString().trim().equals(endcity_tv.getText().toString().trim())) {
 					new AlertDialog.Builder(context).setTitle("出发和到达不能为同一个城市").setPositiveButton("知道了", null).show();
 					break;
 				}
-//				if (wayType==SingleOrDouble.doubleWayGo) {
-//					Toast.makeText(context, "暂不支持按航班查询,敬请期待！", 0).show();
-//					break;
-//				}else
 				if (wayType==SingleOrDouble.doubleWayGo&&flightno_cet.getText().toString().trim().length()==0) {
 					new AlertDialog.Builder(context).setTitle("请输入要查询的航班号码").setPositiveButton("确定", null).show();
 					break;

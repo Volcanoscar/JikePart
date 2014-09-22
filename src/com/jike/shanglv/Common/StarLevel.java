@@ -20,5 +20,6 @@ public class StarLevel {
 		StarlevelReverse.put("三星级/舒适","3");
 		StarlevelReverse.put("四星级/高档","4");
 		StarlevelReverse.put("五星级/豪华","5");
+		StarlevelReverse.put("不限","");
 	}
 }

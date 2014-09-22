@@ -1,49 +1,40 @@
 package com.jike.shanglv;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnHoverListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.ViewFlipper;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.view.WindowManager;
-import android.app.Activity;
-import android.app.ActivityGroup;
-import android.app.LocalActivityManager;
-import android.view.Display;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
+import android.widget.Toast;
+
+import com.jike.shanglv.Common.MyRolateAnimImageView;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public class HomeActivity extends Activity  implements AnimationListener{
+public class HomeActivity extends Activity{
 
 	public static HomeActivity instance = null;
 	private SharedPreferences sp;
-	private ImageButton btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg, btn_hfcz,
-			btn_jdmp, btn_zhcz, btn_hcp;
+//	private ImageButton btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg, btn_hfcz,
+//			btn_jdmp, btn_zhcz, btn_hcp;
 	
-	Animation animScal;
+	private MyRolateAnimImageView btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg, btn_hfcz,
+	btn_jdmp, btn_zhcz, btn_hcp;
+	private Context context;
+	
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home1);
-
+		setContentView(R.layout.activity_home2);
+		context=this;
 		sp=this.getSharedPreferences("mySPData",Activity.MODE_PRIVATE);
+		/*
 		btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
 		btn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);
 		btn_hbdt = (ImageButton) findViewById(R.id.imgBtn_hbdt);
@@ -51,8 +42,20 @@ public class HomeActivity extends Activity  implements AnimationListener{
 		btn_zhcz = (ImageButton) findViewById(R.id.imgBtn_zhcz);
 		btn_hcp = (ImageButton) findViewById(R.id.imgBtn_hcp);
 		btn_jd = (ImageButton) findViewById(R.id.imgBtn_jd);
+		
 //		btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg);
 //		btn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp);
+//		btn_tg.setOnClickListener(btnClickListner);
+//		btn_jdmp.setOnClickListener(btnClickListner);
+		
+		*/
+		btn_gnjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gnjp);
+		btn_gjjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gjjp);
+		btn_hbdt = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hbdt);
+		btn_hfcz = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hfcz);
+		btn_zhcz = (MyRolateAnimImageView) findViewById(R.id.imgBtn_zhcz);
+		btn_hcp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hcp);
+		btn_jd = (MyRolateAnimImageView) findViewById(R.id.imgBtn_jd);
 		btn_gnjp.setOnClickListener(btnClickListner);
 		btn_gjjp.setOnClickListener(btnClickListner);
 		btn_hbdt.setOnClickListener(btnClickListner);
@@ -60,58 +63,8 @@ public class HomeActivity extends Activity  implements AnimationListener{
 		btn_hfcz.setOnClickListener(btnClickListner);
 		btn_zhcz.setOnClickListener(btnClickListner);
 		btn_hcp.setOnClickListener(btnClickListner);
-//		btn_tg.setOnClickListener(btnClickListner);
-//		btn_jdmp.setOnClickListener(btnClickListner);
-		
-		btn_gnjp.setOnHoverListener(new OnHoverListener() {
-			@Override
-			public boolean onHover(View arg0, MotionEvent arg1) {
-				btn_gnjp.startAnimation(animScal);
-				return true;
-			}
-		});
-		
-		animScal = AnimationUtils.loadAnimation(getApplicationContext(),
-	            R.anim.home_drawable_zoom_out);
-		animScal.setAnimationListener(new AnimationListener() {
-            
-            @Override
-            public void onAnimationStart(Animation animation) {
-                    
-            }
-            
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                    
-            }
-            
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                    //动画执行完后的动作
-            }
-    });
-	}
+	}		
 	
-	
-	@Override
-	public void onAnimationEnd(Animation arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onAnimationRepeat(Animation arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onAnimationStart(Animation arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -119,7 +72,7 @@ public class HomeActivity extends Activity  implements AnimationListener{
 		edit.putLong("adjustFontSize", adjustFontSize());  
 		edit.commit();//将按屏幕分辨率计算好的合适文字大小存起来供后面的自定义控件使用
 	}
-
+	
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
 
 		@Override

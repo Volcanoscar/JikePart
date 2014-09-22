@@ -43,14 +43,29 @@
                 <action android:name="com.baidu.location.service_v2.4" />
             </intent-filter>
         </service>
+          <!--欢迎页 -->
+        <activity
+            android:name=".WelcomeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+             >
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+        </activity>
+       <!-- 引导页 -->
+        <activity
+            android:name=".GuideActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+             >
+        </activity>
         <activity
             android:name="com.jike.shanglv.MainActivity"
             android:screenOrientation="portrait" 
             android:label="@string/app_name" >
-    	    <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
+             
         </activity>
         
         <!-- 日历选择-->
@@ -271,6 +286,13 @@
             android:screenOrientation="portrait"
             >
         </activity>
+         <!--酒店筛选-->
+        <activity
+            android:name=".ActivityHotelFilter"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            >
+        </activity>
          <!--酒店详情-->
         <activity
             android:name=".ActivityHotelDetail"
@@ -401,7 +423,6 @@
             android:screenOrientation="portrait"
              >
         </activity>
-        
         
     </application>
 

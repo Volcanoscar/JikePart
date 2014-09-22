@@ -3,6 +3,7 @@ package com.jike.shanglv;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.view.WindowManager;
@@ -22,13 +24,14 @@ import android.app.LocalActivityManager;
 import android.view.Display;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public class MainActivity extends ActivityGroup  implements OnCheckedChangeListener{
+public class MainActivity extends ActivityGroup implements
+		OnCheckedChangeListener {
 
 	public static MainActivity instance = null;
 	private RadioGroup radio_group;
 	private Intent mIntent;
 	private ViewFlipper container;
-	private RadioButton radio_order,radio_home,radio_mine,radio_more; 
+	private RadioButton radio_order, radio_home, radio_mine, radio_more;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,9 @@ public class MainActivity extends ActivityGroup  implements OnCheckedChangeListe
 		initView();
 		initHomePage();
 		radio_group.setOnCheckedChangeListener(this);
+//		SysApplication.getInstance().addActivity(this); 
 	}
-	
+
 	private void switchPage(int positoon) {
 		switch (positoon) {
 		case 0:
@@ -57,13 +61,16 @@ public class MainActivity extends ActivityGroup  implements OnCheckedChangeListe
 		default:
 			break;
 		}
-		
+
 		container.removeAllViews();
-		    mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		    Window subActivity = getLocalActivityManager().startActivity("subActivity", mIntent);
-		container.addView(subActivity.getDecorView(), new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-		        LayoutParams.FILL_PARENT));
+		mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Window subActivity = getLocalActivityManager().startActivity(
+				"subActivity", mIntent);
+		container.addView(subActivity.getDecorView(),
+				new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+						LayoutParams.FILL_PARENT));
 	}
+
 	/**
 	 * 根据checkedId来判断选定的Radio，从而进行页面的换
 	 */
@@ -86,15 +93,16 @@ public class MainActivity extends ActivityGroup  implements OnCheckedChangeListe
 			break;
 		}
 	}
-	
-	private void initHomePage()
-	{
+
+	private void initHomePage() {
 		container.removeAllViews();
 		mIntent = new Intent(this, HomeActivity.class);
-		    mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		    Window subActivity = getLocalActivityManager().startActivity("subActivity", mIntent);
-		container.addView(subActivity.getDecorView(), new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-		        LayoutParams.FILL_PARENT));
+		mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Window subActivity = getLocalActivityManager().startActivity(
+				"subActivity", mIntent);
+		container.addView(subActivity.getDecorView(),
+				new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+						LayoutParams.FILL_PARENT));
 	}
 
 	/**
@@ -103,10 +111,10 @@ public class MainActivity extends ActivityGroup  implements OnCheckedChangeListe
 	private void initView() {
 		container = (ViewFlipper) findViewById(R.id.container);
 		radio_group = (RadioGroup) findViewById(R.id.radio_group);
-		radio_order=(RadioButton)findViewById(R.id.radio_order);
-		radio_home=(RadioButton)findViewById(R.id.radio_home);
-		radio_mine=(RadioButton)findViewById(R.id.radio_mine);
-		radio_more=(RadioButton)findViewById(R.id.radio_more);
+		radio_order = (RadioButton) findViewById(R.id.radio_order);
+		radio_home = (RadioButton) findViewById(R.id.radio_home);
+		radio_mine = (RadioButton) findViewById(R.id.radio_mine);
+		radio_more = (RadioButton) findViewById(R.id.radio_more);
 	}
 
 	@Override
@@ -115,9 +123,31 @@ public class MainActivity extends ActivityGroup  implements OnCheckedChangeListe
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+	}
+
+	private long mExitTime;
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if ((System.currentTimeMillis() - mExitTime) > 2000) {
+				Object mHelperUtils;
+				Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+				mExitTime = System.currentTimeMillis();
+
+			} else {
+//				finish();
+//				SysApplication.getInstance().exit();
+				  android.os.Process.killProcess(android.os.Process.myPid());
+				  finish();
+				  System.exit(0); 
+				  //http://864331652.blog.163.com/blog/static/1168625632013415112635566/
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

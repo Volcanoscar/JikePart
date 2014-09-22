@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/menu_top" >
+
+        <ImageView
+            android:id="@+id/menu_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/title_slgj" >
+        </ImageView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="359"
+            android:gravity="center_vertical|center_horizontal" >
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_gnjp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_gnjp_item1" />
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_gjjp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/content_description"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_gjjp_item1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="287"
+            android:gravity="center_vertical|center_horizontal" >
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_jd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="2"
+                android:contentDescription="@string/content_description"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_jd_item1" />
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_hbdt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/content_description"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_hbdt_item1" />
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_hfcz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/content_description"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_hfcz_item1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="328"
+            android:gravity="center_vertical|center_horizontal" >
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_zhcz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/content_description"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_zhcz_item1" />
+
+            <com.jike.shanglv.Common.MyRolateAnimImageView
+                android:id="@+id/imgBtn_hcp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/content_description"
+                android:scaleType="matrix"
+                android:src="@drawable/nav_hcp_item1" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

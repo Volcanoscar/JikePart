@@ -2,8 +2,12 @@ package com.jike.shanglv;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -11,21 +15,29 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.IDCard;
@@ -40,9 +52,9 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 
 	private TextView cancel_tv,finish_tv, passengerType_tv, identificationType_tv;
 	private ClearEditText passengerName_et, identificationNum_et, phoneNum_et;
-	private Button shenfenzheng_btn, huzhao_btn, gangaotongxingzheng_btn,
-			taobaozheng_btn, qita_btn, chengren_btn, ertongpiao_btn,
-			yingerpiao_btn;
+//	private Button shenfenzheng_btn, huzhao_btn, gangaotongxingzheng_btn,
+//			taobaozheng_btn, qita_btn, chengren_btn, ertongpiao_btn,
+//			yingerpiao_btn;
 	private PopupWindow popupWindow_idtype, popupWindow_ptype;
 	private View popupWindowView_idtype, popupWindowView_ptype;
 	private Context context;
@@ -105,45 +117,45 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 		passengerType_tv.setOnClickListener(clickListener);
 		savecontact_rl.setOnClickListener(clickListener);
 
-		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-		popupWindowView_idtype = inflater.inflate(
-				R.layout.popupwindow_identification_type, null);
-		popupWindow_idtype = new PopupWindow(popupWindowView_idtype,
-				LayoutParams.FILL_PARENT, 420, true);
-		popupWindow_idtype.setBackgroundDrawable(new BitmapDrawable());
-		// 设置PopupWindow的弹出和消失效果
-		popupWindow_idtype.setAnimationStyle(R.style.AnimBottomPopup);
-		shenfenzheng_btn = (Button) popupWindowView_idtype
-				.findViewById(R.id.shenfenzheng_btn);
-		huzhao_btn = (Button) popupWindowView_idtype
-				.findViewById(R.id.huzhao_btn);
-		gangaotongxingzheng_btn = (Button) popupWindowView_idtype
-				.findViewById(R.id.gangaotongxingzheng_btn);
-		taobaozheng_btn = (Button) popupWindowView_idtype
-				.findViewById(R.id.taobaozheng_btn);
-		qita_btn = (Button) popupWindowView_idtype.findViewById(R.id.qita_btn);
-		shenfenzheng_btn.setOnClickListener(popupClickListener);
-		huzhao_btn.setOnClickListener(popupClickListener);
-		gangaotongxingzheng_btn.setOnClickListener(popupClickListener);
-		taobaozheng_btn.setOnClickListener(popupClickListener);
-		qita_btn.setOnClickListener(popupClickListener);
-
-		popupWindowView_ptype = inflater.inflate(
-				R.layout.popupwindow_passenger_type, null);
-		popupWindow_ptype = new PopupWindow(popupWindowView_ptype,
-				LayoutParams.FILL_PARENT, 280, true);
-		popupWindow_ptype.setBackgroundDrawable(new BitmapDrawable());
-		// 设置PopupWindow的弹出和消失效果
-		popupWindow_ptype.setAnimationStyle(R.style.AnimBottomPopup);
-		chengren_btn = (Button) popupWindowView_ptype
-				.findViewById(R.id.chengren_btn);
-		ertongpiao_btn = (Button) popupWindowView_ptype
-				.findViewById(R.id.ertongpiao_btn);
-		yingerpiao_btn = (Button) popupWindowView_ptype
-				.findViewById(R.id.yingerpiao_btn);
-		chengren_btn.setOnClickListener(popupClickListener_ptype);
-		ertongpiao_btn.setOnClickListener(popupClickListener_ptype);
-		yingerpiao_btn.setOnClickListener(popupClickListener_ptype);
+//		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//		popupWindowView_idtype = inflater.inflate(
+//				R.layout.popupwindow_identification_type, null);
+//		popupWindow_idtype = new PopupWindow(popupWindowView_idtype,
+//				LayoutParams.FILL_PARENT, 420, true);
+//		popupWindow_idtype.setBackgroundDrawable(new BitmapDrawable());
+//		// 设置PopupWindow的弹出和消失效果
+//		popupWindow_idtype.setAnimationStyle(R.style.AnimBottomPopup);
+//		shenfenzheng_btn = (Button) popupWindowView_idtype
+//				.findViewById(R.id.shenfenzheng_btn);
+//		huzhao_btn = (Button) popupWindowView_idtype
+//				.findViewById(R.id.huzhao_btn);
+//		gangaotongxingzheng_btn = (Button) popupWindowView_idtype
+//				.findViewById(R.id.gangaotongxingzheng_btn);
+//		taobaozheng_btn = (Button) popupWindowView_idtype
+//				.findViewById(R.id.taobaozheng_btn);
+//		qita_btn = (Button) popupWindowView_idtype.findViewById(R.id.qita_btn);
+//		shenfenzheng_btn.setOnClickListener(popupClickListener);
+//		huzhao_btn.setOnClickListener(popupClickListener);
+//		gangaotongxingzheng_btn.setOnClickListener(popupClickListener);
+//		taobaozheng_btn.setOnClickListener(popupClickListener);
+//		qita_btn.setOnClickListener(popupClickListener);
+//
+//		popupWindowView_ptype = inflater.inflate(
+//				R.layout.popupwindow_passenger_type, null);
+//		popupWindow_ptype = new PopupWindow(popupWindowView_ptype,
+//				LayoutParams.FILL_PARENT, 280, true);
+//		popupWindow_ptype.setBackgroundDrawable(new BitmapDrawable());
+//		// 设置PopupWindow的弹出和消失效果
+//		popupWindow_ptype.setAnimationStyle(R.style.AnimBottomPopup);
+//		chengren_btn = (Button) popupWindowView_ptype
+//				.findViewById(R.id.chengren_btn);
+//		ertongpiao_btn = (Button) popupWindowView_ptype
+//				.findViewById(R.id.ertongpiao_btn);
+//		yingerpiao_btn = (Button) popupWindowView_ptype
+//				.findViewById(R.id.yingerpiao_btn);
+//		chengren_btn.setOnClickListener(popupClickListener_ptype);
+//		ertongpiao_btn.setOnClickListener(popupClickListener_ptype);
+//		yingerpiao_btn.setOnClickListener(popupClickListener_ptype);
 
 		Intent intent = getIntent();
 		if (intent != null) {
@@ -190,8 +202,6 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 					&& !editPassenger.getMobie().equals("null"))
 				phoneNum_et.setText(editPassenger.getMobie());
 			if (systype.equals("1")) {// 若为国际机票
-				shenfenzheng_btn.setBackgroundColor(getResources().getColor(R.color.gray));
-				shenfenzheng_btn.setEnabled(false);//国际不能使用身份证
 				// issueAt_et,IDdeadline_et, nation_et, gender_et, birthDay_et
 				if (editPassenger.getIssueAt() != null
 						&& !editPassenger.getIssueAt().equals("null"))
@@ -315,16 +325,23 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 						ActivityInlandAirlineticketAddoreditPassengers.this
 								.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				popupWindow_idtype.showAtLocation(shenfenzheng_btn,
-						Gravity.BOTTOM, 0, 0);
+//				popupWindow_idtype.showAtLocation(shenfenzheng_btn,	Gravity.BOTTOM, 0, 0);
+				if (systype.equals("1")) {// 若为国际机票
+					iniPopupWindow(0,initInternationalIdentificationTypeData());//国际不能使用身份证
+				}else {
+					iniPopupWindow(0, initInlandIdentificationTypeData());
+				}
+				pwMyPopWindow.showAtLocation(finish_tv, Gravity.BOTTOM, 0,0);
 				break;
 			case R.id.passengerType_tv:
 				imm.hideSoftInputFromWindow(
 						ActivityInlandAirlineticketAddoreditPassengers.this
 								.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				popupWindow_ptype.showAtLocation(chengren_btn, Gravity.BOTTOM,
-						0, 0);
+//				popupWindow_ptype.showAtLocation(chengren_btn, Gravity.BOTTOM,	0, 0);
+				
+				iniPopupWindow(0, initPassengerTypeData());
+				pwMyPopWindow.showAtLocation(finish_tv, Gravity.BOTTOM, 0,0);
 				break;
 			case R.id.IDdeadline_rl:
 				Calendar c = Calendar.getInstance();
@@ -515,5 +532,208 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			}
 		}
 		return true;
+	}
+	
+	
+	
+	
+	
+	private PopupWindow pwMyPopWindow;// popupwindow
+	private ListView lvPopupList;
+	private int currentID_ZJ = 0;
+	private int currentID_CK = 0;
+
+	/*
+	 * xjOrJg 0:证件类型；1：乘客类型
+	 */
+	private void iniPopupWindow(final int zjOrCk,
+			final List<Map<String, Object>> list1) {
+		final LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.popupwindow_list_select, null);
+		lvPopupList = (ListView) layout.findViewById(R.id.lv_popup_list);
+		pwMyPopWindow = new PopupWindow(layout);
+		pwMyPopWindow.setFocusable(true);// 加上这个popupwindow中的ListView才可以接收点击事件
+
+		MyListAdapter adapter = new MyListAdapter(context, list1);
+		adapter.setCurrentID(zjOrCk == 0 ? currentID_ZJ : currentID_CK);
+		lvPopupList.setAdapter(adapter);
+		lvPopupList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (zjOrCk == 0) {// 0:证件类型
+					identificationType_tv.setText(list1.get(position).get("title")
+							.toString());
+					currentID_ZJ = position;
+					pwMyPopWindow.dismiss();
+				} else if (zjOrCk == 1) {// 1：乘客类型
+					passengerType_tv .setText(list1.get(position).get("title")
+							.toString());
+					currentID_CK = position;
+					pwMyPopWindow.dismiss();
+				}
+			}
+		});
+
+		// 控制popupwindow的宽度和高度自适应
+		lvPopupList.measure(View.MeasureSpec.UNSPECIFIED,
+				View.MeasureSpec.UNSPECIFIED);
+		pwMyPopWindow.setWidth(LayoutParams.FILL_PARENT);// lvPopupList.getMeasuredWidth()
+		pwMyPopWindow.setHeight(LayoutParams.FILL_PARENT);// ((lvPopupList.getMeasuredHeight())*
+															// list1.size());
+		pwMyPopWindow.setAnimationStyle(R.style.AnimBottomPopup);
+		ColorDrawable dw = new ColorDrawable(0xb0000000);
+		// 控制popupwindow点击屏幕其他地方消失
+		pwMyPopWindow.setBackgroundDrawable(dw);// (new BitmapDrawable());//
+												// 设置背景图片，不能在布局中设置，要通过代码来设置
+		pwMyPopWindow.setOutsideTouchable(true);// 触摸popupwindow外部，popupwindow消失。这个要求你的popupwindow要有背景图片才可以成功，如上
+
+		// 对弹出的全屏选择框添加OnTouchListener监听判断获取触屏位置，如果在listview外面则销毁弹出框
+		layout.setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				View layout = inflater.inflate(
+						R.layout.popupwindow_list_select, null);
+				int height = lvPopupList.getTop();
+				int y = (int) event.getY();
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					if (y < height) {
+						pwMyPopWindow.dismiss();
+					}
+				}
+				return true;
+			}
+		});
+	}
+
+	private ArrayList<Map<String, Object>> initInlandIdentificationTypeData() {
+		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", "身份证");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "护照");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "港澳通行证");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "台胞证");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "其他");
+		list.add(map);
+		return list;
+	}
+	
+	private ArrayList<Map<String, Object>> initInternationalIdentificationTypeData() {
+		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", "护照");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "港澳通行证");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "台胞证");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "其他");
+		list.add(map);
+		return list;
+	}
+	
+	private ArrayList<Map<String, Object>> initPassengerTypeData() {
+		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", "成人");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "儿童0");//以0结尾的数据表示不可选   本次APP客户端不支持儿童和婴儿票
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "婴儿0");
+		list.add(map);
+		return list;
+	}
+
+	private class MyListAdapter extends BaseAdapter {
+
+		@Override
+		public void notifyDataSetChanged() {
+			super.notifyDataSetChanged();
+		}
+
+		private LayoutInflater inflater;
+		List<Map<String, Object>> list;
+		Context c;
+		int currentID = 0;
+
+		public MyListAdapter(Context context, List<Map<String, Object>> list2) {
+			inflater = LayoutInflater.from(context);
+			this.c = context;
+			this.list = list2;
+		}
+
+		public void setList(ArrayList<Map<String, Object>> list) {
+			this.list = list;
+		}
+
+		@Override
+		public int getCount() {
+			return list.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return list.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Holder myHolder;
+			if (convertView == null) {
+				myHolder = new Holder();
+				convertView = inflater.inflate(
+						R.layout.item_train_baoxian_list_single, null);
+				myHolder.title = (TextView) convertView
+						.findViewById(R.id.title);
+				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
+				convertView.setTag(myHolder);
+			} else {
+				myHolder = (Holder) convertView.getTag();
+			}
+			if (position == this.currentID)
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.radio_clk));
+			else
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.radio));
+			String titleString=list.get(position).get("title").toString();
+			if (titleString.endsWith("0")) {//以0结尾的数据表示不可选
+				myHolder.title.setText(titleString.substring(0,titleString.length()-1));
+				convertView.setOnClickListener(null);
+				myHolder.title.setTextColor(getResources().getColor(R.color.gray));
+			}else{
+				myHolder.title.setText(titleString);
+				myHolder.title.setTextColor(getResources().getColor(R.color.black));
+			}
+			return convertView;
+		}
+
+		class Holder {
+			ImageView iv;
+			TextView title;
+		}
+
+		public void setCurrentID(int currentID) {
+			this.currentID = currentID;
+		}
 	}
 }

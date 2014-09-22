@@ -1,9 +1,12 @@
+//酒店筛选
 package com.jike.shanglv;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -36,111 +39,48 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.DateUtil;
+import com.jike.shanglv.Common.StarLevel;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
-public class ActivityHotel extends Activity {
+public class ActivityHotelFilter extends Activity {
 
-	private final int ruzhudate = 0, lidiandate = 1, ruzhucity = 2;
-	private ImageButton back_imgbtn, home_imgbtn;
-	private TextView city_tv, ruzhu_date_tv, lidian_date_tv, xingji_tv,
-			jiage_tv;
+	protected static final int FITER_RESULT_CODE=0;
+	private ImageButton back_imgbtn;
+	private TextView  xingji_tv,jiage_tv,reset_tv;
 	private com.jike.shanglv.Common.ClearEditText keywords_et;
-	private LinearLayout city_ll, my_position_ll, ruzhu_date_ll,
-			lidian_date_ll, xingji_ll, jiage_ll;
-	private Button search_button;
+	private LinearLayout  xingji_ll, jiage_ll;
+	private Button ok_button;
 	private Context context;
 	InputMethodManager imm;
 	private SharedPreferences sp;
-	private Boolean isNearby = false;
-	private double latitude, longtitude;
-	private String myaddress = "";
-	private int errorCode;// 定位结果
-	private LocationClient mLocationClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel);
+		setContentView(R.layout.activity_hotel_filter);
 		initView();
-		myNear();
 	}
 
-	private void myNear() {
-		mLocationClient.start();
-		mLocationClient.requestLocation();
-		city_tv.setText("我附近的酒店");
-		isNearby = true;
-	}
 
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		imm = (InputMethodManager) getSystemService(ActivityHotel.this.INPUT_METHOD_SERVICE);
-
-		mLocationClient = new LocationClient(this.getApplicationContext());
-		mLocationClient.registerLocationListener(new MyLocationListener());
-		InitLocation();
+		imm = (InputMethodManager) getSystemService(ActivityHotelFilter.this.INPUT_METHOD_SERVICE);
 
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
-		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
-		city_tv = (TextView) findViewById(R.id.city_tv);
-		ruzhu_date_tv = (TextView) findViewById(R.id.ruzhu_date_tv);
-		lidian_date_tv = (TextView) findViewById(R.id.lidian_date_tv);
 		xingji_tv = (TextView) findViewById(R.id.xingji_tv);
 		jiage_tv = (TextView) findViewById(R.id.jiage_tv);
 		keywords_et = (ClearEditText) findViewById(R.id.keywords_et);
-		my_position_ll = (LinearLayout) findViewById(R.id.my_position_ll);
-		ruzhu_date_ll = (LinearLayout) findViewById(R.id.ruzhu_date_ll);
-		lidian_date_ll = (LinearLayout) findViewById(R.id.lidian_date_ll);
 		xingji_ll = (LinearLayout) findViewById(R.id.xingji_ll);
 		jiage_ll = (LinearLayout) findViewById(R.id.jiage_ll);
-		city_ll = (LinearLayout) findViewById(R.id.city_ll);
-		city_ll.setOnClickListener(clickListener);
+		reset_tv=(TextView) findViewById(R.id.reset_tv);
 		back_imgbtn.setOnClickListener(clickListener);
-		home_imgbtn.setOnClickListener(clickListener);
-		my_position_ll.setOnClickListener(clickListener);
-		ruzhu_date_ll.setOnClickListener(clickListener);
-		lidian_date_ll.setOnClickListener(clickListener);
 		xingji_ll.setOnClickListener(clickListener);
 		jiage_ll.setOnClickListener(clickListener);
-
-		ruzhu_date_tv.setText(DateUtil.GetDateAfterToday(1));
-		lidian_date_tv.setText(DateUtil.GetDateAfterToday(2));
-
-		search_button = (Button) findViewById(R.id.chongzhi_button);
-		search_button.setOnClickListener(clickListener);
-	}
-
-	private void InitLocation() {
-		LocationClientOption option = new LocationClientOption();
-		// option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式:高精度
-		option.setCoorType("gcj02");// 返回的定位结果是百度经纬度，默认值gcj02
-		int span = 1000;
-		option.setScanSpan(span);// 设置发起定位请求的间隔时间为1000ms
-		option.setIsNeedAddress(true);
-		mLocationClient.setLocOption(option);
-	}
-
-	/**
-	 * 实现实位回调监听
-	 */
-	public class MyLocationListener implements BDLocationListener {
-
-		@Override
-		public void onReceiveLocation(BDLocation location) {// Receive Location
-			latitude = location.getLatitude();
-			longtitude = location.getLongitude();
-			myaddress = location.getAddrStr();
-			errorCode = location.getLocType();
-			// ((TextView)findViewById(R.id.test_tv)).setText(myaddress);
-			if (errorCode == 63 || errorCode == 63 || errorCode == 67
-					|| (errorCode > 500 && errorCode < 701)) {
-				// Toast.makeText(context, "网络异常，自动定位失败", 0).show();
-				city_tv.setText("上海");
-				isNearby = false;
-			}
-		}
+		ok_button = (Button) findViewById(R.id.ok_button);
+		ok_button.setOnClickListener(clickListener);
+		reset_tv.setOnClickListener(clickListener);
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -153,87 +93,64 @@ public class ActivityHotel extends Activity {
 			case R.id.home_imgbtn:
 				startActivity(new Intent(context, MainActivity.class));
 				break;
-			case R.id.my_position_ll:
-				myNear();
-				break;
-			case R.id.city_ll:
-				Intent cityIntent = new Intent();
-				cityIntent.setClass(context,
-						com.jike.shanglv.SeclectCity.HotelCityActivity.class);
-				startActivityForResult(cityIntent, ruzhucity);
-				break;
-			case R.id.ruzhu_date_ll:
-				Intent dateIntent = new Intent();
-				dateIntent.setClass(context,
-						com.jike.shanglv.ShipCalendar.MainActivity.class);
-				startActivityForResult(dateIntent, ruzhudate);
-				break;
-			case R.id.lidian_date_ll:
-				Intent dateIntent1 = new Intent();
-				dateIntent1.setClass(context,
-						com.jike.shanglv.ShipCalendar.MainActivity.class);
-				startActivityForResult(dateIntent1, lidiandate);
-				break;
 			case R.id.xingji_ll:
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				// popupWindow_xingji.showAtLocation(buxian_xingji_btn,Gravity.BOTTOM,
-				// 0, 0);
-
 				iniPopupWindow(0, initXingjiData());
-				pwMyPopWindow.showAtLocation(search_button, Gravity.BOTTOM, 0,
+				pwMyPopWindow.showAtLocation(ok_button, Gravity.BOTTOM, 0,
 						0);
+				break;
+			case R.id.reset_tv:
+				 xingji_tv.setText("不限");
+				 jiage_tv.setText("不限");
+				 keywords_et.setText("");
 				break;
 			case R.id.jiage_ll:
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				// popupWindow_jiage.showAtLocation(buxian_price_btn,Gravity.BOTTOM,
-				// 0, 0);
 				iniPopupWindow(1, initJiageData());
-				pwMyPopWindow.showAtLocation(search_button, Gravity.BOTTOM, 0,
+				pwMyPopWindow.showAtLocation(ok_button, Gravity.BOTTOM, 0,
 						0);
 				break;
-			case R.id.chongzhi_button:
-				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
-					startActivity(new Intent(context, Activity_Login.class));
-					break;
+			case R.id.ok_button:
+//				Intent intents = new Intent(context,
+//						ActivityHotelSearchlist.class);
+//				intents.putExtra("starlevel", xingji_tv.getText().toString());
+//				intents.putExtra("price", jiage_tv.getText().toString());
+//				intents.putExtra("keywords", keywords_et.getText().toString());
+//				startActivity(intents);
+				String keywords = keywords_et.getText().toString();
+				String star = StarLevel.StarlevelReverse.get(xingji_tv.getText().toString());
+				String price =jiage_tv.getText().toString();
+				String minprice = "",maxprice = "";
+				if (price.equals("￥150以下")) {
+					minprice = "";
+					maxprice = "150";
+				} else if (price.equals("￥150-￥300")) {
+					minprice = "150";
+					maxprice = "300";
+				} else if (price.equals("￥301-￥450")) {
+					minprice = "301";
+					maxprice = "450";
+				} else if (price.equals("￥451-￥600")) {
+					minprice = "451";
+					maxprice = "600";
+				} else if (price.equals("￥601-￥1000")) {
+					minprice = "601";
+					maxprice = "1000";
+				} else if (price.equals("￥1000以上")) {
+					minprice = "1000";
+					maxprice = "";
 				}
-				if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
-						.toString(), lidian_date_tv.getText().toString())) {
-					new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
-							.setPositiveButton("知道了", null).show();
-					break;
-				}
-				if (HttpUtils.showNetCannotUse(context)) {
-					break;
-				}
-				if (city_tv.getText().toString().equals("我附近的酒店")) {
-					isNearby = true;
-				}
-				if (city_tv.getText().toString().equals("我附近的酒店")
-						&& (myaddress == null || myaddress.equals(""))) {// 定位失败
-					city_tv.setText("上海");
-					isNearby = false;
-					Toast.makeText(context, "定位失败，请选择城市进行查询", 0).show();
-					break;
-				}
-				Intent intents = new Intent(context,
-						ActivityHotelSearchlist.class);
-				intents.putExtra("nearby", isNearby);
-				intents.putExtra("latitude", latitude);
-				intents.putExtra("longtitude", longtitude);
-				intents.putExtra("myaddress", myaddress);
-				intents.putExtra("city", city_tv.getText());
-				intents.putExtra("ruzhu_date", ruzhu_date_tv.getText()
-						.toString());
-				intents.putExtra("lidian_date", lidian_date_tv.getText()
-						.toString());
-				intents.putExtra("starlevel", xingji_tv.getText().toString());
-				intents.putExtra("price", jiage_tv.getText().toString());
-				intents.putExtra("keywords", keywords_et.getText().toString());
-				startActivity(intents);
+				Bundle bundle=new Bundle();//minprice = "", maxprice = "", star
+				bundle.putString("minprice", minprice);
+				bundle.putString("maxprice", maxprice);
+				bundle.putString("star", star);
+				bundle.putString("keywords", keywords_et.getText().toString());
+				setResult(0, getIntent().putExtra("filterdDate", bundle));
+				finish();
 				break;
 			default:
 				break;
@@ -241,39 +158,7 @@ public class ActivityHotel extends Activity {
 		}
 	};
 
-	/*
-	 * 选择城市或日期后结果回显到界面
-	 */
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (data == null)
-			return;
-		Bundle b = data.getExtras();
-		String myDate = DateUtil.GetTodayDate();// 获取从com.jike.jikepart.ShipCalendar.MainActivity中回传的值
-		switch (requestCode) {
-		case ruzhudate:
-			if (b != null && b.containsKey("pickedDate")) {
-				myDate = b.getString("pickedDate");
-				ruzhu_date_tv.setText(myDate);
-			}
-			break;
-		case lidiandate:
-			if (b != null && b.containsKey("pickedDate")) {
-				myDate = b.getString("pickedDate");
-				lidian_date_tv.setText(myDate);
-			}
-			break;
-		case ruzhucity:
-			if (b != null && b.containsKey("pickedCity")) {
-				String myCity = b.getString("pickedCity");
-				city_tv.setText(myCity);
-				isNearby = false;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-
+	
 	private PopupWindow pwMyPopWindow;// popupwindow
 	private ListView lvPopupList;
 	private int currentID_XJ = 0;

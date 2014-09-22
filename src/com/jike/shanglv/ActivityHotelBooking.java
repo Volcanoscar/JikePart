@@ -4,35 +4,47 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -67,8 +79,7 @@ public class ActivityHotelBooking extends Activity {
 			ruzhuren_rl5, ruzhurenID_rl, creadit_card_validity_rl,
 			identificationType_rl;
 	private LinearLayout ruzhu_date_ll, lidian_date_ll, Garantee_LL;
-	private Button one_room_btn, two_room_btn, three_room_btn, four_room_btn,
-			five_room_btn, time1_btn, time2_btn, time3_btn,shenfenzheng_btn,huzhao_btn,qita_btn;
+	private Button shenfenzheng_btn,huzhao_btn,qita_btn;//one_room_btn, two_room_btn, three_room_btn, four_room_btn,five_room_btn, time1_btn, time2_btn, time3_btn,
 	private Context context;
 
 	private PopupWindow popupWindow_order_room_count,
@@ -85,6 +96,7 @@ public class ActivityHotelBooking extends Activity {
 	private HotelRoom roomInfoObject;
 	private HotelRoomComfirm hotelRoomComfirm;
 	private CustomProgressDialog progressdialog;
+	private ArrayList<Map<String, Object>> arriveTimeList = new ArrayList<Map<String, Object>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +156,7 @@ public class ActivityHotelBooking extends Activity {
 		lidian_date_tv = (TextView) findViewById(R.id.lidian_date_tv);
 		room_count_tv = (TextView) findViewById(R.id.room_count_tv);
 		will_arrive_time_tv = (TextView) findViewById(R.id.will_arrive_time_tv);
+		will_arrive_time_tv.setOnClickListener(clickListener);
 		commit_order_tv = (TextView) findViewById(R.id.commit_order_tv);
 		roomType_tv = (TextView) findViewById(R.id.roomType_tv);
 		total_price_tv = (TextView) findViewById(R.id.total_price_tv);
@@ -174,60 +187,57 @@ public class ActivityHotelBooking extends Activity {
 		room_count_tv.setOnClickListener(clickListener);
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-		popupWindowView_order_room_count = inflater.inflate(
-				R.layout.popupwindow_hotel_order_room_count, null);
-		popupWindow_order_room_count = new PopupWindow(
-				popupWindowView_order_room_count, LayoutParams.FILL_PARENT,
-				550, true);
-		popupWindow_order_room_count
-				.setBackgroundDrawable(new BitmapDrawable());
-		// 设置PopupWindow的弹出和消失效果
-		popupWindow_order_room_count.setAnimationStyle(R.style.popupAnimation);
-
-		one_room_btn = (Button) popupWindowView_order_room_count
-				.findViewById(R.id.one_room_btn);
-		two_room_btn = (Button) popupWindowView_order_room_count
-				.findViewById(R.id.two_room_btn);
-		three_room_btn = (Button) popupWindowView_order_room_count
-				.findViewById(R.id.three_room_btn);
-		four_room_btn = (Button) popupWindowView_order_room_count
-				.findViewById(R.id.four_room_btn);
-		five_room_btn = (Button) popupWindowView_order_room_count
-				.findViewById(R.id.five_room_btn);
-		one_room_btn.setTag("1");
-		two_room_btn.setTag("2");
-		three_room_btn.setTag("3");
-		four_room_btn.setTag("4");
-		five_room_btn.setTag("5");
-		one_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-		two_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-		three_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-		four_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-		five_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-
-		will_arrive_time_tv.setOnClickListener(clickListener);
-		popupWindowView_order_will_arrive_time = inflater.inflate(
-				R.layout.popupwindow_hotel_order_arrive_time, null);
-		popupWindow_order_will_arrive_time = new PopupWindow(
-				popupWindowView_order_will_arrive_time,
-				LayoutParams.FILL_PARENT, 350, true);
-		popupWindow_order_will_arrive_time
-				.setBackgroundDrawable(new BitmapDrawable());
-		// 设置PopupWindow的弹出和消失效果
-		popupWindow_order_will_arrive_time
-				.setAnimationStyle(R.style.popupAnimation);
-		time1_btn = (Button) popupWindowView_order_will_arrive_time
-				.findViewById(R.id.time1_btn);
-		time2_btn = (Button) popupWindowView_order_will_arrive_time
-				.findViewById(R.id.time2_btn);
-		time3_btn = (Button) popupWindowView_order_will_arrive_time
-				.findViewById(R.id.time3_btn);
-		time1_btn.setTag("1");
-		time2_btn.setTag("2");
-		time3_btn.setTag("3");
-		time1_btn.setOnClickListener(arrive_time_popupClickListener);
-		time2_btn.setOnClickListener(arrive_time_popupClickListener);
-		time3_btn.setOnClickListener(arrive_time_popupClickListener);
+//		popupWindowView_order_room_count = inflater.inflate(
+//				R.layout.popupwindow_hotel_order_room_count, null);
+//		popupWindow_order_room_count = new PopupWindow(
+//				popupWindowView_order_room_count, LayoutParams.FILL_PARENT,
+//				550, true);
+//		popupWindow_order_room_count
+//				.setBackgroundDrawable(new BitmapDrawable());
+//		// 设置PopupWindow的弹出和消失效果
+//		popupWindow_order_room_count.setAnimationStyle(R.style.popupAnimation);
+//		one_room_btn = (Button) popupWindowView_order_room_count
+//				.findViewById(R.id.one_room_btn);
+//		two_room_btn = (Button) popupWindowView_order_room_count
+//				.findViewById(R.id.two_room_btn);
+//		three_room_btn = (Button) popupWindowView_order_room_count
+//				.findViewById(R.id.three_room_btn);
+//		four_room_btn = (Button) popupWindowView_order_room_count
+//				.findViewById(R.id.four_room_btn);
+//		five_room_btn = (Button) popupWindowView_order_room_count
+//				.findViewById(R.id.five_room_btn);
+//		one_room_btn.setTag("1");
+//		two_room_btn.setTag("2");
+//		three_room_btn.setTag("3");
+//		four_room_btn.setTag("4");
+//		five_room_btn.setTag("5");
+//		one_room_btn.setOnClickListener(room_count_tv_popupClickListener);
+//		two_room_btn.setOnClickListener(room_count_tv_popupClickListener);
+//		three_room_btn.setOnClickListener(room_count_tv_popupClickListener);
+//		four_room_btn.setOnClickListener(room_count_tv_popupClickListener);
+//		five_room_btn.setOnClickListener(room_count_tv_popupClickListener);
+//		popupWindowView_order_will_arrive_time = inflater.inflate(
+//				R.layout.popupwindow_hotel_order_arrive_time, null);
+//		popupWindow_order_will_arrive_time = new PopupWindow(
+//				popupWindowView_order_will_arrive_time,
+//				LayoutParams.FILL_PARENT, 350, true);
+//		popupWindow_order_will_arrive_time
+//				.setBackgroundDrawable(new BitmapDrawable());
+//		// 设置PopupWindow的弹出和消失效果
+//		popupWindow_order_will_arrive_time
+//				.setAnimationStyle(R.style.popupAnimation);
+//		time1_btn = (Button) popupWindowView_order_will_arrive_time
+//				.findViewById(R.id.time1_btn);
+//		time2_btn = (Button) popupWindowView_order_will_arrive_time
+//				.findViewById(R.id.time2_btn);
+//		time3_btn = (Button) popupWindowView_order_will_arrive_time
+//				.findViewById(R.id.time3_btn);
+//		time1_btn.setTag("1");
+//		time2_btn.setTag("2");
+//		time3_btn.setTag("3");
+//		time1_btn.setOnClickListener(arrive_time_popupClickListener);
+//		time2_btn.setOnClickListener(arrive_time_popupClickListener);
+//		time3_btn.setOnClickListener(arrive_time_popupClickListener);
 		
 		popupWindowView_hotel_guarantee_identification_type = inflater.inflate(
 				R.layout.popupwindow_hotel_guarantee_identification_type, null);
@@ -262,6 +272,8 @@ public class ActivityHotelBooking extends Activity {
 		identificationType_rl = (RelativeLayout) findViewById(R.id.identificationType_rl);
 		creadit_card_validity_rl.setOnClickListener(clickListener);
 		identificationType_rl.setOnClickListener(clickListener);
+		
+		arriveTimeList=initArriveTimeData();
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -297,15 +309,18 @@ public class ActivityHotelBooking extends Activity {
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				popupWindow_order_room_count.showAtLocation(one_room_btn,
-						Gravity.BOTTOM, 0, 0);
+//				popupWindow_order_room_count.showAtLocation(one_room_btn,Gravity.BOTTOM, 0, 0);
+				iniPopupWindow(0,initRoomCountData());
+				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0,0);
 				break;
 			case R.id.will_arrive_time_tv:
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				popupWindow_order_will_arrive_time.showAtLocation(time1_btn,
-						Gravity.BOTTOM, 0, 0);
+//				popupWindow_order_will_arrive_time.showAtLocation(time1_btn,Gravity.BOTTOM, 0, 0);
+
+				iniPopupWindow(1,arriveTimeList);//到达时间的数据动态变化
+				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0,0);
 				break;
 			case R.id.identificationType_rl:
 			case R.id.identificationType_tv:
@@ -328,7 +343,6 @@ public class ActivityHotelBooking extends Activity {
                     	 creadit_card_validity_tv.setText(month+"/"+String.valueOf(year).substring(2,4));  
                       }  
                   }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), 0).show();  
-
 
 				break;
 			case R.id.commit_order_tv:
@@ -529,24 +543,35 @@ public class ActivityHotelBooking extends Activity {
 											.getGaranteeRule().getEndtime()
 											.length() != 0)) {
 								time_need_guarantee=true;
-								time1_btn
-										.setText(hotelRoomComfirm
-												.getGaranteeRule()
-												.getStattime()
-												+ "之前");
-								time2_btn.setText(hotelRoomComfirm
-										.getGaranteeRule().getStattime()
-										+ "-"
-										+ hotelRoomComfirm.getGaranteeRule()
-												.getEndtime());
-								time3_btn.setText(hotelRoomComfirm
-										.getGaranteeRule().getEndtime() + "之后");
+								
+								arriveTimeList.clear();
+								Map<String, Object> map = new HashMap<String, Object>();
+								map.put("title", hotelRoomComfirm.getGaranteeRule().getStattime()+ "之前");
+								arriveTimeList.add(map);
+								map = new HashMap<String, Object>();
+								map.put("title", hotelRoomComfirm.getGaranteeRule().getStattime()+ "-"+ hotelRoomComfirm.getGaranteeRule().getEndtime());
+								arriveTimeList.add(map);
+								map = new HashMap<String, Object>();
+								map.put("title", hotelRoomComfirm.getGaranteeRule().getEndtime() + "之后");
+								arriveTimeList.add(map);
+//								time1_btn
+//										.setText(hotelRoomComfirm
+//												.getGaranteeRule()
+//												.getStattime()
+//												+ "之前");
+//								time2_btn.setText(hotelRoomComfirm
+//										.getGaranteeRule().getStattime()
+//										+ "-"
+//										+ hotelRoomComfirm.getGaranteeRule()
+//												.getEndtime());
+//								time3_btn.setText(hotelRoomComfirm
+//										.getGaranteeRule().getEndtime() + "之后");
 							}
 						}
-						will_arrive_time_tv.setText(time1_btn.getText());
+						will_arrive_time_tv.setText(arriveTimeList.get(0).get("title").toString());
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询酒店详情失败")
+						new AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
 								.setMessage(message)
 								.setPositiveButton("确认", null).show();
 					}
@@ -785,6 +810,231 @@ public class ActivityHotelBooking extends Activity {
 				}
 				contact_person_phone_cet.setText(myNum);
 			}
+		}
+	}
+	
+	
+	
+	
+	private PopupWindow pwMyPopWindow;// popupwindow
+	private ListView lvPopupList;
+	private int currentID_FJ = 0;
+	private int currentID_SJ = 0;
+
+	/*
+	 * fjOrSj 0:房间数；1：到店时间
+	 */
+	private void iniPopupWindow(final int fjOrSj,
+			final List<Map<String, Object>> list1) {
+		final LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.popupwindow_list_select, null);
+		lvPopupList = (ListView) layout.findViewById(R.id.lv_popup_list);
+		pwMyPopWindow = new PopupWindow(layout);
+		pwMyPopWindow.setFocusable(true);// 加上这个popupwindow中的ListView才可以接收点击事件
+
+		MyListAdapter adapter = new MyListAdapter(context, list1);
+		adapter.setCurrentID(fjOrSj == 0 ? currentID_FJ : currentID_SJ);
+		lvPopupList.setAdapter(adapter);
+		lvPopupList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (fjOrSj == 0) {// 0:房间
+					room_count_tv.setText(list1.get(position).get("title")
+							.toString());
+					currentID_FJ = position;
+					
+					if (currentID_FJ==0) {
+						ruzhuren_rl2.setVisibility(View.GONE);
+						ruzhuren_rl3.setVisibility(View.GONE);
+						ruzhuren_rl4.setVisibility(View.GONE);
+						ruzhuren_rl5.setVisibility(View.GONE);
+						room_count = 1;
+					} else if (currentID_FJ==1) {
+						ruzhuren_rl2.setVisibility(View.VISIBLE);
+						ruzhuren_rl3.setVisibility(View.GONE);
+						ruzhuren_rl4.setVisibility(View.GONE);
+						ruzhuren_rl5.setVisibility(View.GONE);
+						room_count = 2;
+					} else if (currentID_FJ==2) {
+						ruzhuren_rl2.setVisibility(View.VISIBLE);
+						ruzhuren_rl3.setVisibility(View.VISIBLE);
+						ruzhuren_rl4.setVisibility(View.GONE);
+						ruzhuren_rl5.setVisibility(View.GONE);
+						room_count = 3;
+					} else if (currentID_FJ==3) {
+						ruzhuren_rl2.setVisibility(View.VISIBLE);
+						ruzhuren_rl3.setVisibility(View.VISIBLE);
+						ruzhuren_rl4.setVisibility(View.VISIBLE);
+						ruzhuren_rl5.setVisibility(View.GONE);
+						room_count = 4;
+					} else if (currentID_FJ==4) {
+						ruzhuren_rl2.setVisibility(View.VISIBLE);
+						ruzhuren_rl3.setVisibility(View.VISIBLE);
+						ruzhuren_rl4.setVisibility(View.VISIBLE);
+						ruzhuren_rl5.setVisibility(View.VISIBLE);
+						room_count = 5;
+					}
+					if (roomcount_need_guarantee&&room_count>guarantee_room_count-1) {
+						Garantee_LL.setVisibility(View.VISIBLE);
+						garantee_desc_tv.setText(hotelRoomComfirm.getGaranteeRule()
+								.getDesc());
+						need_guarantee=true;
+					}else {
+						Garantee_LL.setVisibility(View.GONE);
+					}
+					
+					pwMyPopWindow.dismiss();
+				} else if (fjOrSj == 1) {// 1：时间
+					 will_arrive_time_tv .setText(list1.get(position).get("title")
+							.toString());
+					currentID_SJ = position;
+					if (time_need_guarantee && currentID_SJ==1) {// need_guarantee_btn
+						Garantee_LL.setVisibility(View.VISIBLE);
+						garantee_desc_tv.setText(hotelRoomComfirm.getGaranteeRule()
+								.getDesc());
+						need_guarantee=true;
+					} else {
+						Garantee_LL.setVisibility(View.GONE);
+					}
+					pwMyPopWindow.dismiss();
+				}
+			}
+		});
+		// 控制popupwindow的宽度和高度自适应
+		lvPopupList.measure(View.MeasureSpec.UNSPECIFIED,
+				View.MeasureSpec.UNSPECIFIED);
+		pwMyPopWindow.setWidth(LayoutParams.FILL_PARENT);// lvPopupList.getMeasuredWidth()
+		pwMyPopWindow.setHeight(LayoutParams.FILL_PARENT);// ((lvPopupList.getMeasuredHeight())*
+															// list1.size());
+		pwMyPopWindow.setAnimationStyle(R.style.AnimBottomPopup);
+		ColorDrawable dw = new ColorDrawable(0xb0000000);
+		// 控制popupwindow点击屏幕其他地方消失
+		pwMyPopWindow.setBackgroundDrawable(dw);// (new BitmapDrawable());//
+												// 设置背景图片，不能在布局中设置，要通过代码来设置
+		pwMyPopWindow.setOutsideTouchable(true);// 触摸popupwindow外部，popupwindow消失。这个要求你的popupwindow要有背景图片才可以成功，如上
+
+		// 对弹出的全屏选择框添加OnTouchListener监听判断获取触屏位置，如果在listview外面则销毁弹出框
+		layout.setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				View layout = inflater.inflate(
+						R.layout.popupwindow_list_select, null);
+				int height = lvPopupList.getTop();
+				int y = (int) event.getY();
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					if (y < height) {
+						pwMyPopWindow.dismiss();
+					}
+				}
+				return true;
+			}
+		});
+	}
+
+	private ArrayList<Map<String, Object>> initArriveTimeData() {
+		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", "18:00之前");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "18:00-06:00");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "06:00之后");
+		list.add(map);
+		return list;
+	}
+
+	private ArrayList<Map<String, Object>> initRoomCountData() {
+		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", "1间");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "2间");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "3间");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "4间");
+		list.add(map);
+		map = new HashMap<String, Object>();
+		map.put("title", "5间");
+		list.add(map);
+		return list;
+	}
+
+	private class MyListAdapter extends BaseAdapter {
+
+		@Override
+		public void notifyDataSetChanged() {
+			super.notifyDataSetChanged();
+		}
+
+		private LayoutInflater inflater;
+		List<Map<String, Object>> list;
+		Context c;
+		int currentID = 0;
+
+		public MyListAdapter(Context context, List<Map<String, Object>> list2) {
+			inflater = LayoutInflater.from(context);
+			this.c = context;
+			this.list = list2;
+		}
+
+		public void setList(ArrayList<Map<String, Object>> list) {
+			this.list = list;
+		}
+
+		@Override
+		public int getCount() {
+			return list.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return list.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Holder myHolder;
+			if (convertView == null) {
+				myHolder = new Holder();
+				convertView = inflater.inflate(
+						R.layout.item_train_baoxian_list_single, null);
+				myHolder.title = (TextView) convertView
+						.findViewById(R.id.title);
+				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
+				convertView.setTag(myHolder);
+			} else {
+				myHolder = (Holder) convertView.getTag();
+			}
+			if (position == this.currentID)
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.radio_clk));
+			else
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.radio));
+			myHolder.title.setText(list.get(position).get("title").toString());
+			return convertView;
+		}
+
+		class Holder {
+			ImageView iv;
+			TextView title;
+		}
+
+		public void setCurrentID(int currentID) {
+			this.currentID = currentID;
 		}
 	}
 }

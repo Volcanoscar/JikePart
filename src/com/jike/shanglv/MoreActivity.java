@@ -26,6 +26,7 @@ public class MoreActivity extends Activity {
 		 ((RelativeLayout)findViewById(R.id.gwpf_rl)).setOnClickListener(btnClickListner);
 		 ((RelativeLayout)findViewById(R.id.jcgx_rl)).setOnClickListener(btnClickListner);
 		 ((RelativeLayout)findViewById(R.id.gyslgj_rl)).setOnClickListener(btnClickListner);
+		 ((RelativeLayout)findViewById(R.id.xbjs_rl)).setOnClickListener(btnClickListner);
 	}
 	
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
@@ -45,6 +46,9 @@ public class MoreActivity extends Activity {
 				intent.putExtra(Activity_Web_Frame.TITLE, "¸øÎÒÆÀ·Ö");
 				intent.putExtra(Activity_Web_Frame.URL, "http://www.163.com");
 				startActivity(intent);
+				break;
+			case R.id.xbjs_rl:
+				startActivity(new Intent(MoreActivity.this, GuideActivity.class));
 				break;
 			case R.id.jcgx_rl:
 				break;

@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Common.StarLevel;
 import com.jike.shanglv.Enums.SPkeys;
@@ -56,11 +58,13 @@ import com.jike.shanglv.LazyList.ImageLoader;
 import com.jike.shanglv.Models.Hotel;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
+import com.jike.shanglv.SeclectCity.TrainCityModel;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class ActivityHotelSearchlist extends Activity implements
 		RefreshListView.IOnRefreshListener, RefreshListView.IOnLoadMoreListener {
 
+	protected static final int FILTER_REQUEST_CODE = 0;
 	private Context context;
 	private ImageButton back_imgbtn;
 	private ImageView sort_arrow_price_iv, sort_arrow_pingfen_iv,
@@ -229,6 +233,7 @@ public class ActivityHotelSearchlist extends Activity implements
 						listArray = jsonObject.getJSONArray("reqdata");
 						reqdata_List_size = reqdata_List.size();
 						createList(listArray);
+						reqdata_List=filterData(reqdata_List);
 						adapter = new ListAdapter(context, reqdata_List);
 						listview.setAdapter(adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -255,6 +260,7 @@ public class ActivityHotelSearchlist extends Activity implements
 				}
 				progressdialog.dismiss();
 				mapSign();
+//				filterData();
 				break;
 			case 2:// 附近的酒店列表
 				if (nearbyReturnJson.equals("")) {
@@ -282,6 +288,7 @@ public class ActivityHotelSearchlist extends Activity implements
 						listArray = jsonObject.getJSONArray("reqdata");
 						reqdata_List_size = reqdata_List.size();
 						createList(listArray);
+						reqdata_List=filterData(reqdata_List);
 						adapter = new ListAdapter(context, reqdata_List);
 						listview.setAdapter(adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -308,6 +315,7 @@ public class ActivityHotelSearchlist extends Activity implements
 				}
 				progressdialog.dismiss();
 				mapSign();
+//				filterData();// 附件的酒店返回的数据未按照搜索条件返回，返回后过滤一遍，达到按搜索条件查询的效果
 				break;
 			}
 		}
@@ -551,11 +559,101 @@ public class ActivityHotelSearchlist extends Activity implements
 					list_map_tv.setText("地图");
 				}
 				break;
+			case R.id.shaixuan_LL:
+				startActivityForResult(new Intent(context,
+						ActivityHotelFilter.class), FILTER_REQUEST_CODE);
+				break;
 			default:
 				break;
 			}
 		}
 	};
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == FILTER_REQUEST_CODE) {// 筛选结果返回
+			if (data == null) {
+				return;
+			}
+			Bundle b = data.getExtras();
+			if (b == null || !b.containsKey("filterdDate")) {
+				return;
+			} else {
+				b = b.getBundle("filterdDate");
+			}
+			if (b != null && b.containsKey("minprice")) {
+				minprice = b.getString("minprice");
+			}
+			if (b != null && b.containsKey("maxprice")) {
+				maxprice = b.getString("maxprice");
+			}
+			if (b != null && b.containsKey("star")) {
+				star = b.getString("star");
+			}
+			if (b != null && b.containsKey("keywords")) {
+				keywords = b.getString("keywords");
+			}
+			adapter.updateListView(filterData(reqdata_List));
+		}
+	}
+
+	/*
+	 * 按条件筛选数据
+	 */
+	private ArrayList<Hotel> filterData(ArrayList<Hotel> reqdata_List) {
+		ArrayList<Hotel> filterDateList2 = new ArrayList<Hotel>();
+		try {
+			ArrayList<Hotel> filterDateList = new ArrayList<Hotel>();
+			if (keywords.isEmpty()) {
+				filterDateList = reqdata_List;
+			} else {
+				filterDateList.clear();
+				for (int i = 0; i < reqdata_List.size(); i++) {
+					Hotel hotel = reqdata_List.get(i);
+					if (hotel.getAddress() != null
+							&& hotel.getAddress().indexOf(keywords) != -1
+							|| hotel.getCBD() != null
+							&& hotel.getCBD().indexOf(keywords) != -1
+							|| hotel.getName() != null
+							&& hotel.getName().indexOf(keywords) != -1
+							|| hotel.getService() != null
+							&& hotel.getService().indexOf(keywords) != -1) {
+						filterDateList.add(hotel);
+					}
+				}
+			}
+			ArrayList<Hotel> filterDateList1 = new ArrayList<Hotel>();
+			if (filterDateList.size() > 0) {
+				float min = Float.valueOf(minprice.isEmpty() ? "0" : minprice);
+				float max = Float.valueOf(maxprice.isEmpty() ? "999999"
+						: maxprice);
+				for (int i = 0; i < filterDateList.size(); i++) {
+					Hotel hotel = filterDateList.get(i);
+					if ((hotel.getPrice() != null || !hotel.getPrice()
+							.isEmpty())
+							&& Float.valueOf(hotel.getPrice()) > min
+							&& Float.valueOf(hotel.getPrice()) < max) {
+						filterDateList1.add(hotel);
+					}
+				}
+			}
+			if (filterDateList1.size() > 0 && !star.isEmpty()) {
+				for (int i = 0; i < filterDateList1.size(); i++) {
+					Hotel hotel = filterDateList1.get(i);
+					if (hotel.getStar().equals(star)) {
+						filterDateList2.add(hotel);
+					}
+				}
+			} else {
+				filterDateList2 = filterDateList1;
+			}
+//			adapter.updateListView(filterDateList2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return filterDateList2;
+	}
 
 	private void mapSign() {
 		try {
@@ -649,6 +747,11 @@ public class ActivityHotelSearchlist extends Activity implements
 		@Override
 		public int getCount() {
 			return str.size();
+		}
+
+		public void updateListView(List<Hotel> list) {
+			this.str = list;
+			notifyDataSetChanged();
 		}
 
 		public void refreshData(List<Hotel> data) {
