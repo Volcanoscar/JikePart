@@ -49,7 +49,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
              >
-             <intent-filter>
+           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
@@ -69,6 +69,12 @@
         </activity>
         
         <!-- 日历选择-->
+        <activity
+            android:name=".ShipCalendar.MainActivity_bak"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+         <!-- new日历选择-->
         <activity
             android:name=".ShipCalendar.MainActivity"
             android:screenOrientation="portrait"

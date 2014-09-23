@@ -29,7 +29,7 @@ public class MyApp {
 	public static Platform platform=Platform.B2C;
 	
 	public static String userkey="5b13658a9fc945e34893f806027d467a";//5b13658a9fc945e34893f806027d467a有效期到2014.09.10
-	public static String sitekey="d41d8cd98f00b204e9800998ecf8427e";
+	public static String sitekey="";
 	
 	public MyApp(Context context){
 		this.context=context;

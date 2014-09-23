@@ -1,6 +1,8 @@
 //订单列表
 package com.jike.shanglv;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -214,16 +216,22 @@ public class ActivityOrderList extends Activity implements
 			public void run() {// type=1:查航班号 type=2:查航段， air 航空公司
 				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
 				MyApp ma = new MyApp(context);
-				String str = "{\"orderID:\":\"" + orderID + "\",\"tm1\":\""
+				String str = "{\"orderID\":\"" + orderID + "\",\"tm1\":\""
 						+ startDate + "\",\"tm2\":\"" + endDate
 						+ "\",\"userID\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"pageSize\":\"" + pageSize
 						+ "\",\"pageIndex\":\"" + pageIndex + "\"}";
+				try {//解决获取数据时的400错误
+					str=URLEncoder.encode(str, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 				String param = "action=" + actionName + "&str=" + str
 						+ "&userkey=" + MyApp.userkey + "&sitekey="
 						+ MyApp.sitekey + "&sign="
 						+ CommonFunc.MD5(MyApp.userkey + actionName + str);
+		
 				orderlistReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 //				String param =  "?action=" + actionName 
