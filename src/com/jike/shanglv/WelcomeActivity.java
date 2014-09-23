@@ -1,6 +1,7 @@
 package com.jike.shanglv;
 
 import com.jike.shanglv.Enums.SPkeys;
+import com.jike.shanglv.Update.Xmlparse;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class WelcomeActivity extends Activity {
 		setContentView(R.layout.welcome);
 
 		init();
+//		(new Xmlparse()).getUpdateNode();
 	}
 
 	private void init() {

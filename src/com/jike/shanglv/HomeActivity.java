@@ -7,13 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.animation.Animation;
-import android.widget.Toast;
 
 import com.jike.shanglv.Common.MyRolateAnimImageView;
+import com.jike.shanglv.Update.Xmlparse;
 
 @SuppressWarnings({ "deprecation", "unused" })
 public class HomeActivity extends Activity{

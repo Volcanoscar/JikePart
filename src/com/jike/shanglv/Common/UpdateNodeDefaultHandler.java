@@ -5,8 +5,7 @@ import java.util.List;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import com.jike.shanglv.Models.UpdateNode;
+import com.jike.shanglv.Update.UpdateNode;
 
 public class UpdateNodeDefaultHandler extends DefaultHandler {
 		private List<UpdateNode> nodes;  
@@ -49,15 +48,15 @@ public class UpdateNodeDefaultHandler extends DefaultHandler {
 	            }else if ("updatetime".equals(tag)) {  
 	                node.setContent(data);  
 	            }else if ("hotelcity".equals(tag)) {  
-	                node.setHotelcity(data);  
+	                node.setHotelcity(Integer.valueOf(data));  
 	            }else if ("flightcity".equals(tag)) {  
-	                node.setFlightcity(data);  
+	                node.setFlightcity(Integer.valueOf(data));  
 	            }else if ("iflightcity".equals(tag)) {  
-	                node.setIflightcity(data);  
+	                node.setIflightcity(Integer.valueOf(data));  
 	            }else if ("traincity".equals(tag)) {  
-	                node.setTraincity(data);  
+	                node.setTraincity(Integer.valueOf(data));  
 	            }else if ("versionCode".equals(tag)) {  
-	                node.setVersionCode(data);  
+	                node.setVersionCode(Integer.valueOf(data));  
 	            }    
 	        }  
 	    }  

@@ -46,8 +46,8 @@ public class HttpUtils {
 			// 设置请求方式
 			conn.setRequestMethod("GET");
 			// 设置属性
-			// 设置该连接是否可输入
-			// conn.setDoInput(true);
+//			 设置该连接是否可输入
+			conn.setDoInput(true);
 			int code = conn.getResponseCode();
 			System.out.println(code + "****");
 			if (code == 200) {

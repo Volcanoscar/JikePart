@@ -23,7 +23,10 @@ public class DateUtil {
 		temp_str = sdf.format(dt);
 		return temp_str;
 	}
-
+	public static String GetNow() {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		return df.format(new Date());
+	}
 	/**
 	 * 获取今天之后i天的日期，明天:GetDateAfterToday(1)
 	 * */

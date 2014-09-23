@@ -125,7 +125,7 @@ public class ActivityOrderList extends Activity implements
 		home_imgbtn.setOnClickListener(btnClickListner);
 		// 默认查一月内的数据
 		startDate = DateUtil.GetDateAfterToday(-30);
-		endDate = DateUtil.GetTodayDate();
+		endDate = DateUtil.GetDateAfterToday(1);
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null) {
 			if (bundle.containsKey(ACTION_TOKENNAME)) {
@@ -171,7 +171,7 @@ public class ActivityOrderList extends Activity implements
 				scrollbar_iv.startAnimation(animation);
 
 				startDate = DateUtil.GetDateAfterToday(-30);
-				endDate = DateUtil.GetTodayDate();
+				endDate = DateUtil.GetDateAfterToday(1);
 				startQuery();
 				break;
 			case R.id.doubleline_tv:// 一月前
@@ -226,6 +226,12 @@ public class ActivityOrderList extends Activity implements
 						+ CommonFunc.MD5(MyApp.userkey + actionName + str);
 				orderlistReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
+//				String param =  "?action=" + actionName 
+//						+ "&userkey=" + MyApp.userkey + "&sitekey="
+//						+ MyApp.sitekey + "&sign="
+//						+ CommonFunc.MD5(MyApp.userkey + actionName + str);
+//				orderlistReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
+//						"&str=" + str);
 				Message msg = new Message();
 				msg.what = 1;
 				handler.sendMessage(msg);
@@ -717,12 +723,12 @@ public class ActivityOrderList extends Activity implements
 			if (actionName.equals(FLIGHT_ORDERLIST)
 					|| actionName.equals(DEMAND_ORDERLIST)
 					|| actionName.equals(TRAIN_ORDERLIST)) {
-				((AirlineTicketListAdapter) adapter)
+				if(order_List_airlineticket!=null)((AirlineTicketListAdapter) adapter)
 						.refreshData(order_List_airlineticket);
 			} else if (actionName.equals(HOTEL_ORDERLIST)) {
-				((HotelListAdapter) adapter).refreshData(order_List_hotel);
+				if(order_List_hotel!=null)((HotelListAdapter) adapter).refreshData(order_List_hotel);
 			} else if (actionName.equals(PHONE_ORDERLIST)) {
-				((PhoneListAdapter) adapter).refreshData(order_List_phone);
+				if(order_List_phone!=null)((PhoneListAdapter) adapter).refreshData(order_List_phone);
 			}
 			listview.onRefreshComplete();
 		}
