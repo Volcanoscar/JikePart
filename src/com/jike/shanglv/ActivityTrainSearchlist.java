@@ -374,9 +374,12 @@ public class ActivityTrainSearchlist extends Activity {
 			end_station_tv.setText(str.get(position).getStationE());
 			seat_grad_tv.setText(str.get(position).getSeat_Type());
 			price_tv.setText("￥" + str.get(position).getPrice());
-			remain_count_tv.setText("余票 " + str.get(position).getRemain_Count()
-					+ "张");
-
+			if (str.get(position).getRemain_Count().equals("40")) {
+				remain_count_tv.setText("票源充足 ");
+			}else {
+				remain_count_tv.setText("余票 " + str.get(position).getRemain_Count()
+						+ "张");
+			}		
 			String SFType = str.get(position).getSFType();
 			if (SFType.length() == 3) {
 				String SType = SFType.substring(0, 1);
@@ -397,40 +400,42 @@ public class ActivityTrainSearchlist extends Activity {
 							.getDrawable(R.drawable.train_over));
 				}
 			}
-			if (str.get(position).getYuDing().equals("False")) {
-				train_num_tv.setTextColor(getResources().getColor(R.color.gray));
-				train_type_tv.setTextColor(getResources().getColor(R.color.gray));
-				start_time_tv.setTextColor(getResources().getColor(R.color.gray));
-				arrive_time_tv.setTextColor(getResources().getColor(R.color.gray));
-				used_time_tv.setTextColor(getResources().getColor(R.color.gray));
-				start_station_tv.setTextColor(getResources().getColor(R.color.gray));
-				end_station_tv.setTextColor(getResources().getColor(R.color.gray));
-				seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
-				price_tv.setTextColor(getResources().getColor(R.color.gray));
-				remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
-				if (SFType.length() == 3) {
-					String SType = SFType.substring(0, 1);
-					String FType = SFType.substring(2, 3);
-					if (SType.equals("始")) {
-						start_station_icon_iv.setBackground(getResources()
-								.getDrawable(R.drawable.trains_startgray));
-					} else if (SType.equals("过")) {
-						start_station_icon_iv.setBackground(getResources()
-								.getDrawable(R.drawable.train_overgray));
-					}
-
-					if (FType.equals("终")) {
-						end_station_icon_iv.setBackground(getResources()
-								.getDrawable(R.drawable.train_finalgray));
-					} else if (FType.equals("过")) {
-						end_station_icon_iv.setBackground(getResources()
-								.getDrawable(R.drawable.train_overgray));
-					}
-				}
-				convertView.setEnabled(false);
-			}
+//			if (!Boolean.valueOf(str.get(position).getYuDing().toLowerCase())) {
+//				train_num_tv.setTextColor(getResources().getColor(R.color.gray));
+//				train_type_tv.setTextColor(getResources().getColor(R.color.gray));
+//				start_time_tv.setTextColor(getResources().getColor(R.color.gray));
+//				arrive_time_tv.setTextColor(getResources().getColor(R.color.gray));
+//				used_time_tv.setTextColor(getResources().getColor(R.color.gray));
+//				start_station_tv.setTextColor(getResources().getColor(R.color.gray));
+//				end_station_tv.setTextColor(getResources().getColor(R.color.gray));
+//				seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
+//				price_tv.setTextColor(getResources().getColor(R.color.gray));
+//				remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
+//				if (SFType.length() == 3) {
+//					String SType = SFType.substring(0, 1);
+//					String FType = SFType.substring(2, 3);
+//					if (SType.equals("始")) {
+//						start_station_icon_iv.setBackground(getResources()
+//								.getDrawable(R.drawable.trains_startgray));
+//					} else if (SType.equals("过")) {
+//						start_station_icon_iv.setBackground(getResources()
+//								.getDrawable(R.drawable.train_overgray));
+//					}
+//
+//					if (FType.equals("终")) {
+//						end_station_icon_iv.setBackground(getResources()
+//								.getDrawable(R.drawable.train_finalgray));
+//					} else if (FType.equals("过")) {
+//						end_station_icon_iv.setBackground(getResources()
+//								.getDrawable(R.drawable.train_overgray));
+//					}
+//				}
+//				convertView.setEnabled(false);
+//				convertView.setOnClickListener(null);
+//			}
 
 			return convertView;
 		}
+		
 	}
 }

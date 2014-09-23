@@ -225,8 +225,6 @@
                     android:background="@null"
                     android:drawableRight="@drawable/delete_selector"
                     android:hint="请输入证件号码"
-                    android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-"
-					android:inputType="number"
                     android:gravity="right"
                     android:singleLine="true"
                     android:textColor="@color/blue_title_color"

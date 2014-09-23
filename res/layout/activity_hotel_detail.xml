@@ -358,13 +358,15 @@
             </LinearLayout>
            <TextView
 				    android:id="@+id/no_rooms_status"
-				    android:layout_width="wrap_content"  
-				    android:layout_height="wrap_content"  
+				    android:layout_width="fill_parent"  
+				    android:layout_height="50dp"  
 				    android:textSize="15dp"
 				    android:layout_marginTop="15dp"
 				    android:visibility="gone"
+				    android:gravity="center"
 				    android:layout_gravity="center_horizontal"
-				    android:text="抱歉，该酒店在此期间暂无可售房型或已经满房。。。"/>
+				    android:background="@color/white"
+				    android:text="该酒店在此期间暂无可售房型或已经满房"/>
         </LinearLayout>
     </ScrollView>
 

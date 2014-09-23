@@ -155,12 +155,16 @@ public class ActivityOrderList extends Activity implements
 
 			switch (v.getId()) {
 			case R.id.singleline_tv:// 一月内
+				//页卡切换时原来的数据清空
+//				order_List_airlineticket.clear();
+//				order_List_hotel.clear();
+//				order_List_phone.clear();
+				
 				wayType = SingleOrDouble.singleWay;
 				singleline_tv.setTextColor(context.getResources().getColor(
 						R.color.blue_title_color));
 				doubleline_tv.setTextColor(context.getResources().getColor(
 						R.color.black_txt_color));
-
 				Animation animation = new TranslateAnimation(one, 0, 0, 0);
 				animation.setFillAfter(true);// True:图片停在动画结束位置
 				animation.setDuration(200);
@@ -169,24 +173,25 @@ public class ActivityOrderList extends Activity implements
 				startDate = DateUtil.GetDateAfterToday(-30);
 				endDate = DateUtil.GetTodayDate();
 				startQuery();
-
 				break;
 			case R.id.doubleline_tv:// 一月前
+				//页卡切换时原来的数据清空
+//				order_List_airlineticket.clear();
+//				order_List_hotel.clear();
+//				order_List_phone.clear();
+				
 				wayType = SingleOrDouble.doubleWayGo;
 				singleline_tv.setTextColor(context.getResources().getColor(
 						R.color.black_txt_color));
 				doubleline_tv.setTextColor(context.getResources().getColor(
 						R.color.blue_title_color));
-
 				animation = new TranslateAnimation(offset, one, 0, 0);
 				animation.setFillAfter(true);// True:图片停在动画结束位置
 				animation.setDuration(200);
 				scrollbar_iv.startAnimation(animation);
-
 				startDate = "2000-01-01";
 				endDate = DateUtil.GetDateAfterToday(-30);
 				startQuery();
-
 				break;
 			case R.id.back_imgbtn:// 返回
 				finish();
@@ -252,10 +257,11 @@ public class ActivityOrderList extends Activity implements
 						count = Integer.parseInt(jsonObject
 								.getString("recordcount"));
 						JSONArray jsonArray = jsonObject.getJSONArray("d");
-						if (jsonArray.length() == 0) {
+						if (jsonArray.length() == 0&&(order_List_airlineticket.size()==0&&order_List_hotel.size()==0&&order_List_phone.size()==0)) {
 							new AlertDialog.Builder(context)
 									.setTitle("未查询到相关数据")
 									.setPositiveButton("确认", null).show();
+							
 							// 不能这么干，因为动态加载更多时，也会清除数据
 							// if (actionName.equals(FLIGHT_ORDERLIST))
 							// {//国内机票或需求单
@@ -502,6 +508,7 @@ public class ActivityOrderList extends Activity implements
 						.getStartOffDate()));
 			} catch (Exception e) {
 				e.printStackTrace();
+				startoff_date_tv.setText(str.get(position).getStartOffDate());//国内机票直接返回2014-09-18的格式
 			}
 			startCity_tv.setText(str.get(position).getStartCity());
 			endCity_tv.setText(str.get(position).getEndCity());

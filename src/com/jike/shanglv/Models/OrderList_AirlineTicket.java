@@ -22,7 +22,7 @@ public class OrderList_AirlineTicket {
 				this.OrderStatus=object.getString("OrderStatus");
 				this.StartCity=object.getJSONArray("FlightInfo").getJSONObject(0).getString("sCityName");
 				this.endCity=object.getJSONArray("FlightInfo").getJSONObject(0).getString("eCityName");
-				this.StartOffDate=object.getJSONArray("FlightInfo").getJSONObject(0).getString("eCityName");
+				this.StartOffDate=object.getJSONArray("FlightInfo").getJSONObject(0).getString("beginDate");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
