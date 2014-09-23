@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Enums.SPkeys;
+import com.jike.shanglv.Models.Seat;
 import com.jike.shanglv.Models.TrainListItem;
 import com.jike.shanglv.Models.TrainListItem;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -137,7 +138,10 @@ public class ActivityTrainSearchlist extends Activity {
 								Intent intents = new Intent(
 										context,
 										ActivityTrainBooking.class);
-								intents.putExtra("TrainListItemString", JSONHelper.toJSON(ti));
+								String tiString=JSONHelper.toJSON(ti);
+								String seatListString=JSONHelper.toJSON(ti.getSeatList());
+								intents.putExtra("TrainListItemString", tiString);
+								intents.putExtra("SeatListString", seatListString);
 								intents.putExtra("startcity", startcity);
 								intents.putExtra("arrivecity", arrivecity);
 								intents.putExtra("startdate",startoff_date);
@@ -172,13 +176,19 @@ public class ActivityTrainSearchlist extends Activity {
 				TrainListItem ti = JSONHelper.parseObject(
 						flist_list.getJSONObject(i), TrainListItem.class);
 				JSONArray seatListArray=flist_list.getJSONObject(i).getJSONArray("SeatList");
+				ArrayList<Seat> SeatList=new ArrayList<Seat>();
 				for (int j = 0; j < seatListArray.length(); j++) {
-					TrainListItem ti1=ti.clone();
-					ti1.setSeat_Type(seatListArray.getJSONObject(j).getString("type"));
-					ti1.setPrice(seatListArray.getJSONObject(j).getString("price"));
-					ti1.setRemain_Count(seatListArray.getJSONObject(j).getString("shengyu"));
-					train_List.add(ti1);
+					Seat seat =new Seat();
+					seat.setPrice(seatListArray.getJSONObject(j).getString("price"));
+					seat.setShengyu(seatListArray.getJSONObject(j).getString("shengyu"));
+					seat.setType(seatListArray.getJSONObject(j).getString("type"));
+					SeatList.add(seat);
 				}
+				ti.setSeatList(SeatList);
+				ti.setSeat_Type(SeatList.get(0).getType());
+				ti.setRemain_Count(SeatList.get(0).getShengyu());
+				ti.setPrice(SeatList.get(0).getPrice());
+				train_List.add(ti);
 			} catch (Exception e) {
 		}
 		}
@@ -386,6 +396,38 @@ public class ActivityTrainSearchlist extends Activity {
 					end_station_icon_iv.setBackground(getResources()
 							.getDrawable(R.drawable.train_over));
 				}
+			}
+			if (str.get(position).getYuDing().equals("False")) {
+				train_num_tv.setTextColor(getResources().getColor(R.color.gray));
+				train_type_tv.setTextColor(getResources().getColor(R.color.gray));
+				start_time_tv.setTextColor(getResources().getColor(R.color.gray));
+				arrive_time_tv.setTextColor(getResources().getColor(R.color.gray));
+				used_time_tv.setTextColor(getResources().getColor(R.color.gray));
+				start_station_tv.setTextColor(getResources().getColor(R.color.gray));
+				end_station_tv.setTextColor(getResources().getColor(R.color.gray));
+				seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
+				price_tv.setTextColor(getResources().getColor(R.color.gray));
+				remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
+				if (SFType.length() == 3) {
+					String SType = SFType.substring(0, 1);
+					String FType = SFType.substring(2, 3);
+					if (SType.equals("ЪМ")) {
+						start_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.trains_startgray));
+					} else if (SType.equals("Й§")) {
+						start_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.train_overgray));
+					}
+
+					if (FType.equals("же")) {
+						end_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.train_finalgray));
+					} else if (FType.equals("Й§")) {
+						end_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.train_overgray));
+					}
+				}
+				convertView.setEnabled(false);
 			}
 
 			return convertView;

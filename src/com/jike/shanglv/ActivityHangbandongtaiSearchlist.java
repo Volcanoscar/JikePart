@@ -313,7 +313,7 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 			String picN=str.get(position).getFlightno().substring(0, 2);
 			MyApp ma = new MyApp(context);
 			String imgUrl=String.format(ma.getFlightCompanyLogo(),picN);
-			imageLoader.DisplayImage(imgUrl, flight_company_logo);
+			imageLoader.DisplayImageWithoutDefault(imgUrl, flight_company_logo);
 			flightNo_tv.setText(str.get(position).getFlightno());
 			flightName_tv.setVisibility(View.GONE);
 			startTime_tv.setText(str.get(position).getRealfly());

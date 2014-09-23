@@ -269,8 +269,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:background="@color/deep_gray" />
+            
+            <ListView 
+                android:id="@+id/xibie_listview"
+                 android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                ></ListView>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:background="@color/white"

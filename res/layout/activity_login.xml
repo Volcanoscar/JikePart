@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="@color/ef_gray_bg"
     android:orientation="vertical" >
 
    <RelativeLayout
@@ -69,7 +70,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/uname_text"
             android:background="@drawable/register_input"
-            android:inputType="textVisiblePassword"
+            android:hint="请输入用户名"
             android:paddingLeft="20dp"
             android:singleLine="true" />
     </RelativeLayout>
@@ -101,8 +102,9 @@
             android:layout_toRightOf="@id/password_tv"
             android:background="@drawable/register_input"
             android:inputType="textPassword"
+             android:hint="请输入用户密码"
             android:maxLength="16"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:singleLine="true" />
     </RelativeLayout>
 

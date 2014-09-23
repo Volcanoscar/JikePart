@@ -315,7 +315,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.date_yesterday_ll:
-				startQuery();
+				
 				if (!DateUtil.IsMoreThanToday(currentdate)) {
 					left_arrow_iv.setBackground(getResources().getDrawable(
 							R.drawable.solid_arrow_left_disable));
@@ -333,10 +333,9 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 							R.drawable.solid_arrow_left_disable));
 					date_yesterday_ll.setEnabled(true);
 				}
-
+				startQuery();
 				break;
 			case R.id.date_tomorrow_ll:
-				startQuery();
 				try {
 					currentdate = DateUtil.getSpecifiedDayAfter(currentdate);
 //					date_current_tv.setText(currentdate);
@@ -346,6 +345,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 				if (DateUtil.IsMoreThanToday(currentdate))
 					left_arrow_iv.setBackground(getResources().getDrawable(
 							R.drawable.solid_arrow_left));
+				startQuery();
 				break;
 			case R.id.bytime_LL:
 				sort_time_tv.setSelected(true);
@@ -445,8 +445,10 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 					.findViewById(R.id.discount_tv);
 			TextView price_tv = (TextView) convertView
 					.findViewById(R.id.price_tv);
-			TextView FlightNameAndNo_tv = (TextView) convertView
-					.findViewById(R.id.FlightNameAndNo_tv);
+			TextView FlightName_tv = (TextView) convertView
+					.findViewById(R.id.FlightName_tv);
+			TextView FlightNo_tv = (TextView) convertView
+					.findViewById(R.id.FlightNo_tv);
 			TextView PlaneTypeAndModel = (TextView) convertView
 					.findViewById(R.id.PlaneTypeAndModel);
 			TextView CabinName_tv = (TextView) convertView
@@ -491,8 +493,8 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			discount_tv.setText(discountDeal(str.get(position).getMinDiscount()
 					.trim()));
 			price_tv.setText(" £§" + str.get(position).getMinFare());
-			FlightNameAndNo_tv.setText(str.get(position).getCarrinerName()
-					+ str.get(position).getFlightNo());
+			FlightName_tv.setText(str.get(position).getCarrinerName());
+			FlightNo_tv.setText(str.get(position).getFlightNo());
 			PlaneTypeAndModel.setText(str.get(position).getPlaneType()
 					+ str.get(position).getPlaneModel());
 			ticketCount_tv.setText(tiecketCountDeal(str.get(position).getMinTicketCount()) + "’≈");

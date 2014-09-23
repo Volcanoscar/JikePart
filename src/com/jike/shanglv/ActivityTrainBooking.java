@@ -6,9 +6,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +24,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,6 +32,7 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,6 +41,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.jike.shanglv.ActivityTrainBaoxian.MyListAdapter.Holder;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
@@ -41,6 +51,7 @@ import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.LazyList.ImageLoader;
 import com.jike.shanglv.Models.Passenger;
+import com.jike.shanglv.Models.Seat;
 import com.jike.shanglv.Models.TrainListItem;
 import com.jike.shanglv.Models.TrainOrderPassenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -64,7 +75,7 @@ public class ActivityTrainBooking extends Activity {
 	seat_grad_tv,ticket_price_tv,remain_count_tv,modify_seat_tv,baoxian_price_and_count_tv,order_totalmoney_tv;
 	private ClearEditText contact_person_phone_et,yanzhengma_input_et;
 	private View passenger_head_divid_line;
-	private ListView passenger_listview;
+	private ListView passenger_listview,xibie_listview;
 	private ImageView start_station_icon_iv,end_station_icon_iv,yanzhengma_iv;
 	private Button order_now_btn;
 	private Context context;
@@ -74,10 +85,12 @@ public class ActivityTrainBooking extends Activity {
 	private TrainListItem ti = new TrainListItem();//从列表传过来的车票信息
 	private String startdate,commitReturnJson;
 	private float ticket_price,baoxian_unitPrice=10,totalPrice;//保费：0、5、10
+	private int selectedSeatIndex=0;
 	private Bitmap validCodeBitmap;
 	private ArrayList<Passenger> passengerList;// 选择的乘机人列表
 	private ArrayList<Passenger> allPassengerList;// 当前所有乘机人的列表（服务端和用户新增的）
 	private CustomProgressDialog progressdialog;
+	MyListAdapter adapter_xibie;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +107,7 @@ public class ActivityTrainBooking extends Activity {
 		passengerList = new ArrayList<Passenger>();
 		allPassengerList = new ArrayList<Passenger>();
 		
+		xibie_listview=(ListView) findViewById(R.id.xibie_listview);
 		add_passager_rl=(RelativeLayout) findViewById(R.id.add_passager_rl);
 		baoxian_rl=(RelativeLayout) findViewById(R.id.baoxian_rl);
 		lianxiren_icon_imgbtn=(ImageButton) findViewById(R.id.lianxiren_icon_imgbtn);
@@ -147,6 +161,22 @@ public class ActivityTrainBooking extends Activity {
 		remain_count_tv.setText("余票"+ti.getRemain_Count()+"张");
 		start_time_tv.setText(ti.getGoTime());
 		end_time_tv.setText(ti.getETime());
+	    adapter_xibie=new MyListAdapter(context, ti.getSeatList());
+		xibie_listview.setAdapter(adapter_xibie);
+		ActivityInlandAirlineticketBooking.setListViewHeightBasedOnChildren(xibie_listview);
+		xibie_listview.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (position != selectedSeatIndex) {
+					adapter_xibie.setCurrentID(position);
+					adapter_xibie.notifyDataSetChanged();
+				}
+				selectedSeatIndex = position;
+				ticket_price=Float.valueOf(ti.getSeatList().get(position).getPrice());
+				caculateMoney();
+			}
+		});
 		
 		String SFType = ti.getSFType();
 		if (SFType.length() == 3) {
@@ -198,6 +228,18 @@ public class ActivityTrainBooking extends Activity {
 				if (bundle.containsKey("TrainListItemString")) {
 					JSONObject jsonObject = new JSONObject(bundle.getString("TrainListItemString"));
 					ti =JSONHelper.parseObject(jsonObject, TrainListItem.class);
+				}
+				if (bundle.containsKey("SeatListString")) {
+					JSONArray array=new JSONArray(bundle.getString("SeatListString"));
+					ArrayList<Seat> seats=new ArrayList<Seat>();
+					for (int i = 0; i < array.length(); i++) {
+						Seat seat=new Seat();
+						seat.setPrice(array.getJSONObject(i).getString("price"));
+						seat.setShengyu(array.getJSONObject(i).getString("shengyu"));
+						seat.setType(array.getJSONObject(i).getString("type"));
+						seats.add(seat);
+					}
+					ti.setSeatList(seats);
 				}
 				if (bundle.containsKey("startdate")) {
 					Calendar c = Calendar.getInstance();
@@ -505,7 +547,7 @@ public class ActivityTrainBooking extends Activity {
 			caculateMoney();
 		}
 	}
-	
+	//旅客列表
 	private class PassengerListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		private List<Passenger> str;
@@ -584,5 +626,106 @@ public class ActivityTrainBooking extends Activity {
 			return convertView;
 		}
 	}
+	
+	
+	Boolean hasSelected=false;//是否有选中（模拟单选的效果）
+	//席别选择
+	public class MyListAdapter extends BaseAdapter {
+
+		@Override
+		public void notifyDataSetChanged() {
+			super.notifyDataSetChanged();
+		}
+
+		private LayoutInflater inflater;
+		ArrayList<Seat> seats;
+		Context c;
+		int currentID = 0;
+
+		public MyListAdapter(Context context, ArrayList<Seat> seats) {
+			inflater = LayoutInflater.from(context);
+			this.c = context;
+			this.seats = seats;
+		}
+
+		public void setList( ArrayList<Seat> seats) {
+			this.seats = seats;
+		}
+
+		@Override
+		public int getCount() {
+			return seats.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return seats.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Holder myHolder;
+			if (convertView == null) {
+				myHolder = new Holder();
+				convertView = inflater.inflate(
+						R.layout.item_train_xibie_list_single , null);
+				myHolder.seat_grad_tv = (TextView) convertView
+						.findViewById(R.id.seat_grad_tv);
+				myHolder.ticket_price_tv = (TextView) convertView
+						.findViewById(R.id.ticket_price_tv);
+				myHolder.remain_count_tv = (TextView) convertView
+						.findViewById(R.id.remain_count_tv);
+				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
+				convertView.setTag(myHolder);
+			} else {
+				myHolder = (Holder) convertView.getTag();
+			}
+			// myHolder.iv.setBackgroundResource((Integer)
+			// list.get(position).get("img"));
+			if (position == this.currentID&&!seats.get(position).getShengyu().equals("0")){
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.checkmark_icon_selected));
+				hasSelected=true;
+			}
+			else if(!hasSelected&&!seats.get(position).getShengyu().equals("0")){
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.checkmark_icon_selected));
+				hasSelected=true;
+			}else {
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.checkmark_icon_unselected));
+			}
+			myHolder.seat_grad_tv.setText(seats.get(position).getType());
+			myHolder.ticket_price_tv.setText("￥"+seats.get(position).getPrice());
+			myHolder.remain_count_tv.setText("余票"+seats.get(position).getShengyu()+"张");
+			if (ti.getSeat_Type().equals(seats.get(position).getType())) {//默认选中席别与前页列表中展现的相同
+				selectedSeatIndex=currentID;
+			}
+			if (seats.get(position).getShengyu().equals("0")) {//余票为0，不可预订
+				myHolder.seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
+				myHolder.ticket_price_tv.setTextColor(getResources().getColor(R.color.gray));
+				myHolder.remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
+				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
+						R.drawable.radio));
+			}
+			return convertView;
+		}
+
+		class Holder {
+			ImageView iv;
+			TextView seat_grad_tv,ticket_price_tv,remain_count_tv;
+		}
+
+		public void setCurrentID(int currentID) {
+			this.currentID = currentID;
+		}
+
+	}
+	
 
 }

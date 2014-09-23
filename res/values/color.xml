@@ -33,5 +33,6 @@
     <color name="transparent">#00000000</color>
     <color name="gold">#b89766</color>
     <color name="select">#98aacc</color>
+     <color name="ef_gray_bg">#efefef</color>
     
 </resources>

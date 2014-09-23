@@ -15,7 +15,7 @@ public class TrainListItem  implements Cloneable{
 			YuDing;// False,
 	private ArrayList<Seat> SeatList;
 	
-	//以下三个字段为根据SeatList的数据生成的，以便在列表中显示
+	//以下三个字段为根据SeatList的数据生成的，以便在列表中显示(默认取第一行)
 	private String Seat_Type,
 			Price,
 			Remain_Count;
@@ -28,36 +28,6 @@ public class TrainListItem  implements Cloneable{
 	         e.printStackTrace();  
 	     }  
 	     return o;  
-	}
-
-	public class Seat {
-		private String type,// 二等座,
-				price,// 553.0,
-				shengyu;// 0
-
-		public String getType() {
-			return type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
-		}
-
-		public String getPrice() {
-			return price;
-		}
-
-		public void setPrice(String price) {
-			this.price = price;
-		}
-
-		public String getShengyu() {
-			return shengyu;
-		}
-
-		public void setShengyu(String shengyu) {
-			this.shengyu = shengyu;
-		}
 	}
 
 	public String getStationS() {

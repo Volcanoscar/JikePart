@@ -1,5 +1,6 @@
 package com.jike.shanglv;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -254,12 +255,34 @@ public class ActivityHotel extends Activity {
 			if (b != null && b.containsKey("pickedDate")) {
 				myDate = b.getString("pickedDate");
 				ruzhu_date_tv.setText(myDate);
+				if (DateUtil.compareDateIsBefore(myDate, lidian_date_tv
+						.getText().toString().trim())) {
+					try {
+						lidian_date_tv.setText(DateUtil
+								.getSpecifiedDayAfter(myDate));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			break;
 		case lidiandate:
 			if (b != null && b.containsKey("pickedDate")) {
 				myDate = b.getString("pickedDate");
 				lidian_date_tv.setText(myDate);
+				if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
+						.toString().trim(), myDate)) {
+					try {
+						if (DateUtil.IsMoreThanToday(myDate)) {
+							ruzhu_date_tv.setText(DateUtil
+									.getSpecifiedDayBefore(myDate));
+						} else {
+							ruzhu_date_tv.setText(DateUtil.GetTodayDate());
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			break;
 		case ruzhucity:

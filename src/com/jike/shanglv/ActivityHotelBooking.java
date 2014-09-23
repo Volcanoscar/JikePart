@@ -1,19 +1,15 @@
 package com.jike.shanglv;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -64,7 +60,7 @@ public class ActivityHotelBooking extends Activity {
 
 	protected static final int ROOMSRI_MSG = 1;
 	protected static final int ORDER_MSG = 2;
-	private final int ruzhudate = 0, lidiandate = 1;//选择日期请求参数
+	private final int ruzhudate = 0, lidiandate = 1;// 选择日期请求参数
 	private ImageButton back_imgbtn, home_imgbtn;
 	private ImageView contact_person_phone_iv;
 	private TextView commit_order_tv, hotel_name_tv, xingji_tv, ruzhu_date_tv,
@@ -74,25 +70,35 @@ public class ActivityHotelBooking extends Activity {
 	private com.jike.shanglv.Common.ClearEditText name_cet1, name_cet2,
 			name_cet3, name_cet4, name_cet5, identificationNum_et,
 			creditCard_num_cet, cvv_num_cet, chikaren_name_cet,
-			creditCard_identificationNum_cet,contact_person_phone_cet;
+			creditCard_identificationNum_cet, contact_person_phone_cet;
 	private RelativeLayout ruzhuren_rl2, ruzhuren_rl3, ruzhuren_rl4,
 			ruzhuren_rl5, ruzhurenID_rl, creadit_card_validity_rl,
 			identificationType_rl;
 	private LinearLayout ruzhu_date_ll, lidian_date_ll, Garantee_LL;
-	private Button shenfenzheng_btn,huzhao_btn,qita_btn;//one_room_btn, two_room_btn, three_room_btn, four_room_btn,five_room_btn, time1_btn, time2_btn, time3_btn,
+	private Button shenfenzheng_btn, huzhao_btn, qita_btn;// one_room_btn,
+															// two_room_btn,
+															// three_room_btn,
+															// four_room_btn,five_room_btn,
+															// time1_btn,
+															// time2_btn,
+															// time3_btn,
 	private Context context;
 
 	private PopupWindow popupWindow_order_room_count,
-			popupWindow_order_will_arrive_time,popupWindow_hotel_guarantee_identification_type;
+			popupWindow_order_will_arrive_time,
+			popupWindow_hotel_guarantee_identification_type;
 	private View popupWindowView_order_room_count,
-			popupWindowView_order_will_arrive_time,popupWindowView_hotel_guarantee_identification_type;
+			popupWindowView_order_will_arrive_time,
+			popupWindowView_hotel_guarantee_identification_type;
 	InputMethodManager imm;
 	private SharedPreferences sp;
-	private int room_count = 1, guarantee_room_count = 6,guarantee_identification_type_isID=0;// 当用户要预定的房间数room_count超过guarantee_room_count时需要担保、信用卡担保证件:0身份证1护照2其他
-	private Boolean need_guarantee = false,time_need_guarantee= false,roomcount_need_guarantee= false, isSevenDayHotel = false;//是否需要担保、是否时间段担保、是否超过房间数担保、是否七天酒店
+	private int room_count = 1, guarantee_room_count = 6,
+			guarantee_identification_type_isID = 0;// 当用户要预定的房间数room_count超过guarantee_room_count时需要担保、信用卡担保证件:0身份证1护照2其他
+	private Boolean need_guarantee = false, time_need_guarantee = false,
+			roomcount_need_guarantee = false, isSevenDayHotel = false;// 是否需要担保、是否时间段担保、是否超过房间数担保、是否七天酒店
 	private String ruzhu_date, lidian_date, hotelId, hotelName, starLevel,
-			creditYear,creditMonth,//信用卡的有效年月
-			orderReturnJson,roomsriReturnJson,successOrderId;//提交订单后返回的订单号
+			creditYear, creditMonth,// 信用卡的有效年月
+			orderReturnJson, roomsriReturnJson, successOrderId;// 提交订单后返回的订单号
 	private HotelRoom roomInfoObject;
 	private HotelRoomComfirm hotelRoomComfirm;
 	private CustomProgressDialog progressdialog;
@@ -170,7 +176,7 @@ public class ActivityHotelBooking extends Activity {
 		name_cet3 = (ClearEditText) findViewById(R.id.name_cet3);
 		name_cet4 = (ClearEditText) findViewById(R.id.name_cet4);
 		name_cet5 = (ClearEditText) findViewById(R.id.name_cet5);
-		contact_person_phone_cet=(ClearEditText) findViewById(R.id.contact_person_phone_cet);
+		contact_person_phone_cet = (ClearEditText) findViewById(R.id.contact_person_phone_cet);
 		identificationNum_et = (ClearEditText) findViewById(R.id.identificationNum_et);
 		creditCard_num_cet = (ClearEditText) findViewById(R.id.creditCard_num_cet);
 		cvv_num_cet = (ClearEditText) findViewById(R.id.cvv_num_cet);
@@ -181,64 +187,13 @@ public class ActivityHotelBooking extends Activity {
 		ruzhuren_rl4 = (RelativeLayout) findViewById(R.id.ruzhuren_rl4);
 		ruzhuren_rl5 = (RelativeLayout) findViewById(R.id.ruzhuren_rl5);
 		ruzhurenID_rl = (RelativeLayout) findViewById(R.id.ruzhurenID_rl);
-		contact_person_phone_iv=(ImageView) findViewById(R.id.contact_person_phone_iv);
+		contact_person_phone_iv = (ImageView) findViewById(R.id.contact_person_phone_iv);
 		contact_person_phone_iv.setOnClickListener(clickListener);
 		commit_order_tv.setOnClickListener(clickListener);
 		room_count_tv.setOnClickListener(clickListener);
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//		popupWindowView_order_room_count = inflater.inflate(
-//				R.layout.popupwindow_hotel_order_room_count, null);
-//		popupWindow_order_room_count = new PopupWindow(
-//				popupWindowView_order_room_count, LayoutParams.FILL_PARENT,
-//				550, true);
-//		popupWindow_order_room_count
-//				.setBackgroundDrawable(new BitmapDrawable());
-//		// 设置PopupWindow的弹出和消失效果
-//		popupWindow_order_room_count.setAnimationStyle(R.style.popupAnimation);
-//		one_room_btn = (Button) popupWindowView_order_room_count
-//				.findViewById(R.id.one_room_btn);
-//		two_room_btn = (Button) popupWindowView_order_room_count
-//				.findViewById(R.id.two_room_btn);
-//		three_room_btn = (Button) popupWindowView_order_room_count
-//				.findViewById(R.id.three_room_btn);
-//		four_room_btn = (Button) popupWindowView_order_room_count
-//				.findViewById(R.id.four_room_btn);
-//		five_room_btn = (Button) popupWindowView_order_room_count
-//				.findViewById(R.id.five_room_btn);
-//		one_room_btn.setTag("1");
-//		two_room_btn.setTag("2");
-//		three_room_btn.setTag("3");
-//		four_room_btn.setTag("4");
-//		five_room_btn.setTag("5");
-//		one_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-//		two_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-//		three_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-//		four_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-//		five_room_btn.setOnClickListener(room_count_tv_popupClickListener);
-//		popupWindowView_order_will_arrive_time = inflater.inflate(
-//				R.layout.popupwindow_hotel_order_arrive_time, null);
-//		popupWindow_order_will_arrive_time = new PopupWindow(
-//				popupWindowView_order_will_arrive_time,
-//				LayoutParams.FILL_PARENT, 350, true);
-//		popupWindow_order_will_arrive_time
-//				.setBackgroundDrawable(new BitmapDrawable());
-//		// 设置PopupWindow的弹出和消失效果
-//		popupWindow_order_will_arrive_time
-//				.setAnimationStyle(R.style.popupAnimation);
-//		time1_btn = (Button) popupWindowView_order_will_arrive_time
-//				.findViewById(R.id.time1_btn);
-//		time2_btn = (Button) popupWindowView_order_will_arrive_time
-//				.findViewById(R.id.time2_btn);
-//		time3_btn = (Button) popupWindowView_order_will_arrive_time
-//				.findViewById(R.id.time3_btn);
-//		time1_btn.setTag("1");
-//		time2_btn.setTag("2");
-//		time3_btn.setTag("3");
-//		time1_btn.setOnClickListener(arrive_time_popupClickListener);
-//		time2_btn.setOnClickListener(arrive_time_popupClickListener);
-//		time3_btn.setOnClickListener(arrive_time_popupClickListener);
-		
+
 		popupWindowView_hotel_guarantee_identification_type = inflater.inflate(
 				R.layout.popupwindow_hotel_guarantee_identification_type, null);
 		popupWindow_hotel_guarantee_identification_type = new PopupWindow(
@@ -258,8 +213,10 @@ public class ActivityHotelBooking extends Activity {
 		shenfenzheng_btn.setTag("1");
 		huzhao_btn.setTag("2");
 		qita_btn.setTag("3");
-		shenfenzheng_btn.setOnClickListener(hotel_guarantee_identification_type_popupClickListener);
-		huzhao_btn.setOnClickListener(hotel_guarantee_identification_type_popupClickListener);
+		shenfenzheng_btn
+				.setOnClickListener(hotel_guarantee_identification_type_popupClickListener);
+		huzhao_btn
+				.setOnClickListener(hotel_guarantee_identification_type_popupClickListener);
 		qita_btn.setOnClickListener(hotel_guarantee_identification_type_popupClickListener);
 
 		ruzhu_date_ll = (LinearLayout) findViewById(R.id.ruzhu_date_ll);
@@ -272,8 +229,8 @@ public class ActivityHotelBooking extends Activity {
 		identificationType_rl = (RelativeLayout) findViewById(R.id.identificationType_rl);
 		creadit_card_validity_rl.setOnClickListener(clickListener);
 		identificationType_rl.setOnClickListener(clickListener);
-		
-		arriveTimeList=initArriveTimeData();
+
+		arriveTimeList = initArriveTimeData();
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -309,44 +266,52 @@ public class ActivityHotelBooking extends Activity {
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-//				popupWindow_order_room_count.showAtLocation(one_room_btn,Gravity.BOTTOM, 0, 0);
-				iniPopupWindow(0,initRoomCountData());
-				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0,0);
+				// popupWindow_order_room_count.showAtLocation(one_room_btn,Gravity.BOTTOM,
+				// 0, 0);
+				iniPopupWindow(0, initRoomCountData());
+				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0, 0);
 				break;
 			case R.id.will_arrive_time_tv:
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-//				popupWindow_order_will_arrive_time.showAtLocation(time1_btn,Gravity.BOTTOM, 0, 0);
+				// popupWindow_order_will_arrive_time.showAtLocation(time1_btn,Gravity.BOTTOM,
+				// 0, 0);
 
-				iniPopupWindow(1,arriveTimeList);//到达时间的数据动态变化
-				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0,0);
+				iniPopupWindow(1, arriveTimeList);// 到达时间的数据动态变化
+				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0, 0);
 				break;
 			case R.id.identificationType_rl:
 			case R.id.identificationType_tv:
 				imm.hideSoftInputFromWindow(((Activity) context)
 						.getCurrentFocus().getWindowToken(),
 						InputMethodManager.HIDE_NOT_ALWAYS);
-				popupWindow_hotel_guarantee_identification_type.showAtLocation(shenfenzheng_btn,
-						Gravity.BOTTOM, 0, 0);
+				popupWindow_hotel_guarantee_identification_type.showAtLocation(
+						shenfenzheng_btn, Gravity.BOTTOM, 0, 0);
 				break;
 			case R.id.creadit_card_validity_rl:
-				   Calendar c = Calendar.getInstance();  
-                  new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {  
-                      @Override  
-                      public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {  
-                          // TODO Auto-generated method stub  
-                    	 String month=String.valueOf((monthOfYear+1));
-                    	 creditYear=year+"";
-                    	 creditMonth=month+"";
-                    	 if (month.length()==1) month="0"+month;
-                    	 creadit_card_validity_tv.setText(month+"/"+String.valueOf(year).substring(2,4));  
-                      }  
-                  }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), 0).show();  
+				Calendar c = Calendar.getInstance();
+				new DatePickerDialog(context,
+						new DatePickerDialog.OnDateSetListener() {
+							@Override
+							public void onDateSet(DatePicker view, int year,
+									int monthOfYear, int dayOfMonth) {
+								// TODO Auto-generated method stub
+								String month = String
+										.valueOf((monthOfYear + 1));
+								creditYear = year + "";
+								creditMonth = month + "";
+								if (month.length() == 1)
+									month = "0" + month;
+								creadit_card_validity_tv.setText(month + "/"
+										+ String.valueOf(year).substring(2, 4));
+							}
+						}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), 0)
+						.show();
 
 				break;
 			case R.id.commit_order_tv:
-				if(!validInput())
+				if (!validInput())
 					break;
 				startCommitHotelOrder();
 				break;
@@ -390,46 +355,96 @@ public class ActivityHotelBooking extends Activity {
 			}
 		}).start();
 	}
-	
+
 	private void startCommitHotelOrder() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				// url?action=hotelorder&sign=7745955d2500de4d473e7badbe5c904d&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage&str=见上
-				// &str= tm1：入住，tm2：离店，uid：用户ID，sid：网站ID，pid：价格计划ID，rid：房型ID，hid：酒店ID，suppid:房型供应商,roomtype：0现付1预付，hname：酒店名，rname：房型名，lasttime：到店时间，cityname：城市名,amount：金额，contacts：联系人，phone：联系电话,email：邮箱，，iscard：是否担保1是0否
-				//cardno:信用卡号,year:有效期至年,month:有效期至月,code:CVV2码,name:持卡人姓名,idtype:证件类型,idno:证件号码,isInvoice:是否需要发票1是0否，invoiceType：发票类型，invoiceTitle：发票抬头，recipient：收件人，invoicePhone：手机号，postCode：邮 编，postAddress：详细地址,allotmenttype:allotmenttype,ratetype:ratetype,facepaytype:facepaytype,faceprice:faceprice,includebreakfastqty2:includebreakfastqty2, supplierid:supplierid  
-//				cost：成本，rooms：房间数，passenger：旅客姓名，sumrate：总返点，
+				// &str=
+				// tm1：入住，tm2：离店，uid：用户ID，sid：网站ID，pid：价格计划ID，rid：房型ID，hid：酒店ID，suppid:房型供应商,roomtype：0现付1预付，hname：酒店名，rname：房型名，lasttime：到店时间，cityname：城市名,amount：金额，contacts：联系人，phone：联系电话,email：邮箱，，iscard：是否担保1是0否
+				// cardno:信用卡号,year:有效期至年,month:有效期至月,code:CVV2码,name:持卡人姓名,idtype:证件类型,idno:证件号码,isInvoice:是否需要发票1是0否，invoiceType：发票类型，invoiceTitle：发票抬头，recipient：收件人，invoicePhone：手机号，postCode：邮
+				// 编，postAddress：详细地址,allotmenttype:allotmenttype,ratetype:ratetype,facepaytype:facepaytype,faceprice:faceprice,includebreakfastqty2:includebreakfastqty2,
+				// supplierid:supplierid
+				// cost：成本，rooms：房间数，passenger：旅客姓名，sumrate：总返点，
 
 				MyApp ma = new MyApp(context);
 				String str = "";
+				String idno = "";// 七天酒店信用卡担保时的身份证号码不显示了，用上面用户信息的证件号.提交时只有一个字段
+				if (isSevenDayHotel)
+					idno = identificationNum_et.getText().toString().trim();
+				else
+					idno = creditCard_identificationNum_cet.getText()
+							.toString().trim();
 				try {
-					str = "{\"hid\":\"" + hotelId + "\",\"tm1\":\""	+ ruzhu_date + "\",\"tm2\":\"" + lidian_date
-							+ "\",\"rid\":\"" + roomInfoObject.getRid()	+ "\",\"pid\":\"" + roomInfoObject.getPlanid()
-							+ "\",\"suppid\":\""+ roomInfoObject.getHotelsupplier()
-							+ "\",\"hname\":\""+ hotelRoomComfirm.getHotelName()
-							+ "\",\"rname\":\""+ hotelRoomComfirm.getRoomName()
-							+ "\",\"lasttime\":\""+ will_arrive_time_tv.getText().toString().replace("之前", "").replace("之后", "")
-							+ "\",\"amount\":\""+ total_price_tv.getText().toString().replace("￥", "")
-							+ "\",\"phone\":\""+ contact_person_phone_cet.getText()
-							+ "\",\"contacts\":\""+ sp.getString(SPkeys.username.getString(), "")
-							+ "\",\"iscard\":\""+ (need_guarantee?"1":"0")
-							+ "\",\"cardno\":\""+ creditCard_identificationNum_cet.getText()
-							+ "\",\"year\":\""+ creditYear+ "\",\"month\":\""+ creditMonth
-							+ "\",\"code\":\""+cvv_num_cet.getText()+ "\",\"name\":\""+chikaren_name_cet.getText()
-							+ "\",\"idtype\":\""+guarantee_identification_type_isID+ "\",\"idno\":\""+creditCard_identificationNum_cet.getText()
-							+"\",\"isInvoice\":\"0\",\"invoiceType\":\"\",\"invoiceTitle\":\"\",\"recipient\":\"\",\"invoicePhone\":\"\",\"postCode\":\"\",\"postAddress\":\"\",\""
-							+ "allotmenttype\":\""+ hotelRoomComfirm.getAllotmenttype()
-							+ "\",\"ratetype\":\""+ hotelRoomComfirm.getRatetype()
-							+ "\",\"facepaytype\":\""+ hotelRoomComfirm.getFacepaytype()
-							+ "\",\"faceprice\":\""+ hotelRoomComfirm.getFaceprice()
-							+ "\",\"includebreakfastqty2\":\""+ hotelRoomComfirm.getIncludebreakfastqty2()
-							+ "\",\"supplierid\":\""+ hotelRoomComfirm.getSupplierid()
-							+ "\",\"rooms\":\""+ room_count_tv.getText().toString().substring(0,1)
-							+ "\",\"passenger\":\""+ getPassengers()
-							+ "\",\"cost\":\"\",\"sumrate\":\""+ hotelRoomComfirm.getAllrate()
-							+ "\",\"roomtype\":\"" + hotelRoomComfirm.getRoomtype() + "\",\"uid\":\""
+					str = "{\"hid\":\""
+							+ hotelId
+							+ "\",\"tm1\":\""
+							+ ruzhu_date
+							+ "\",\"tm2\":\""
+							+ lidian_date
+							+ "\",\"rid\":\""
+							+ roomInfoObject.getRid()
+							+ "\",\"pid\":\""
+							+ roomInfoObject.getPlanid()
+							+ "\",\"suppid\":\""
+							+ roomInfoObject.getHotelsupplier()
+							+ "\",\"hname\":\""
+							+ hotelRoomComfirm.getHotelName()
+							+ "\",\"rname\":\""
+							+ hotelRoomComfirm.getRoomName()
+							+ "\",\"lasttime\":\""
+							+ will_arrive_time_tv.getText().toString()
+									.replace("之前", "").replace("之后", "")
+							+ "\",\"amount\":\""
+							+ total_price_tv.getText().toString()
+									.replace("￥", "")
+							+ "\",\"phone\":\""
+							+ contact_person_phone_cet.getText()
+							+ "\",\"contacts\":\""
+							+ sp.getString(SPkeys.username.getString(), "")
+							+ "\",\"iscard\":\""
+							+ (need_guarantee ? "1" : "0")
+							+ "\",\"cardno\":\""
+							+ creditCard_identificationNum_cet.getText()
+							+ "\",\"year\":\""
+							+ creditYear
+							+ "\",\"month\":\""
+							+ creditMonth
+							+ "\",\"code\":\""
+							+ cvv_num_cet.getText()
+							+ "\",\"name\":\""
+							+ chikaren_name_cet.getText()
+							+ "\",\"idtype\":\""
+							+ guarantee_identification_type_isID
+							+ "\",\"idno\":\""
+							+ idno
+							+ "\",\"isInvoice\":\"0\",\"invoiceType\":\"\",\"invoiceTitle\":\"\",\"recipient\":\"\",\"invoicePhone\":\"\",\"postCode\":\"\",\"postAddress\":\"\",\""
+							+ "allotmenttype\":\""
+							+ hotelRoomComfirm.getAllotmenttype()
+							+ "\",\"ratetype\":\""
+							+ hotelRoomComfirm.getRatetype()
+							+ "\",\"facepaytype\":\""
+							+ hotelRoomComfirm.getFacepaytype()
+							+ "\",\"faceprice\":\""
+							+ hotelRoomComfirm.getFaceprice()
+							+ "\",\"includebreakfastqty2\":\""
+							+ hotelRoomComfirm.getIncludebreakfastqty2()
+							+ "\",\"supplierid\":\""
+							+ hotelRoomComfirm.getSupplierid()
+							+ "\",\"rooms\":\""
+							+ room_count_tv.getText().toString()
+									.substring(0, 1)
+							+ "\",\"passenger\":\""
+							+ getPassengers()
+							+ "\",\"cost\":\"\",\"sumrate\":\""
+							+ hotelRoomComfirm.getAllrate()
+							+ "\",\"roomtype\":\""
+							+ hotelRoomComfirm.getRoomtype()
+							+ "\",\"uid\":\""
 							+ sp.getString(SPkeys.userid.getString(), "")
 							+ "\",\"sid\":\"65\",\"cityname\":\"\",\"email\":\"\"}";
+					str = (URLEncoder.encode(str, "utf-8"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -454,26 +469,24 @@ public class ActivityHotelBooking extends Activity {
 		});
 		progressdialog.show();
 	}
-	
-	private String getPassengers(){
-		String string="";
-		int count=Integer.valueOf(room_count_tv.getText().toString().substring(0,1));
-		string=name_cet1.getText().toString()+","+name_cet2.getText().toString()+","
-				+name_cet3.getText().toString()+","+name_cet4.getText().toString()+","
-				+name_cet5.getText().toString();
-		try {
-			string=URLEncoder.encode(string, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		if (count==1) {
-			string=string.replace(",,,,", "");
-		}else if (count==2) {
-			string=string.replace(",,,", "");
-		}else if (count==3) {
-			string=string.replace(",,", "");
-		}else if (count==4) {
-			string=string.substring(0, string.length()-2);
+
+	private String getPassengers() {
+		String string = "";
+		int count = Integer.valueOf(room_count_tv.getText().toString()
+				.substring(0, 1));
+		string = name_cet1.getText().toString() + ","
+				+ name_cet2.getText().toString() + ","
+				+ name_cet3.getText().toString() + ","
+				+ name_cet4.getText().toString() + ","
+				+ name_cet5.getText().toString();
+		if (count == 1) {
+			string = string.replace(",,,,", "");
+		} else if (count == 2) {
+			string = string.replace(",,,", "");
+		} else if (count == 3) {
+			string = string.replace(",,", "");
+		} else if (count == 4) {
+			string = string.substring(0, string.length() - 2);
 		}
 		return string;
 	}
@@ -502,15 +515,17 @@ public class ActivityHotelBooking extends Activity {
 						if (hotelRoomComfirm.getPrices() != null) {
 							totalPrice = Float.valueOf(hotelRoomComfirm
 									.getPrices().getTotalPrice());
-							DecimalFormat df = new DecimalFormat("#.#");
-							totalPrice = Double.parseDouble(df
-									.format(totalPrice));
+//							DecimalFormat df = new DecimalFormat("#.#");
+//							totalPrice = Double.parseDouble(df
+//									.format(totalPrice));
 						}
 						total_price_tv.setText("￥" + totalPrice);
-						if (!Boolean.valueOf(hotelRoomComfirm.getYuding().trim())) {
+						if (!Boolean.valueOf(hotelRoomComfirm.getYuding()
+								.trim())) {
 							commit_order_tv.setEnabled(false);
 							total_price_tv.setText("已满房");
-							commit_order_tv.setBackgroundColor(getResources().getColor(R.color.danhuise));
+							commit_order_tv.setBackgroundColor(getResources()
+									.getColor(R.color.danhuise));
 						}
 						if (hotelName.contains("7天连锁")
 								&& hotelRoomComfirm.getRoomtype().equals("0")) {
@@ -518,10 +533,21 @@ public class ActivityHotelBooking extends Activity {
 							ruzhurenID_rl.setVisibility(View.VISIBLE);
 						}
 						if (hotelRoomComfirm.getGaranteeRule() != null) {
-							guarantee_room_count = Integer.valueOf(hotelRoomComfirm.getGaranteeRule().getRomms().equals("")
-											|| Integer.valueOf(hotelRoomComfirm.getGaranteeRule().getRomms()).equals(0)
-											||hotelRoomComfirm.getGaranteeRule().getRomms() == null ? "6"
-											: hotelRoomComfirm.getGaranteeRule().getRomms().toString().trim());
+							guarantee_room_count = Integer
+									.valueOf(hotelRoomComfirm.getGaranteeRule()
+											.getRomms().equals("")
+											|| Integer.valueOf(
+													hotelRoomComfirm
+															.getGaranteeRule()
+															.getRomms())
+													.equals(0)
+											|| hotelRoomComfirm
+													.getGaranteeRule()
+													.getRomms() == null ? "6"
+											: hotelRoomComfirm
+													.getGaranteeRule()
+													.getRomms().toString()
+													.trim());
 							// 房间数超过指定值时需要担保
 							if (guarantee_room_count != 6)
 								roomcount_need_guarantee = true;
@@ -542,33 +568,28 @@ public class ActivityHotelBooking extends Activity {
 											.getStattime().length() != 0 || hotelRoomComfirm
 											.getGaranteeRule().getEndtime()
 											.length() != 0)) {
-								time_need_guarantee=true;
-								
+								time_need_guarantee = true;
+
 								arriveTimeList.clear();
 								Map<String, Object> map = new HashMap<String, Object>();
-								map.put("title", hotelRoomComfirm.getGaranteeRule().getStattime()+ "之前");
+								map.put("title", hotelRoomComfirm
+										.getGaranteeRule().getStattime() + "之前");
 								arriveTimeList.add(map);
 								map = new HashMap<String, Object>();
-								map.put("title", hotelRoomComfirm.getGaranteeRule().getStattime()+ "-"+ hotelRoomComfirm.getGaranteeRule().getEndtime());
+								map.put("title", hotelRoomComfirm
+										.getGaranteeRule().getStattime()
+										+ "-"
+										+ hotelRoomComfirm.getGaranteeRule()
+												.getEndtime());
 								arriveTimeList.add(map);
 								map = new HashMap<String, Object>();
-								map.put("title", hotelRoomComfirm.getGaranteeRule().getEndtime() + "之后");
+								map.put("title", hotelRoomComfirm
+										.getGaranteeRule().getEndtime() + "之后");
 								arriveTimeList.add(map);
-//								time1_btn
-//										.setText(hotelRoomComfirm
-//												.getGaranteeRule()
-//												.getStattime()
-//												+ "之前");
-//								time2_btn.setText(hotelRoomComfirm
-//										.getGaranteeRule().getStattime()
-//										+ "-"
-//										+ hotelRoomComfirm.getGaranteeRule()
-//												.getEndtime());
-//								time3_btn.setText(hotelRoomComfirm
-//										.getGaranteeRule().getEndtime() + "之后");
 							}
 						}
-						will_arrive_time_tv.setText(arriveTimeList.get(0).get("title").toString());
+						will_arrive_time_tv.setText(arriveTimeList.get(0)
+								.get("title").toString());
 					} else {
 						String message = jsonObject.getString("msg");
 						new AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
@@ -588,12 +609,13 @@ public class ActivityHotelBooking extends Activity {
 
 					if (state.equals("0000")) {
 						successOrderId = jsonObject.getString("d");
-						Toast.makeText(context, "订单提交成功，OrderId："+successOrderId, 0).show();
-//						String orderID = jsonObject.getJSONObject("d").getString("orderid");
+						Toast.makeText(context,
+								"订单提交成功，OrderId：" + successOrderId, 0).show();
+						// String orderID =
+						// jsonObject.getJSONObject("d").getString("orderid");
 						Intent intent = new Intent(context,
 								ActivityHotelOrderDetail.class);
-						intent.putExtra(
-								ActivityHotelOrderDetail.ORDERRECEIPT,
+						intent.putExtra(ActivityHotelOrderDetail.ORDERRECEIPT,
 								successOrderId);
 						startActivityForResult(intent, 22);
 					} else {
@@ -646,13 +668,15 @@ public class ActivityHotelBooking extends Activity {
 				ruzhuren_rl5.setVisibility(View.VISIBLE);
 				room_count = 5;
 			}
-			if (roomcount_need_guarantee&&room_count>guarantee_room_count-1) {
+			if (roomcount_need_guarantee
+					&& room_count > guarantee_room_count - 1) {
 				Garantee_LL.setVisibility(View.VISIBLE);
 				garantee_desc_tv.setText(hotelRoomComfirm.getGaranteeRule()
 						.getDesc());
-				need_guarantee=true;
-			}else {
+				need_guarantee = true;
+			} else {
 				Garantee_LL.setVisibility(View.GONE);
+				need_guarantee = false;
 			}
 
 			popupWindow_order_room_count.dismiss();
@@ -668,76 +692,98 @@ public class ActivityHotelBooking extends Activity {
 				Garantee_LL.setVisibility(View.VISIBLE);
 				garantee_desc_tv.setText(hotelRoomComfirm.getGaranteeRule()
 						.getDesc());
-				need_guarantee=true;
+				need_guarantee = true;
 			} else {
 				Garantee_LL.setVisibility(View.GONE);
+				need_guarantee = false;
 			}
 			popupWindow_order_will_arrive_time.dismiss();
 		}
 	};
-	
+
 	OnClickListener hotel_guarantee_identification_type_popupClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			Button btn = (Button) v;
 			identificationType_tv.setText(btn.getText());
 			if (v.getTag().equals("1")) {// 身份证
-				guarantee_identification_type_isID=0;
-			} else if (v.getTag().equals("2")) {//护照
-				guarantee_identification_type_isID=1;
-			}else //其他
-				guarantee_identification_type_isID=1;
-			
+				guarantee_identification_type_isID = 0;
+			} else if (v.getTag().equals("2")) {// 护照
+				guarantee_identification_type_isID = 1;
+			} else
+				// 其他
+				guarantee_identification_type_isID = 1;
+
 			popupWindow_hotel_guarantee_identification_type.dismiss();
 		}
 	};
-	
+
 	private Boolean validInput() {
-		if (room_count>0&&name_cet1.getText().toString().trim().length()==0) {
-			new AlertDialog.Builder(context).setTitle("请输入入住人姓名").setPositiveButton("确定", null).show();
+		if (room_count > 0
+				&& name_cet1.getText().toString().trim().length() == 0) {
+			new AlertDialog.Builder(context).setTitle("请输入入住人姓名")
+					.setPositiveButton("确定", null).show();
 			return false;
-		}else if (room_count>1&&name_cet2.getText().toString().trim().length()==0) {
-			new AlertDialog.Builder(context).setTitle("请输入第二个入住人姓名").setPositiveButton("确定", null).show();
+		} else if (room_count > 1
+				&& name_cet2.getText().toString().trim().length() == 0) {
+			new AlertDialog.Builder(context).setTitle("请输入第二个入住人姓名")
+					.setPositiveButton("确定", null).show();
 			return false;
-		}else if (room_count>2&&name_cet3.getText().toString().trim().length()==0) {
-			new AlertDialog.Builder(context).setTitle("请输入第三个入住人姓名").setPositiveButton("确定", null).show();
+		} else if (room_count > 2
+				&& name_cet3.getText().toString().trim().length() == 0) {
+			new AlertDialog.Builder(context).setTitle("请输入第三个入住人姓名")
+					.setPositiveButton("确定", null).show();
 			return false;
-		}else if (room_count>3&&name_cet4.getText().toString().trim().length()==0) {
-			new AlertDialog.Builder(context).setTitle("请输入第四个入住人姓名").setPositiveButton("确定", null).show();
+		} else if (room_count > 3
+				&& name_cet4.getText().toString().trim().length() == 0) {
+			new AlertDialog.Builder(context).setTitle("请输入第四个入住人姓名")
+					.setPositiveButton("确定", null).show();
 			return false;
-		}else if (room_count>4&&name_cet5.getText().toString().trim().length()==0) {
-			new AlertDialog.Builder(context).setTitle("请输入第五个入住人姓名").setPositiveButton("确定", null).show();
+		} else if (room_count > 4
+				&& name_cet5.getText().toString().trim().length() == 0) {
+			new AlertDialog.Builder(context).setTitle("请输入第五个入住人姓名")
+					.setPositiveButton("确定", null).show();
 			return false;
 		}
-		if (!CommonFunc.isMobileNO(contact_person_phone_cet.getText().toString().trim())) {
-			new AlertDialog.Builder(context).setTitle("请输入合法的联系人手机号").setPositiveButton("确定", null).show();
+		if (!CommonFunc.isMobileNO(contact_person_phone_cet.getText()
+				.toString().trim())) {
+			new AlertDialog.Builder(context).setTitle("请输入合法的联系人手机号")
+					.setPositiveButton("确定", null).show();
 			return false;
 		}
 		if (need_guarantee) {
-			if (creditCard_num_cet.getText().toString().trim().length()==0) {
-				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡卡号").setPositiveButton("确定", null).show();
+			if (creditCard_num_cet.getText().toString().trim().length() == 0) {
+				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡卡号")
+						.setPositiveButton("确定", null).show();
 				return false;
 			}
-			if (creadit_card_validity_tv.getText().toString().trim().length()==0) {
-				new AlertDialog.Builder(context).setTitle("请选择信用卡的有效期").setPositiveButton("确定", null).show();
+			if (creadit_card_validity_tv.getText().toString().trim().length() == 0) {
+				new AlertDialog.Builder(context).setTitle("请选择信用卡的有效期")
+						.setPositiveButton("确定", null).show();
 				return false;
 			}
-			if (cvv_num_cet.getText().toString().trim().length()==0) {
-				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的CVV2码").setPositiveButton("确定", null).show();
+			if (cvv_num_cet.getText().toString().trim().length() == 0) {
+				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的CVV2码")
+						.setPositiveButton("确定", null).show();
 				return false;
 			}
-			if (chikaren_name_cet.getText().toString().trim().length()==0) {
-				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的持卡人姓名").setPositiveButton("确定", null).show();
+			if (chikaren_name_cet.getText().toString().trim().length() == 0) {
+				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的持卡人姓名")
+						.setPositiveButton("确定", null).show();
 				return false;
 			}
-			if (creditCard_identificationNum_cet.getText().toString().trim().length()==0) {
-				new AlertDialog.Builder(context).setTitle("请输入证件号码").setPositiveButton("确定", null).show();
+			if (creditCard_identificationNum_cet.getText().toString().trim()
+					.length() == 0) {
+				new AlertDialog.Builder(context).setTitle("请输入证件号码")
+						.setPositiveButton("确定", null).show();
 				return false;
 			}
-			if (guarantee_identification_type_isID==0&&!(new IDCard().verify(creditCard_identificationNum_cet.getText().toString().trim()))) {
+			if (guarantee_identification_type_isID == 0
+					&& !(new IDCard().verify(creditCard_identificationNum_cet
+							.getText().toString().trim()))) {
 				new AlertDialog.Builder(context).setTitle("身份证号不合法")
-				.setMessage("请输入担保人合法的身份证号码！")
-				.setPositiveButton("确定", null).show();
+						.setMessage("请输入担保人合法的身份证号码！")
+						.setPositiveButton("确定", null).show();
 			}
 		}
 		if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
@@ -745,16 +791,16 @@ public class ActivityHotelBooking extends Activity {
 			return false;
 		}
 		if (isSevenDayHotel) {
-			if (!(new IDCard().verify(identificationNum_et.getText()
-					.toString().trim()))) {
+			if (!(new IDCard().verify(identificationNum_et.getText().toString()
+					.trim()))) {
 				new AlertDialog.Builder(context).setTitle("身份证号不合法")
 						.setMessage("请输入一个入住人的合法身份证号码！")
 						.setPositiveButton("确定", null).show();
 				return false;
 			}
 		}
-		if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
-				.toString(), lidian_date_tv.getText().toString())) {
+		if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText().toString(),
+				lidian_date_tv.getText().toString())) {
 			new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
 					.setPositiveButton("知道了", null).show();
 			return false;
@@ -780,9 +826,15 @@ public class ActivityHotelBooking extends Activity {
 				ruzhu_date = myDate;
 				try {
 					ruzhu_date_tv.setText(DateUtil.getMonthDayDate(myDate));
+					if (DateUtil.compareDateIsBefore(myDate, lidian_date)) {
+						lidian_date_tv.setText(DateUtil
+								.getMonthDayDate(DateUtil
+										.getSpecifiedDayAfter(myDate)));
+					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
+				startQueryRoomsRI();
 			}
 			break;
 		case lidiandate:
@@ -791,31 +843,39 @@ public class ActivityHotelBooking extends Activity {
 				lidian_date = myDate;
 				try {
 					lidian_date_tv.setText(DateUtil.getMonthDayDate(myDate));
+					if (DateUtil.compareDateIsBefore(ruzhu_date, myDate)) {
+						if (DateUtil.IsMoreThanToday(myDate)) {
+							ruzhu_date_tv.setText(DateUtil
+									.getMonthDayDate(DateUtil
+											.getSpecifiedDayBefore(myDate)));
+						} else {
+							ruzhu_date_tv.setText(DateUtil
+									.getMonthDayDate(DateUtil.GetTodayDate()));
+						}
+					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
+				startQueryRoomsRI();
 			}
 			break;
 		default:
 			break;
 		}
-		
+
 		if (requestCode == 13) {
-			if (data != null&&b != null && b.containsKey("pickedPhoneNum")) {
+			if (data != null && b != null && b.containsKey("pickedPhoneNum")) {
 				String myNum = b.getString("pickedPhoneNum");
 				if (myNum.startsWith("17951")) {
-					myNum=myNum.substring(5);
-				}else if (myNum.startsWith("+86")) {
-					myNum=myNum.substring(3);
+					myNum = myNum.substring(5);
+				} else if (myNum.startsWith("+86")) {
+					myNum = myNum.substring(3);
 				}
 				contact_person_phone_cet.setText(myNum);
 			}
 		}
 	}
-	
-	
-	
-	
+
 	private PopupWindow pwMyPopWindow;// popupwindow
 	private ListView lvPopupList;
 	private int currentID_FJ = 0;
@@ -845,59 +905,62 @@ public class ActivityHotelBooking extends Activity {
 					room_count_tv.setText(list1.get(position).get("title")
 							.toString());
 					currentID_FJ = position;
-					
-					if (currentID_FJ==0) {
+
+					if (currentID_FJ == 0) {
 						ruzhuren_rl2.setVisibility(View.GONE);
 						ruzhuren_rl3.setVisibility(View.GONE);
 						ruzhuren_rl4.setVisibility(View.GONE);
 						ruzhuren_rl5.setVisibility(View.GONE);
 						room_count = 1;
-					} else if (currentID_FJ==1) {
+					} else if (currentID_FJ == 1) {
 						ruzhuren_rl2.setVisibility(View.VISIBLE);
 						ruzhuren_rl3.setVisibility(View.GONE);
 						ruzhuren_rl4.setVisibility(View.GONE);
 						ruzhuren_rl5.setVisibility(View.GONE);
 						room_count = 2;
-					} else if (currentID_FJ==2) {
+					} else if (currentID_FJ == 2) {
 						ruzhuren_rl2.setVisibility(View.VISIBLE);
 						ruzhuren_rl3.setVisibility(View.VISIBLE);
 						ruzhuren_rl4.setVisibility(View.GONE);
 						ruzhuren_rl5.setVisibility(View.GONE);
 						room_count = 3;
-					} else if (currentID_FJ==3) {
+					} else if (currentID_FJ == 3) {
 						ruzhuren_rl2.setVisibility(View.VISIBLE);
 						ruzhuren_rl3.setVisibility(View.VISIBLE);
 						ruzhuren_rl4.setVisibility(View.VISIBLE);
 						ruzhuren_rl5.setVisibility(View.GONE);
 						room_count = 4;
-					} else if (currentID_FJ==4) {
+					} else if (currentID_FJ == 4) {
 						ruzhuren_rl2.setVisibility(View.VISIBLE);
 						ruzhuren_rl3.setVisibility(View.VISIBLE);
 						ruzhuren_rl4.setVisibility(View.VISIBLE);
 						ruzhuren_rl5.setVisibility(View.VISIBLE);
 						room_count = 5;
 					}
-					if (roomcount_need_guarantee&&room_count>guarantee_room_count-1) {
+					if (roomcount_need_guarantee
+							&& room_count > guarantee_room_count - 1) {
 						Garantee_LL.setVisibility(View.VISIBLE);
-						garantee_desc_tv.setText(hotelRoomComfirm.getGaranteeRule()
-								.getDesc());
-						need_guarantee=true;
-					}else {
-						Garantee_LL.setVisibility(View.GONE);
-					}
-					
-					pwMyPopWindow.dismiss();
-				} else if (fjOrSj == 1) {// 1：时间
-					 will_arrive_time_tv .setText(list1.get(position).get("title")
-							.toString());
-					currentID_SJ = position;
-					if (time_need_guarantee && currentID_SJ==1) {// need_guarantee_btn
-						Garantee_LL.setVisibility(View.VISIBLE);
-						garantee_desc_tv.setText(hotelRoomComfirm.getGaranteeRule()
-								.getDesc());
-						need_guarantee=true;
+						garantee_desc_tv.setText(hotelRoomComfirm
+								.getGaranteeRule().getDesc());
+						need_guarantee = true;
 					} else {
 						Garantee_LL.setVisibility(View.GONE);
+						need_guarantee = false;
+					}
+
+					pwMyPopWindow.dismiss();
+				} else if (fjOrSj == 1) {// 1：时间
+					will_arrive_time_tv.setText(list1.get(position)
+							.get("title").toString());
+					currentID_SJ = position;
+					if (time_need_guarantee && currentID_SJ == 1) {// need_guarantee_btn
+						Garantee_LL.setVisibility(View.VISIBLE);
+						garantee_desc_tv.setText(hotelRoomComfirm
+								.getGaranteeRule().getDesc());
+						need_guarantee = true;
+					} else {
+						Garantee_LL.setVisibility(View.GONE);
+						need_guarantee = false;
 					}
 					pwMyPopWindow.dismiss();
 				}

@@ -1,6 +1,8 @@
 //国际机票搜索查询主界面
 package com.jike.shanglv;
 
+import java.text.ParseException;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -233,12 +235,34 @@ public class ActivityInternationalAirlineticket extends Activity {
 			if (b != null && b.containsKey("pickedDate")) {
 				myDate = b.getString("pickedDate");
 				startdate_tv.setText(myDate);
+				if (DateUtil.compareDateIsBefore(myDate, enddate_tv
+						.getText().toString().trim())) {
+					try {
+						enddate_tv.setText(DateUtil
+								.getSpecifiedDayAfter(myDate));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			break;
 		case enddate:
 			if (b != null && b.containsKey("pickedDate")) {
 				myDate = b.getString("pickedDate");
 				enddate_tv.setText(myDate);
+				if (DateUtil.compareDateIsBefore(startdate_tv.getText()
+						.toString().trim(), myDate)) {
+					try {
+						if (DateUtil.IsMoreThanToday(myDate)) {
+							startdate_tv.setText(DateUtil
+									.getSpecifiedDayBefore(myDate));
+						} else {
+							startdate_tv.setText(DateUtil.GetTodayDate());
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			break;
 		case startoff_date:

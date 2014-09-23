@@ -13,7 +13,6 @@ import android.annotation.SuppressLint;
 import android.net.ParseException;
 import android.text.format.DateFormat;
 
-
 @SuppressLint("SimpleDateFormat")
 public class DateUtil {
 	public static String GetTodayDate() {
@@ -68,6 +67,7 @@ public class DateUtil {
 
 	/**
 	 * 获得指定日期的后一天
+	 * 
 	 * @param specifiedDay
 	 * @return
 	 * @throws java.text.ParseException
@@ -90,7 +90,8 @@ public class DateUtil {
 		return dayAfter;
 	}
 
-	/**判断制定日期是否大于今天
+	/**
+	 * 判断制定日期是否大于今天
 	 */
 	public static Boolean IsMoreThanToday(String specifiedDay) {
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,7 +99,7 @@ public class DateUtil {
 		Date d = null;
 		try {
 			date = dfs.parse(GetDateAfterToday(0));
-			d=dfs.parse(specifiedDay);
+			d = dfs.parse(specifiedDay);
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
 		}
@@ -107,120 +108,178 @@ public class DateUtil {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * 获得指定日期时间的HH:mm
 	 */
 	public static String getTime(String dateString)
 			throws java.text.ParseException {
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-		Date date = sdf.parse(dateString); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = sdf.parse(dateString);
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		//Calendar.HOUR 12小时制     Calendar.HOUR_OF_DAY  24小时制的时间
-		String minute="";
-		String hour="";
-		if (c.get(Calendar.MINUTE)<10) {
-			minute="0"+Integer.toString(c.get(Calendar.MINUTE)) ;
-		}
-		else minute=Integer.toString(c.get(Calendar.MINUTE));
-		if (c.get(Calendar.HOUR_OF_DAY)<10) {
-			hour="0"+Integer.toString(c.get(Calendar.HOUR_OF_DAY)) ;
-		}
-		else hour=Integer.toString(c.get(Calendar.HOUR_OF_DAY));
-		
-		String time=hour+":"+minute;
-//		String time=dateString.substring(dateString.length()-8,dateString.length()-3);
+		// Calendar.HOUR 12小时制 Calendar.HOUR_OF_DAY 24小时制的时间
+		String minute = "";
+		String hour = "";
+		if (c.get(Calendar.MINUTE) < 10) {
+			minute = "0" + Integer.toString(c.get(Calendar.MINUTE));
+		} else
+			minute = Integer.toString(c.get(Calendar.MINUTE));
+		if (c.get(Calendar.HOUR_OF_DAY) < 10) {
+			hour = "0" + Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+		} else
+			hour = Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+
+		String time = hour + ":" + minute;
+		// String
+		// time=dateString.substring(dateString.length()-8,dateString.length()-3);
 		return time;
 	}
-	
+
 	/**
 	 * 获得指定日期时间的YYYY-MM:dd 年-月-日
 	 */
 	public static String getDate(String dateString)
-	    throws java.text.ParseException {
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-		Date date = sdf.parse(dateString); 
+			throws java.text.ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = sdf.parse(dateString);
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		String month="";
-		if(c.get(Calendar.MONTH)<9)month="0"+(c.get(Calendar.MONTH)+1);
-		else month=String.valueOf(c.get(Calendar.MONTH)+1);
-		String time=c.get(Calendar.YEAR)+"-"+month+"-"+c.get(Calendar.DAY_OF_MONTH);
+		String month = "";
+		if (c.get(Calendar.MONTH) < 9)
+			month = "0" + (c.get(Calendar.MONTH) + 1);
+		else
+			month = String.valueOf(c.get(Calendar.MONTH) + 1);
+		String time = c.get(Calendar.YEAR) + "-" + month + "-"
+				+ c.get(Calendar.DAY_OF_MONTH);
 		return time;
 	}
-	
+
 	/**
 	 * 获得指定日期时间的MM:dd 月-日
 	 */
 	public static String getMonthDayDate(String dateString)
-	    throws java.text.ParseException {
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd"); 
-		Date date = sdf.parse(dateString); 
+			throws java.text.ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = sdf.parse(dateString);
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		String month="",day="";
-		if(c.get(Calendar.MONTH)<9)month="0"+(c.get(Calendar.MONTH)+1);
-		else month=String.valueOf(c.get(Calendar.MONTH)+1);
-		if(c.get(Calendar.DAY_OF_MONTH)<9)day="0"+c.get(Calendar.DAY_OF_MONTH);
-		else day=String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-		String time=month+"-"+day;
+		String month = "", day = "";
+		if (c.get(Calendar.MONTH) < 9)
+			month = "0" + (c.get(Calendar.MONTH) + 1);
+		else
+			month = String.valueOf(c.get(Calendar.MONTH) + 1);
+		if (c.get(Calendar.DAY_OF_MONTH) < 9)
+			day = "0" + c.get(Calendar.DAY_OF_MONTH);
+		else
+			day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+		String time = month + "-" + day;
 		return time;
 	}
-	
+
 	/**
 	 * 获得指定日期时间为星期几
 	 */
 	public static String getDayOfWeek(String dateString)
-	    throws java.text.ParseException {
-		Date date=new Date();
+			throws java.text.ParseException {
+		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String today = formatter.format(date);
-		
-		String str1=DateUtil.getDate(dateString);
-		String tomorrow=DateUtil.getSpecifiedDayAfter(today);
-		String houtian=DateUtil.getSpecifiedDayAfter(DateUtil.getSpecifiedDayAfter(today));
-		
-		
+
+		String str1 = DateUtil.getDate(dateString);
+		String tomorrow = DateUtil.getSpecifiedDayAfter(today);
+		String houtian = DateUtil.getSpecifiedDayAfter(DateUtil
+				.getSpecifiedDayAfter(today));
+
 		if (DateUtil.getDate(dateString).equals(today)) {
 			return "今天";
-		}
-		else if(DateUtil.getDate(dateString).trim().equals(DateUtil.getSpecifiedDayAfter(today).trim())) {
+		} else if (DateUtil.getDate(dateString).trim()
+				.equals(DateUtil.getSpecifiedDayAfter(today).trim())) {
 			return "明天";
-		}
-		else if(DateUtil.getDate(dateString).equals(DateUtil.getSpecifiedDayAfter(DateUtil.getSpecifiedDayAfter(today)))) {
+		} else if (DateUtil.getDate(dateString).equals(
+				DateUtil.getSpecifiedDayAfter(DateUtil
+						.getSpecifiedDayAfter(today)))) {
 			return "后天";
 		}
-		
-		String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
-		SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-		Date date2 = sdf.parse(dateString); 
+
+		String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date2 = sdf.parse(dateString);
 		Calendar c = Calendar.getInstance();
 		c.setTime(date2);
-		Integer time=c.get(Calendar.DAY_OF_WEEK);
-		return weekDays[time-1];
+		Integer time = c.get(Calendar.DAY_OF_WEEK);
+		return weekDays[time - 1];
 	}
-	
-	 public static Boolean compareDateIsBefore(String DATE1, String DATE2) {
-		 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-	        try {
-	            Date dt1 = df.parse(DATE1);
-	            Date dt2 = df.parse(DATE2);
-	            if (dt1.getTime() > dt2.getTime()) {
-//	                System.out.println("dt1 >dt2");
-	                return true;
-	            } else if (dt1.getTime() < dt2.getTime()) {
-//	                System.out.println("dt1<dt2");
-	                return false;
-	            } else {//同一天
-	                return true;
-	            }
-	        } catch (Exception exception) {
-	            exception.printStackTrace();
-	        }
-	        return false;
-	    }
 
+	public static Boolean compareDateIsBefore(String DATE1, String DATE2) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date dt1 = df.parse(DATE1);
+			Date dt2 = df.parse(DATE2);
+			if (dt1.getTime() > dt2.getTime()) {
+				// System.out.println("dt1 >dt2");
+				return true;
+			} else if (dt1.getTime() < dt2.getTime()) {
+				// System.out.println("dt1<dt2");
+				return false;
+			} else {// 同一天
+				return true;
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * 两个日期之间相隔天数的共通
+	 * 
+	 * @param from
+	 *            開始時間
+	 * @param to
+	 *            　終了時間
+	 * @return　天数
+	 */
+	public static String getDaysBetweenTwoDates(String dateFrom, String dateEnd) {
+		Date dtFrom = null;
+		Date dtEnd = null;
+		dtFrom = toDate(dateFrom, "yyyyMMdd");
+		dtEnd = toDate(dateEnd, "yyyyMMdd");
+		long begin = dtFrom.getTime();
+		long end = dtEnd.getTime();
+		long inter = end - begin;
+		if (inter < 0) {
+			inter = inter * (-1);
+		}
+		long dateMillSec = 24 * 60 * 60 * 1000;
+
+		long dateCnt = inter / dateMillSec;
+
+		long remainder = inter % dateMillSec;
+
+		if (remainder != 0) {
+			dateCnt++;
+		}
+		return String.valueOf(dateCnt);
+	}
+
+	/**
+	 * 字符窜(yyyyMMdd)转换成为java.util.Date
+	 * @param sDate
+	 *            字符窜(yyyyMMdd)
+	 * @param sFmt
+	 *            format
+	 * @return Date java.util.Date日期
+	 */
+	public static Date toDate(String sDate, String sFmt) {
+		Date dt = null;
+		try {
+			dt = new SimpleDateFormat(sFmt).parse(sDate);
+		} catch (Exception e) {
+			return dt;
+		}
+		return dt;
+	}
 
 	// 获取字体大小
 	public static int adjustFontSize(int screenWidth, int screenHeight) {

@@ -274,6 +274,9 @@ public class HotelCityActivity extends Activity {
 				if(name.indexOf(filterStr.toString()) != -1 || HotelCityModel.getNameSort().startsWith(filterStr.toString())){
 					filterDateList.add(HotelCityModel);
 				}
+				if(name.indexOf(filterStr.toString()) != -1 || HotelCityModel.getSuoxie().startsWith(filterStr.toString())){
+					filterDateList.add(HotelCityModel);
+				}
 			}
 		}
 		filterDateList=DateUtil.removeDuplicateWithOrder(filterDateList);
