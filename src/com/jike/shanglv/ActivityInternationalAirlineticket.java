@@ -161,12 +161,16 @@ public class ActivityInternationalAirlineticket extends Activity {
 				startActivityForResult(cityIntent, arrivecity);
 				break;
 			case R.id.startdate_tv:// 往返 开始日期
+				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "出发日期");
 				startActivityForResult(dateIntent, startdate);
 				break;
 			case R.id.enddate_tv:// 往返 返程日期
+				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "返程日期");
 				startActivityForResult(dateIntent, enddate);
 				break;
+			case R.id.date_choose_single_rl:
 			case R.id.startoff_date_tv:// 单程 出发日期
+				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "出发日期");
 				startActivityForResult(dateIntent, startoff_date);
 				break;
 			case R.id.back_imgbtn://返回

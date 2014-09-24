@@ -59,6 +59,8 @@ public class ActivityTrain extends Activity {
 		startcity_choose_ll=(LinearLayout) findViewById(R.id.startcity_choose_ll);
 		endcity_choose_ll=(LinearLayout) findViewById(R.id.endcity_choose_ll);
 		swith_city_iv=(ImageView) findViewById(R.id.swith_city_iv);
+		date_choose_rl=(RelativeLayout) findViewById(R.id.date_choose_rl);
+		date_choose_rl.setOnClickListener(btnClickListner);
 		swith_city_iv.setOnClickListener(btnClickListner);
 		startcity_choose_ll.setOnClickListener(btnClickListner);
 		endcity_choose_ll.setOnClickListener(btnClickListner);
@@ -90,7 +92,9 @@ public class ActivityTrain extends Activity {
 			case R.id.endcity_tv:// 到达城市
 				startActivityForResult(cityIntent, arrivecity);
 				break;
+			case R.id.date_choose_rl:
 			case R.id.startoff_date_tv:// 单程 出发日期
+				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "出发日期");
 				startActivityForResult(dateIntent, startoff_date);
 				break;
 			case R.id.back_imgbtn://返回

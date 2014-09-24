@@ -167,12 +167,14 @@ public class ActivityHotel extends Activity {
 				Intent dateIntent = new Intent();
 				dateIntent.setClass(context,
 						com.jike.shanglv.ShipCalendar.MainActivity.class);
+				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "入住日期");
 				startActivityForResult(dateIntent, ruzhudate);
 				break;
 			case R.id.lidian_date_ll:
 				Intent dateIntent1 = new Intent();
 				dateIntent1.setClass(context,
 						com.jike.shanglv.ShipCalendar.MainActivity.class);
+				dateIntent1.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "离店日期");
 				startActivityForResult(dateIntent1, lidiandate);
 				break;
 			case R.id.xingji_ll:

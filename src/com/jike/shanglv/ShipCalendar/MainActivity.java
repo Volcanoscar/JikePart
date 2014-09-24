@@ -4,33 +4,36 @@ import static android.widget.Toast.LENGTH_SHORT;
 import java.util.Calendar;
 import java.util.Date;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.R;
 import com.squareup.timessquare.CalendarPickerView;
+import com.squareup.timessquare.CalendarPickerView.OnDateSelectedListener;
 import com.squareup.timessquare.CalendarPickerView.SelectionMode;
 
-public class MainActivity extends Activity implements OnClickListener{
-	private static final String TAG = "SampleTimesSquareActivity";
+public class MainActivity extends Activity{
+	public static final String TITLE="TITLE";
 	private CalendarPickerView calendar;
-	private String selectedDay = "jjj";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar_picker);
+		
+		String title="请选择日期";
+		Bundle bundle=getIntent().getExtras();
+		if (bundle!=null) {
+			if(bundle.containsKey("TITLE"))title=bundle.getString(TITLE);
+		}
+		((TextView)findViewById(R.id.title_tv)).setText(title);
 
 		final Calendar nextYear = Calendar.getInstance();
 		nextYear.add(Calendar.YEAR, 1);
-
 		final Calendar lastYear = Calendar.getInstance();
 		lastYear.add(Calendar.YEAR, -1);
 
@@ -62,49 +65,43 @@ public class MainActivity extends Activity implements OnClickListener{
 						LENGTH_SHORT).show();
 			}
 		});
-		calendar.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Toast.makeText(MainActivity.this,
-						calendar.getSelectedDate().getTime() + "kkk",
-						LENGTH_SHORT).show();
-			}
-		});
-
+		
 		findViewById(R.id.finish_tv).setOnClickListener(
 				selected_finishClickListener);
 		findViewById(R.id.back_imgbtn).setOnClickListener(
 				selected_finishClickListener);
+		
+		calendar.setOnDateSelectedListener(new OnDateSelectedListener() {
+			@Override
+			public void onDateUnselected(Date date) {
+				throwDate();
+			}
+			@Override
+			public void onDateSelected(Date date) {
+				throwDate();
+			}
+		});
 	}
 
 	OnClickListener selected_finishClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			// Log.d(TAG, "Selected time in millis: " +
-			// calendar.getSelectedDate().getTime());
-			String month = "";
-			if (calendar.getSelectedDate().getMonth() < 9)
-				month = "0" + (calendar.getSelectedDate().getMonth() + 1);
-			else
-				month = String.valueOf(calendar.getSelectedDate().getMonth() + 1);
-			String date = (calendar.getSelectedDate().getYear() + 1900) + "-"+ month+ "-"
-					+ calendar.getSelectedDate().getDate();
-			// Toast.makeText(MainActivity.this, date, LENGTH_SHORT).show();
-			setResult(0, getIntent().putExtra("pickedDate", date));
-			finish();
+			throwDate();
 		}
 	};
-	
-	@Override
-	public void onClick(View paramView) {
-//		if (paramView.getTag() != null) 
-		{
-			String date = (calendar.getSelectedDate().getYear() + 1900) + "-"
-					+ (calendar.getSelectedDate().getMonth()+1) + "-"
-					+ calendar.getSelectedDate().getDate();
-			setResult(0, getIntent().putExtra("pickedDate", date));
-			finish();
-		}
+
+	/**将选择的日期抛出到上一个调用activity
+	 */
+	private void throwDate(){
+		String month = "";
+		if (calendar.getSelectedDate().getMonth() < 9)
+			month = "0" + (calendar.getSelectedDate().getMonth() + 1);
+		else
+			month = String.valueOf(calendar.getSelectedDate().getMonth() + 1);
+		String date1 = (calendar.getSelectedDate().getYear() + 1900) + "-"+ month+ "-"
+				+ calendar.getSelectedDate().getDate();
+		// Toast.makeText(MainActivity.this, date, LENGTH_SHORT).show();
+		setResult(0, getIntent().putExtra("pickedDate", date1));
+		finish();
 	}
 }
