@@ -11,7 +11,7 @@
 	<classpathentry exported="true" kind="lib" path="E:/Source Code/JikePart/libs/universal-image-loader-1.8.6-with-sources.jar"/>
 	<classpathentry kind="lib" path="E:/Source Code/JikePart/libs/baidumapapi_v3_1_0.jar"/>
 	<classpathentry kind="src" path="/CalendarLibrary"/>
-	<classpathentry kind="src" path="/MainActivity"/>
-	<classpathentry kind="lib" path="E:/Source Code/JikePart/libs/updatelibrary.jar"/>
+	<classpathentry kind="src" path="/appcompat_v7"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/UpdateLibrary"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1,22 +1,18 @@
 package com.jike.shanglv;
 
-import com.jike.shanglv.Enums.SPkeys;
-import com.jike.shanglv.Update.Xmlparse;
-import com.loveplusplus.update.UpdateChecker;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
+import com.jike.shanglv.Enums.SPkeys;
 
 /**
  *     class desc: 启动画面 (1)判断是否是首次加载应用--采取读取SharedPreferences的方法
  *     (2)是，则进入GuideActivity；否，则进入MainActivity (3)3s后执行(2)操作
  */
-public class WelcomeActivity  extends FragmentActivity {
+public class WelcomeActivity  extends Activity {
 	boolean isFirstIn = false;
 	SharedPreferences preferences;
 	private static final int GO_HOME = 1000;
@@ -70,8 +66,7 @@ public class WelcomeActivity  extends FragmentActivity {
 			mHandler.sendMessage(msg);
 //			preferences.edit().putBoolean(SPkeys.isFirstIn.getString(), true).commit();
 		}
-		//检查更新
-//		UpdateChecker.checkForDialog(WelcomeActivity.this,"jike");
+
 	}
 
 	private void goHome() {
