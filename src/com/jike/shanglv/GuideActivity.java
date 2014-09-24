@@ -2,6 +2,9 @@ package com.jike.shanglv;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.jike.shanglv.Enums.SPkeys;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -175,13 +178,9 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 		 * method desc：设置已经引导过了，下次启动不用再次引导
 		 */
 		private void setGuided() {
-			SharedPreferences preferences = activity.getSharedPreferences(
-					SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-			Editor editor = preferences.edit();
-			// 存入数据
-			editor.putBoolean("isFirstIn", false);
-			// 提交修改
-			editor.commit();
+			SharedPreferences preferences = getSharedPreferences(
+					SPkeys.SPNAME.getString(), MODE_PRIVATE);
+			preferences.edit().putBoolean(SPkeys.isFirstIn.getString(), true).commit();
 		}
 
 		// 判断是否由对象生成界面

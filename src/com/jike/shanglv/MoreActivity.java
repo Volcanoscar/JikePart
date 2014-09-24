@@ -48,7 +48,7 @@ public class MoreActivity extends Activity {
 				startActivity(intent);
 				break;
 			case R.id.xbjs_rl:
-				startActivity(new Intent(MoreActivity.this, GuideActivity.class));
+				startActivity(new Intent(MoreActivity.this,GuideActivity.class));
 				break;
 			case R.id.jcgx_rl:
 				break;

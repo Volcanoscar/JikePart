@@ -3,6 +3,7 @@ package com.jike.shanglv;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -24,7 +25,7 @@ import android.app.LocalActivityManager;
 import android.view.Display;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public class MainActivity extends ActivityGroup implements
+public class MainActivity extends ActivityGroup  implements
 		OnCheckedChangeListener {
 
 	public static MainActivity instance = null;
@@ -40,7 +41,7 @@ public class MainActivity extends ActivityGroup implements
 		initView();
 		initHomePage();
 		radio_group.setOnCheckedChangeListener(this);
-//		SysApplication.getInstance().addActivity(this); 
+		
 	}
 
 	private void switchPage(int positoon) {

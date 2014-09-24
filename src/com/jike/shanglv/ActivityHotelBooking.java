@@ -75,13 +75,7 @@ public class ActivityHotelBooking extends Activity {
 			ruzhuren_rl5, ruzhurenID_rl, creadit_card_validity_rl,
 			identificationType_rl;
 	private LinearLayout ruzhu_date_ll, lidian_date_ll, Garantee_LL;
-	private Button shenfenzheng_btn, huzhao_btn, qita_btn;// one_room_btn,
-															// two_room_btn,
-															// three_room_btn,
-															// four_room_btn,five_room_btn,
-															// time1_btn,
-															// time2_btn,
-															// time3_btn,
+	private Button shenfenzheng_btn, huzhao_btn, qita_btn;
 	private Context context;
 
 	private PopupWindow popupWindow_order_room_count,
@@ -103,7 +97,8 @@ public class ActivityHotelBooking extends Activity {
 	private HotelRoomComfirm hotelRoomComfirm;
 	private CustomProgressDialog progressdialog;
 	private ArrayList<Map<String, Object>> arriveTimeList = new ArrayList<Map<String, Object>>();
-
+	double totalPrice = 0f;//一间房N天的房价  显示时需乘以房间数
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -435,8 +430,7 @@ public class ActivityHotelBooking extends Activity {
 							+ "\",\"supplierid\":\""
 							+ hotelRoomComfirm.getSupplierid()
 							+ "\",\"rooms\":\""
-							+ room_count_tv.getText().toString()
-									.substring(0, 1)
+							+ room_count
 							+ "\",\"passenger\":\""
 							+ getPassengers()
 							+ "\",\"cost\":\"\",\"sumrate\":\""
@@ -513,7 +507,7 @@ public class ActivityHotelBooking extends Activity {
 						}
 						jsonObject = jsonObject.getJSONObject("d");
 						hotelRoomComfirm = new HotelRoomComfirm(jsonObject);
-						double totalPrice = 0f;
+						
 						if (hotelRoomComfirm.getPrices() != null) {
 							totalPrice = Float.valueOf(hotelRoomComfirm
 									.getPrices().getTotalPrice());
@@ -521,7 +515,7 @@ public class ActivityHotelBooking extends Activity {
 //							totalPrice = Double.parseDouble(df
 //									.format(totalPrice));
 						}
-						total_price_tv.setText("￥" + totalPrice);
+						total_price_tv.setText("￥" + totalPrice*room_count);
 						if (!Boolean.valueOf(hotelRoomComfirm.getYuding()
 								.trim())) {
 							commit_order_tv.setEnabled(false);
@@ -680,7 +674,7 @@ public class ActivityHotelBooking extends Activity {
 				Garantee_LL.setVisibility(View.GONE);
 				need_guarantee = false;
 			}
-
+			total_price_tv.setText("￥" + totalPrice*room_count);
 			popupWindow_order_room_count.dismiss();
 		}
 	};
@@ -949,7 +943,7 @@ public class ActivityHotelBooking extends Activity {
 						Garantee_LL.setVisibility(View.GONE);
 						need_guarantee = false;
 					}
-
+					total_price_tv.setText("￥" + totalPrice*room_count);
 					pwMyPopWindow.dismiss();
 				} else if (fjOrSj == 1) {// 1：时间
 					will_arrive_time_tv.setText(list1.get(position)

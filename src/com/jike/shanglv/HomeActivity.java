@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
-
 import com.jike.shanglv.Common.MyRolateAnimImageView;
 import com.jike.shanglv.Update.Xmlparse;
+import com.loveplusplus.update.UpdateChecker;
 
 @SuppressWarnings({ "deprecation", "unused" })
 public class HomeActivity extends Activity{
@@ -31,6 +31,8 @@ public class HomeActivity extends Activity{
 		setContentView(R.layout.activity_home2);
 		context=this;
 		sp=this.getSharedPreferences("mySPData",Activity.MODE_PRIVATE);
+		
+//		UpdateChecker.checkForDialog(MainActivity.this,"jike");
 		/*
 		btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
 		btn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);

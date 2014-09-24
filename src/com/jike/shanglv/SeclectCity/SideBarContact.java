@@ -50,7 +50,7 @@ public class SideBarContact extends View {
 		int singleHeight = height / b.length;// 获取每一个字母的高度
 
 		for (int i = 0; i < b.length; i++) {
-			paint.setColor(Color.rgb(33, 65, 98));//右边字母导航条的颜色
+			paint.setColor(Color.rgb(119, 119, 119));//右边字母导航条的颜色
 //			paint.setColor(Color.WHITE);
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
