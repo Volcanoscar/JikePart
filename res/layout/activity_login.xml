@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:background="@color/ef_gray_bg"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-   <RelativeLayout
+    <RelativeLayout
         android:id="@+id/text_bg"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_height"
@@ -101,8 +101,8 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/password_tv"
             android:background="@drawable/register_input"
+            android:hint="请输入用户密码"
             android:inputType="textPassword"
-             android:hint="请输入用户密码"
             android:maxLength="16"
             android:paddingLeft="20dp"
             android:singleLine="true" />
@@ -134,8 +134,8 @@
 
             <ImageView
                 android:id="@+id/autologin_checkbox_iv"
-                android:layout_width="25dp"
-                android:layout_height="26dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:background="@drawable/fuxuankuang_yes" >
             </ImageView>

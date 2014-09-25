@@ -2,14 +2,9 @@ package com.jike.shanglv;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jike.shanglv.Enums.SPkeys;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -20,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import com.jike.shanglv.Enums.SPkeys;
 
 /**
  */

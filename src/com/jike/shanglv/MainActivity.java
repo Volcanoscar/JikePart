@@ -1,28 +1,18 @@
 package com.jike.shanglv;
 
-import android.os.Bundle;
-import android.app.Activity;
+import android.app.ActivityGroup;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.view.WindowManager;
-import android.app.Activity;
-import android.app.ActivityGroup;
-import android.app.LocalActivityManager;
-import android.view.Display;
 
 @SuppressWarnings({ "deprecation", "unused" })
 public class MainActivity extends ActivityGroup  implements

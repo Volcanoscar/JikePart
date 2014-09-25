@@ -222,6 +222,7 @@ public class ActivityOrderList extends Activity implements
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"pageSize\":\"" + pageSize
 						+ "\",\"pageIndex\":\"" + pageIndex + "\"}";
+				String signString=CommonFunc.MD5(MyApp.userkey + actionName + str);
 				try {//解决获取数据时的400错误
 					str=URLEncoder.encode(str, "utf-8");
 				} catch (UnsupportedEncodingException e) {
@@ -230,7 +231,7 @@ public class ActivityOrderList extends Activity implements
 				String param = "action=" + actionName + "&str=" + str
 						+ "&userkey=" + MyApp.userkey + "&sitekey="
 						+ MyApp.sitekey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + actionName + str);
+						+ signString;
 		
 				orderlistReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);

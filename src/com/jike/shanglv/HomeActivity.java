@@ -9,9 +9,6 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import com.jike.shanglv.Common.MyRolateAnimImageView;
-import com.lurencun.service.autoupdate.AppUpdate;
-import com.lurencun.service.autoupdate.AppUpdateService;
-import com.lurencun.service.autoupdate.internal.SimpleJSONParser;
 
 public class HomeActivity extends Activity{
 
@@ -24,7 +21,7 @@ public class HomeActivity extends Activity{
 	btn_jdmp, btn_zhcz, btn_hcp;
 	private Context context;
 	
-	AppUpdate appUpdate;
+//	AppUpdate appUpdate;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +63,9 @@ public class HomeActivity extends Activity{
 		
 		//¼ì²é¸üÐÂ
 //		UpdateChecker.checkForDialog(HomeActivity.this,"jike");
-		appUpdate = AppUpdateService.getAppUpdate(this);
-		appUpdate.checkLatestVersion("UPDATE_URL", 
-				new SimpleJSONParser());
+//		appUpdate = AppUpdateService.getAppUpdate(this);
+//		appUpdate.checkLatestVersion("UPDATE_URL", 
+//				new SimpleJSONParser());
 	}		
 	
 	@Override

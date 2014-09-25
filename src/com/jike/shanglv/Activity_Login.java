@@ -164,7 +164,7 @@ public class Activity_Login extends Activity {
 								.commit();
 						finish();
 					} else {
-						String message = jsonObject.getString("msg");
+						String message = jsonObject.getJSONObject("d").getString("msg");
 						// CustomProgressDialog cpd = new CustomProgressDialog(
 						// context);
 						// cpd.setMessage(message);
@@ -233,11 +233,11 @@ public class Activity_Login extends Activity {
 							utype = 1;
 						else if (pf == Platform.B2C)
 							utype = 2;
-						String str = "{uname:'"
+						String str = "{\"uname\":\""
 								+ uername_input_et.getText().toString().trim()
-								+ "',upwd:'"
+								+ "\",\"upwd\":\""
 								+ password_input_et.getText().toString().trim()
-								+ "',utype:" + utype + "}";
+								+ "\",\"utype\":\"" + utype + "\"}";
 						String param = "action=userlogin&sitekey=&userkey="
 								+ MyApp.userkey
 								+ "&str="
