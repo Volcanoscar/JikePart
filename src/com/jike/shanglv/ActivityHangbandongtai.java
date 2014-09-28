@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -180,11 +181,23 @@ public class ActivityHangbandongtai extends Activity {
 //					break;
 //				}
 				if (startcity_tv.getText().toString().trim().equals(endcity_tv.getText().toString().trim())) {
-					new AlertDialog.Builder(context).setTitle("出发和到达不能为同一个城市").setPositiveButton("知道了", null).show();
+//					new AlertDialog.Builder(context).setTitle("出发和到达不能为同一个城市").setPositiveButton("知道了", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("出发和到达不能为同一个城市");
+					cad.setPositiveButton("知道了", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (wayType==SingleOrDouble.doubleWayGo&&flightno_cet.getText().toString().trim().length()==0) {
-					new AlertDialog.Builder(context).setTitle("请输入要查询的航班号码").setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("请输入要查询的航班号码").setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入要查询的航班号码");
+					cad.setPositiveButton("知道了", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (HttpUtils.showNetCannotUse(context)) {

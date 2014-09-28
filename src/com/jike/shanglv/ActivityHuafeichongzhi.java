@@ -8,7 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
+//import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
@@ -18,6 +18,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -101,15 +103,21 @@ public class ActivityHuafeichongzhi extends Activity {
 							.trim()
 							.equals(confirm_phonenum_et.getText().toString()
 									.trim())) {
-						new AlertDialog.Builder(context)
-								.setTitle("两次号码输入不一致，请重新输入")
-								.setPositiveButton("确定", new OnClickListener() {
-									@Override
-									public void onClick(DialogInterface arg0,
-											int arg1) {
-										confirm_phonenum_et.setText("");
-									}
-								}).show();
+//						new AlertDialog.Builder(context)
+//								.setTitle("两次号码输入不一致，请重新输入")
+//								.setPositiveButton("确定", new OnClickListener() {
+//									@Override
+//									public void onClick(DialogInterface arg0,
+//											int arg1) {
+//										confirm_phonenum_et.setText("");
+//									}
+//								}).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("两次号码输入不一致，请重新输入");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 					startQueryPhonepro();
 				}
@@ -201,9 +209,15 @@ public class ActivityHuafeichongzhi extends Activity {
 				}
 				if (!CommonFunc.isMobileNO(phonenum_et.getText()
 						.toString().trim())) {
-					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
-							.setMessage("请输入合法的手机号码！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
+//							.setMessage("请输入合法的手机号码！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("手机号码格式不正确");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				} 
 				if (!phonenum_et
@@ -211,15 +225,22 @@ public class ActivityHuafeichongzhi extends Activity {
 						.toString()
 						.trim()
 						.equals(confirm_phonenum_et.getText().toString().trim())) {
-					new AlertDialog.Builder(context)
-							.setTitle("两次号码输入不一致，请重新输入")
-							.setPositiveButton("确定", new OnClickListener() {
-								@Override
-								public void onClick(DialogInterface arg0,
-										int arg1) {
-									confirm_phonenum_et.setText("");
-								}
-							}).show();
+//					new AlertDialog.Builder(context)
+//							.setTitle("两次号码输入不一致，请重新输入")
+//							.setPositiveButton("确定", new OnClickListener() {
+//								@Override
+//								public void onClick(DialogInterface arg0,
+//										int arg1) {
+//									confirm_phonenum_et.setText("");
+//								}
+//							}).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("两次号码输入不一致，请重新输入");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+							confirm_phonenum_et.setText("");
+						}});
 				}
 				startCommitOrder();
 			default:
@@ -362,9 +383,15 @@ public class ActivityHuafeichongzhi extends Activity {
 						hedui_ll.setVisibility(View.VISIBLE);
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("验证价格失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证价格失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						chongzhi_button.setBackgroundColor(getResources()
 								.getColor(R.color.gray));
 						chongzhi_button.setEnabled(false);
@@ -395,9 +422,15 @@ public class ActivityHuafeichongzhi extends Activity {
 						startActivity(intent);
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("订单提交失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("订单提交失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						chongzhi_button.setBackgroundColor(getResources()
 								.getColor(R.color.gray));
 						chongzhi_button.setEnabled(false);

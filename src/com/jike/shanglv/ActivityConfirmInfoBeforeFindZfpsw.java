@@ -14,12 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -63,8 +65,14 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 				break;
 			case R.id.nextstep_button:
 				if(yanzhengma_cet.getText().toString().trim().length()==0){
-					new AlertDialog.Builder(context).setTitle("请输入验证码")
-						.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("请输入验证码")
+//						.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入验证码");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}else {
 					startVerify();
@@ -144,9 +152,15 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 				jsonParser = new JSONTokener(yanzhengmaReturnJson);
 				try {
 					if (yanzhengmaReturnJson.length() == 0) {
-						new AlertDialog.Builder(context)
-								.setTitle("验证码发送失败")
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context)
+//								.setTitle("验证码发送失败")
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("验证码发送失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						break;
 					}
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
@@ -154,13 +168,25 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 					String message = jsonObject.getString("d");
 					if (state.equals("0000")) {
 						nextstep_button.setEnabled(true);
-						new AlertDialog.Builder(context).setTitle("验证码发送成功")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证码发送成功")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					} else {
-						new AlertDialog.Builder(context).setTitle("验证码发送失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证码发送失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -171,9 +197,15 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 				try {
 					progressdialog.dismiss();
 					if (verifyReturnJson.length() == 0) {
-						new AlertDialog.Builder(context)
-								.setTitle("验证码校验出错")
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context)
+//								.setTitle("验证码校验出错")
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("验证码校验出错");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						break;
 					}
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
@@ -184,9 +216,15 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 						intent.putExtra(ActivityResetZfPsw.ISRESETLOGINPSW, false);
 						startActivity(intent);
 					} else {
-						new AlertDialog.Builder(context).setTitle("验证码不正确")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证码不正确")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("验证码不正确");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.R.integer;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,16 +29,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
+
 import com.jike.shanglv.Common.ClearEditText;
-import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.StarLevel;
 import com.jike.shanglv.Enums.SPkeys;
-import com.jike.shanglv.NetAndJson.HttpUtils;
 
 public class ActivityHotelFilter extends Activity {
 

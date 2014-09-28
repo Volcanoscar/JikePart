@@ -8,14 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +24,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -40,6 +38,7 @@ import android.widget.Toast;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Enums.Platform;
@@ -631,21 +630,32 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.back_imgbtn:
-				AlertDialog.Builder builder = new AlertDialog.Builder(context);  
-		        builder.setTitle("提示");  
-		        builder.setMessage("您的订单尚未完成，确认放弃填写吗？");  
-		        builder.setPositiveButton("确认放弃",  
-		                new DialogInterface.OnClickListener() {  
-		                    public void onClick(DialogInterface dialog, int whichButton) {  
-		                    	finish();  
-		                    }  
-		                });  
-		        builder.setNegativeButton("继续填写",  
-		                new DialogInterface.OnClickListener() {  
-		                    public void onClick(DialogInterface dialog, int whichButton) {  
-		                    }  
-		                });  
-		        builder.show();
+//				AlertDialog.Builder builder = new AlertDialog.Builder(context);  
+//		        builder.setTitle("提示");  
+//		        builder.setMessage("您的订单尚未完成，确认放弃填写吗？");  
+//		        builder.setPositiveButton("确认放弃",  
+//		                new DialogInterface.OnClickListener() {  
+//		                    public void onClick(DialogInterface dialog, int whichButton) {  
+//		                    	finish();  
+//		                    }  
+//		                });  
+//		        builder.setNegativeButton("继续填写",  
+//		                new DialogInterface.OnClickListener() {  
+//		                    public void onClick(DialogInterface dialog, int whichButton) {  
+//		                    }  
+//		                });  
+//		        builder.show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
+				cad.setTitle("您的订单尚未完成，确认放弃填写吗？");
+				cad.setPositiveButton("继续填写", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
+				cad.setNegativeButton("确认放弃", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+						finish();
+					}});
 				break;
 			case R.id.home_imgbtn:
 				startActivity(new Intent(context, MainActivity.class));
@@ -704,16 +714,28 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				break;
 			case R.id.order_now_btn:
 				if (passengerList.size() == 0) {
-					new AlertDialog.Builder(context).setTitle("乘机人不能为空")
-							.setMessage("请添加乘机人！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("乘机人不能为空")
+//							.setMessage("请添加乘机人！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad1=new CustomerAlertDialog(context,true);
+					cad1.setTitle("请添加乘机人");
+					cad1.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad1.dismiss();
+						}});
 					break;
 				}
 				if (!CommonFunc.isMobileNO(contact_person_phone_et.getText()
 						.toString().trim())) {
-					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
-							.setMessage("请输入合法的手机号码！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
+//							.setMessage("请输入合法的手机号码！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad2=new CustomerAlertDialog(context,true);
+					cad2.setTitle("手机号码格式不正确");
+					cad2.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad2.dismiss();
+						}});
 					break;
 				} else {
 					sp.edit()

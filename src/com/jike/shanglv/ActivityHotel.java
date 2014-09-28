@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -31,11 +32,13 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.jike.shanglv.Common.ClearEditText;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -205,8 +208,14 @@ public class ActivityHotel extends Activity {
 				}
 				if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
 						.toString(), lidian_date_tv.getText().toString())) {
-					new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
-							.setPositiveButton("知道了", null).show();
+//					new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
+//							.setPositiveButton("知道了", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("入住日期不能大于离店日期");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (HttpUtils.showNetCannotUse(context)) {

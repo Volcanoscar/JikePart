@@ -7,20 +7,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
+//import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -31,6 +29,7 @@ import android.os.Message;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -47,6 +46,7 @@ import com.jike.shanglv.ActivityTrainBaoxian.MyListAdapter.Holder;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.LazyList.ImageLoader;
@@ -384,8 +384,14 @@ public class ActivityTrainBooking extends Activity {
 					getValidCodePic();// 提交失败后需刷新验证码
 					yanzhengma_input_et.setText("");
 					progressdialog.dismiss();
-					new AlertDialog.Builder(context).setTitle("发生异常，订单提交失败！")
-							.setPositiveButton("确认", null).show();
+//					new AlertDialog.Builder(context).setTitle("发生异常，订单提交失败！")
+//							.setPositiveButton("确认", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("发生异常，订单提交失败");
+					cad.setPositiveButton("知道了", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				JSONTokener jsonParser;
@@ -404,11 +410,18 @@ public class ActivityTrainBooking extends Activity {
 						startActivityForResult(intent, NEW_ORDER_DETAIL_CODE);
 
 					} else {
-						new AlertDialog.Builder(context)
-								.setTitle(
-										jsonObject.getJSONObject("d")
-												.getString("msg"))
-								.setPositiveButton("确定", null).show();
+//						new AlertDialog.Builder(context)
+//								.setTitle(
+//										jsonObject.getJSONObject("d")
+//												.getString("msg"))
+//								.setPositiveButton("确定", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(jsonObject.getJSONObject("d")
+								.getString("msg"));
+						cad.setPositiveButton("知道了", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						getValidCodePic();// 提交失败后需刷新验证码
 						yanzhengma_input_et.setText("");
 					}
@@ -484,21 +497,39 @@ public class ActivityTrainBooking extends Activity {
 					break;
 				}
 				if (passengerList.size() == 0) {
-					new AlertDialog.Builder(context).setTitle("乘客不能为空")
-							.setMessage("请添加乘客信息！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("乘客不能为空")
+//							.setMessage("请添加乘客信息！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请添加乘客信息");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (yanzhengma_input_et.getText().toString().length() != 4) {
-					new AlertDialog.Builder(context).setTitle("请输入验证码")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("请输入验证码")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入验证码");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (!CommonFunc.isMobileNO(contact_person_phone_et.getText()
 						.toString().trim())) {
-					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
-							.setMessage("请输入合法的手机号码！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
+//							.setMessage("请输入合法的手机号码！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("手机号码格式不正确");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				} else {
 					sp.edit()

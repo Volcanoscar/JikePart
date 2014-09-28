@@ -1,18 +1,20 @@
 package com.jike.shanglv;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+//import android.content.DialogInterface;
+//import android.content.DialogInterface.OnClickListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 
 public class ActivityMyAccout extends Activity {
@@ -58,16 +60,30 @@ public class ActivityMyAccout extends Activity {
 				startActivity(new Intent(ActivityMyAccout.this, MineActivity.class));
 				break;
 			case R.id.logout_button:
-				new AlertDialog.Builder(context).setTitle("确认注销").setNegativeButton("取消", null)
-				.setMessage("确认注销当前用户？").setPositiveButton("注销", new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
+//				new AlertDialog.Builder(context).setTitle("确认注销").setNegativeButton("取消", null)
+//				.setMessage("确认注销当前用户？").setPositiveButton("注销", new OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface arg0, int arg1) {
+//						sp.edit().putString(SPkeys.userid.getString(),"").commit();
+//						sp.edit().putString(SPkeys.username.getString(),"").commit();
+//						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
+//						finish();
+//					}
+//				}).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
+				cad.setTitle("确认注销当前用户？");
+				cad.setPositiveButton("注销", new OnClickListener(){
+					public void onClick(View arg0) {
 						sp.edit().putString(SPkeys.userid.getString(),"").commit();
 						sp.edit().putString(SPkeys.username.getString(),"").commit();
 						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
 						finish();
-					}
-				}).show();
+						cad.dismiss();
+					}});
+				cad.setNegativeButton("取消",new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				
 				break;
 			case R.id.chongzhi_tv:

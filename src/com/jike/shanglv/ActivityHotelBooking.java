@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +48,7 @@ import android.widget.Toast;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.IDCard;
 import com.jike.shanglv.Enums.SPkeys;
@@ -588,9 +588,15 @@ public class ActivityHotelBooking extends Activity {
 								.get("title").toString());
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("查询酒店房间信息失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -605,8 +611,8 @@ public class ActivityHotelBooking extends Activity {
 
 					if (state.equals("0000")) {
 						successOrderId = jsonObject.getString("d");
-						Toast.makeText(context,
-								"订单提交成功，OrderId：" + successOrderId, 0).show();
+//						Toast.makeText(context,
+//								"订单提交成功，OrderId：" + successOrderId, 0).show();
 						// String orderID =
 						// jsonObject.getJSONObject("d").getString("orderid");
 						Intent intent = new Intent(context,
@@ -616,9 +622,15 @@ public class ActivityHotelBooking extends Activity {
 						startActivityForResult(intent, 22);
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("提交订单失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("提交订单失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -717,69 +729,141 @@ public class ActivityHotelBooking extends Activity {
 	private Boolean validInput() {
 		if (room_count > 0
 				&& name_cet1.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("请输入入住人姓名")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("请输入入住人姓名")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入入住人姓名");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		} else if (room_count > 1
 				&& name_cet2.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("请输入第二个入住人姓名")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("请输入第二个入住人姓名")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入第二个入住人姓名");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		} else if (room_count > 2
 				&& name_cet3.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("请输入第三个入住人姓名")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("请输入第三个入住人姓名")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入第三个入住人姓名");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		} else if (room_count > 3
 				&& name_cet4.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("请输入第四个入住人姓名")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("请输入第四个入住人姓名")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入第四个入住人姓名");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		} else if (room_count > 4
 				&& name_cet5.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("请输入第五个入住人姓名")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("请输入第五个入住人姓名")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入第五个入住人姓名");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (!CommonFunc.isMobileNO(contact_person_phone_cet.getText()
 				.toString().trim())) {
-			new AlertDialog.Builder(context).setTitle("请输入合法的联系人手机号")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("请输入合法的联系人手机号")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入合法的联系人手机号");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (need_guarantee) {
 			if (creditCard_num_cet.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡卡号")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡卡号")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入担保使用的信用卡卡号");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (creadit_card_validity_tv.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请选择信用卡的有效期")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("请选择信用卡的有效期")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请选择信用卡的有效期");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (cvv_num_cet.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的CVV2码")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的CVV2码")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入担保使用的信用卡的CVV2码");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (chikaren_name_cet.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的持卡人姓名")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的持卡人姓名")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入担保使用的信用卡的持卡人姓名");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (creditCard_identificationNum_cet.getText().toString().trim()
 					.length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请输入证件号码")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("请输入证件号码")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入证件号码");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (guarantee_identification_type_isID == 0
 					&& !(new IDCard().verify(creditCard_identificationNum_cet
 							.getText().toString().trim()))) {
-				new AlertDialog.Builder(context).setTitle("身份证号不合法")
-						.setMessage("请输入担保人合法的身份证号码！")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("身份证号不合法")
+//						.setMessage("请输入担保人合法的身份证号码！")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入担保人合法的身份证号码");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 			}
 		}
 		if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
@@ -789,16 +873,28 @@ public class ActivityHotelBooking extends Activity {
 		if (isSevenDayHotel) {
 			if (!(new IDCard().verify(identificationNum_et.getText().toString()
 					.trim()))) {
-				new AlertDialog.Builder(context).setTitle("身份证号不合法")
-						.setMessage("请输入一个入住人的合法身份证号码！")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("身份证号不合法")
+//						.setMessage("请输入一个入住人的合法身份证号码！")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入一个入住人的合法身份证号码");
+				cad.setPositiveButton("确定", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 		}
 		if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText().toString(),
 				lidian_date_tv.getText().toString())) {
-			new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
-					.setPositiveButton("知道了", null).show();
+//			new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
+//					.setPositiveButton("知道了", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("入住日期不能大于离店日期");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (HttpUtils.showNetCannotUse(context)) {

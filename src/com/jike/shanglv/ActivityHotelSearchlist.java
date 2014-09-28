@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -28,6 +27,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -50,6 +50,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Common.StarLevel;
@@ -209,8 +210,14 @@ public class ActivityHotelSearchlist extends Activity implements
 			case 1:// 酒店列表
 				JSONTokener jsonParser;
 				if (hotelsReturnJson.equals("")) {
-					new AlertDialog.Builder(context).setTitle("未查询到数据")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("未查询到数据")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("未查询到数据");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					progressdialog.dismiss();
 					break;
 				}
@@ -221,8 +228,14 @@ public class ActivityHotelSearchlist extends Activity implements
 
 					if (state.equals("0000")) {
 						if (jsonObject.getJSONObject("d").length() == 0) {
-							new AlertDialog.Builder(context).setTitle("未查询到数据")
-									.setPositiveButton("确定", null).show();
+//							new AlertDialog.Builder(context).setTitle("未查询到数据")
+//									.setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							cad.setTitle("未查询到数据");
+							cad.setPositiveButton("确定", new OnClickListener(){
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}});
 							progressdialog.dismiss();
 							break;
 						}
@@ -251,9 +264,15 @@ public class ActivityHotelSearchlist extends Activity implements
 						});
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("查询失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("查询失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -264,8 +283,14 @@ public class ActivityHotelSearchlist extends Activity implements
 				break;
 			case 2:// 附近的酒店列表
 				if (nearbyReturnJson.equals("")) {
-					new AlertDialog.Builder(context).setTitle("未查询到数据")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("未查询到数据")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("查询失败");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					progressdialog.dismiss();
 					break;
 				}
@@ -276,8 +301,14 @@ public class ActivityHotelSearchlist extends Activity implements
 
 					if (state.equals("0000")) {
 						if (jsonObject.getJSONObject("d").length() == 0) {
-							new AlertDialog.Builder(context).setTitle("未查询到数据")
-									.setPositiveButton("确定", null).show();
+//							new AlertDialog.Builder(context).setTitle("未查询到数据")
+//									.setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							cad.setTitle("未查询到数据");
+							cad.setPositiveButton("确定", new OnClickListener(){
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}});
 							progressdialog.dismiss();
 							break;
 						}
@@ -306,9 +337,15 @@ public class ActivityHotelSearchlist extends Activity implements
 						});
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("查询失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

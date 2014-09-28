@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -30,6 +29,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Adapter;
@@ -42,6 +42,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Enums.SPkeys;
@@ -273,9 +274,15 @@ public class ActivityOrderList extends Activity implements
 								.getString("recordcount"));
 						JSONArray jsonArray = jsonObject.getJSONArray("d");
 						if (jsonArray.length() == 0&&(order_List_airlineticket.size()==0&&order_List_hotel.size()==0&&order_List_phone.size()==0)) {
-							new AlertDialog.Builder(context)
-									.setTitle("未查询到相关数据")
-									.setPositiveButton("确认", null).show();
+//							new AlertDialog.Builder(context)
+//									.setTitle("未查询到相关数据")
+//									.setPositiveButton("确认", null).show();
+							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							cad.setTitle("未查询到相关数据");
+							cad.setPositiveButton("确定", new OnClickListener(){
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}});
 							
 							// 不能这么干，因为动态加载更多时，也会清除数据
 							// if (actionName.equals(FLIGHT_ORDERLIST))
@@ -378,9 +385,15 @@ public class ActivityOrderList extends Activity implements
 					} else {
 						String message = jsonObject.getJSONObject("d")
 								.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("查询失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

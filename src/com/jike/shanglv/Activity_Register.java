@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -82,23 +83,38 @@ public class Activity_Register extends Activity {
 					JSONObject data=jsonObject.getJSONObject("d");
 
 					if (state.equals("0000")) {
-						new AlertDialog.Builder(context).setTitle("注册成功")
-								.setMessage("注册成功,请登录！")
-								.setPositiveButton("确认",
-										new DialogInterface.OnClickListener() {
-											public void onClick(
-													DialogInterface dialog,
-													int id) {
-												startActivity(new Intent(
-														context,
-														Activity_Login.class));
-											}
-										}).show();
+//						new AlertDialog.Builder(context).setTitle("注册成功")
+//								.setMessage("注册成功,请登录！")
+//								.setPositiveButton("确认",
+//										new DialogInterface.OnClickListener() {
+//											public void onClick(
+//													DialogInterface dialog,
+//													int id) {
+//												startActivity(new Intent(
+//														context,
+//														Activity_Login.class));
+//											}
+//										}).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("注册成功,请登录！");
+						cad.setPositiveButton("立即登录", new OnClickListener(){
+							public void onClick(View arg0) {
+								startActivity(new Intent(
+									context,
+									Activity_Login.class));
+								cad.dismiss();
+							}});
 					} else {
 						String message = data.getString("msg");
-						new AlertDialog.Builder(context).setTitle("注册失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("注册失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -168,58 +184,112 @@ public class Activity_Register extends Activity {
 	 * */
 	private Boolean checkValid() {
 		if (uername_input_et.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("用户名不能为空")
-					.setMessage("请输入用户名！").setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("用户名不能为空")
+//					.setMessage("请输入用户名！").setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("用户名不能为空");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (!CommonFunc.isValidUserName(uername_input_et.getText()
 				.toString().trim())) {
-			new AlertDialog.Builder(context).setTitle("用户名格式不正确")
-					.setMessage("为保证密码的安全性，请输入6-12位的数字、字母或下划线的组合！")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("用户名格式不正确")
+//					.setMessage("为保证密码的安全性，请输入6-12位的数字、字母或下划线的组合！")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("为保证密码的安全性，请输入6-12位的数字、字母或下划线的组合！");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (password_input_et.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("密码不能为空")
-					.setMessage("请输入密码！").setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("密码不能为空")
+//					.setMessage("请输入密码！").setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入密码！");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		} else if (!CommonFunc.isValidPassword(password_input_et.getText()
 				.toString().trim())) {
-			new AlertDialog.Builder(context).setTitle("密码格式不正确")
-					.setMessage("为保证密码的安全性，请输入6-20位的数字或字母的组合！")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("密码格式不正确")
+//					.setMessage("为保证密码的安全性，请输入6-20位的数字或字母的组合！")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("为保证密码的安全性，请输入6-20位的数字或字母的组合！");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (!password_input_et.getText().toString().trim()
 				.equals(confirm_input_et.getText().toString().trim())) {
-			new AlertDialog.Builder(context).setTitle("密码不一致")
-					.setMessage("请确保两次输入的密码相同！").setPositiveButton("确定", null)
-					.show();
+//			new AlertDialog.Builder(context).setTitle("密码不一致")
+//					.setMessage("请确保两次输入的密码相同！").setPositiveButton("确定", null)
+//					.show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("两次输入密码不一致");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (!CommonFunc.isMobileNO(mobile_input_et.getText().toString().trim())) {
-			new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
-					.setMessage("请输入合法的手机号码！").setPositiveButton("确定", null)
-					.show();
+//			new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
+//					.setMessage("请输入合法的手机号码！").setPositiveButton("确定", null)
+//					.show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("手机号码格式不正确");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (realname_input_et.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("姓名不能为空")
-					.setMessage("请输入真实姓名！").setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("姓名不能为空")
+//					.setMessage("请输入真实姓名！").setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("姓名不能为空");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		// 邮箱地址不做必填项，如果有内容，则校验格式
 		if (email_input_et.getText().toString().trim().length() != 0
 				&& !CommonFunc.isEmail(email_input_et.getText().toString()
 						.trim())) {
-			new AlertDialog.Builder(context).setTitle("邮箱格式不正确")
-					.setMessage("请输入合法的电子邮件名！").setPositiveButton("确定", null)
-					.show();
+//			new AlertDialog.Builder(context).setTitle("邮箱格式不正确")
+//					.setMessage("请输入合法的电子邮件名！").setPositiveButton("确定", null)
+//					.show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("邮箱格式不正确");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (recommend_input_et.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("邀请码不能为空")
-					.setMessage("请输入邀请码！").setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("邀请码不能为空")
+//					.setMessage("请输入邀请码！").setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入邀请码！");
+			cad.setPositiveButton("确定", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		return true;

@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Enums.SPkeys;
@@ -142,10 +143,16 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 						dongtai_List=removeDuplicteHangbandongtais(dongtai_List);
 						adapter = new ListAdapter(context, dongtai_List);
 						listview.setAdapter(adapter);
-						if (dongtai_List.size() == 0)
-							new AlertDialog.Builder(context)
-									.setTitle("未查相关的航班信息")
-									.setPositiveButton("确认", null).show();
+						if (dongtai_List.size() == 0){
+//							new AlertDialog.Builder(context)
+//									.setTitle("未查相关的航班信息")
+//									.setPositiveButton("确认", null).show();
+							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("未查相关的航班信息");
+						cad.setPositiveButton("知道了", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});}
 						listview.setOnItemClickListener(new OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
@@ -163,9 +170,15 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("查询失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("查询失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

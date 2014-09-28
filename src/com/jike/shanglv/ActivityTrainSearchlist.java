@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -22,6 +21,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -32,6 +32,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.Seat;
 import com.jike.shanglv.Models.TrainListItem;
@@ -115,8 +116,14 @@ public class ActivityTrainSearchlist extends Activity {
 				jsonParser = new JSONTokener(trainsReturnJson);
 				try {
 					if (trainsReturnJson.length()==0) {
-						new AlertDialog.Builder(context).setTitle("未查到该车段的列车信息")
-						.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("未查到该车段的列车信息")
+//						.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("未查到该车段的列车信息");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						progressdialog.dismiss();
 						break;
 					}
@@ -151,9 +158,15 @@ public class ActivityTrainSearchlist extends Activity {
 
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("查询失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("查询失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

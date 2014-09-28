@@ -1,11 +1,10 @@
 package com.jike.shanglv;
 
 import java.util.HashMap;
-
 import android.content.Context;
-
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
+
 //百度地图 SHA1 0D:3C:EC:2E:C2:01:A0:E6:C7:AE:44:B4:05:17:9D:F8:BE:A9:70:9E
 public class MyApp {
 	private Context context;
@@ -21,7 +20,7 @@ public class MyApp {
 //	put(K key, V value) 
 //	hm.put(a,b); //插入值为b,key值为a
 //	hm.get(key); //返回值为value
-	/**打包不同程序时更改此处
+	/**打包不同程序时更改此处   另外打包时需要更改百度地图的key
 	 * 此类中只需更改以下三个值：RELEASE、hm、platform
 	 */
 	public static boolean RELEASE = false;//测试  or 发布，接口
@@ -82,7 +81,14 @@ public class MyApp {
 		if(RELEASE)
 			return context.getResources().getString(R.string.formal_about);
 		else return context.getResources().getString(R.string.test_about);
-	}	
+	}
+	/**获取update接口的地址
+	 */
+	public String getUpdateServeUrl() {
+		if(RELEASE)
+			return context.getResources().getString(R.string.formal_update_url);
+		else return context.getResources().getString(R.string.test_update_url);
+	}
 
 	/**构建不同厂家的打包数据
 	 */
@@ -90,7 +96,7 @@ public class MyApp {
 		self_hm.put(PackageKeys.WELCOME_DRAWABLE.getString(), R.drawable.welcome);
 		self_hm.put(PackageKeys.APP_NAME.getString(), R.string.app_name);
 		self_hm.put(PackageKeys.MENU_LOGO_DRAWABLE.getString(), R.drawable.menu_logo);
-		self_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jikeb2c");
+		self_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike");
 		self_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
 	}
 }

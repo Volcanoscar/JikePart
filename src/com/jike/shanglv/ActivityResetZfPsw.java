@@ -9,18 +9,20 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
+//import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -67,15 +69,27 @@ public class ActivityResetZfPsw extends Activity {
 			case R.id.ok_button:
 				if (!newpsw_cet.getText().toString()
 						.equals(confirmpsw_cet.getText().toString())) {
-					new AlertDialog.Builder(context).setTitle("两次输入的新密码不一致")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("两次输入的新密码不一致")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("两次输入的新密码不一致");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (!CommonFunc.isValidPassword(newpsw_cet.getText().toString()
 						.trim())) {
-					new AlertDialog.Builder(context).setTitle("密码格式不正确")
-							.setMessage("为保证密码的安全性，请输入6-20位的数字或字母的组合！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("密码格式不正确")
+//							.setMessage("为保证密码的安全性，请输入6-20位的数字或字母的组合！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("为保证密码的安全性，请输入6-20位的数字或字母的组合");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				startReset();
@@ -132,9 +146,15 @@ public class ActivityResetZfPsw extends Activity {
 				jsonParser = new JSONTokener(changePswReturnJson);
 				try {
 					if (changePswReturnJson.length() == 0) {
-						new AlertDialog.Builder(context)
-								.setTitle("重置密码失败！")
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context)
+//								.setTitle("重置密码失败！")
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("重置密码失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						progressdialog.dismiss();
 						break;
 					}
@@ -144,19 +164,32 @@ public class ActivityResetZfPsw extends Activity {
 					jsonObject = jsonObject.getJSONObject("d");
 					String message = jsonObject.getString("msg");
 					if (state.equals("0000")) {
-						new AlertDialog.Builder(context).setTitle("密码重置成功")
-								.setMessage(message)
-								.setPositiveButton("确认", new OnClickListener() {
-									@Override
-									public void onClick(DialogInterface arg0,
-											int arg1) {
-										finish();
-									}
-								}).show();
+//						new AlertDialog.Builder(context).setTitle("密码重置成功")
+//								.setMessage(message)
+//								.setPositiveButton("确认", new OnClickListener() {
+//									@Override
+//									public void onClick(DialogInterface arg0,
+//											int arg1) {
+//										finish();
+//									}
+//								}).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("重置密码成功");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+								finish();
+							}});
 					} else {
-						new AlertDialog.Builder(context).setTitle("重置密码失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("重置密码失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

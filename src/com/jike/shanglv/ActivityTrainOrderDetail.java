@@ -3,12 +3,10 @@ package com.jike.shanglv;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -30,7 +28,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.SPkeys;

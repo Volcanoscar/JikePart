@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -51,7 +52,6 @@ public class Activity_Login extends Activity {
 	private SharedPreferences sp;
 	private String loginReturnJson;// 登录验证后返回的结果数据
 	private CustomProgressDialog progressdialog;
-	private boolean dialog_cancel = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -165,13 +165,16 @@ public class Activity_Login extends Activity {
 						finish();
 					} else {
 						String message = jsonObject.getJSONObject("d").getString("msg");
-						// CustomProgressDialog cpd = new CustomProgressDialog(
-						// context);
-						// cpd.setMessage(message);
-						// cpd.show();
-						new AlertDialog.Builder(context).setTitle("登录失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("登录失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -206,15 +209,27 @@ public class Activity_Login extends Activity {
 				break;
 			case R.id.login_btn:
 				if (uername_input_et.getText().toString().trim().length() == 0) {
-					new AlertDialog.Builder(context).setTitle("用户名不能为空")
-							.setMessage("请输入用户名").setPositiveButton("确定", null)
-							.show();
+//					new AlertDialog.Builder(context).setTitle("用户名不能为空")
+//							.setMessage("请输入用户名").setPositiveButton("确定", null)
+//							.show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入用户名");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (password_input_et.getText().toString().trim().length() == 0) {
-					new AlertDialog.Builder(context).setTitle("密码不能为空")
-							.setMessage("请输入密码").setPositiveButton("确定", null)
-							.show();
+//					new AlertDialog.Builder(context).setTitle("密码不能为空")
+//							.setMessage("请输入密码").setPositiveButton("确定", null)
+//							.show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入密码");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				// 登录验证
@@ -256,13 +271,6 @@ public class Activity_Login extends Activity {
 				progressdialog = CustomProgressDialog.createDialog(context);
 				progressdialog.setMessage("正在登录，请稍候...");
 				progressdialog.setCancelable(false);
-				progressdialog.setOnCancelListener(new OnCancelListener() {
-
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						dialog_cancel = true;
-					}
-				});
 				progressdialog.show();
 				break;
 			default:

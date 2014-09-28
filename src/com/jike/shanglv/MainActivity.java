@@ -13,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import com.jike.shanglv.Enums.PackageKeys;
+import com.jike.shanglv.Update.UpdateManager;
 
 @SuppressWarnings({ "deprecation", "unused" })
 public class MainActivity extends ActivityGroup  implements
@@ -32,6 +34,12 @@ public class MainActivity extends ActivityGroup  implements
 		initHomePage();
 		radio_group.setOnCheckedChangeListener(this);
 		
+		if(!((MyApplication)getApplication()).getHasCheckedUpdate()){
+			MyApp ma=new MyApp(MainActivity.this);
+			UpdateManager manager=new UpdateManager(MainActivity.this,ma.getHm().get(PackageKeys.UPDATE_NOTE.getString()).toString());
+			manager.checkForUpdates();
+			((MyApplication)getApplication()).setHasCheckedUpdate(true);
+		}
 	}
 
 	private void switchPage(int positoon) {
@@ -52,7 +60,6 @@ public class MainActivity extends ActivityGroup  implements
 		default:
 			break;
 		}
-
 		container.removeAllViews();
 		mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Window subActivity = getLocalActivityManager().startActivity(

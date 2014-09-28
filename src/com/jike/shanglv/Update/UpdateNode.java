@@ -3,13 +3,23 @@ package com.jike.shanglv.Update;
 public class UpdateNode {
 	String name, version, content,// 1、全新界面 2、增加话费充值
 			download_url,// http://b2b.51jp.cn/download/android/Jike_Shanglv_self.apk
+			softname,
 			updatetime;// 2013-07-16
+
 	int	hotelcity,// 2
 			flightcity,// 3
 			iflightcity,// 4
 			traincity,// 5
 			versionCode;// 16
 
+	public String getSoftname() {
+		return softname;
+	}
+
+	public void setSoftname(String softname) {
+		this.softname = softname;
+	}
+	
 	public String getName() {
 		return name;
 	}

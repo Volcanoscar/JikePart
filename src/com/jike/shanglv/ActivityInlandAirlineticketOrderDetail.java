@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +19,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.Passenger;
@@ -189,10 +190,16 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 										.setBackgroundDrawable(getResources()
 												.getDrawable(R.drawable.btn_3_d));
 								pay_now_btn.setEnabled(false);
-								new AlertDialog.Builder(context)
-										.setTitle("定位失败")
-										.setMessage("定位失败，暂不能支付！")
-										.setPositiveButton("确定", null).show();
+//								new AlertDialog.Builder(context)
+//										.setTitle("定位失败")
+//										.setMessage("定位失败，暂不能支付！")
+//										.setPositiveButton("确定", null).show();
+								final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+								cad.setTitle("定位失败，暂不能支付！");
+								cad.setPositiveButton("确定", new OnClickListener(){
+									public void onClick(View arg0) {
+										cad.dismiss();
+									}});
 							}
 						}
 					} else {

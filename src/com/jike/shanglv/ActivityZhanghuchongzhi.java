@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -79,13 +81,25 @@ public class ActivityZhanghuchongzhi extends Activity {
 					break;
 				}
 				if (chongzhijine_et.getText().toString().trim().length()==0) {
-					new AlertDialog.Builder(context).setTitle("请输入充值金额")
-					.setPositiveButton("确认", null).show();
+//					new AlertDialog.Builder(context).setTitle("请输入充值金额")
+//					.setPositiveButton("确认", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入充值金额");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (!CommonFunc.isNumber(chongzhijine_et.getText().toString().trim())) {
-					new AlertDialog.Builder(context).setTitle("请输入合法的充值金额")
-					.setPositiveButton("确认", null).show();
+//					new AlertDialog.Builder(context).setTitle("请输入合法的充值金额")
+//					.setPositiveButton("确认", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入正确的充值金额");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				
@@ -171,9 +185,15 @@ public class ActivityZhanghuchongzhi extends Activity {
 						startActivity(intent);
 					} else {
 						String message = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle("订单提交失败")
-								.setMessage(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("订单提交失败")
+//								.setMessage(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("订单提交失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						chongzhi_button.setBackgroundColor(getResources()
 								.getColor(R.color.gray));
 						chongzhi_button.setEnabled(false);

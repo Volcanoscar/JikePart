@@ -8,6 +8,7 @@ import org.json.JSONTokener;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -71,8 +72,14 @@ public class Activity_RetrievePassword extends Activity {
 			@Override
 			public void onClick(View v) {
 				if (yanzhengma_cet.getText().toString().trim().length() == 0) {
-					new AlertDialog.Builder(context).setTitle("请输入验证码")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("请输入验证码")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("请输入验证码");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 				} else {
 					startVerify();
 				}
@@ -86,15 +93,27 @@ public class Activity_RetrievePassword extends Activity {
 			public void onClick(View v) {
 				if (!CommonFunc.isMobileNO(phone_input_et.getText().toString()
 						.trim())) {
-					new AlertDialog.Builder(Activity_RetrievePassword.this)
-							.setTitle("手机号码格式不正确").setMessage("请输入合法的手机号码！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(Activity_RetrievePassword.this)
+//							.setTitle("手机号码格式不正确").setMessage("请输入合法的手机号码！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("手机号码格式不正确");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					return;
 				}
 				if (username_input_et.getText().toString().trim().length() == 0) {
-					new AlertDialog.Builder(context).setTitle("用户名不能为空")
-							.setMessage("请输入用户名！")
-							.setPositiveButton("确定", null).show();
+//					new AlertDialog.Builder(context).setTitle("用户名不能为空")
+//							.setMessage("请输入用户名！")
+//							.setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("用户名不能为空");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 				}
 				startGetUserId();
 			}
@@ -183,8 +202,14 @@ public class Activity_RetrievePassword extends Activity {
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(useridReturnJson);
 				if (useridReturnJson.length() == 0) {// 未获取到用户id，提示发生错误
-					new AlertDialog.Builder(context).setTitle("获取用户信息失败")
-							.setPositiveButton("确认", null).show();
+//					new AlertDialog.Builder(context).setTitle("获取用户信息失败")
+//							.setPositiveButton("确认", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("获取用户信息失败");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				try {
@@ -197,8 +222,14 @@ public class Activity_RetrievePassword extends Activity {
 						startGetYanzhengma();
 					} else {
 						String emsg = jsonObject.getString("msg");
-						new AlertDialog.Builder(context).setTitle(emsg)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle(emsg)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(emsg);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -208,8 +239,14 @@ public class Activity_RetrievePassword extends Activity {
 				jsonParser = new JSONTokener(yanzhengmaReturnJson);
 				try {
 					if (yanzhengmaReturnJson.length() == 0) {
-						new AlertDialog.Builder(context).setTitle("验证码发送失败")
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证码发送失败")
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("验证码发送失败");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						break;
 					}
 					JSONObject jsonObject1 = (JSONObject) jsonParser
@@ -219,11 +256,23 @@ public class Activity_RetrievePassword extends Activity {
 					if (state1.equals("0000")) {
 						retrieve_btn.setEnabled(true);
 						retrieve_btn.setBackground(getResources().getDrawable(R.drawable.btn_3));
-						new AlertDialog.Builder(context).setTitle(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					} else {
-						new AlertDialog.Builder(context).setTitle(message)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle(message)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -234,8 +283,14 @@ public class Activity_RetrievePassword extends Activity {
 				try {
 					progressdialog.dismiss();
 					if (verifyReturnJson.length() == 0) {
-						new AlertDialog.Builder(context).setTitle("验证码校验出错")
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证码校验出错")
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("验证码校验出错");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 						break;
 					}
 					JSONObject jsonObject2 = (JSONObject) jsonParser
@@ -249,9 +304,15 @@ public class Activity_RetrievePassword extends Activity {
 								true);
 						startActivity(intent);
 					} else {
-						new AlertDialog.Builder(context).setTitle("验证码不正确")
-								.setMessage(message1)
-								.setPositiveButton("确认", null).show();
+//						new AlertDialog.Builder(context).setTitle("验证码不正确")
+//								.setMessage(message1)
+//								.setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("验证码不正确");
+						cad.setPositiveButton("确定", new OnClickListener(){
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

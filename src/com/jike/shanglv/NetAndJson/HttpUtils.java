@@ -22,6 +22,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
+import com.jike.shanglv.Common.CustomerAlertDialog;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,6 +31,8 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class HttpUtils {
 	// 定义一个静态的方法获取JSON内容
@@ -189,9 +193,15 @@ public class HttpUtils {
 	
 	public static Boolean showNetCannotUse(Context context){
 		if (!HttpUtils.checkNet(context)) {
-			new AlertDialog.Builder(context).setTitle("网络连接失败")
-					.setMessage("无法连接网路，请检查网络设置！")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("网络连接失败")
+//					.setMessage("无法连接网路，请检查网络设置！")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("无法连接网路，请检查网络设置！");
+			cad.setPositiveButton("知道了", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return true;
 		}
 		return false;

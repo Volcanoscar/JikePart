@@ -8,15 +8,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+//import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -25,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.Common.CustomProgressDialog;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
@@ -253,31 +253,57 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 								  index);
 						
 						  if (wayType==SingleOrDouble.doubleWayGo) {//如果是往返机票，且目前选择的是去程，则跳到航班搜索页面，选择返程机票
-							  new AlertDialog.Builder(context).setTitle("请选择返程机票")
-							  .setMessage("   已选择去程航班，点击“确定”选择返程航班！")
-							  .setPositiveButton("确定", 
-									  	new OnClickListener() {
-											@Override
-											public void onClick(DialogInterface dialog, int which) {
-												Intent intents = new Intent(
-															context,
-															ActivityInlandAirlineticketSearchlist.class);
-												intents.putExtra("wayType", SingleOrDouble.doubleWayBack);
-												intents.putExtra("startcity", startcity);
-												intents.putExtra("arrivecity", arrivecity);
-												intents.putExtra("startcity_code", startcity_code);
-												intents.putExtra("arrivecity_code", arrivecity_code);
-												intents.putExtra("startdate", startdate);
-												intents.putExtra("enddate", enddate);
-												intents.putExtra(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1,
-														 String.valueOf(index));
-												intents.putExtra(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1,
-														  jsonObject.toString());
-												startActivity(intents);
-											}
-										})
-										.setNeutralButton("稍等一会", null)
-							  .show();
+//							  new AlertDialog.Builder(context).setTitle("请选择返程机票")
+//							  .setMessage("   已选择去程航班，点击“确定”选择返程航班！")
+//							  .setPositiveButton("确定", 
+//									  	new OnClickListener() {
+//											@Override
+//											public void onClick(DialogInterface dialog, int which) {
+//												Intent intents = new Intent(
+//															context,
+//															ActivityInlandAirlineticketSearchlist.class);
+//												intents.putExtra("wayType", SingleOrDouble.doubleWayBack);
+//												intents.putExtra("startcity", startcity);
+//												intents.putExtra("arrivecity", arrivecity);
+//												intents.putExtra("startcity_code", startcity_code);
+//												intents.putExtra("arrivecity_code", arrivecity_code);
+//												intents.putExtra("startdate", startdate);
+//												intents.putExtra("enddate", enddate);
+//												intents.putExtra(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1,
+//														 String.valueOf(index));
+//												intents.putExtra(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1,
+//														  jsonObject.toString());
+//												startActivity(intents);
+//											}
+//										})
+//										.setNeutralButton("稍等一会", null)
+//							  .show();
+							  final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
+								cad.setTitle("已选择去程航班，点击“确定”选择返程航班！");
+								cad.setPositiveButton("确定", new OnClickListener(){
+									public void onClick(View arg0) {
+										Intent intents = new Intent(
+												context,
+												ActivityInlandAirlineticketSearchlist.class);
+									intents.putExtra("wayType", SingleOrDouble.doubleWayBack);
+									intents.putExtra("startcity", startcity);
+									intents.putExtra("arrivecity", arrivecity);
+									intents.putExtra("startcity_code", startcity_code);
+									intents.putExtra("arrivecity_code", arrivecity_code);
+									intents.putExtra("startdate", startdate);
+									intents.putExtra("enddate", enddate);
+									intents.putExtra(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1,
+											 String.valueOf(index));
+									intents.putExtra(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1,
+											  jsonObject.toString());
+									startActivity(intents);
+										cad.dismiss();
+									}});
+								cad.setNegativeButton("稍等一会", new OnClickListener(){
+									public void onClick(View arg0) {
+										cad.dismiss();
+										finish();
+									}});
 						  }
 						  else startActivity(intentSend);
 					  }
@@ -301,7 +327,7 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 			tuiGaiQian_rl.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(context,"退改签", 0).show();
+//					Toast.makeText(context,"退改签", 0).show();
 				}
 			});
 			

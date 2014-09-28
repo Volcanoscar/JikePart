@@ -5,9 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -40,6 +38,7 @@ import android.widget.TextView;
 
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.IDCard;
 import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Models.Passenger;
@@ -116,46 +115,6 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 		identificationType_tv.setOnClickListener(clickListener);
 		passengerType_tv.setOnClickListener(clickListener);
 		savecontact_rl.setOnClickListener(clickListener);
-
-//		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//		popupWindowView_idtype = inflater.inflate(
-//				R.layout.popupwindow_identification_type, null);
-//		popupWindow_idtype = new PopupWindow(popupWindowView_idtype,
-//				LayoutParams.FILL_PARENT, 420, true);
-//		popupWindow_idtype.setBackgroundDrawable(new BitmapDrawable());
-//		// 设置PopupWindow的弹出和消失效果
-//		popupWindow_idtype.setAnimationStyle(R.style.AnimBottomPopup);
-//		shenfenzheng_btn = (Button) popupWindowView_idtype
-//				.findViewById(R.id.shenfenzheng_btn);
-//		huzhao_btn = (Button) popupWindowView_idtype
-//				.findViewById(R.id.huzhao_btn);
-//		gangaotongxingzheng_btn = (Button) popupWindowView_idtype
-//				.findViewById(R.id.gangaotongxingzheng_btn);
-//		taobaozheng_btn = (Button) popupWindowView_idtype
-//				.findViewById(R.id.taobaozheng_btn);
-//		qita_btn = (Button) popupWindowView_idtype.findViewById(R.id.qita_btn);
-//		shenfenzheng_btn.setOnClickListener(popupClickListener);
-//		huzhao_btn.setOnClickListener(popupClickListener);
-//		gangaotongxingzheng_btn.setOnClickListener(popupClickListener);
-//		taobaozheng_btn.setOnClickListener(popupClickListener);
-//		qita_btn.setOnClickListener(popupClickListener);
-//
-//		popupWindowView_ptype = inflater.inflate(
-//				R.layout.popupwindow_passenger_type, null);
-//		popupWindow_ptype = new PopupWindow(popupWindowView_ptype,
-//				LayoutParams.FILL_PARENT, 280, true);
-//		popupWindow_ptype.setBackgroundDrawable(new BitmapDrawable());
-//		// 设置PopupWindow的弹出和消失效果
-//		popupWindow_ptype.setAnimationStyle(R.style.AnimBottomPopup);
-//		chengren_btn = (Button) popupWindowView_ptype
-//				.findViewById(R.id.chengren_btn);
-//		ertongpiao_btn = (Button) popupWindowView_ptype
-//				.findViewById(R.id.ertongpiao_btn);
-//		yingerpiao_btn = (Button) popupWindowView_ptype
-//				.findViewById(R.id.yingerpiao_btn);
-//		chengren_btn.setOnClickListener(popupClickListener_ptype);
-//		ertongpiao_btn.setOnClickListener(popupClickListener_ptype);
-//		yingerpiao_btn.setOnClickListener(popupClickListener_ptype);
 
 		Intent intent = getIntent();
 		if (intent != null) {
@@ -463,71 +422,131 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 	// 输入合法性判断
 	private Boolean validInput() {
 		if (passengerName_et.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("姓名不能为空")
-					.setMessage("请输入乘客姓名！").setPositiveButton("确定", null)
-					.show();
+//			new AlertDialog.Builder(context).setTitle("姓名不能为空")
+//					.setMessage("请输入乘客姓名！").setPositiveButton("确定", null)
+//					.show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入乘客姓名");
+			cad.setPositiveButton("知道了", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (!systype.equals("1")&&phoneNum_et.getText().toString().trim().length()>0&&(CommonFunc.isMobileNO(phoneNum_et.getText()
 				.toString().trim())==false&&CommonFunc.isPhone(phoneNum_et.getText()
 						.toString().trim())==false)) {
-			new AlertDialog.Builder(context).setTitle("电话号码格式不正确")
-					.setMessage("请输入合法的手机号码或座机号码！")
-					.setPositiveButton("确定", null).show();
+//			new AlertDialog.Builder(context).setTitle("电话号码格式不正确")
+//					.setMessage("请输入合法的手机号码或座机号码！")
+//					.setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入合法的手机号码或座机号码");
+			cad.setPositiveButton("知道了", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if (identificationNum_et.getText().toString().trim().length() == 0) {
-			new AlertDialog.Builder(context).setTitle("证件号码不能为空")
-					.setMessage("请输入证件号码！").setPositiveButton("确定", null)
-					.show();
+//			new AlertDialog.Builder(context).setTitle("证件号码不能为空")
+//					.setMessage("请输入证件号码！").setPositiveButton("确定", null)
+//					.show();
+			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			cad.setTitle("请输入证件号码");
+			cad.setPositiveButton("知道了", new OnClickListener(){
+				public void onClick(View arg0) {
+					cad.dismiss();
+				}});
 			return false;
 		}
 		if ((identificationType_tv.getText().toString().trim())
 				.equals(IdType.IdType.get(0))) {
 			if (!(new IDCard().verify(identificationNum_et.getText().toString()
 					.trim()))) {
-				new AlertDialog.Builder(context).setTitle("身份证号不合法")
-						.setMessage("请输入合法的身份证号码！")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("身份证号不合法")
+//						.setMessage("请输入合法的身份证号码！")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入合法的身份证号码");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 		}
 		if (systype.equals("1")) {
 			if (!CommonFunc.isEnglishName(passengerName_et.getText()
 					.toString().trim())) {
-				new AlertDialog.Builder(context).setTitle("姓名格式不正确")
-						.setMessage("请输入英文名，姓氏和名字之间以斜杠分割，格式为\"zhang/san\"")
-						.setPositiveButton("确定", null).show();
+//				new AlertDialog.Builder(context).setTitle("姓名格式不正确")
+//						.setMessage("请输入英文名，姓氏和名字之间以斜杠分割，格式为\"zhang/san\"")
+//						.setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入英文名，姓氏和名字之间以斜杠分割，例如:\"zhang/san\"");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			} 
 			if (IDdeadline_et.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请选择证件有效期")
-						.setMessage("请选择证件有效期！").setPositiveButton("确定", null)
-						.show();
+//				new AlertDialog.Builder(context).setTitle("请选择证件有效期")
+//						.setMessage("请选择证件有效期！").setPositiveButton("确定", null)
+//						.show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请选择证件有效期");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (nation_et.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请选择国籍")
-						.setMessage("请选择国籍！").setPositiveButton("确定", null)
-						.show();
+//				new AlertDialog.Builder(context).setTitle("请选择国籍")
+//						.setMessage("请选择国籍！").setPositiveButton("确定", null)
+//						.show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请选择国籍");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (issueAt_et.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请输入证件签发地")
-						.setMessage("请输入证件签发地！").setPositiveButton("确定", null)
-						.show();
+//				new AlertDialog.Builder(context).setTitle("请输入证件签发地")
+//						.setMessage("请输入证件签发地！").setPositiveButton("确定", null)
+//						.show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请输入证件签发地");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (gender_et.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请选择性别")
-						.setMessage("请选择性别！").setPositiveButton("确定", null)
-						.show();
+//				new AlertDialog.Builder(context).setTitle("请选择性别")
+//						.setMessage("请选择性别！").setPositiveButton("确定", null)
+//						.show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请选择性别");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 			if (birthDay_et.getText().toString().trim().length() == 0) {
-				new AlertDialog.Builder(context).setTitle("请选择出生年月日")
-						.setMessage("请选择出生年月日！").setPositiveButton("确定", null)
-						.show();
+//				new AlertDialog.Builder(context).setTitle("请选择出生年月日")
+//						.setMessage("请选择出生年月日！").setPositiveButton("确定", null)
+//						.show();
+				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				cad.setTitle("请选择出生年月日");
+				cad.setPositiveButton("知道了", new OnClickListener(){
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}});
 				return false;
 			}
 		}

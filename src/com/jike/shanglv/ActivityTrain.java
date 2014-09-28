@@ -10,12 +10,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -119,7 +122,13 @@ public class ActivityTrain extends Activity {
 					break;
 				}
 				if (startcity_tv.getText().toString().trim().equals(endcity_tv.getText().toString().trim())) {
-					new AlertDialog.Builder(context).setTitle("出发和到达不能为同一个城市").setPositiveButton("知道了", null).show();
+//					new AlertDialog.Builder(context).setTitle("出发和到达不能为同一个城市").setPositiveButton("知道了", null).show();
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("出发和到达不能为同一个城市");
+					cad.setPositiveButton("知道了", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
 					break;
 				}
 				if (HttpUtils.showNetCannotUse(context)) {
