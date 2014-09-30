@@ -1,9 +1,11 @@
 package com.jike.shanglv;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 //import android.content.DialogInterface;
 //import android.content.DialogInterface.OnClickListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.SPkeys;
 
@@ -70,20 +71,23 @@ public class ActivityMyAccout extends Activity {
 //						finish();
 //					}
 //				}).show();
+				
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
 				cad.setTitle("确认注销当前用户？");
-				cad.setPositiveButton("注销", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					public void onClick(View arg0) {
 						sp.edit().putString(SPkeys.userid.getString(),"").commit();
 						sp.edit().putString(SPkeys.username.getString(),"").commit();
 						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
 						finish();
 						cad.dismiss();
-					}});
-				cad.setNegativeButton("取消",new OnClickListener(){
+					}
+				});
+				cad.setNegativeButton1("取消",new OnClickListener() {
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				
 				break;
 			case R.id.chongzhi_tv:

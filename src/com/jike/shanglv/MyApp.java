@@ -23,11 +23,11 @@ public class MyApp {
 	/**打包不同程序时更改此处   另外打包时需要更改百度地图的key
 	 * 此类中只需更改以下三个值：RELEASE、hm、platform
 	 */
-	public static boolean RELEASE = false;//测试  or 发布，接口
+	public static boolean RELEASE = true;//测试  or 发布，接口
 	private HashMap<String,Object> hm=self_hm;
 	public static Platform platform=Platform.B2C;
 	
-	public static String userkey="5b13658a9fc945e34893f806027d467a";//5b13658a9fc945e34893f806027d467a有效期到2014.09.10
+//	public static String userkey="5b13658a9fc945e34893f806027d467a";//5b13658a9fc945e34893f806027d467a有效期到2014.09.10
 	public static String sitekey="";
 	
 	public MyApp(Context context){
@@ -52,7 +52,9 @@ public class MyApp {
 	public String getServeUrl() {
 		if(RELEASE)
 			return context.getResources().getString(R.string.formal_server_url);
-		else return context.getResources().getString(R.string.test_server_url);
+		else
+			return context.getResources().getString(R.string.test_server_url);
+	
 	}
 	/**获取支付接口的地址
 	 */
@@ -98,5 +100,6 @@ public class MyApp {
 		self_hm.put(PackageKeys.MENU_LOGO_DRAWABLE.getString(), R.drawable.menu_logo);
 		self_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike");
 		self_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
+		self_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"ffdd14d2e6c26b70749c8b2c08067c69":"5b13658a9fc945e34893f806027d467a");
 	}
 }

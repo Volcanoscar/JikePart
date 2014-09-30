@@ -93,13 +93,16 @@ public class MainActivity extends Activity{
 	/**将选择的日期抛出到上一个调用activity
 	 */
 	private void throwDate(){
-		String month = "";
+		String month = "",day="";
 		if (calendar.getSelectedDate().getMonth() < 9)
 			month = "0" + (calendar.getSelectedDate().getMonth() + 1);
 		else
 			month = String.valueOf(calendar.getSelectedDate().getMonth() + 1);
-		String date1 = (calendar.getSelectedDate().getYear() + 1900) + "-"+ month+ "-"
-				+ calendar.getSelectedDate().getDate();
+		day=calendar.getSelectedDate().getDate()+"";
+		if (calendar.getSelectedDate().getDate()<9) {
+			day= "0" + day;
+		}
+		String date1 = (calendar.getSelectedDate().getYear() + 1900) + "-"+ month+ "-"+ day;
 		// Toast.makeText(MainActivity.this, date, LENGTH_SHORT).show();
 		setResult(0, getIntent().putExtra("pickedDate", date1));
 		finish();

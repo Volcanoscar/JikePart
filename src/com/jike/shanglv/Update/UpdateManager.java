@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.jike.shanglv.MyApp;
 import com.jike.shanglv.R;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 
 
 public class UpdateManager
@@ -92,7 +93,7 @@ public class UpdateManager
 				showCustomerNoticeDialog();
 				break;
 			case NOUPDATE:
-				
+				showNoUpdateDialog();
 				break;
 			default:
 				break;
@@ -155,6 +156,16 @@ public class UpdateManager
 		TextView dialog_content_tv=(TextView)noticeDialog.getWindow().findViewById(R.id.dialog_content_tv);
 		dialog_content_tv.setText(myNode.getContent().replace("\\r\\n", "\r\n"));
 		
+		}
+	
+	private void showNoUpdateDialog()
+	{
+		final CustomerAlertDialog cad=new CustomerAlertDialog(mContext,true);
+		cad.setTitle("当前已是最新版本");
+		cad.setPositiveButton("确定", new android.view.View.OnClickListener(){
+			public void onClick(View arg0) {
+				cad.dismiss();
+			}});
 		}
 
 	/**
@@ -364,7 +375,9 @@ public class UpdateManager
 		return result;
 	}
 	
-	public void checkForUpdates() {
+	/*isPushNoUpdate false不弹出没有更新的提示，否则提示
+	 * */
+	public void checkForUpdates(final Boolean isPushNoUpdate) {
 		mThread = new Thread() {
 			@Override
 			public void run() {
@@ -374,7 +387,7 @@ public class UpdateManager
 //					parseJson(info);
 					try {
 						myNode=ParseXmlService.getNodeFromXml(info, nameOfNode);
-						parseXml(myNode);
+						parseXml(myNode,isPushNoUpdate);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -382,7 +395,6 @@ public class UpdateManager
 					Log.e("UpdateManager", "can't get app update info");
 				}
 			}
-
 		};
 		mThread.start();
 	}
@@ -390,7 +402,7 @@ public class UpdateManager
 	/*
 	 * 从节点中获取信息并显示更新对话框，或返回没有更新结果false
 	 */
-	private Boolean parseXml(UpdateNode myNode) {
+	private Boolean parseXml(UpdateNode myNode,Boolean isPushNoUpdate) {
 		mThread.interrupt();
 		Looper.prepare();
 		try {
@@ -409,7 +421,7 @@ public class UpdateManager
 				msg.what=UPDATE;
 				isUpdateHandler.sendMessage(msg);
 				return true;
-			} else {
+			} else if(isPushNoUpdate){
 				Message msg=new Message();
 				msg.what=NOUPDATE;
 				isUpdateHandler.sendMessage(msg);

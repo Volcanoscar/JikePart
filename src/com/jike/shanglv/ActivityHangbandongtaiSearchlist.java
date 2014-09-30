@@ -37,6 +37,7 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
 import com.jike.shanglv.LazyList.ImageLoader;
@@ -218,9 +219,9 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 						+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
 						+ flightNo + "\",\"type\":\"" + 2 + "\"}";
 				String param = "action=flighttime&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "flighttime" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flighttime" + str);
 				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -230,7 +231,7 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -250,9 +251,9 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 						+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
 						+ flightNo + "\",\"type\":\"" + 1 + "\"}";
 				String param = "action=flighttime&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "flighttime" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flighttime" + str);
 				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -266,7 +267,7 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询航班动态信息，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

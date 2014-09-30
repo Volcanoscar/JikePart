@@ -24,6 +24,7 @@ public class CustomerAlertDialog {
 		dialog_cancel_tv=(TextView)window.findViewById(R.id.dialog_cancel_tv);
 		dialog_ok_tv=(TextView)window.findViewById(R.id.dialog_ok_tv);
 		if(isOneBtn)dialog_cancel_tv.setVisibility(View.GONE);
+		else dialog_cancel_tv.setVisibility(View.VISIBLE);
 	}
 	public void setTitle(int resId)
 	{
@@ -71,11 +72,10 @@ public class CustomerAlertDialog {
 	 * @param text
 	 * @param listener
 	 */
-	public void setNegativeButton(String text,final View.OnClickListener listener)
+	public void setNegativeButton1(String text,final View.OnClickListener listener)
 	{
 		dialog_cancel_tv.setText(text);
 		dialog_cancel_tv.setOnClickListener(listener);
-		this.dismiss();
 	}
 	/**
 	 * ¹Ø±Õ¶Ô»°¿ò

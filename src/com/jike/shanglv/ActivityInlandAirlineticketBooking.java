@@ -11,8 +11,11 @@ import java.util.TreeSet;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +44,7 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.IdType;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
@@ -66,6 +70,8 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	protected static final int BAOXIAN_MSG_CODE = 5;
 	protected static final int COMMIT_ORDER_MSG_CODE = 6;
 	protected static final int NEW_ORDER_DETAIL_CODE = 7;
+	protected static final int TUIGAIQIAN_MSG_CODE = 8;
+	protected static final int TUIGAIQIAN_MSG_CODE3 = 9;
 
 	private Context context;
 	private ImageButton back_imgbtn, home_imgbtn, lianxiren_icon_imgbtn,
@@ -106,7 +112,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	private ImageView up_down_arrow_iv3;
 
 	private Boolean needBaoxianBoolean = true;// 是否购买保险
-	private String baoxianReturnJson = "", commitReturnJson = "";
+	private String baoxianReturnJson = "", commitReturnJson = "",tuigaiqianReturnJson="";
 	private ArrayList<Passenger> passengerList;// 选择的乘机人列表
 	private ArrayList<Passenger> allPassengerList;// 当前所有乘机人的列表（服务端和用户新增的）
 	private CustomProgressDialog progressdialog;
@@ -231,6 +237,9 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					+ jsonObject.getJSONArray("CabList")
 							.getJSONObject(selectCabinListIndex)
 							.getString("Cabin"));
+			startQueryTuigaiqian(ia.getFlightNo(), jsonObject.getJSONArray("CabList")
+					.getJSONObject(selectCabinListIndex)
+					.getString("Cabin"), startoff_date_tv.getText().toString(), TUIGAIQIAN_MSG_CODE);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -309,6 +318,9 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					+ jsonObject3.getJSONArray("CabList")
 							.getJSONObject(selectCabinListIndex3)
 							.getString("Cabin"));
+			startQueryTuigaiqian(ia.getFlightNo(), jsonObject3.getJSONArray("CabList")
+					.getJSONObject(selectCabinListIndex)
+					.getString("Cabin"), startoff_date_tv3.getText().toString(), TUIGAIQIAN_MSG_CODE3);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -414,6 +426,34 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					e.printStackTrace();
 				}
 				break;
+			case TUIGAIQIAN_MSG_CODE:
+				jsonParser = new JSONTokener(tuigaiqianReturnJson);
+				try {
+					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+					String state = jsonObject.getString("c");
+
+					if (state.equals("0000")) {
+						String tgq=jsonObject.getJSONObject("d").getString("visor");
+						tuiGaiQian_state_tv.setText(tgq);
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+				break;
+			case TUIGAIQIAN_MSG_CODE3:
+				jsonParser = new JSONTokener(tuigaiqianReturnJson);
+				try {
+					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+					String state = jsonObject.getString("c");
+
+					if (state.equals("0000")) {
+						String tgq=jsonObject.getJSONObject("d").getString("visor");
+						tuiGaiQian_state_tv3.setText(tgq);
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+				break;
 			}
 		}
 	};
@@ -428,12 +468,35 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"siteid\":\"65\"}";
 				String param = "action=flightisu&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "flightisu" + str);
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flightisu" + str);
 				baoxianReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
 				msg.what = BAOXIAN_MSG_CODE;
+				handler.sendMessage(msg);
+			}
+		}).start();
+	}
+	
+	private void startQueryTuigaiqian(final String flightNo,final String cabin,final String fdate,final int TUIGAIQIAN_mc) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MyApp ma = new MyApp(context);
+				String str = "{\"alcode\":\"" +flightNo
+						+ "\",\"cabin\":\""+cabin+ "\",\"fdate\":\""+fdate	+"\"}";
+				String param = "action=visor&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "visor"
+								+ str);
+				tuigaiqianReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
+				Message msg = new Message();
+				msg.what = TUIGAIQIAN_mc;
 				handler.sendMessage(msg);
 			}
 		}).start();
@@ -462,10 +525,15 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						+ getPassengerJsonString() + ",\"content\":"
 						+ getContentJsonString() + ",\"itinerary\":{}"
 						+ ",\"siteid\":\"65\"}";
-				str=str.replace("null", "\"\"");
-				String param = "?action=forder&userkey=" + MyApp.userkey
+				str=str.replace("null", "");
+				String param = "?action=forder&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "forder" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "forder" + str);
+				try {
+					str = URLEncoder.encode(str, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -475,7 +543,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交订单，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -602,9 +670,9 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			cp.setIdtype(String.valueOf(IdType.IdTypeReverse.get(idtypeString)));
 			cp.setIsunum(needBaoxianBoolean ? "1" : "0");
 			cp.setMobile(passengerList.get(i).getMobie());
-			try {
-				cp.setPname(URLEncoder.encode((passengerList.get(i).getPassengerName()), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
+			try {//URLEncoder.encode((passengerList.get(i).getPassengerName()), "utf-8")
+				cp.setPname(passengerList.get(i).getPassengerName());
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			cp.setPtype("1");
@@ -647,15 +715,17 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 //		        builder.show();
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
 				cad.setTitle("您的订单尚未完成，确认放弃填写吗？");
-				cad.setPositiveButton("继续填写", new OnClickListener(){
+				cad.setPositiveButton("确认放弃", new OnClickListener() {
 					public void onClick(View arg0) {
-						cad.dismiss();
-					}});
-				cad.setNegativeButton("确认放弃", new OnClickListener(){
-					public void onClick(View arg0) {
-						cad.dismiss();
 						finish();
-					}});
+						cad.dismiss();
+					}
+				});
+				cad.setNegativeButton1("继续填写",new OnClickListener() {
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}
+				});
 				break;
 			case R.id.home_imgbtn:
 				startActivity(new Intent(context, MainActivity.class));

@@ -1,10 +1,21 @@
 package com.jike.shanglv;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import android.app.ActivityGroup;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -13,7 +24,15 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+
+import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.PackageKeys;
+import com.jike.shanglv.Enums.Platform;
+import com.jike.shanglv.Enums.SPkeys;
+import com.jike.shanglv.NetAndJson.HttpUtils;
+import com.jike.shanglv.NetAndJson.JSONHelper;
+import com.jike.shanglv.NetAndJson.UserInfo;
 import com.jike.shanglv.Update.UpdateManager;
 
 @SuppressWarnings({ "deprecation", "unused" })
@@ -24,7 +43,10 @@ public class MainActivity extends ActivityGroup  implements
 	private RadioGroup radio_group;
 	private Intent mIntent;
 	private ViewFlipper container;
+	private SharedPreferences sp;
 	private RadioButton radio_order, radio_home, radio_mine, radio_more;
+	private Context context;
+	private String loginReturnJson="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +59,102 @@ public class MainActivity extends ActivityGroup  implements
 		if(!((MyApplication)getApplication()).getHasCheckedUpdate()){
 			MyApp ma=new MyApp(MainActivity.this);
 			UpdateManager manager=new UpdateManager(MainActivity.this,ma.getHm().get(PackageKeys.UPDATE_NOTE.getString()).toString());
-			manager.checkForUpdates();
+			manager.checkForUpdates(false);
 			((MyApplication)getApplication()).setHasCheckedUpdate(true);
 		}
 	}
+	
+	private void queryUserInfo(){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				int utype = 0;
+				MyApp ma = new MyApp(context);
+				Platform pf = ma.getPlatform();
+				if (pf == Platform.B2B)
+					utype = 1;
+				else if (pf == Platform.B2C)
+					utype = 2;
+				String str = "{\"uname\":\""
+						+ sp.getString(SPkeys.lastUsername.getString(), "")
+						+ "\",\"upwd\":\""
+						+ sp.getString(SPkeys.lastPassword.getString(), "")
+						+ "\",\"utype\":\"" + utype + "\"}";
+				String param = "action=userlogin&sitekey=&userkey="
+						+ ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&str="
+						+ str
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "userlogin" + str);
+				loginReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
+				Log.v("loginReturnJson", loginReturnJson);
+				Message msg = new Message();
+				msg.what = 1;
+				handler.sendMessage(msg);
+			}
+		}).start();
+	}
+	
+	private Handler handler = new Handler() {//在主界面判断用户名密码是否失效
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:// 获取登录返回的数据
+
+				JSONTokener jsonParser;
+				jsonParser = new JSONTokener(loginReturnJson);
+				try {
+					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+					String state = jsonObject.getString("c");
+
+					if (state.equals("0000")) {
+						String content = jsonObject.getString("d");
+						sp.edit()
+								.putString(SPkeys.UserInfoJson.getString(),
+										content).commit();
+
+						// 以下代码将用户信息反序列化到SharedPreferences中
+						UserInfo user = JSONHelper.parseObject(content,
+								UserInfo.class);
+						sp.edit()
+								.putString(SPkeys.userid.getString(),
+										user.getUserid()).commit();
+						sp.edit()
+								.putString(SPkeys.username.getString(),
+										user.getUsername()).commit();
+						sp.edit()
+								.putString(SPkeys.amount.getString(),
+										user.getAmmount()).commit();
+						sp.edit()
+								.putString(SPkeys.siteid.getString(),
+										user.getSiteid()).commit();
+						sp.edit()
+								.putString(SPkeys.userphone.getString(),
+										user.getMobile()).commit();
+						sp.edit()
+								.putString(SPkeys.useremail.getString(),
+										user.getEmail()).commit();
+						sp.edit()
+								.putBoolean(SPkeys.loginState.getString(), true)
+								.commit();
+					} else if (state.equals("1003")){
+						sp.edit().putString(SPkeys.userid.getString(),"").commit();
+						sp.edit().putString(SPkeys.username.getString(),"").commit();
+						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+	};
 
 	private void switchPage(int positoon) {
 		switch (positoon) {
@@ -107,6 +221,8 @@ public class MainActivity extends ActivityGroup  implements
 	 * 初始化各种控件
 	 */
 	private void initView() {
+		context=this;
+		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		container = (ViewFlipper) findViewById(R.id.container);
 		radio_group = (RadioGroup) findViewById(R.id.radio_group);
 		radio_order = (RadioButton) findViewById(R.id.radio_order);

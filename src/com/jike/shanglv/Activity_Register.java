@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -158,8 +159,8 @@ public class Activity_Register extends Activity {
 						+"\"}";
 				
 				String param = "action=userreg&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "userreg" + str);
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "userreg" + str);
 				;
 				registerReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
@@ -170,7 +171,7 @@ public class Activity_Register extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("◊¢≤·÷–£¨«Î…‘∫Ú...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

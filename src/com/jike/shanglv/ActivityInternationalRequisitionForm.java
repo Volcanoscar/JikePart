@@ -39,6 +39,7 @@ import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.IdType;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
 import com.jike.shanglv.Models.InterDemandPassenger;
@@ -285,13 +286,18 @@ public class ActivityInternationalRequisitionForm extends Activity {
 				
 				MyApp ma = new MyApp(context);
 				String str = getStr().replace("null", "");
-//				String param = "action=intdemand&sitekey=&userkey=" + MyApp.userkey
+//				String param = "action=intdemand&sitekey=&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 //						+ "&sign="
-//						+ CommonFunc.MD5(MyApp.userkey + "intdemand" + str)+"&str=" + str;
+//						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "intdemand" + str)+"&str=" + str;
 //				commitReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),param);
 				String param = "?action=createDemandOrder&sitekey="+ MyApp.sitekey
-						+"&userkey=" + MyApp.userkey+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "createDemandOrder" + str);
+						+"&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()+ "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "createDemandOrder" + str);
+				try {
+					str=URLEncoder.encode(str, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -302,7 +308,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交需求单，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -360,10 +366,10 @@ public class ActivityInternationalRequisitionForm extends Activity {
 			interDemandPassenger.setCardType(String.valueOf(IdType.IdTypeReverse.get(passenger.getIdentificationType())));
 			interDemandPassenger.setCusBirth(passenger.getBirthDay());
 			interDemandPassenger.setNumberValiddate(passenger.getIDdeadline());
-			try {
-				interDemandPassenger.setCountry(URLEncoder.encode(passenger.getNation(), "utf-8"));
-				interDemandPassenger.setQianfadi(URLEncoder.encode(passenger.getIssueAt(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
+			try {//URLEncoder.encode(passenger.getNation(), "utf-8")
+				interDemandPassenger.setCountry(passenger.getNation());
+				interDemandPassenger.setQianfadi(passenger.getIssueAt());
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			interDemandPassenger.setInsurance(needBaoxianString);

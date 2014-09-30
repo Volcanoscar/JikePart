@@ -7,6 +7,7 @@ public enum PackageKeys {
 	UPDATE_NOTE("UPDATE_NOTE"),//升级参数节点
 	RECOMMAND_CODE("RECOMMAND_CODE"),//默认推荐码
 	PLATFORM("PLATFORM"),//平台：B2B、B2C
+	USERKEY("USERKEY"),//userkey
 	
 	phoneNum("phoneNum")//
 	

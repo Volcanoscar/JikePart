@@ -1,7 +1,6 @@
 package com.jike.shanglv;
 
 import com.jike.shanglv.Enums.SPkeys;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;

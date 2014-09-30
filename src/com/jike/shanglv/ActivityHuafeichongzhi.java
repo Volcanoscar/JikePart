@@ -25,11 +25,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -306,9 +306,9 @@ public class ActivityHuafeichongzhi extends Activity {
 					e.printStackTrace();
 				}
 				String param = "action=phoneprov2&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "phoneprov2" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "phoneprov2" + str);
 				phoneproReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -338,9 +338,9 @@ public class ActivityHuafeichongzhi extends Activity {
 						+ "\",\"uid\":\""+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"sid\":\""+siteid+"\"}";
 				String param = "action=phoneorder&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "phoneorder" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "phoneorder" + str);
 				commitReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -350,7 +350,7 @@ public class ActivityHuafeichongzhi extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交话费充值订单，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -382,12 +382,12 @@ public class ActivityHuafeichongzhi extends Activity {
 						loading_ll.setVisibility(View.GONE);
 						hedui_ll.setVisibility(View.VISIBLE);
 					} else {
-						String message = jsonObject.getString("msg");
+//						String message = jsonObject.getString("msg");
 //						new AlertDialog.Builder(context).setTitle("验证价格失败")
 //								.setMessage(message)
 //								.setPositiveButton("确认", null).show();
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-						cad.setTitle(message);
+						cad.setTitle("验证价格失败");
 						cad.setPositiveButton("确定", new OnClickListener(){
 							public void onClick(View arg0) {
 								cad.dismiss();

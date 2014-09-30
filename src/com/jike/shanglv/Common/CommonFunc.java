@@ -1,7 +1,9 @@
 package com.jike.shanglv.Common;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -153,13 +155,48 @@ public class CommonFunc {
 			// digest()最后确定返回md5 hash值，返回值为8为字符串。因为md5 hash值是16位的hex值，实际上就是8位的字符
 			// BigInteger函数则将8位的字符串转换成16位hex值，用字符串来表示；得到字符串形式的hash值
 			String pwd = new BigInteger(1, md.digest()).toString(16);
-			System.err.println(pwd);
+			if (pwd.length()<32) {
+				return getMD5Str(password);
+			}
 			return pwd;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return password;
 	}
+	
+	/** 
+     * MD5 加密 
+     */  
+    private static String getMD5Str(String str) {  
+        MessageDigest messageDigest = null;  
+  
+        try {  
+            messageDigest = MessageDigest.getInstance("MD5");  
+  
+            messageDigest.reset();  
+  
+            messageDigest.update(str.getBytes("UTF-8"));  
+        } catch (NoSuchAlgorithmException e) {  
+            System.out.println("NoSuchAlgorithmException caught!");  
+            System.exit(-1);  
+        } catch (UnsupportedEncodingException e) {  
+            e.printStackTrace();  
+        }  
+  
+        byte[] byteArray = messageDigest.digest();  
+  
+        StringBuffer md5StrBuff = new StringBuffer();  
+  
+        for (int i = 0; i < byteArray.length; i++) {              
+            if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)  
+                md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));  
+            else  
+                md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));  
+        }  
+  
+        return md5StrBuff.toString();  
+    }  
 
 	public static String getPhoneNumber(Context context) {
 		TelephonyManager mTelephonyMgr;

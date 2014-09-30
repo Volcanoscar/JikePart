@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -98,12 +99,7 @@ public class Activity_Login extends Activity {
 					SPkeys.lastUsername.getString(), ""));
 			password_input_et.setText(sp.getString(
 					SPkeys.lastPassword.getString(), ""));
-			sp.edit()
-					.putString(SPkeys.lastUsername.getString(),
-							uername_input_et.getText().toString()).commit();
-			sp.edit()
-					.putString(SPkeys.lastPassword.getString(),
-							password_input_et.getText().toString()).commit();
+
 		}
 
 		autologin_checkbox_iv = (ImageView) findViewById(R.id.autologin_checkbox_iv);
@@ -152,29 +148,53 @@ public class Activity_Login extends Activity {
 						// 以下代码将用户信息反序列化到SharedPreferences中
 						UserInfo user = JSONHelper.parseObject(content,
 								UserInfo.class);
-						sp.edit().putString(SPkeys.userid.getString(),user.getUserid()).commit();
-						sp.edit().putString(SPkeys.username.getString(),user.getUsername()).commit();
-						sp.edit().putString(SPkeys.amount.getString(),user.getAmmount()).commit();
-						sp.edit().putString(SPkeys.siteid.getString(),user.getSiteid()).commit();
-						sp.edit().putString(SPkeys.userphone.getString(),user.getMobile()).commit();
-						sp.edit().putString(SPkeys.useremail.getString(),user.getEmail()).commit();
-						//其他信息以后用时再增加
+						sp.edit()
+								.putString(SPkeys.lastUsername.getString(),
+										uername_input_et.getText().toString())
+								.commit();
+						sp.edit()
+								.putString(SPkeys.lastPassword.getString(),
+										password_input_et.getText().toString())
+								.commit();
+						sp.edit()
+								.putString(SPkeys.userid.getString(),
+										user.getUserid()).commit();
+						sp.edit()
+								.putString(SPkeys.username.getString(),
+										user.getUsername()).commit();
+						sp.edit()
+								.putString(SPkeys.amount.getString(),
+										user.getAmmount()).commit();
+						sp.edit()
+								.putString(SPkeys.siteid.getString(),
+										user.getSiteid()).commit();
+						sp.edit()
+								.putString(SPkeys.userphone.getString(),
+										user.getMobile()).commit();
+						sp.edit()
+								.putString(SPkeys.useremail.getString(),
+										user.getEmail()).commit();
+						// 其他信息以后用时再增加
 						// 登录后将登录状态置为true
-						sp.edit().putBoolean(SPkeys.loginState.getString(), true)
+						sp.edit()
+								.putBoolean(SPkeys.loginState.getString(), true)
 								.commit();
 						finish();
 					} else {
-						String message = jsonObject.getJSONObject("d").getString("msg");
-//						new AlertDialog.Builder(context).setTitle("登录失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						String message = jsonObject.getJSONObject("d")
+								.getString("msg");
+						// new AlertDialog.Builder(context).setTitle("登录失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -209,27 +229,31 @@ public class Activity_Login extends Activity {
 				break;
 			case R.id.login_btn:
 				if (uername_input_et.getText().toString().trim().length() == 0) {
-//					new AlertDialog.Builder(context).setTitle("用户名不能为空")
-//							.setMessage("请输入用户名").setPositiveButton("确定", null)
-//							.show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					// new AlertDialog.Builder(context).setTitle("用户名不能为空")
+					// .setMessage("请输入用户名").setPositiveButton("确定", null)
+					// .show();
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, true);
 					cad.setTitle("请输入用户名");
-					cad.setPositiveButton("确定", new OnClickListener(){
+					cad.setPositiveButton("确定", new OnClickListener() {
 						public void onClick(View arg0) {
 							cad.dismiss();
-						}});
+						}
+					});
 					break;
 				}
 				if (password_input_et.getText().toString().trim().length() == 0) {
-//					new AlertDialog.Builder(context).setTitle("密码不能为空")
-//							.setMessage("请输入密码").setPositiveButton("确定", null)
-//							.show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					// new AlertDialog.Builder(context).setTitle("密码不能为空")
+					// .setMessage("请输入密码").setPositiveButton("确定", null)
+					// .show();
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, true);
 					cad.setTitle("请输入密码");
-					cad.setPositiveButton("确定", new OnClickListener(){
+					cad.setPositiveButton("确定", new OnClickListener() {
 						public void onClick(View arg0) {
 							cad.dismiss();
-						}});
+						}
+					});
 					break;
 				}
 				// 登录验证
@@ -237,7 +261,7 @@ public class Activity_Login extends Activity {
 				if (HttpUtils.showNetCannotUse(context)) {
 					break;
 				}
-				
+
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -254,12 +278,16 @@ public class Activity_Login extends Activity {
 								+ password_input_et.getText().toString().trim()
 								+ "\",\"utype\":\"" + utype + "\"}";
 						String param = "action=userlogin&sitekey=&userkey="
-								+ MyApp.userkey
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
 								+ "&str="
 								+ str
 								+ "&sign="
-								+ CommonFunc.MD5(MyApp.userkey + "userlogin"
-										+ str);
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "userlogin" + str);
 						loginReturnJson = HttpUtils.getJsonContent(
 								ma.getServeUrl(), param);
 						Log.v("loginReturnJson", loginReturnJson);
@@ -270,7 +298,7 @@ public class Activity_Login extends Activity {
 				}).start();
 				progressdialog = CustomProgressDialog.createDialog(context);
 				progressdialog.setMessage("正在登录，请稍候...");
-				progressdialog.setCancelable(false);
+				progressdialog.setCancelable(true);
 				progressdialog.show();
 				break;
 			default:

@@ -23,11 +23,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -51,15 +50,14 @@ import com.baidu.mapapi.model.LatLng;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
-import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Common.StarLevel;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.LazyList.ImageLoader;
 import com.jike.shanglv.Models.Hotel;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
-import com.jike.shanglv.SeclectCity.TrainCityModel;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class ActivityHotelSearchlist extends Activity implements
@@ -102,9 +100,12 @@ public class ActivityHotelSearchlist extends Activity implements
 		super.onCreate(savedInstanceState);
 		SDKInitializer.initialize(getApplicationContext());
 		setContentView(R.layout.activity_hotel_searchlist);
-		initView();
-
-		startQuery();
+		try {
+			initView();
+			startQuery();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	private void initView() {
@@ -246,7 +247,7 @@ public class ActivityHotelSearchlist extends Activity implements
 						listArray = jsonObject.getJSONArray("reqdata");
 						reqdata_List_size = reqdata_List.size();
 						createList(listArray);
-						reqdata_List=filterData(reqdata_List);
+//						reqdata_List=filterData(reqdata_List);
 						adapter = new ListAdapter(context, reqdata_List);
 						listview.setAdapter(adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -274,7 +275,7 @@ public class ActivityHotelSearchlist extends Activity implements
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();
@@ -319,7 +320,7 @@ public class ActivityHotelSearchlist extends Activity implements
 						listArray = jsonObject.getJSONArray("reqdata");
 						reqdata_List_size = reqdata_List.size();
 						createList(listArray);
-						reqdata_List=filterData(reqdata_List);
+//						reqdata_List=filterData(reqdata_List);
 						adapter = new ListAdapter(context, reqdata_List);
 						listview.setAdapter(adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -347,7 +348,7 @@ public class ActivityHotelSearchlist extends Activity implements
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();
@@ -463,33 +464,36 @@ public class ActivityHotelSearchlist extends Activity implements
 				MyApp ma = new MyApp(context);
 				Message msg = new Message();
 				String str1 = "";
+				//URLEncoder.encode(city, "utf-8")
+				str1 = "{\"city\":\"" + city
+						+ "\",\"pgsize\":\"" + pgsize + "\",\"pgindex\":\""
+						+ pgindex + "\",\"hn\":\""
+						+ keywords
+						+ "\",\"key\":\"" + strEm + "\",\"yufu\":\""
+						+ strEm + "\",\"esdid\":\"" + strEm
+						+ "\",\"minprice\":\"" + minprice
+						+ "\",\"maxprice\":\"" + maxprice
+						+ "\",\"lsid\":\"" + strEm + "\",\"areid\":\""
+						+ strEm + "\",\"star\":\"" + star
+						+ "\",\"fw\":\"\"}";
+				String param1="";
 				try {
-					str1 = "{\"city\":\"" + URLEncoder.encode(city, "utf-8")
-							+ "\",\"pgsize\":\"" + pgsize + "\",\"pgindex\":\""
-							+ pgindex + "\",\"hn\":\""
-							+ URLEncoder.encode(keywords, "utf-8")
-							+ "\",\"key\":\"" + strEm + "\",\"yufu\":\""
-							+ strEm + "\",\"esdid\":\"" + strEm
-							+ "\",\"minprice\":\"" + minprice
-							+ "\",\"maxprice\":\"" + maxprice
-							+ "\",\"lsid\":\"" + strEm + "\",\"areid\":\""
-							+ strEm + "\",\"star\":\"" + star
-							+ "\",\"fw\":\"\"}";
+					param1 = "action=hlist&str=" +URLEncoder.encode(str1 , "utf-8") + "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hlist" + str1);
 				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String param1 = "action=hlist&str=" + str1 + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "hlist" + str1);
 				String str2 = "";
 				str2 = "{\"lng\":\"" + longtitude + "\",\"pagesize\":\""
 						+ pgsize + "\",\"pg\":\"" + pgindex + "\",\"lat\":\""
 						+ latitude + "\"}";
 				String param2 = "action=nearby&str=" + str2 + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "nearby" + str2);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "nearby" + str2);
 				if (!isNearby) {
 					hotelsReturnJson = HttpUtils.getJsonContent(
 							ma.getServeUrl(), param1);
@@ -504,7 +508,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询酒店列表，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -631,7 +635,7 @@ public class ActivityHotelSearchlist extends Activity implements
 			if (b != null && b.containsKey("keywords")) {
 				keywords = b.getString("keywords");
 			}
-			adapter.updateListView(filterData(reqdata_List));
+//			adapter.updateListView(filterData(reqdata_List));
 		}
 	}
 
@@ -833,7 +837,7 @@ public class ActivityHotelSearchlist extends Activity implements
 				area_tv.setText(str.get(position).getCBD());
 			} else {
 				juli_tv.setVisibility(View.GONE);
-				area_tv.setText(str.get(position).getCBD().replace("区域", ""));
+				area_tv.setText(str.get(position).getCBD().replace("区域", "").replace(":", "").replace("：", "").replace(" ", ""));
 			}
 			hotel_name_tv.setText(str.get(position).getName());
 			score_tv.setText(Float.valueOf(str.get(position).getHaoping()) == -1f ? "暂无"
@@ -889,8 +893,12 @@ public class ActivityHotelSearchlist extends Activity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			adapter.refreshData(reqdata_List);
-			listview.onRefreshComplete();
+			try {
+				adapter.refreshData(reqdata_List);
+				listview.onRefreshComplete();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
 	}
 

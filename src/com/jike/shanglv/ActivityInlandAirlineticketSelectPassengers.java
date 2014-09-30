@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.Passenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -247,8 +248,8 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"siteid\":\"65\"}";
 				String param = "action=passenger&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "passenger" + str);
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "passenger" + str);
 				passengersReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 				Message msg = new Message();

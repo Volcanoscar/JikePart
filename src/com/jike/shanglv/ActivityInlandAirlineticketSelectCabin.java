@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 //import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -253,7 +254,7 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 								  index);
 						
 						  if (wayType==SingleOrDouble.doubleWayGo) {//如果是往返机票，且目前选择的是去程，则跳到航班搜索页面，选择返程机票
-//							  new AlertDialog.Builder(context).setTitle("请选择返程机票")
+//							  new android.app.AlertDialog.Builder(context).setTitle("请选择返程机票")
 //							  .setMessage("   已选择去程航班，点击“确定”选择返程航班！")
 //							  .setPositiveButton("确定", 
 //									  	new OnClickListener() {
@@ -278,9 +279,10 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 //										})
 //										.setNeutralButton("稍等一会", null)
 //							  .show();
-							  final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
-								cad.setTitle("已选择去程航班，点击“确定”选择返程航班！");
-								cad.setPositiveButton("确定", new OnClickListener(){
+							  final CustomerAlertDialog cad = new CustomerAlertDialog(
+										context, false);
+								cad.setTitle("已选择去程航班，点击“确定”选择返程航班");
+								cad.setPositiveButton("确定", new OnClickListener() {
 									public void onClick(View arg0) {
 										Intent intents = new Intent(
 												context,
@@ -298,12 +300,13 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 											  jsonObject.toString());
 									startActivity(intents);
 										cad.dismiss();
-									}});
-								cad.setNegativeButton("稍等一会", new OnClickListener(){
+									}
+								});
+								cad.setNegativeButton1("稍等一会",new OnClickListener() {
 									public void onClick(View arg0) {
 										cad.dismiss();
-										finish();
-									}});
+									}
+								});
 						  }
 						  else startActivity(intentSend);
 					  }

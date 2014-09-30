@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.DateUtil;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.InternationalFlightInfo;
 import com.jike.shanglv.Models.Passenger;
@@ -247,9 +248,9 @@ public class ActivityInternationalAirlineticketOrderDetail extends Activity {
 				String param = "action=intflightorderdetail&str="
 						+ str
 						+ "&userkey="
-						+ MyApp.userkey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "intflightorderdetail"
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "intflightorderdetail"
 								+ str);
 				orderDetailReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);

@@ -9,6 +9,7 @@ import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -130,8 +131,8 @@ public class Activity_RetrievePassword extends Activity {
 						+ phone_input_et.getText().toString().trim()
 						+ "\"}";
 				String param = "action=restcode&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "restcode" + str)
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "restcode" + str)
 						+ "&sitekey=" + MyApp.sitekey;
 				yanzhengmaReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
@@ -150,8 +151,8 @@ public class Activity_RetrievePassword extends Activity {
 				String str = "{\"userName\":\""
 						+ username_input_et.getText().toString().trim() + "\"}";
 				String param = "action=checkuser&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "checkuser" + str)
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "checkuser" + str)
 						+ "&sitekey=" + MyApp.sitekey;
 				useridReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
@@ -172,8 +173,8 @@ public class Activity_RetrievePassword extends Activity {
 						+ "\",\"cdk\":\""
 						+ yanzhengma_cet.getText().toString().trim() + "\"}";
 				String param = "action=chenkedcode&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "chenkedcode" + str)
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "chenkedcode" + str)
 						+ "&sitekey=" + MyApp.sitekey;
 				verifyReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
@@ -184,7 +185,7 @@ public class Activity_RetrievePassword extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在核对验证码，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

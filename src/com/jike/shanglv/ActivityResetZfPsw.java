@@ -23,6 +23,7 @@ import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -116,8 +117,8 @@ public class ActivityResetZfPsw extends Activity {
 				if (isResetLoginPsw)actionNameString="restloginpass";
 				else actionNameString="restpaypass";
 				String param = "action="+actionNameString+"&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + actionNameString+ str)
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + actionNameString+ str)
 						+ "&sitekey=" + MyApp.sitekey;
 				changePswReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
@@ -128,7 +129,7 @@ public class ActivityResetZfPsw extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交重置密码请求，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

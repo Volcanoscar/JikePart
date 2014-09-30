@@ -21,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -210,9 +211,9 @@ public class ActivityHotelOrderDetail extends Activity {
 				String param = "action=hotelorderdetail&str="
 						+ str
 						+ "&userkey="
-						+ MyApp.userkey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "hotelorderdetail"
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hotelorderdetail"
 								+ str);
 				orderDetailReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);

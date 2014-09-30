@@ -4,7 +4,7 @@
      <string name="test_update_url">http://dn-rocky.qbox.me/shanglvguanjiaversion.xml</string>
 	 <string name="formal_update_url">http://gatewayv3.51jp.cn/version.xml</string>
 	 
-     <string name="formal_server_url">http://gatewayceshi.51jp.cn/gateway</string>
+     <string name="formal_server_url">http://gatewayv3.51jp.cn/gateway</string>
      <string name="test_server_url">http://gatewayceshi.51jp.cn/gateway</string>
 
      <string name="formal_pay_server_url">http://gatewayv3.51jp.cn/PayMent/BeginPay.aspx?orderID=%1$s&amp;amount=%2$s&amp;userid=%3$s&amp;paysystype=%4$s&amp;siteid=%5$s&amp;sign=%6$s</string>
@@ -16,8 +16,8 @@
      <string name="formal_flight_company_logo">http://gatewayv3.51jp.cn/airPic/%1$s.gif</string>
      <string name="test_flight_company_logo">http://gatewayceshi.51jp.cn/airPic/%1$s.gif</string>
      
-     <string name="formal_about">http://m.51jp.cn/About/?siteid=%1$s&amp;userid=%2$s&amp;plat=android</string>
-     <string name="test_about">http://m.51jp.cn/About/?siteid=%1$s&amp;userid=%2$s&amp;plat=android</string>
+     <string name="formal_about">http://m.51jp.cn/Aboutv2?productType=%1$s&amp;userKey=%2$s&amp;</string>
+     <string name="test_about">http://m.51jp.cn/Aboutv2?productType=%1$s&amp;userKey=%2$s&amp;</string>
     
      <string name="btoc_baoxian_price">￥20</string>
      

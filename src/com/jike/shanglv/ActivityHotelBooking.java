@@ -1,5 +1,6 @@
 package com.jike.shanglv;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.IDCard;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.HotelRoom;
 import com.jike.shanglv.Models.HotelRoomComfirm;
@@ -97,7 +99,7 @@ public class ActivityHotelBooking extends Activity {
 	private HotelRoomComfirm hotelRoomComfirm;
 	private CustomProgressDialog progressdialog;
 	private ArrayList<Map<String, Object>> arriveTimeList = new ArrayList<Map<String, Object>>();
-	double totalPrice = 0f;//一间房N天的房价  显示时需乘以房间数
+	int totalPrice = 0;//一间房N天的房价  显示时需乘以房间数
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -341,9 +343,9 @@ public class ActivityHotelBooking extends Activity {
 					e.printStackTrace();
 				}
 				String param = "action=roomsrid&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "roomsrid" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "roomsrid" + str);
 				roomsriReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -440,16 +442,23 @@ public class ActivityHotelBooking extends Activity {
 							+ "\",\"uid\":\""
 							+ sp.getString(SPkeys.userid.getString(), "")
 							+ "\",\"sid\":\"65\",\"cityname\":\"\",\"email\":\"\"}";
-					str = (URLEncoder.encode(str, "utf-8"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=hotelorder&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+				String param = "?action=hotelorder&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "hotelorder" + str);
-				orderReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hotelorder" + str);
+//				orderReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
+//						param);
+				try {
+					str = URLEncoder.encode(str, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				orderReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
+						"&str=" + str);
 				Message msg = new Message();
 				msg.what = ORDER_MSG;
 				handler.sendMessage(msg);
@@ -457,7 +466,7 @@ public class ActivityHotelBooking extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交订单，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -509,8 +518,8 @@ public class ActivityHotelBooking extends Activity {
 						hotelRoomComfirm = new HotelRoomComfirm(jsonObject);
 						
 						if (hotelRoomComfirm.getPrices() != null) {
-							totalPrice = Float.valueOf(hotelRoomComfirm
-									.getPrices().getTotalPrice());
+							float f=Float.valueOf(hotelRoomComfirm.getPrices().getTotalPrice());
+							totalPrice = (int)f;
 //							DecimalFormat df = new DecimalFormat("#.#");
 //							totalPrice = Double.parseDouble(df
 //									.format(totalPrice));
@@ -587,7 +596,7 @@ public class ActivityHotelBooking extends Activity {
 						will_arrive_time_tv.setText(arriveTimeList.get(0)
 								.get("title").toString());
 					} else {
-						String message = jsonObject.getString("msg");
+//						String message = jsonObject.getJSONObject("d").getString("msg");
 //						new AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
 //								.setMessage(message)
 //								.setPositiveButton("确认", null).show();
@@ -621,7 +630,12 @@ public class ActivityHotelBooking extends Activity {
 								successOrderId);
 						startActivityForResult(intent, 22);
 					} else {
-						String message = jsonObject.getString("msg");
+						String message="";
+						try{
+							message= jsonObject.getJSONObject("d").getString("msg");
+						}catch(Exception e){
+							message= jsonObject.getString("msg");
+						}
 //						new AlertDialog.Builder(context).setTitle("提交订单失败")
 //								.setMessage(message)
 //								.setPositiveButton("确认", null).show();

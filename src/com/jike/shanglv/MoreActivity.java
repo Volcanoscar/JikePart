@@ -1,6 +1,8 @@
 package com.jike.shanglv;
 
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
+import com.jike.shanglv.Update.UpdateManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,12 +29,15 @@ public class MoreActivity extends Activity {
 		 ((RelativeLayout)findViewById(R.id.jcgx_rl)).setOnClickListener(btnClickListner);
 		 ((RelativeLayout)findViewById(R.id.gyslgj_rl)).setOnClickListener(btnClickListner);
 		 ((RelativeLayout)findViewById(R.id.xbjs_rl)).setOnClickListener(btnClickListner);
+		 ((RelativeLayout)findViewById(R.id.yjfh_rl)).setVisibility(View.GONE);
+		 ((RelativeLayout)findViewById(R.id.gwpf_rl)).setVisibility(View.GONE);
 	}
 	
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			Intent intent=new Intent(MoreActivity.this,Activity_Web_Frame.class);
+			MyApp ma=new MyApp(getApplicationContext());
 			switch (v.getId()) {
 			case R.id.back_imgbtn:
 				startActivity(new Intent(MoreActivity.this, MainActivity.class));
@@ -51,16 +56,14 @@ public class MoreActivity extends Activity {
 				startActivity(new Intent(MoreActivity.this,GuideActivity.class));
 				break;
 			case R.id.jcgx_rl:
+				UpdateManager manager=new UpdateManager(MoreActivity.this,ma.getHm().get(PackageKeys.UPDATE_NOTE.getString()).toString());
+				manager.checkForUpdates(true);
 				break;
 			case R.id.gyslgj_rl:
 				intent.putExtra(Activity_Web_Frame.TITLE, "นุ  ำฺ");
-				MyApp ma=new MyApp(getApplicationContext());
-//				http://m.51jp.cn/About/?siteid=65&userid=6266&os=android
+//				http://m.51jp.cn/Aboutv2?productType=3&userKey=
 				intent.putExtra(Activity_Web_Frame.URL, 
-						String.format(ma.getAbout(),
-						sp.getString(SPkeys.userid.getString(), ""),
-						sp.getString(SPkeys.siteid.getString(), "")
-						));
+						String.format(ma.getAbout(),"1",ma.getHm().get(PackageKeys.USERKEY.getString()).toString()));
 				startActivity(intent);
 				break;
 			default:

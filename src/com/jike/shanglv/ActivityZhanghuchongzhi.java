@@ -21,6 +21,7 @@ import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -146,9 +147,9 @@ public class ActivityZhanghuchongzhi extends Activity {
 					e.printStackTrace();
 				}
 				String param = "action=phoneprov2&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "phoneprov2" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "phoneprov2" + str);
 				phoneproReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();

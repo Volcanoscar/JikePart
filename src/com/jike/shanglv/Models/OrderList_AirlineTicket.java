@@ -9,6 +9,7 @@ public class OrderList_AirlineTicket {
 		    StartOffDate,//2014-9-12 15:07:59",
 		    OrderStatus,//新订单",
 		    StartCity,
+		    OrderTime,
 		    endCity;
 	/**
 	 * @param object
@@ -23,6 +24,7 @@ public class OrderList_AirlineTicket {
 				this.StartCity=object.getJSONArray("FlightInfo").getJSONObject(0).getString("sCityName");
 				this.endCity=object.getJSONArray("FlightInfo").getJSONObject(0).getString("eCityName");
 				this.StartOffDate=object.getJSONArray("FlightInfo").getJSONObject(0).getString("beginDate");
+				this.OrderTime=object.getString("OrderTime");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -34,6 +36,7 @@ public class OrderList_AirlineTicket {
 				this.StartCity=object.getString("Startname");
 				this.endCity=object.getString("Endname");
 				this.StartOffDate=object.getString("Startdate");
+				this.OrderTime=object.getString("OrderTime");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -45,6 +48,7 @@ public class OrderList_AirlineTicket {
 				this.StartCity=object.getString("SCity");
 				this.endCity=object.getString("ECity");
 				this.StartOffDate=object.getString("SDate");
+				this.OrderTime=object.getString("OrderTime");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -58,6 +62,7 @@ public class OrderList_AirlineTicket {
 				this.endCity=object.getString("EndCity");
 				this.StartOffDate=object.getJSONArray("Info")
 						.getJSONObject(0).getString("startTime");
+				this.OrderTime=object.getString("OrderDate");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -111,6 +116,14 @@ public class OrderList_AirlineTicket {
 
 	public void setEndCity(String endCity) {
 		this.endCity = endCity;
+	}
+
+	public String getOrderTime() {
+		return OrderTime;
+	}
+
+	public void setOrderTime(String orderTime) {
+		OrderTime = orderTime;
 	}
 	
 	/*国内

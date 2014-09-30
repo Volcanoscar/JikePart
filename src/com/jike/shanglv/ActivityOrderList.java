@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -45,8 +46,10 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
+import com.jike.shanglv.Models.InlandAirlineInfo;
 import com.jike.shanglv.Models.OrderList_AirlineTicket;
 import com.jike.shanglv.Models.OrderList_Hotel;
 import com.jike.shanglv.Models.OrderList_Phone;
@@ -223,23 +226,23 @@ public class ActivityOrderList extends Activity implements
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"pageSize\":\"" + pageSize
 						+ "\",\"pageIndex\":\"" + pageIndex + "\"}";
-				String signString=CommonFunc.MD5(MyApp.userkey + actionName + str);
+				String signString=CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + actionName + str);
 				try {//解决获取数据时的400错误
 					str=URLEncoder.encode(str, "utf-8");
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 				String param = "action=" + actionName + "&str=" + str
-						+ "&userkey=" + MyApp.userkey + "&sitekey="
+						+ "&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey="
 						+ MyApp.sitekey + "&sign="
 						+ signString;
 		
 				orderlistReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 //				String param =  "?action=" + actionName 
-//						+ "&userkey=" + MyApp.userkey + "&sitekey="
+//						+ "&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey="
 //						+ MyApp.sitekey + "&sign="
-//						+ CommonFunc.MD5(MyApp.userkey + actionName + str);
+//						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + actionName + str);
 //				orderlistReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 //						"&str=" + str);
 				Message msg = new Message();
@@ -249,7 +252,7 @@ public class ActivityOrderList extends Activity implements
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -474,6 +477,31 @@ public class ActivityOrderList extends Activity implements
 		}
 		removeDuplicteOrders();
 	}
+	
+	Comparator<OrderList_AirlineTicket> comparator_airline = new Comparator<OrderList_AirlineTicket>() {
+		public int compare(OrderList_AirlineTicket s1, OrderList_AirlineTicket s2) {
+			if (!s1.getOrderTime().equals(s2.getOrderTime())) {
+				return s2.getOrderTime().compareTo(s1.getOrderTime());
+			} else
+				return 0;
+		}
+	};
+	Comparator<OrderList_Hotel> comparator_hotel = new Comparator<OrderList_Hotel>() {
+		public int compare(OrderList_Hotel s1, OrderList_Hotel s2) {
+			if (!s1.getOrderDate().equals(s2.getOrderDate())) {
+				return s2.getOrderDate().compareTo(s1.getOrderDate());
+			} else
+				return 0;
+		}
+	};
+	Comparator<OrderList_Phone> comparator_phone = new Comparator<OrderList_Phone>() {
+		public int compare(OrderList_Phone s1, OrderList_Phone s2) {
+			if (!s1.getAddtime().equals(s2.getAddtime())) {
+				return s2.getAddtime().compareTo(s1.getAddtime());
+			} else
+				return 0;
+		}
+	};
 
 	@SuppressLint("ResourceAsColor")
 	private class AirlineTicketListAdapter extends BaseAdapter {
@@ -484,6 +512,7 @@ public class ActivityOrderList extends Activity implements
 				List<OrderList_AirlineTicket> list1) {
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
+			Collections.sort(str, comparator_airline);
 		}
 
 		public void refreshData(List<OrderList_AirlineTicket> data) {
@@ -568,6 +597,7 @@ public class ActivityOrderList extends Activity implements
 		public HotelListAdapter(Context context, List<OrderList_Hotel> list1) {
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
+			Collections.sort(str, comparator_hotel);
 		}
 
 		public void refreshData(List<OrderList_Hotel> data) {
@@ -650,6 +680,7 @@ public class ActivityOrderList extends Activity implements
 		public PhoneListAdapter(Context context, List<OrderList_Phone> list1) {
 			this.inflater = LayoutInflater.from(context);
 			this.str = list1;
+			Collections.sort(str, comparator_phone);
 		}
 
 		public void refreshData(List<OrderList_Phone> data) {

@@ -19,6 +19,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -29,7 +30,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jike.shanglv.Common.CommonFunc;
+import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.Passenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -38,6 +41,7 @@ public class ActivityTrainOrderDetail extends Activity {
 
 	protected static final int ORDERDETAIL_MSG_CODE = 4;
 	protected static final String ORDERRECEIPT = "ORDERRECEIPT";
+	protected static final int COMFIRMORDER_MSG_CODE = 0;
 
 	private Context context;
 	private ImageButton back_imgbtn, home_imgbtn;
@@ -54,7 +58,7 @@ public class ActivityTrainOrderDetail extends Activity {
 	private SharedPreferences sp;
 	private ArrayList<Passenger> passengerList;// 乘客列表
 	private String orderID = "",  amount = "";// amount为订单金额
-	private String orderDetailReturnJson;
+	private String orderDetailReturnJson,comfirmOrderReturnJson;
 	private JSONObject orderDetailObject;// 返回的订单详情对象
 	
 
@@ -128,16 +132,31 @@ public class ActivityTrainOrderDetail extends Activity {
 				startActivity(new Intent(context, MainActivity.class));
 				break;
 			case R.id.pay_now_btn:
-				String userid=sp.getString(SPkeys.userid.getString(), "");
-				int paysystype=14;
-				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-				String sign=CommonFunc. MD5(orderID + amount + userid + paysystype + siteid);
-				MyApp ma = new MyApp(context);
-				String url=String.format(ma.getPayServeUrl(),orderID, amount,userid,paysystype,siteid,sign);
-				Intent intent=new Intent(context,Activity_Web_Pay.class);
-				intent.putExtra(Activity_Web_Pay.URL, url);
-				intent.putExtra(Activity_Web_Pay.TITLE, "火车票订单支付");
-				startActivity(intent);
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, false);
+				cad.setTitle("是否确认购买火车票？确认后，系统将自动扣款，用于支付本次订单。");
+				cad.setPositiveButton("确定", new OnClickListener() {
+					public void onClick(View arg0) {
+						comfirmOrder();
+						cad.dismiss();
+					}
+				});
+				cad.setNegativeButton1("取消",new OnClickListener() {
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}
+				});
+				
+//				String userid=sp.getString(SPkeys.userid.getString(), "");
+//				int paysystype=14;
+//				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
+//				String sign=CommonFunc. MD5(orderID + amount + userid + paysystype + siteid);
+//				MyApp ma = new MyApp(context);
+//				String url=String.format(ma.getPayServeUrl(),orderID, amount,userid,paysystype,siteid,sign);
+//				Intent intent=new Intent(context,Activity_Web_Pay.class);
+//				intent.putExtra(Activity_Web_Pay.URL, url);
+//				intent.putExtra(Activity_Web_Pay.TITLE, "火车票订单支付");
+//				startActivity(intent);
 				break;
 			default:
 				break;
@@ -174,7 +193,34 @@ public class ActivityTrainOrderDetail extends Activity {
 						orderDetailObject = jsonObject.getJSONObject("d");
 						assignment();// 获取数据后对页面上的内容进行赋值
 					} else {
-						Toast.makeText(context, "网络异常，获取保险价格失败！", 0).show();
+						Toast.makeText(context, "发生异常，获取订单信息失败！", 0).show();
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
+			case COMFIRMORDER_MSG_CODE:
+				jsonParser = new JSONTokener(comfirmOrderReturnJson);
+				try {
+					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+					String state = jsonObject.getString("c");
+
+					if (state.equals("0000")||state.equals("1111")) {
+						String mesString = jsonObject.getJSONObject("d").getString("msg");
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle(mesString);
+						cad.setPositiveButton("确定", new OnClickListener() {
+							public void onClick(View arg0) {
+								Intent intent=new Intent(context,ActivityOrderList.class);
+								intent.putExtra(ActivityOrderList.ACTION_TOKENNAME, ActivityOrderList.TRAIN_ORDERLIST);
+								intent.putExtra(ActivityOrderList.TITLE_TOKENNAME,"火车票订单");
+								startActivity(intent);
+								cad.dismiss();
+							}
+						});
+					} else{
+						Toast.makeText(context,"发生异常", 0).show();
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -239,6 +285,29 @@ public class ActivityTrainOrderDetail extends Activity {
 			}
 		}
 	};
+	
+	private void comfirmOrder() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MyApp ma = new MyApp(context);
+				String str = "{\"orderid\":\"" + orderID
+						+ "\",\"userid\":\""+sp.getString(SPkeys.userid.getString(), "")+"\"}";
+				String param = "action=trainOrderConfirmV2&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainOrderConfirmV2"
+								+ str);
+				comfirmOrderReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
+				Message msg = new Message();
+				msg.what = COMFIRMORDER_MSG_CODE;
+				handler.sendMessage(msg);
+			}
+		}).start();
+	}
 
 	private void startQueryOrderDetail() {
 		new Thread(new Runnable() {
@@ -250,9 +319,9 @@ public class ActivityTrainOrderDetail extends Activity {
 				String param = "action=trainorderdetail&str="
 						+ str
 						+ "&userkey="
-						+ MyApp.userkey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "trainorderdetail"
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainorderdetail"
 								+ str);
 				orderDetailReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);

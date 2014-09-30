@@ -42,6 +42,7 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.StarLevel;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.LazyList.ImageLoader;
 import com.jike.shanglv.Models.HotelComment;
@@ -272,9 +273,9 @@ public class ActivityHotelDetail extends Activity {
 					e.printStackTrace();
 				}
 				String param = "action=hotelinfo&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "hotelinfo" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hotelinfo" + str);
 				hotelsDetailReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 				Message msg = new Message();
@@ -284,7 +285,7 @@ public class ActivityHotelDetail extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("’˝‘⁄≤È—Øæ∆µÍœÍ«È£¨«Î…‘∫Ú...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -311,9 +312,9 @@ public class ActivityHotelDetail extends Activity {
 					e.printStackTrace();
 				}
 				String param = "action=rooms&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "rooms" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "rooms" + str);
 				roomsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -338,9 +339,9 @@ public class ActivityHotelDetail extends Activity {
 					e.printStackTrace();
 				}
 				String param = "action=comments&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "comments" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "comments" + str);
 				commentsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();

@@ -1,5 +1,6 @@
 package com.jike.shanglv;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.IdType;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.LazyList.ImageLoader;
 import com.jike.shanglv.Models.Passenger;
@@ -86,9 +88,9 @@ public class ActivityTrainBooking extends Activity {
 	private ImageLoader imageLoader;
 
 	private TrainListItem ti = new TrainListItem();// 从列表传过来的车票信息
-	private String startdate, commitReturnJson;
+	private String startdate, commitReturnJson,seat_Type;
 	private float ticket_price, baoxian_unitPrice = 10, totalPrice;// 保费：0、5、10
-	private int selectedSeatIndex = -1;
+	private int selectedSeatIndex = -1,remainTicketCount=1;//当前选择席别及剩余票数
 	private Bitmap validCodeBitmap;
 	private ArrayList<Passenger> passengerList;// 选择的乘机人列表
 	private ArrayList<Passenger> allPassengerList;// 当前所有乘机人的列表（服务端和用户新增的）
@@ -160,13 +162,13 @@ public class ActivityTrainBooking extends Activity {
 		start_station_tv.setText(ti.getStationS());
 		end_station_tv.setText(ti.getStationE());
 		seat_grad_tv.setText(ti.getSeat_Type());
-		ticket_price = Float.parseFloat(ti.getPrice());
 		ticket_price_tv.setText("￥" + ticket_price);
 		remain_count_tv.setText("余票" + ti.getRemain_Count() + "张");
 		start_time_tv.setText(ti.getGoTime());
 		end_time_tv.setText(ti.getETime());
 		adapter_xibie = new MyListAdapter(context, ti.getSeatList());
 		adapter_xibie.setCurrentID(selectedSeatIndex);
+		remainTicketCount=Integer.valueOf(ti.getRemain_Count());
 //		adapter_xibie.notifyDataSetChanged();
 		xibie_listview.setAdapter(adapter_xibie);
 		ActivityInlandAirlineticketBooking
@@ -183,6 +185,7 @@ public class ActivityTrainBooking extends Activity {
 //				adapter_xibie.notifyDataSetChanged();
 				ticket_price = Float.valueOf(ti.getSeatList().get(position)
 						.getPrice());
+				remainTicketCount=Integer.valueOf(ti.getSeatList().get(position).getShengyu());
 				caculateMoney();
 			}
 		});
@@ -258,6 +261,7 @@ public class ActivityTrainBooking extends Activity {
 						seats.add(seat);
 						if (!hasSelectedASeatBoolean&&!seat.getShengyu().equals("0")) {
 							selectedSeatIndex=i;
+							ticket_price=Float.valueOf(array.getJSONObject(i).getString("price"));
 							hasSelectedASeatBoolean=true;
 						}
 					}
@@ -322,10 +326,16 @@ public class ActivityTrainBooking extends Activity {
 						+ sp.getString(SPkeys.username.getString(), "")
 						+ "\",\"TicketCount\":\"" + passengerList.size()
 						+ "\",\"PsgInfo\":" + getPassengers() + "}";
-				str = str.replace("null", "\"\"");
-				String param = "?action=trainorderv2&userkey=" + MyApp.userkey
+				str = str.replace("null", "");
+				String param = "?action=trainorderv2&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sitekey=" + MyApp.sitekey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "trainorderv2" + str);
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainorderv2" + str);
+				try {
+					str = URLEncoder.encode(str, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -335,7 +345,7 @@ public class ActivityTrainBooking extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交订单，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -355,13 +365,11 @@ public class ActivityTrainBooking extends Activity {
 					.getIdentificationType());
 			trainOrderPassenger.setIncAmount(String.valueOf(baoxian_unitPrice));
 			trainOrderPassenger.setPhone(passengerList.get(i).getMobie());
-			trainOrderPassenger.setSaleprice(ti.getPrice());
-			trainOrderPassenger.setSeatType(ti.getSeat_Type());
-			try {
-				trainOrderPassenger.setPsgName(URLEncoder.encode(passengerList
-						.get(i).getPassengerName(), "utf-8"));
-				trainOrderPassenger.setTicketType(URLEncoder.encode(
-						passengerList.get(i).getPassengerType(), "utf-8"));
+			trainOrderPassenger.setSaleprice(ticket_price+"");
+			trainOrderPassenger.setSeatType(seat_Type);
+			try {//URLEncoder.encode(passengerList.get(i).getPassengerName(), "utf-8")
+				trainOrderPassenger.setPsgName(passengerList.get(i).getPassengerName());
+				trainOrderPassenger.setTicketType(passengerList.get(i).getPassengerType());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -507,7 +515,16 @@ public class ActivityTrainBooking extends Activity {
 							cad.dismiss();
 						}});
 					break;
+				}else if(remainTicketCount<passengerList.size()){
+					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					cad.setTitle("当前仅剩余"+remainTicketCount+"张票，无法满足"+passengerList.size()+"个人的预订需求");
+					cad.setPositiveButton("确定", new OnClickListener(){
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}});
+					break;
 				}
+				
 				if (yanzhengma_input_et.getText().toString().length() != 4) {
 //					new AlertDialog.Builder(context).setTitle("请输入验证码")
 //							.setPositiveButton("确定", null).show();
@@ -775,12 +792,19 @@ public class ActivityTrainBooking extends Activity {
 						R.drawable.checkmark_icon_selected));
 				hasSelected = true;
 				selectedSeatIndex = position;
+				//票价格和剩余票数 随所选座位变化
+				ticket_price=Float.valueOf(seats.get(selectedSeatIndex).getPrice());
+				remainTicketCount=Integer.valueOf(seats.get(selectedSeatIndex).getShengyu());
+				seat_Type=seats.get(selectedSeatIndex).getType();
 			} else if (!hasSelected
 					&& !seats.get(position).getShengyu().equals("0")) {
 				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
 						R.drawable.checkmark_icon_selected));
 				hasSelected = true;
 				selectedSeatIndex = position;
+				ticket_price=Float.valueOf(seats.get(selectedSeatIndex).getPrice());
+				remainTicketCount=Integer.valueOf(seats.get(selectedSeatIndex).getShengyu());
+				seat_Type=seats.get(selectedSeatIndex).getType();
 			} else {
 				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
 						R.drawable.checkmark_icon_unselected));

@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.Seat;
 import com.jike.shanglv.Models.TrainListItem;
@@ -218,8 +219,8 @@ public class ActivityTrainSearchlist extends Activity {
 						+ arrivecity_code + "\",\"t\":\"" + startoff_date
 						+ "\"}";
 				String param = "action=trainlistv2&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "trainlistv2" + str)
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainlistv2" + str)
 						+ "&sitekey=" + MyApp.sitekey;
 				trainsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
@@ -230,7 +231,7 @@ public class ActivityTrainSearchlist extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -377,7 +378,13 @@ public class ActivityTrainSearchlist extends Activity {
 					.findViewById(R.id.start_station_icon_iv);
 			ImageView end_station_icon_iv = (ImageView) convertView
 					.findViewById(R.id.end_station_icon_iv);
+			ImageView no_ticket_iv=(ImageView) convertView.findViewById(R.id.no_ticket_iv);
 
+			if (!Boolean.valueOf(str.get(position).getYuDing().toLowerCase())) {//不可预订，显示无票
+				no_ticket_iv.setVisibility(View.VISIBLE);
+			}else {
+				no_ticket_iv.setVisibility(View.GONE);
+			}
 			train_num_tv.setText(str.get(position).getTrainID());
 			train_type_tv.setText(str.get(position).getTrainType());
 			start_time_tv.setText(str.get(position).getGoTime());

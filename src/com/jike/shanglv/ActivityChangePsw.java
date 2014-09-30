@@ -22,6 +22,7 @@ import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
@@ -108,8 +109,8 @@ public class ActivityChangePsw extends Activity {
 						+ "\",\"newpass\":\"" + newpsw_cet.getText().toString()
 						+ "\"}";
 				String param = "action=updatepass&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "updatepass" + str)
+						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
+						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "updatepass" + str)
 						+ "&sitekey=" + MyApp.sitekey;
 				changePswReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
@@ -120,7 +121,7 @@ public class ActivityChangePsw extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在提交密码修改请求，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

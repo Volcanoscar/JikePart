@@ -35,6 +35,7 @@ import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
+import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
@@ -51,10 +52,11 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 	private LinearLayout date_yesterday_ll, date_tomorrow_ll, bytime_LL,
 			byprice_ll;
 	private ListView listview;
-	private String goFlight="",goFlightSelectedIndex="";//往返机票去程航班信息
+	private String goFlight = "", goFlightSelectedIndex = "";// 往返机票去程航班信息
 	private String currentdate = "",// 当前日期
 			startcity_code = "", arrivecity_code = "",
-			startcity = "",arrivecity = "", startoff_date = "", startdate = "", enddate = "";// 从搜索页面获取的数据
+			startcity = "",
+			arrivecity = "", startoff_date = "", startdate = "", enddate = "";// 从搜索页面获取的数据
 	private SingleOrDouble wayType;
 	private SharedPreferences sp;
 	private CustomProgressDialog progressdialog;
@@ -104,52 +106,65 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		byprice_ll.setOnClickListener(btnClickListner);
 		back_imgbtn.setOnClickListener(btnClickListner);
 		home_imgbtn.setOnClickListener(btnClickListner);
-		
+
 		getIntentData();
 
 		title_tv.setText(startcity + "-" + arrivecity);
 		if (!DateUtil.IsMoreThanToday(currentdate)) {
 			left_arrow_iv.setBackground(getResources().getDrawable(
 					R.drawable.solid_arrow_left_disable));
-		}else {
+		} else {
 			left_arrow_iv.setBackground(getResources().getDrawable(
 					R.drawable.solid_arrow_left));
 		}
 	}
-	
-	//获取Intent数据,并给到页面和做搜索数据使用
-	private void getIntentData(){
+
+	// 获取Intent数据,并给到页面和做搜索数据使用
+	private void getIntentData() {
 		Bundle bundle = this.getIntent().getExtras();
-		if (bundle!=null) {
-			if(bundle.containsKey("wayType"))wayType = (SingleOrDouble) bundle.get("wayType");
-			if(bundle.containsKey("startcity_code"))startcity_code = bundle.getString("startcity_code");// 城市三字码
-			if(bundle.containsKey("arrivecity_code"))arrivecity_code = bundle.getString("arrivecity_code");
-			if(bundle.containsKey("startcity"))startcity = bundle.getString("startcity");// 城市名字
-			if(bundle.containsKey("arrivecity"))arrivecity = bundle.getString("arrivecity");
-			if(bundle.containsKey(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1))
-				goFlightSelectedIndex = bundle.getString(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1);
-			if(bundle.containsKey(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1))
-				goFlight = bundle.getString(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1);
-		
+		if (bundle != null) {
+			if (bundle.containsKey("wayType"))
+				wayType = (SingleOrDouble) bundle.get("wayType");
+			if (bundle.containsKey("startcity_code"))
+				startcity_code = bundle.getString("startcity_code");// 城市三字码
+			if (bundle.containsKey("arrivecity_code"))
+				arrivecity_code = bundle.getString("arrivecity_code");
+			if (bundle.containsKey("startcity"))
+				startcity = bundle.getString("startcity");// 城市名字
+			if (bundle.containsKey("arrivecity"))
+				arrivecity = bundle.getString("arrivecity");
+			if (bundle
+					.containsKey(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1))
+				goFlightSelectedIndex = bundle
+						.getString(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1);
+			if (bundle
+					.containsKey(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1))
+				goFlight = bundle
+						.getString(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1);
+
 			if (wayType == SingleOrDouble.singleWay) {
-				if(bundle.containsKey("startoff_date"))startoff_date = bundle.getString("startoff_date");
+				if (bundle.containsKey("startoff_date"))
+					startoff_date = bundle.getString("startoff_date");
 				currentdate = startoff_date;
 				date_current_tv.setText(currentdate);
-			} else if (wayType == SingleOrDouble.doubleWayGo||wayType == SingleOrDouble.doubleWayBack) {
-				if(bundle.containsKey("startdate"))startdate = bundle.getString("startdate");
-				if(bundle.containsKey("enddate"))enddate = bundle.getString("enddate");
-				if(wayType == SingleOrDouble.doubleWayGo)currentdate = startdate;
-				else if(wayType == SingleOrDouble.doubleWayBack)
-				{
+			} else if (wayType == SingleOrDouble.doubleWayGo
+					|| wayType == SingleOrDouble.doubleWayBack) {
+				if (bundle.containsKey("startdate"))
+					startdate = bundle.getString("startdate");
+				if (bundle.containsKey("enddate"))
+					enddate = bundle.getString("enddate");
+				if (wayType == SingleOrDouble.doubleWayGo)
+					currentdate = startdate;
+				else if (wayType == SingleOrDouble.doubleWayBack) {
 					currentdate = enddate;
-					String cityString="",codeString="";//返程机票，交换出发、到达城市
-					cityString=startcity;
-					startcity=arrivecity;
-					arrivecity=cityString;
-					
-					codeString=startcity_code;
-					startcity_code=arrivecity_code;
-					arrivecity_code=codeString;
+					String cityString = "", codeString = "";// 返程机票，交换出发、到达城市
+					cityString = startcity;
+					startcity = arrivecity;
+					arrivecity = cityString;
+
+					codeString = startcity_code;
+					startcity_code = arrivecity_code;
+					arrivecity_code = codeString;
 				}
 				date_current_tv.setText(currentdate);// 往返机票订单，先显示出发日期
 			}
@@ -163,6 +178,16 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			case 1:
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(flistReturnJson);
+				if (flistReturnJson.length()==0) {
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, true);
+					cad.setTitle("查询失败");
+					cad.setPositiveButton("确定", new OnClickListener() {
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}
+					});
+				}
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
@@ -174,8 +199,10 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 						createList(flist);
 						adapter = new ListAdapter(context, InlandAirline_List);
 						listview.setAdapter(adapter);
-						try {//获取列表中数据的日期，以免发生显示错位
-							date_current_tv.setText(DateUtil.getDate(InlandAirline_List.get(0).getOffTime()));
+						try {// 获取列表中数据的日期，以免发生显示错位
+							date_current_tv.setText(DateUtil
+									.getDate(InlandAirline_List.get(0)
+											.getOffTime()));
 						} catch (ParseException e) {
 							e.printStackTrace();
 						}
@@ -194,14 +221,19 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 								intents.putExtra("wayType", wayType);
 								intents.putExtra("startcity", startcity);
 								intents.putExtra("arrivecity", arrivecity);
-								intents.putExtra("startcity_code",startcity_code);
-								intents.putExtra("arrivecity_code",arrivecity_code);
-								intents.putExtra(ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1,
-										 goFlightSelectedIndex);//历史 去程 舱位
-								intents.putExtra(ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1,
-										 goFlight);//历史 去程 航班
+								intents.putExtra("startcity_code",
+										startcity_code);
+								intents.putExtra("arrivecity_code",
+										arrivecity_code);
+								intents.putExtra(
+										ActivityInlandAirlineticketBooking.SELECTED_CABIN_INDEX1,
+										goFlightSelectedIndex);// 历史 去程 舱位
+								intents.putExtra(
+										ActivityInlandAirlineticketSelectCabin.TOKEN_NAME1,
+										goFlight);// 历史 去程 航班
 								if (wayType == SingleOrDouble.singleWay)
-									intents.putExtra("startoff_date",startoff_date);
+									intents.putExtra("startoff_date",
+											startoff_date);
 								else if (wayType == SingleOrDouble.doubleWayGo) {
 									intents.putExtra("startdate", startdate);
 									intents.putExtra("enddate", enddate);
@@ -209,18 +241,20 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 								startActivity(intents);
 							}
 						});
-						
+
 					} else {
-						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						// String message = jsonObject.getString("msg");
+						// new AlertDialog.Builder(context).setTitle("查询失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("查询失败");
+						cad.setPositiveButton("确定", new OnClickListener() {
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -233,6 +267,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 
 	/**
 	 * 构建list对象
+	 * 
 	 * @param flist_list
 	 */
 	private void createList(JSONArray flist_list) {
@@ -294,9 +329,16 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 						+ "\",\"userid\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"siteid\":\"65\"}";
-				String param = "action=flist&str=" + str + "&userkey="
-						+ MyApp.userkey + "&sign="
-						+ CommonFunc.MD5(MyApp.userkey + "flist" + str);
+				String param = "action=flist&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "flist" + str);
 				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -306,7 +348,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
 		progressdialog.setMessage("正在查询，请稍候...");
-		progressdialog.setCancelable(false);
+		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -321,7 +363,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.date_yesterday_ll:
-				
+
 				if (!DateUtil.IsMoreThanToday(currentdate)) {
 					left_arrow_iv.setBackground(getResources().getDrawable(
 							R.drawable.solid_arrow_left_disable));
@@ -330,7 +372,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 				}
 				try {
 					currentdate = DateUtil.getSpecifiedDayBefore(currentdate);
-//					date_current_tv.setText(currentdate);
+					// date_current_tv.setText(currentdate);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -344,7 +386,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			case R.id.date_tomorrow_ll:
 				try {
 					currentdate = DateUtil.getSpecifiedDayAfter(currentdate);
-//					date_current_tv.setText(currentdate);
+					// date_current_tv.setText(currentdate);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -463,16 +505,17 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 					.findViewById(R.id.ticketCount_tv);
 			TextView fanMoney_tv = (TextView) convertView
 					.findViewById(R.id.fanMoney_tv);
-			
-			LinearLayout fanMoney_ll=(LinearLayout) convertView.findViewById(R.id.fanMoney_ll);
-//			if (MyApp.platform==Platform.B2C) {
-//				fanMoney_ll.setVisibility(View.GONE);
-//			}
-//			else if (MyApp.platform==Platform.B2B)
-//			{
-//				fanMoney_ll.setVisibility(View.VISIBLE);
-//			}
-			
+
+			LinearLayout fanMoney_ll = (LinearLayout) convertView
+					.findViewById(R.id.fanMoney_ll);
+			// if (MyApp.platform==Platform.B2C) {
+			// fanMoney_ll.setVisibility(View.GONE);
+			// }
+			// else if (MyApp.platform==Platform.B2B)
+			// {
+			// fanMoney_ll.setVisibility(View.VISIBLE);
+			// }
+
 			try {
 				startTime_tv.setText(DateUtil.getTime(str.get(position)
 						.getOffTime()));
@@ -484,17 +527,20 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			String startPort = str.get(position).getStartPortName();
 			String endPort = str.get(position).getEndPortName();
 			if (AirportConvert.AIRPORT.containsKey(startPort)) {
-				startCity_tv.setText(AirportConvert.AIRPORT.get(startPort)+str.get(position).getStartT());
+				startCity_tv.setText(AirportConvert.AIRPORT.get(startPort)
+						+ str.get(position).getStartT());
 			} else
-				startCity_tv.setText(startPort+str.get(position).getStartT());
+				startCity_tv.setText(startPort + str.get(position).getStartT());
 			if (AirportConvert.AIRPORT.containsKey(endPort)) {
-				endCity_tv.setText(AirportConvert.AIRPORT.get(endPort)+str.get(position).getEndT());
+				endCity_tv.setText(AirportConvert.AIRPORT.get(endPort)
+						+ str.get(position).getEndT());
 			} else
-				endCity_tv.setText(endPort+str.get(position).getEndT());
+				endCity_tv.setText(endPort + str.get(position).getEndT());
 
-			if (startCity_tv.getText().toString().length()+endCity_tv.getText().toString().length() > 10) {
-				startCity_tv.setText(" "+str.get(position).getStartT());
-				endCity_tv.setText(" "+str.get(position).getEndT());
+			if (startCity_tv.getText().toString().length()
+					+ endCity_tv.getText().toString().length() > 10) {
+				startCity_tv.setText(" " + str.get(position).getStartT());
+				endCity_tv.setText(" " + str.get(position).getEndT());
 			}
 			discount_tv.setText(discountDeal(str.get(position).getMinDiscount()
 					.trim()));
@@ -503,7 +549,8 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			FlightNo_tv.setText(str.get(position).getFlightNo());
 			PlaneTypeAndModel.setText(str.get(position).getPlaneType()
 					+ str.get(position).getPlaneModel());
-			ticketCount_tv.setText(tiecketCountDeal(str.get(position).getMinTicketCount()) + "张");
+			ticketCount_tv.setText(tiecketCountDeal(str.get(position)
+					.getMinTicketCount()) + "张");
 			CabinName_tv.setText(str.get(position).getCabinName());
 			fanMoney_tv.setText(str.get(position).getYouHui());
 			return convertView;
@@ -520,16 +567,14 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			}
 			return discountString;
 		}
-		
-		private String tiecketCountDeal(String str){
+
+		private String tiecketCountDeal(String str) {
 			String tiecketCount = "";
-			if (Integer.parseInt(str)>9) {
+			if (Integer.parseInt(str) > 9) {
 				tiecketCount = ">9";
-			}
-			else if (Integer.parseInt(str)==1) {
+			} else if (Integer.parseInt(str) == 1) {
 				tiecketCount = "仅剩1";
-			}
-			else {
+			} else {
 				tiecketCount = str;
 			}
 			return tiecketCount;
