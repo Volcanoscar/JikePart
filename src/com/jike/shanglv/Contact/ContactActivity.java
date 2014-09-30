@@ -1,36 +1,27 @@
 package com.jike.shanglv.Contact;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.jike.shanglv.MainActivity;
 import com.jike.shanglv.R;
 import com.jike.shanglv.Common.DateUtil;
-import com.jike.shanglv.SeclectCity.SideBar.OnTouchingLetterChangedListener;
 
 public class ContactActivity extends Activity {
 	
@@ -144,6 +135,7 @@ public class ContactActivity extends Activity {
 	 */
 	private void sortCities() {
 		Comparator<ContactModel> comparator = new Comparator<ContactModel>() {
+			@Override
 			public int compare(ContactModel s1, ContactModel s2) {
 				if (s1.nameSort.compareTo(s2.nameSort) != 0) {
 					return s1.nameSort.compareTo(s2.nameSort);
@@ -166,7 +158,7 @@ public class ContactActivity extends Activity {
 		int nameIndex = 0;
 		
 		if(cursor.getCount() > 0) {
-			contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+			contactIdIndex = cursor.getColumnIndex(BaseColumns._ID);
 			nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
 		}
 		while(cursor.moveToNext()) {

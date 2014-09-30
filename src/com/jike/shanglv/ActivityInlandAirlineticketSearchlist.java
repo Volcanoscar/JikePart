@@ -36,7 +36,6 @@ import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Enums.PackageKeys;
-import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
 import com.jike.shanglv.Models.InlandAirlineInfo;
@@ -183,6 +182,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 							context, true);
 					cad.setTitle("查询失败");
 					cad.setPositiveButton("确定", new OnClickListener() {
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}
@@ -251,6 +251,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 								context, true);
 						cad.setTitle("查询失败");
 						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}
@@ -283,6 +284,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 	}
 
 	Comparator<InlandAirlineInfo> comparator1 = new Comparator<InlandAirlineInfo>() {
+		@Override
 		public int compare(InlandAirlineInfo s1, InlandAirlineInfo s2) {
 			if (s1.getMinFare() != s2.getMinFare()) {
 				return Integer.parseInt(s1.getMinFare())
@@ -292,6 +294,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		}
 	};
 	Comparator<InlandAirlineInfo> comparator2 = new Comparator<InlandAirlineInfo>() {
+		@Override
 		public int compare(InlandAirlineInfo s1, InlandAirlineInfo s2) {
 			if (s1.getMinFare() != s2.getMinFare()) {
 				return Integer.parseInt(s2.getMinFare())
@@ -302,6 +305,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 	};
 
 	Comparator<InlandAirlineInfo> comparator3 = new Comparator<InlandAirlineInfo>() {
+		@Override
 		public int compare(InlandAirlineInfo s1, InlandAirlineInfo s2) {
 			if (!s1.getOffTime().equals(s2.getOffTime())) {
 				return s1.getOffTime().compareTo(s2.getOffTime());
@@ -310,6 +314,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		}
 	};
 	Comparator<InlandAirlineInfo> comparator4 = new Comparator<InlandAirlineInfo>() {
+		@Override
 		public int compare(InlandAirlineInfo s1, InlandAirlineInfo s2) {
 			if (!s1.getOffTime().equals(s2.getOffTime())) {
 				return s2.getOffTime().compareTo(s1.getOffTime());

@@ -1,22 +1,34 @@
 package com.jike.shanglv;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import android.app.Activity;
-import android.app.AlertDialog;
 //import android.content.DialogInterface;
 //import android.content.DialogInterface.OnClickListener;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomerAlertDialog;
+import com.jike.shanglv.Enums.PackageKeys;
+import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
+import com.jike.shanglv.NetAndJson.HttpUtils;
+import com.jike.shanglv.NetAndJson.JSONHelper;
+import com.jike.shanglv.NetAndJson.UserInfo;
 
 public class ActivityMyAccout extends Activity {
 	private ImageButton back_iv;
@@ -51,7 +63,7 @@ public class ActivityMyAccout extends Activity {
 		((RelativeLayout) findViewById(R.id.changePsw_rl)).setOnClickListener(btnClickListner);
 		((RelativeLayout) findViewById(R.id.findZfPsw_rl)).setOnClickListener(btnClickListner);
 	}
-
+	
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
 
 		@Override
@@ -75,15 +87,18 @@ public class ActivityMyAccout extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
 				cad.setTitle("确认注销当前用户？");
 				cad.setPositiveButton("确定", new OnClickListener() {
+					@Override
 					public void onClick(View arg0) {
 						sp.edit().putString(SPkeys.userid.getString(),"").commit();
 						sp.edit().putString(SPkeys.username.getString(),"").commit();
+						sp.edit().putString(SPkeys.lastPassword.getString(),"").commit();
 						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
 						finish();
 						cad.dismiss();
 					}
 				});
 				cad.setNegativeButton1("取消",new OnClickListener() {
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}

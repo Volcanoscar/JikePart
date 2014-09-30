@@ -40,12 +40,14 @@ public class Activity_Web_Pay extends Activity {
 		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
 		back = (ImageButton) findViewById(R.id.back);
 		back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		chongzhi_finish = (TextView) findViewById(R.id.chongzhi_finish);
 		chongzhi_finish.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -61,10 +63,12 @@ public class Activity_Web_Pay extends Activity {
 
 		webView_zhifu.setWebViewClient(new WebViewClient() {/// 不重写的话，会跳到手机浏览器中
 
+			@Override
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) { // Handle the error
 			}
 
+			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				view.loadUrl(url);
 				return true;

@@ -12,7 +12,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -99,7 +98,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 	private void initView() {
 		context = this;
 		passengerList = new ArrayList<Passenger>();
-		imm = (InputMethodManager) getSystemService(ActivityInlandAirlineticketAddoreditPassengers.this.INPUT_METHOD_SERVICE);
+		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		cancel_tv = (TextView)findViewById(R.id.cancel_tv);
 		finish_tv = (TextView)findViewById(R.id.finish_tv);
 		passengerType_tv = (TextView) findViewById(R.id.passengerType_tv);
@@ -428,6 +427,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入乘客姓名");
 			cad.setPositiveButton("知道了", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -442,6 +442,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入合法的手机号码或座机号码");
 			cad.setPositiveButton("知道了", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -454,6 +455,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入证件号码");
 			cad.setPositiveButton("知道了", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -469,6 +471,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入合法的身份证号码");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -484,6 +487,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入英文名，姓氏和名字之间以斜杠分割，例如:\"zhang/san\"");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -496,6 +500,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请选择证件有效期");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -508,6 +513,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请选择国籍");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -520,6 +526,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入证件签发地");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -532,6 +539,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请选择性别");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -544,6 +552,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请选择出生年月日");
 				cad.setPositiveButton("知道了", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -611,6 +620,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 
 		// 对弹出的全屏选择框添加OnTouchListener监听判断获取触屏位置，如果在listview外面则销毁弹出框
 		layout.setOnTouchListener(new OnTouchListener() {
+			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				View layout = inflater.inflate(
 						R.layout.popupwindow_list_select, null);

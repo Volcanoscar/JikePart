@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.FrameLayout;
@@ -24,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity_bak extends Activity implements OnClickListener {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -34,6 +34,7 @@ public class MainActivity_bak extends Activity implements OnClickListener {
 	private int scrollHeight = 0;
 	private LinearLayout mLinearLayoutSelected;
 	private Handler mHandler = new Handler() { // 点击直接跳转到选择日的对应月份
+		@Override
 		public void handleMessage(android.os.Message msg) {
 			if (msg.what == 11) {
 				mScrollView.scrollTo(0, scrollHeight);
@@ -73,8 +74,8 @@ public class MainActivity_bak extends Activity implements OnClickListener {
 		mScrollView = new ScrollView(this);
 		mScrollView.setBackgroundColor(getResources().getColor(android.R.color.white));
 		mScrollView.setLayoutParams(new FrameLayout.LayoutParams(
-				FrameLayout.LayoutParams.MATCH_PARENT,
-				FrameLayout.LayoutParams.MATCH_PARENT));
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
 		setContentView(mScrollView);
 //		mScrollView.setVisibility(View.INVISIBLE);
 		mDatepickerParam = new DatepickerParam();
@@ -84,8 +85,8 @@ public class MainActivity_bak extends Activity implements OnClickListener {
 
 		LinearLayout localLinearLayout1 = new LinearLayout(this);
 		localLinearLayout1.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT));
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		localLinearLayout1.setOrientation(LinearLayout.VERTICAL);
 		mScrollView.addView(localLinearLayout1);
 		localLinearLayout1.setPadding(ScreenUtil.dip2px(context, 5f),
@@ -118,8 +119,8 @@ public class MainActivity_bak extends Activity implements OnClickListener {
 			LinearLayout localLinearLayout2 = (LinearLayout) View.inflate(
 					context, R.layout.date_pick_head, null);
 			localLinearLayout1.addView(localLinearLayout2,
-					LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
+					LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT);
 			TextView localTextView1 = (TextView) localLinearLayout2
 					.findViewById(R.id.tv_cal_year);
 			TextView localTextView2 = (TextView) localLinearLayout2
@@ -400,15 +401,15 @@ public class MainActivity_bak extends Activity implements OnClickListener {
 		LinearLayout localLinearLayout = new LinearLayout(this);
 		localLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 		localLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT));
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		for (int i = 0; i < 7; i++) {
 			float height = (MyApplication.getScreenWidth()
 					- ScreenUtil.dip2px(context, 10f) - ScreenUtil.dip2px(
 					context, 1.5f * 6)) / 7;
 			Log.i(TAG, "height:" + height);
 			LinearLayout.LayoutParams localLayoutParams4 = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.MATCH_PARENT, (int) height, 1.0F);
+					LayoutParams.MATCH_PARENT, (int) height, 1.0F);
 			RelativeLayout localRelativeLayout = new RelativeLayout(context);
 			localRelativeLayout.setLayoutParams(localLayoutParams4);
 			localLayoutParams4.setMargins(ScreenUtil.dip2px(this, 1.5F),
@@ -439,14 +440,14 @@ public class MainActivity_bak extends Activity implements OnClickListener {
 					R.color.calendar_color_white));
 			localTextView2.setText("出发");
 			RelativeLayout.LayoutParams localLayoutParams2 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
+					LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
 			localLayoutParams2.addRule(RelativeLayout.CENTER_HORIZONTAL);
 			localLayoutParams2.topMargin = ScreenUtil.dip2px(context, 4f);
 			localRelativeLayout2.addView(localTextView1, 0, localLayoutParams2);
 			RelativeLayout.LayoutParams localLayoutParams3 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
+					LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
 			localLayoutParams3.addRule(RelativeLayout.CENTER_HORIZONTAL);
 			localLayoutParams3.addRule(RelativeLayout.BELOW, 1);
 			localRelativeLayout2.addView(localTextView2, 1, localLayoutParams3);

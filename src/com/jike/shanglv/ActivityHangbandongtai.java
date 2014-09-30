@@ -3,7 +3,6 @@ package com.jike.shanglv;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jike.shanglv.Common.*;
 import com.jike.shanglv.Enums.*;
 import com.jike.shanglv.NetAndJson.HttpUtils;
@@ -185,6 +182,7 @@ public class ActivityHangbandongtai extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("出发和到达不能为同一个城市");
 					cad.setPositiveButton("知道了", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -195,6 +193,7 @@ public class ActivityHangbandongtai extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请输入要查询的航班号码");
 					cad.setPositiveButton("知道了", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -226,6 +225,7 @@ public class ActivityHangbandongtai extends Activity {
 
 	/*选择城市或日期后结果回显到界面
 	 * */
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(data==null)return;
 		Bundle b = data.getExtras();

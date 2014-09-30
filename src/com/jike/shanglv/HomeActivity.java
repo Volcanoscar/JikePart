@@ -28,7 +28,7 @@ public class HomeActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home2);
 		context=this;
-		sp=this.getSharedPreferences("mySPData",Activity.MODE_PRIVATE);
+		sp=this.getSharedPreferences("mySPData",Context.MODE_PRIVATE);
 		
 //		UpdateChecker.checkForDialog(MainActivity.this,"jike");
 		/*

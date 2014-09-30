@@ -54,6 +54,7 @@ public class ActivityHotelLocation extends Activity {
 		mBaidumap = mMapView.getMap();
 
 		((ImageButton) findViewById(R.id.back_imgbtn)).setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}

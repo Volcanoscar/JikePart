@@ -9,8 +9,6 @@ import org.json.JSONObject;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.IdType;
 
-import android.R.string;
-
 /**
  * @author Administrator
  *

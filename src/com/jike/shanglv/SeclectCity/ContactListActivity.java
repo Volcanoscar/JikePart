@@ -148,6 +148,7 @@ public class ContactListActivity extends Activity {
 	 */
 	private void sortCities() {
 		Comparator<ContactListModel> comparator = new Comparator<ContactListModel>() {
+			@Override
 			public int compare(ContactListModel s1, ContactListModel s2) {
 				return s1.pinyin.compareTo(s2.pinyin);
 			}

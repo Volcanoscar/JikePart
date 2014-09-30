@@ -5,10 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -191,6 +188,7 @@ public class Activity_Login extends Activity {
 								context, true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}
@@ -236,6 +234,7 @@ public class Activity_Login extends Activity {
 							context, true);
 					cad.setTitle("请输入用户名");
 					cad.setPositiveButton("确定", new OnClickListener() {
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}
@@ -250,6 +249,7 @@ public class Activity_Login extends Activity {
 							context, true);
 					cad.setTitle("请输入密码");
 					cad.setPositiveButton("确定", new OnClickListener() {
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}

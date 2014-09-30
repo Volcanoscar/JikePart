@@ -14,7 +14,6 @@ import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -78,6 +77,7 @@ public class Activity_RetrievePassword extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请输入验证码");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -100,6 +100,7 @@ public class Activity_RetrievePassword extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("手机号码格式不正确");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -112,6 +113,7 @@ public class Activity_RetrievePassword extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("用户名不能为空");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -208,6 +210,7 @@ public class Activity_RetrievePassword extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("获取用户信息失败");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -228,6 +231,7 @@ public class Activity_RetrievePassword extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(emsg);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -245,6 +249,7 @@ public class Activity_RetrievePassword extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("验证码发送失败");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -262,6 +267,7 @@ public class Activity_RetrievePassword extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -271,6 +277,7 @@ public class Activity_RetrievePassword extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -289,6 +296,7 @@ public class Activity_RetrievePassword extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("验证码校验出错");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -311,6 +319,7 @@ public class Activity_RetrievePassword extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("验证码不正确");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});

@@ -399,7 +399,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="50dp"
                     android:background="@null"
-                    android:drawableRight="@drawable/delete_selector"
                     android:hint="输入联系人电话"
                     android:inputType="phone"
                     android:maxLength="11"

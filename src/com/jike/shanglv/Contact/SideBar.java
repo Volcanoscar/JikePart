@@ -1,7 +1,5 @@
 package com.jike.shanglv.Contact;
 
-import com.jike.shanglv.SeclectCity.SideBar.OnTouchingLetterChangedListener;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -44,6 +42,7 @@ public class SideBar extends View {
 	/**
 	 * 重写这个方法
 	 */
+	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		// 获取焦点改变背景颜色.
@@ -56,7 +55,7 @@ public class SideBar extends View {
 //			paint.setColor(Color.WHITE);
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
-			paint.setTextSize((int)(height/320)*10);//根据屏幕分辨率设置字体大小
+			paint.setTextSize(height/320*10);//根据屏幕分辨率设置字体大小
 			// 选中的状态
 			if (i == choose) {
 				paint.setColor(Color.parseColor("#3399ff"));

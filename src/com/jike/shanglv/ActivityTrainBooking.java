@@ -1,18 +1,14 @@
 package com.jike.shanglv;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 //import android.app.AlertDialog;
@@ -23,7 +19,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,12 +38,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.jike.shanglv.ActivityTrainBaoxian.MyListAdapter.Holder;
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
-import com.jike.shanglv.Common.IdType;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.LazyList.ImageLoader;
@@ -277,9 +270,9 @@ public class ActivityTrainBooking extends Activity {
 					c.setTime(date);
 					Time run_time = new Time(ti.getRunTime());
 					c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)
-							+ run_time.HOUR);
+							+ Time.HOUR);
 					c.set(Calendar.MINUTE, c.get(Calendar.MINUTE)
-							+ run_time.MINUTE);
+							+ Time.MINUTE);
 					String arriveDay = new SimpleDateFormat("yyyy-MM-dd")
 							.format(c.getTime());
 					end_date_tv.setText(arriveDay);
@@ -330,12 +323,12 @@ public class ActivityTrainBooking extends Activity {
 				String param = "?action=trainorderv2&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sitekey=" + MyApp.sitekey + "&sign="
 						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainorderv2" + str);
-				try {
-					str = URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					str = URLEncoder.encode(str, "utf-8");
+//				} catch (UnsupportedEncodingException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -364,7 +357,7 @@ public class ActivityTrainBooking extends Activity {
 			trainOrderPassenger.setCardType(passengerList.get(i)
 					.getIdentificationType());
 			trainOrderPassenger.setIncAmount(String.valueOf(baoxian_unitPrice));
-			trainOrderPassenger.setPhone(passengerList.get(i).getMobie());
+			trainOrderPassenger.setPhone(passengerList.get(i).getMobie()==null?"":passengerList.get(i).getMobie());
 			trainOrderPassenger.setSaleprice(ticket_price+"");
 			trainOrderPassenger.setSeatType(seat_Type);
 			try {//URLEncoder.encode(passengerList.get(i).getPassengerName(), "utf-8")
@@ -397,6 +390,7 @@ public class ActivityTrainBooking extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("发生异常，订单提交失败");
 					cad.setPositiveButton("知道了", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -427,6 +421,7 @@ public class ActivityTrainBooking extends Activity {
 						cad.setTitle(jsonObject.getJSONObject("d")
 								.getString("msg"));
 						cad.setPositiveButton("知道了", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -511,6 +506,7 @@ public class ActivityTrainBooking extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请添加乘客信息");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -519,6 +515,7 @@ public class ActivityTrainBooking extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("当前仅剩余"+remainTicketCount+"张票，无法满足"+passengerList.size()+"个人的预订需求");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -531,6 +528,7 @@ public class ActivityTrainBooking extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请输入验证码");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -544,6 +542,7 @@ public class ActivityTrainBooking extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("手机号码格式不正确");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -563,6 +562,7 @@ public class ActivityTrainBooking extends Activity {
 		}
 	};
 
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case ActivityInlandAirlineticketSelectPassengers.SELECTED_FINISH:

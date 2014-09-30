@@ -1,7 +1,5 @@
 package com.jike.shanglv;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -201,6 +199,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请添加乘机人");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -214,6 +213,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请输入预算金额");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -227,6 +227,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("请输入合法的手机号码");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -293,11 +294,11 @@ public class ActivityInternationalRequisitionForm extends Activity {
 				String param = "?action=createDemandOrder&sitekey="+ MyApp.sitekey
 						+"&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()+ "&sign="
 						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "createDemandOrder" + str);
-				try {
-					str=URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					str=URLEncoder.encode(str, "utf-8");
+//				} catch (UnsupportedEncodingException e) {
+//					e.printStackTrace();
+//				}
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -376,9 +377,10 @@ public class ActivityInternationalRequisitionForm extends Activity {
 			interDemandPassenger.setSavePsg(passenger.getAddto().equals("1")?"true":"false");
 			cpList.add(interDemandPassenger);
 		}
-		str=JSONHelper.toJSON(cpList);	
+		str=JSONHelper.toJSON(cpList).replace("\\", "");	
 		return str;
 	}
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case ActivityInlandAirlineticketSelectPassengers.SELECTED_FINISH:
@@ -413,6 +415,18 @@ public class ActivityInternationalRequisitionForm extends Activity {
 					add_passager_tv.setText(getResources().getString(
 							R.string.add_passenger));
 					passenger_head_divid_line.setVisibility(View.GONE);
+				}
+				for (int i = 0; i < passengerList.size(); i++) {
+					if (passengerList.get(i).getIDdeadline()==null) {
+						passengerList.remove(i);
+						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						cad.setTitle("乘客"+passengerList.get(i).getPassengerName()+"的证件有效期非法，请重新修改");
+						cad.setPositiveButton("知道了", new OnClickListener(){
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}});
+					}
 				}
 				ListAdapter adapter = new PassengerListAdapter(context,
 						passengerList);
@@ -548,7 +562,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		if (savedInstanceState != null) {
-			String pl = (String) savedInstanceState.getString("passengerList");
+			String pl = savedInstanceState.getString("passengerList");
 			try {
 				passengerList.clear();
 				passengerList = (ArrayList<Passenger>) JSONHelper

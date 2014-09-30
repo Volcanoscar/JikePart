@@ -49,7 +49,6 @@ import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Enums.SingleOrDouble;
-import com.jike.shanglv.Models.InlandAirlineInfo;
 import com.jike.shanglv.Models.OrderList_AirlineTicket;
 import com.jike.shanglv.Models.OrderList_Hotel;
 import com.jike.shanglv.Models.OrderList_Phone;
@@ -146,6 +145,12 @@ public class ActivityOrderList extends Activity implements
 		}
 		startQuery();
 	}
+	
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		startQuery();
+//	}
 
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
 		@SuppressLint("ResourceAsColor")
@@ -251,7 +256,7 @@ public class ActivityOrderList extends Activity implements
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
-		progressdialog.setMessage("正在查询，请稍候...");
+		progressdialog.setMessage("正在查询订单，请稍候...");
 		progressdialog.setCancelable(true);
 		progressdialog.setOnCancelListener(new OnCancelListener() {
 			@Override
@@ -261,11 +266,19 @@ public class ActivityOrderList extends Activity implements
 		progressdialog.show();
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		startQuery();
+	}
+
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
+				progressdialog.dismiss();
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(orderlistReturnJson);
 				try {
@@ -283,6 +296,7 @@ public class ActivityOrderList extends Activity implements
 							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 							cad.setTitle("未查询到相关数据");
 							cad.setPositiveButton("确定", new OnClickListener(){
+								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
 								}});
@@ -331,7 +345,8 @@ public class ActivityOrderList extends Activity implements
 									intent.putExtra(
 											ActivityInlandAirlineticketOrderDetail.ORDERRECEIPT,
 											order.getOrderID());
-									startActivity(intent);
+//									startActivityForResule(intent);
+									startActivityForResult(intent,1);
 								}else if (actionName.equals(INTFLIGHT_ORDERLIST)) {// 国际机票
 									OrderList_AirlineTicket order = order_List_airlineticket
 											.get(position - 1);
@@ -341,7 +356,8 @@ public class ActivityOrderList extends Activity implements
 									intent.putExtra(
 											ActivityInternationalAirlineticketOrderDetail.ORDERRECEIPT,
 											order.getOrderID());
-									startActivity(intent);
+//									startActivity(intent);
+									startActivityForResult(intent,1);
 								}else if (actionName.equals(DEMAND_ORDERLIST)) {// 需求单
 									OrderList_AirlineTicket order = order_List_airlineticket
 											.get(position - 1);
@@ -354,7 +370,8 @@ public class ActivityOrderList extends Activity implements
 									intent.putExtra(
 											ActivityHotelOrderDetail.ORDERRECEIPT,
 											order.getOrderID());
-									startActivity(intent);
+//									startActivity(intent);
+									startActivityForResult(intent,1);
 								} else if (actionName.equals(TRAIN_ORDERLIST)) {// 火车票
 									OrderList_AirlineTicket order = order_List_airlineticket
 											.get(position - 1);
@@ -364,7 +381,8 @@ public class ActivityOrderList extends Activity implements
 									intent.putExtra(
 											ActivityTrainOrderDetail.ORDERRECEIPT,
 											order.getOrderID());
-									startActivity(intent);
+//									startActivity(intent);
+									startActivityForResult(intent,1);
 								} else if (actionName.equals(PHONE_ORDERLIST)) {// 话费充值
 									OrderList_Phone order = order_List_phone
 											.get(position - 1);
@@ -381,7 +399,8 @@ public class ActivityOrderList extends Activity implements
 									Intent intent=new Intent(context,Activity_Web_Pay.class);
 									intent.putExtra(Activity_Web_Pay.URL, url);
 									intent.putExtra(Activity_Web_Pay.TITLE, "话费充值支付");
-									startActivity(intent);
+//									startActivity(intent);
+									startActivityForResult(intent,1);
 								}
 							}
 						});
@@ -394,6 +413,7 @@ public class ActivityOrderList extends Activity implements
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -479,6 +499,7 @@ public class ActivityOrderList extends Activity implements
 	}
 	
 	Comparator<OrderList_AirlineTicket> comparator_airline = new Comparator<OrderList_AirlineTicket>() {
+		@Override
 		public int compare(OrderList_AirlineTicket s1, OrderList_AirlineTicket s2) {
 			if (!s1.getOrderTime().equals(s2.getOrderTime())) {
 				return s2.getOrderTime().compareTo(s1.getOrderTime());
@@ -487,6 +508,7 @@ public class ActivityOrderList extends Activity implements
 		}
 	};
 	Comparator<OrderList_Hotel> comparator_hotel = new Comparator<OrderList_Hotel>() {
+		@Override
 		public int compare(OrderList_Hotel s1, OrderList_Hotel s2) {
 			if (!s1.getOrderDate().equals(s2.getOrderDate())) {
 				return s2.getOrderDate().compareTo(s1.getOrderDate());
@@ -495,6 +517,7 @@ public class ActivityOrderList extends Activity implements
 		}
 	};
 	Comparator<OrderList_Phone> comparator_phone = new Comparator<OrderList_Phone>() {
+		@Override
 		public int compare(OrderList_Phone s1, OrderList_Phone s2) {
 			if (!s1.getAddtime().equals(s2.getAddtime())) {
 				return s2.getAddtime().compareTo(s1.getAddtime());

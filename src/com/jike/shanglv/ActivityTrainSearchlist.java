@@ -37,7 +37,6 @@ import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.Seat;
 import com.jike.shanglv.Models.TrainListItem;
-import com.jike.shanglv.Models.TrainListItem;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 
@@ -122,6 +121,7 @@ public class ActivityTrainSearchlist extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("未查到该车段的列车信息");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -165,6 +165,7 @@ public class ActivityTrainSearchlist extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -240,21 +241,25 @@ public class ActivityTrainSearchlist extends Activity {
 		progressdialog.show();
 	}
 	Comparator<TrainListItem> comparator_time_asc = new Comparator<TrainListItem>() {
+		@Override
 		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s2.getGoTime().compareTo(s1.getGoTime());
 		}
 	};
 	Comparator<TrainListItem> comparator_time_desc = new Comparator<TrainListItem>() {
+		@Override
 		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s1.getGoTime().compareTo(s2.getGoTime());
 		}
 	};
 	Comparator<TrainListItem> comparator_type_asc = new Comparator<TrainListItem>() {
+		@Override
 		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s1.getTrainID().compareTo(s2.getTrainID());
 		}
 	};
 	Comparator<TrainListItem> comparator_type_desc = new Comparator<TrainListItem>() {
+		@Override
 		public int compare(TrainListItem s1, TrainListItem s2) {
 			return s2.getTrainID().compareTo(s1.getTrainID());
 		}

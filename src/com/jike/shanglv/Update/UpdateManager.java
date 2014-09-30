@@ -63,6 +63,7 @@ public class UpdateManager
 
 	private Handler mHandler = new Handler()
 	{
+		@Override
 		public void handleMessage(Message msg)
 		{
 			switch (msg.what)
@@ -84,6 +85,7 @@ public class UpdateManager
 	
 	private Handler isUpdateHandler = new Handler()
 	{
+		@Override
 		public void handleMessage(Message msg)
 		{
 			switch (msg.what)
@@ -163,6 +165,7 @@ public class UpdateManager
 		final CustomerAlertDialog cad=new CustomerAlertDialog(mContext,true);
 		cad.setTitle("当前已是最新版本");
 		cad.setPositiveButton("确定", new android.view.View.OnClickListener(){
+			@Override
 			public void onClick(View arg0) {
 				cad.dismiss();
 			}});
@@ -408,7 +411,7 @@ public class UpdateManager
 		try {
 			String updateMessage = myNode.getContent();
 			String apkUrl = myNode.getDownload_url();
-			int apkCode = myNode.getVersionCode();// 以后的版本按照VersionCode更新，避免手机上显示的版本过�?
+			int apkCode = myNode.getVersionCode();// 以后的版本按照VersionCode更新，避免手机上显示的版本过高
 			String apkVersionName = myNode.getVersion();// 老版本是按Version号更新的，如8.0.0
 
 			int versionCode = mContext.getPackageManager().getPackageInfo(

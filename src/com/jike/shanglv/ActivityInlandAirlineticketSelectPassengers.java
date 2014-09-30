@@ -394,6 +394,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 	}
 
 	//来自新增或编辑乘机人页面
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case ActivityInlandAirlineticketAddoreditPassengers.EDIT_PASSENGER_CODE:

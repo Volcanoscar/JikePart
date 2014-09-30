@@ -20,6 +20,7 @@ public class TrainListItem  implements Cloneable{
 			Price,
 			Remain_Count;
 	
+	@Override
 	public TrainListItem clone() {  
 		 TrainListItem o = null;  
 	     try {  

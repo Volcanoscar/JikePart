@@ -115,6 +115,7 @@ public class ActivityHuafeichongzhi extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("两次号码输入不一致，请重新输入");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -189,6 +190,7 @@ public class ActivityHuafeichongzhi extends Activity {
 						.setTitle("请选择面值")
 						.setSingleChoiceItems(mianzhi_list, selectedIndex,
 								new DialogInterface.OnClickListener() {
+									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
 										thephonenum_tv.setText("");
@@ -215,6 +217,7 @@ public class ActivityHuafeichongzhi extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("手机号码格式不正确");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -237,6 +240,7 @@ public class ActivityHuafeichongzhi extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("两次号码输入不一致，请重新输入");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 							confirm_phonenum_et.setText("");
@@ -389,6 +393,7 @@ public class ActivityHuafeichongzhi extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("验证价格失败");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -428,6 +433,7 @@ public class ActivityHuafeichongzhi extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});

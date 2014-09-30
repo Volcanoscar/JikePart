@@ -136,12 +136,14 @@ public class ActivityTrainOrderDetail extends Activity {
 						context, false);
 				cad.setTitle("是否确认购买火车票？确认后，系统将自动扣款，用于支付本次订单。");
 				cad.setPositiveButton("确定", new OnClickListener() {
+					@Override
 					public void onClick(View arg0) {
 						comfirmOrder();
 						cad.dismiss();
 					}
 				});
 				cad.setNegativeButton1("取消",new OnClickListener() {
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}
@@ -211,6 +213,7 @@ public class ActivityTrainOrderDetail extends Activity {
 								context, true);
 						cad.setTitle(mesString);
 						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
 							public void onClick(View arg0) {
 								Intent intent=new Intent(context,ActivityOrderList.class);
 								intent.putExtra(ActivityOrderList.ACTION_TOKENNAME, ActivityOrderList.TRAIN_ORDERLIST);

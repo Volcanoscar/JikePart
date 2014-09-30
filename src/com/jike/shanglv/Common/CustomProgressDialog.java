@@ -52,6 +52,7 @@ public class CustomProgressDialog extends Dialog {
 		return customProgressDialog;
 	}
 
+	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 
 		if (customProgressDialog == null) {

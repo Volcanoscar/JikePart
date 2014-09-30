@@ -57,7 +57,7 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 	private Button pay_now_btn;
 	private SharedPreferences sp;
 	private ArrayList<Passenger> passengerList;// 乘机人列表
-	private String orderID = "", pnr = "", amount = "", stateString ;// amount为订单金额
+	private String orderID = "", pnr = "", amount = "",PayLimit, stateString ;// amount为订单金额
 	private String orderDetailReturnJson;
 	private JSONObject orderDetailObject;// 返回的订单详情对象
 
@@ -186,7 +186,19 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 						orderDetailObject = jsonObject.getJSONObject("d");
 						assignment();// 获取数据后对页面上的内容进行赋值
 						if(true){ //(MyApp.RELEASE) {// 测试版可以支付，只有正式发布才做此判断
-							if (pnr.trim().equals("")&&(stateString.equals("新订单")||stateString.equals("已受理"))) {
+							if(PayLimit!=null&&!PayLimit.isEmpty()&&DateUtil.isOverThirtyMinite(PayLimit)&&pnr.trim().equals("")&&(stateString.equals("新订单")||stateString.equals("已受理"))){
+								pay_now_btn
+								.setBackgroundDrawable(getResources()
+										.getDrawable(R.drawable.btn_3_d));
+								pay_now_btn.setEnabled(false);
+								final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+								cad.setTitle("已超过支付时限，无法支付支付！");
+								cad.setPositiveButton("确定", new OnClickListener(){
+									@Override
+									public void onClick(View arg0) {
+										cad.dismiss();
+									}});
+							}else if (pnr.trim().equals("")&&(stateString.equals("新订单")||stateString.equals("已受理"))) {
 								pay_now_btn
 										.setBackgroundDrawable(getResources()
 												.getDrawable(R.drawable.btn_3_d));
@@ -198,11 +210,16 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 								final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 								cad.setTitle("定位失败，暂不能支付！");
 								cad.setPositiveButton("确定", new OnClickListener(){
+									@Override
 									public void onClick(View arg0) {
 										cad.dismiss();
 									}});
 								((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.GONE);
 							}else if(stateString.equals("新订单")||stateString.equals("已受理")){
+								pay_now_btn
+								.setBackgroundDrawable(getResources()
+										.getDrawable(R.drawable.btn_3));
+								pay_now_btn.setEnabled(true);
 								((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.VISIBLE);
 							}else {
 								((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.GONE);
@@ -225,6 +242,8 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 						"Amount");
 				pnr = orderDetailObject.getJSONObject("orders")
 						.getString("PNR");
+				PayLimit=orderDetailObject.getJSONObject("orders")
+						.getString("PayLimit");
 				JSONArray passengersArray = orderDetailObject
 						.getJSONArray("psginfo");
 				for (int i = 0; i < passengersArray.length(); i++) {

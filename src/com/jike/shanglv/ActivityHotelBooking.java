@@ -1,7 +1,5 @@
 package com.jike.shanglv;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,8 +42,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
@@ -147,7 +143,7 @@ public class ActivityHotelBooking extends Activity {
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		imm = (InputMethodManager) getSystemService(ActivityHotelBooking.this.INPUT_METHOD_SERVICE);
+		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
 		back_imgbtn.setOnClickListener(clickListener);
@@ -451,12 +447,12 @@ public class ActivityHotelBooking extends Activity {
 						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hotelorder" + str);
 //				orderReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 //						param);
-				try {
-					str = URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					str = URLEncoder.encode(str, "utf-8");
+//				} catch (UnsupportedEncodingException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				orderReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -603,6 +599,7 @@ public class ActivityHotelBooking extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("查询酒店房间信息失败");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -642,6 +639,7 @@ public class ActivityHotelBooking extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -748,6 +746,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入入住人姓名");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -759,6 +758,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入第二个入住人姓名");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -770,6 +770,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入第三个入住人姓名");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -781,6 +782,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入第四个入住人姓名");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -792,6 +794,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入第五个入住人姓名");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -804,6 +807,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入合法的联系人手机号");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -816,6 +820,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入担保使用的信用卡卡号");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -827,6 +832,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请选择信用卡的有效期");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -838,6 +844,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入担保使用的信用卡的CVV2码");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -849,6 +856,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入担保使用的信用卡的持卡人姓名");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -861,6 +869,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入证件号码");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -875,6 +884,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入担保人合法的身份证号码");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -893,6 +903,7 @@ public class ActivityHotelBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 				cad.setTitle("请输入一个入住人的合法身份证号码");
 				cad.setPositiveButton("确定", new OnClickListener(){
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}});
@@ -906,6 +917,7 @@ public class ActivityHotelBooking extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("入住日期不能大于离店日期");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -920,6 +932,7 @@ public class ActivityHotelBooking extends Activity {
 	/*
 	 * 日期后结果回显到界面
 	 */
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (data == null)
 			return;
@@ -1087,6 +1100,7 @@ public class ActivityHotelBooking extends Activity {
 
 		// 对弹出的全屏选择框添加OnTouchListener监听判断获取触屏位置，如果在listview外面则销毁弹出框
 		layout.setOnTouchListener(new OnTouchListener() {
+			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				View layout = inflater.inflate(
 						R.layout.popupwindow_list_select, null);

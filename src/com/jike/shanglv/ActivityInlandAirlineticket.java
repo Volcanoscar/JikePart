@@ -198,6 +198,7 @@ public class ActivityInlandAirlineticket extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("出发和到达不能为同一个城市");
 					cad.setPositiveButton("知道了", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -208,6 +209,7 @@ public class ActivityInlandAirlineticket extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("出发日期不能大于返程日期");
 					cad.setPositiveButton("知道了", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -240,6 +242,7 @@ public class ActivityInlandAirlineticket extends Activity {
 
 	/*选择城市或日期后结果回显到界面
 	 * */
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(data==null)return;
 		Bundle b = data.getExtras();

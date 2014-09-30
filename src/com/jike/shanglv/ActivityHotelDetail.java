@@ -369,6 +369,7 @@ public class ActivityHotelDetail extends Activity {
 							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 							cad.setTitle("未查询到数据");
 							cad.setPositiveButton("确定", new OnClickListener(){
+								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
 								}});
@@ -397,6 +398,7 @@ public class ActivityHotelDetail extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("查询酒店详情失败");
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -420,6 +422,7 @@ public class ActivityHotelDetail extends Activity {
 							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 							cad.setTitle("查询房型信息失败");
 							cad.setPositiveButton("确定", new OnClickListener(){
+								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
 								}});
@@ -484,6 +487,7 @@ public class ActivityHotelDetail extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -506,6 +510,7 @@ public class ActivityHotelDetail extends Activity {
 							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 							cad.setTitle("查询用户评论信息失败");
 							cad.setPositiveButton("确定", new OnClickListener(){
+								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
 								}});
@@ -526,6 +531,7 @@ public class ActivityHotelDetail extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});

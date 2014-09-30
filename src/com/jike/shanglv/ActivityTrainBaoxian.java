@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.jike.shanglv.Enums.SPkeys;
-import com.jike.shanglv.Models.Seat;
 
 public class ActivityTrainBaoxian extends Activity {
 

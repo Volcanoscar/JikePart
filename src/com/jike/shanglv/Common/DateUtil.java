@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import android.annotation.SuppressLint;
 import android.net.ParseException;
-import android.text.format.DateFormat;
 
 @SuppressLint("SimpleDateFormat")
 public class DateUtil {
@@ -34,11 +33,33 @@ public class DateUtil {
 		Date date = new Date();// 取时间
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
-		calendar.add(calendar.DATE, i);// 把日期往后增加一天.整数往后推,负数往前移动
+		calendar.add(Calendar.DATE, i);// 把日期往后增加一天.整数往后推,负数往前移动
 		date = calendar.getTime(); // 这个时间就是日期往后推一天的结果
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = formatter.format(date);
 		return dateString;
+	}
+	
+	public static Boolean isOverThirtyMinite(String dateString){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+		try {
+			date = sdf.parse(dateString);
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		//你设定的时间
+		long calmill=cal.getTimeInMillis(); //比较时，换算成毫秒数
+		//系统时间的毫秒数
+		long sysmill=System.currentTimeMillis();	
+		System.out.println(sysmill);
+		if(sysmill>calmill+1800000)	//1800000毫秒是30分钟
+		{
+			return true;//不能支付
+		}
+		return false;
 	}
 
 	/**

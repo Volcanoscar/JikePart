@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -99,6 +98,7 @@ public class Activity_Register extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle("注册成功,请登录！");
 						cad.setPositiveButton("立即登录", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								startActivity(new Intent(
 									context,
@@ -113,6 +113,7 @@ public class Activity_Register extends Activity {
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
@@ -190,6 +191,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("用户名不能为空");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -203,6 +205,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("为保证密码的安全性，请输入6-12位的数字、字母或下划线的组合！");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -214,6 +217,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入密码！");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -226,6 +230,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("为保证密码的安全性，请输入6-20位的数字或字母的组合！");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -239,6 +244,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("两次输入密码不一致");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -251,6 +257,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("手机号码格式不正确");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -262,6 +269,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("姓名不能为空");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -277,6 +285,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("邮箱格式不正确");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});
@@ -288,6 +297,7 @@ public class Activity_Register extends Activity {
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 			cad.setTitle("请输入邀请码！");
 			cad.setPositiveButton("确定", new OnClickListener(){
+				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
 				}});

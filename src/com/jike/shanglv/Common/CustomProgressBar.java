@@ -34,6 +34,7 @@ public class CustomProgressBar extends Dialog {
 		return customProgressBar;
 	}
 
+	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 
 		if (customProgressBar == null) {

@@ -62,6 +62,7 @@ public class MainActivity extends ActivityGroup  implements
 			manager.checkForUpdates(false);
 			((MyApplication)getApplication()).setHasCheckedUpdate(true);
 		}
+		queryUserInfo();
 	}
 	
 	private void queryUserInfo(){
@@ -245,6 +246,7 @@ public class MainActivity extends ActivityGroup  implements
 
 	private long mExitTime;
 
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if ((System.currentTimeMillis() - mExitTime) > 2000) {

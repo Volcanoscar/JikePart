@@ -145,6 +145,7 @@ public class HotelCityActivity extends Activity {
 	 */
 	private void sortCities() {
 		Comparator<HotelCityModel> comparator = new Comparator<HotelCityModel>() {
+			@Override
 			public int compare(HotelCityModel s1, HotelCityModel s2) {
 				if (s1.ishot.compareTo(s2.ishot)!=0) {
 					return s2.ishot.compareTo(s1.ishot);

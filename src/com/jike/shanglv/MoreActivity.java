@@ -5,8 +5,10 @@ import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Update.UpdateManager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -15,12 +17,14 @@ import android.widget.RelativeLayout;
 public class MoreActivity extends Activity {
 	private ImageButton back_iv;
 	private SharedPreferences sp;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_more);
 		sp=getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+		mContext=this;
 		
 		 back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
 		 back_iv.setOnClickListener(btnClickListner);
@@ -60,10 +64,18 @@ public class MoreActivity extends Activity {
 				manager.checkForUpdates(true);
 				break;
 			case R.id.gyslgj_rl:
+				String version="2.1";
+				try {
+					version = "V"+mContext.getPackageManager().getPackageInfo(
+							mContext.getPackageName(), 0).versionName;
+				} catch (NameNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				intent.putExtra(Activity_Web_Frame.TITLE, "关  于");
 //				http://m.51jp.cn/Aboutv2?productType=3&userKey=
 				intent.putExtra(Activity_Web_Frame.URL, 
-						String.format(ma.getAbout(),"1",ma.getHm().get(PackageKeys.USERKEY.getString()).toString()));
+						String.format(ma.getAbout(),"安卓手机客户端",ma.getHm().get(PackageKeys.USERKEY.getString()).toString(),version));
 				startActivity(intent);
 				break;
 			default:

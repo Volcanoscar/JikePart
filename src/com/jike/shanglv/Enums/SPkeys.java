@@ -1,7 +1,5 @@
 package com.jike.shanglv.Enums;
 
-import com.jike.shanglv.NetAndJson.UserInfo;
-
 /**记录SharedPreferences中的键值
  * */
 public enum SPkeys {

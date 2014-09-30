@@ -1,7 +1,5 @@
 package com.jike.shanglv;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,10 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -529,11 +525,11 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				String param = "?action=forder&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sign="
 						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "forder" + str);
-				try {
-					str = URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					str = URLEncoder.encode(str, "utf-8");
+//				} catch (UnsupportedEncodingException e) {
+//					e.printStackTrace();
+//				}
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -669,7 +665,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			String idtypeString = passengerList.get(i).getIdentificationType();
 			cp.setIdtype(String.valueOf(IdType.IdTypeReverse.get(idtypeString)));
 			cp.setIsunum(needBaoxianBoolean ? "1" : "0");
-			cp.setMobile(passengerList.get(i).getMobie());
+			cp.setMobile(passengerList.get(i).getMobie()==null?"":passengerList.get(i).getMobie());
 			try {//URLEncoder.encode((passengerList.get(i).getPassengerName()), "utf-8")
 				cp.setPname(passengerList.get(i).getPassengerName());
 			} catch (Exception e) {
@@ -716,12 +712,14 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
 				cad.setTitle("您的订单尚未完成，确认放弃填写吗？");
 				cad.setPositiveButton("确认放弃", new OnClickListener() {
+					@Override
 					public void onClick(View arg0) {
 						finish();
 						cad.dismiss();
 					}
 				});
 				cad.setNegativeButton1("继续填写",new OnClickListener() {
+					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
 					}
@@ -790,6 +788,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					final CustomerAlertDialog cad1=new CustomerAlertDialog(context,true);
 					cad1.setTitle("请添加乘机人");
 					cad1.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad1.dismiss();
 						}});
@@ -803,6 +802,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					final CustomerAlertDialog cad2=new CustomerAlertDialog(context,true);
 					cad2.setTitle("手机号码格式不正确");
 					cad2.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad2.dismiss();
 						}});
@@ -822,6 +822,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		}
 	};
 
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
 		case ActivityInlandAirlineticketSelectPassengers.SELECTED_FINISH:
@@ -990,7 +991,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		if (savedInstanceState != null) {
-			String pl = (String) savedInstanceState.getString("passengerList");
+			String pl = savedInstanceState.getString("passengerList");
 			try {
 				passengerList.clear();
 				passengerList = (ArrayList<Passenger>) JSONHelper

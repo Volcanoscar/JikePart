@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
-import com.jike.shanglv.Update.UpdateManager;
 
 /**
  *     class desc: 启动画面 (1)判断是否是首次加载应用--采取读取SharedPreferences的方法

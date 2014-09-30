@@ -33,7 +33,7 @@ public class ParseXmlService {
 		NodeList childNodes = root.getChildNodes();
 		for (int j = 0; j < childNodes.getLength(); j++) {
 			// 遍历子节点
-			Node childNode = (Node) childNodes.item(j);
+			Node childNode = childNodes.item(j);
 			if (childNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element childElement = (Element) childNode;
 				// 版本号

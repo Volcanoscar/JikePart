@@ -118,7 +118,7 @@ public class JSONHelper {
 			Map<String, Object> valueMap = (Map<String, Object>) map;
 			Iterator<Map.Entry<String, Object>> it = valueMap.entrySet().iterator();
 			while (it.hasNext()) {
-				Map.Entry<String, Object> entry = (Map.Entry<String, Object>)it.next();
+				Map.Entry<String, Object> entry = it.next();
 				js.key(entry.getKey());
 				serialize(js,entry.getValue());
 			}
@@ -565,7 +565,7 @@ public class JSONHelper {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> valueMap = (Map<String, Object>) obj;
 			while (keyIter.hasNext()) {
-				key = (String) keyIter.next();
+				key = keyIter.next();
 				value = jo.get(key);				
 				valueMap.put(key, value);
 

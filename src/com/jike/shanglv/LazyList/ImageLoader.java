@@ -184,7 +184,8 @@ public class ImageLoader {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
         public BitmapDisplayer(Bitmap b, PhotoToLoad p){bitmap=b;photoToLoad=p;}
-        public void run()
+        @Override
+		public void run()
         {
             if(imageViewReused(photoToLoad))
                 return;

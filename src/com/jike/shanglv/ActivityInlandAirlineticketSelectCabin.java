@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 //import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Common.DateUtil;
@@ -283,6 +281,7 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 										context, false);
 								cad.setTitle("已选择去程航班，点击“确定”选择返程航班");
 								cad.setPositiveButton("确定", new OnClickListener() {
+									@Override
 									public void onClick(View arg0) {
 										Intent intents = new Intent(
 												context,
@@ -303,6 +302,7 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 									}
 								});
 								cad.setNegativeButton1("稍等一会",new OnClickListener() {
+									@Override
 									public void onClick(View arg0) {
 										cad.dismiss();
 									}

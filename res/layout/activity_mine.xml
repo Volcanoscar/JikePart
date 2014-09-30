@@ -99,7 +99,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/user_icon_iv"
                 android:gravity="center_vertical"
-                android:text="唐晓峰"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="19sp" />
         </RelativeLayout>
@@ -118,6 +118,7 @@
             android:layout_height="50dp"
             android:layout_below="@id/line_middle"
             android:gravity="center_vertical"
+            android:background="@color/white"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
@@ -149,13 +150,13 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/zhanghuyue_label_tv"
                 android:gravity="center_vertical"
-                android:text="300.5"
+                android:text=""
                 android:textColor="@color/price_yellow"
                 android:textSize="19sp" />
 
             <TextView
                 android:id="@+id/chongzhi_tv"
-                android:layout_width="90dp"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

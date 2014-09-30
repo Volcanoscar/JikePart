@@ -147,6 +147,7 @@ public class AirportCityActivity extends Activity {
 	 */
 	private void sortCities() {
 		Comparator<AirportCityModel> comparator = new Comparator<AirportCityModel>() {
+			@Override
 			public int compare(AirportCityModel s1, AirportCityModel s2) {
 				if (s1.ishot.compareTo(s2.ishot)!=0) {
 					return s2.ishot.compareTo(s1.ishot);

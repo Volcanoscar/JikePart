@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -147,6 +146,7 @@ public class TrainCityActivity extends Activity {
 	 */
 	private void sortCities() {
 		Comparator<TrainCityModel> comparator = new Comparator<TrainCityModel>() {
+			@Override
 			public int compare(TrainCityModel s1, TrainCityModel s2) {
 				if (s1.ishot.compareTo(s2.ishot)!=0) {
 					return s2.ishot.compareTo(s1.ishot);

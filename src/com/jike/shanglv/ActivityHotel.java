@@ -80,7 +80,7 @@ public class ActivityHotel extends Activity {
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		imm = (InputMethodManager) getSystemService(ActivityHotel.this.INPUT_METHOD_SERVICE);
+		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		mLocationClient = new LocationClient(this.getApplicationContext());
 		mLocationClient.registerLocationListener(new MyLocationListener());
@@ -213,6 +213,7 @@ public class ActivityHotel extends Activity {
 					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 					cad.setTitle("入住日期不能大于离店日期");
 					cad.setPositiveButton("确定", new OnClickListener(){
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
 						}});
@@ -256,6 +257,7 @@ public class ActivityHotel extends Activity {
 	/*
 	 * 选择城市或日期后结果回显到界面
 	 */
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (data == null)
 			return;
@@ -362,6 +364,7 @@ public class ActivityHotel extends Activity {
 
 		// 对弹出的全屏选择框添加OnTouchListener监听判断获取触屏位置，如果在listview外面则销毁弹出框
 		layout.setOnTouchListener(new OnTouchListener() {
+			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				View layout = inflater.inflate(
 						R.layout.popupwindow_list_select, null);

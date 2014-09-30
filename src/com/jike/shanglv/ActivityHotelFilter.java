@@ -57,7 +57,7 @@ public class ActivityHotelFilter extends Activity {
 	private void initView() {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		imm = (InputMethodManager) getSystemService(ActivityHotelFilter.this.INPUT_METHOD_SERVICE);
+		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		xingji_tv = (TextView) findViewById(R.id.xingji_tv);
@@ -204,6 +204,7 @@ public class ActivityHotelFilter extends Activity {
 
 		// 对弹出的全屏选择框添加OnTouchListener监听判断获取触屏位置，如果在listview外面则销毁弹出框
 		layout.setOnTouchListener(new OnTouchListener() {
+			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				View layout = inflater.inflate(
 						R.layout.popupwindow_list_select, null);

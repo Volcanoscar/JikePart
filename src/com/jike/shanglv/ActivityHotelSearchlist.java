@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -211,14 +210,17 @@ public class ActivityHotelSearchlist extends Activity implements
 			case 1:// 酒店列表
 				JSONTokener jsonParser;
 				if (hotelsReturnJson.equals("")) {
-//					new AlertDialog.Builder(context).setTitle("未查询到数据")
-//							.setPositiveButton("确定", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					// new AlertDialog.Builder(context).setTitle("未查询到数据")
+					// .setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, true);
 					cad.setTitle("未查询到数据");
-					cad.setPositiveButton("确定", new OnClickListener(){
+					cad.setPositiveButton("确定", new OnClickListener() {
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
-						}});
+						}
+					});
 					progressdialog.dismiss();
 					break;
 				}
@@ -229,14 +231,18 @@ public class ActivityHotelSearchlist extends Activity implements
 
 					if (state.equals("0000")) {
 						if (jsonObject.getJSONObject("d").length() == 0) {
-//							new AlertDialog.Builder(context).setTitle("未查询到数据")
-//									.setPositiveButton("确定", null).show();
-							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							// new
+							// AlertDialog.Builder(context).setTitle("未查询到数据")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
 							cad.setTitle("未查询到数据");
-							cad.setPositiveButton("确定", new OnClickListener(){
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
-								}});
+								}
+							});
 							progressdialog.dismiss();
 							break;
 						}
@@ -247,7 +253,7 @@ public class ActivityHotelSearchlist extends Activity implements
 						listArray = jsonObject.getJSONArray("reqdata");
 						reqdata_List_size = reqdata_List.size();
 						createList(listArray);
-//						reqdata_List=filterData(reqdata_List);
+						// reqdata_List=filterData(reqdata_List);
 						adapter = new ListAdapter(context, reqdata_List);
 						listview.setAdapter(adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -265,33 +271,39 @@ public class ActivityHotelSearchlist extends Activity implements
 						});
 					} else {
 						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("查询失败");
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();
 				mapSign();
-//				filterData();
+				// filterData();
 				break;
 			case 2:// 附近的酒店列表
 				if (nearbyReturnJson.equals("")) {
-//					new AlertDialog.Builder(context).setTitle("未查询到数据")
-//							.setPositiveButton("确定", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					// new AlertDialog.Builder(context).setTitle("未查询到数据")
+					// .setPositiveButton("确定", null).show();
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, true);
 					cad.setTitle("查询失败");
-					cad.setPositiveButton("确定", new OnClickListener(){
+					cad.setPositiveButton("确定", new OnClickListener() {
+						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
-						}});
+						}
+					});
 					progressdialog.dismiss();
 					break;
 				}
@@ -302,14 +314,18 @@ public class ActivityHotelSearchlist extends Activity implements
 
 					if (state.equals("0000")) {
 						if (jsonObject.getJSONObject("d").length() == 0) {
-//							new AlertDialog.Builder(context).setTitle("未查询到数据")
-//									.setPositiveButton("确定", null).show();
-							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							// new
+							// AlertDialog.Builder(context).setTitle("未查询到数据")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
 							cad.setTitle("未查询到数据");
-							cad.setPositiveButton("确定", new OnClickListener(){
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
-								}});
+								}
+							});
 							progressdialog.dismiss();
 							break;
 						}
@@ -320,7 +336,7 @@ public class ActivityHotelSearchlist extends Activity implements
 						listArray = jsonObject.getJSONArray("reqdata");
 						reqdata_List_size = reqdata_List.size();
 						createList(listArray);
-//						reqdata_List=filterData(reqdata_List);
+						// reqdata_List=filterData(reqdata_List);
 						adapter = new ListAdapter(context, reqdata_List);
 						listview.setAdapter(adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -338,22 +354,25 @@ public class ActivityHotelSearchlist extends Activity implements
 						});
 					} else {
 						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();
 				mapSign();
-//				filterData();// 附件的酒店返回的数据未按照搜索条件返回，返回后过滤一遍，达到按搜索条件查询的效果
+				// filterData();// 附件的酒店返回的数据未按照搜索条件返回，返回后过滤一遍，达到按搜索条件查询的效果
 				break;
 			}
 		}
@@ -400,6 +419,7 @@ public class ActivityHotelSearchlist extends Activity implements
 	}
 
 	Comparator<Hotel> comparator_pingfen_asc = new Comparator<Hotel>() {
+		@Override
 		public int compare(Hotel s1, Hotel s2) {
 			if (!s1.getHaoping().equals(s2.getHaoping())) {
 				return Float.valueOf(s1.getHaoping()) < Float.valueOf((s2
@@ -409,6 +429,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}
 	};
 	Comparator<Hotel> comparator_pingfen_desc = new Comparator<Hotel>() {
+		@Override
 		public int compare(Hotel s1, Hotel s2) {
 			if (!s1.getHaoping().equals(s2.getHaoping())) {
 				return Float.valueOf(s1.getHaoping()) > Float.valueOf((s2
@@ -418,6 +439,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}
 	};
 	Comparator<Hotel> comparator_price_asc = new Comparator<Hotel>() {
+		@Override
 		public int compare(Hotel s1, Hotel s2) {
 			if (!s1.getPrice().equals(s2.getPrice())) {
 				return Integer.valueOf(s2.getPrice())
@@ -427,6 +449,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}
 	};
 	Comparator<Hotel> comparator_price_desc = new Comparator<Hotel>() {
+		@Override
 		public int compare(Hotel s1, Hotel s2) {
 			if (!s1.getPrice().equals(s2.getPrice())) {
 				return Integer.valueOf(s1.getPrice())
@@ -436,6 +459,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}
 	};
 	Comparator<Hotel> comparator_starlevel_asc = new Comparator<Hotel>() {
+		@Override
 		public int compare(Hotel s1, Hotel s2) {
 			if (!s1.getStar().equals(s2.getStar())) {
 				return Integer.valueOf(s2.getStar())
@@ -445,6 +469,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		}
 	};
 	Comparator<Hotel> comparator_starlevel_desc = new Comparator<Hotel>() {
+		@Override
 		public int compare(Hotel s1, Hotel s2) {
 			if (!s1.getStar().equals(s2.getStar())) {
 				return Integer.valueOf(s1.getStar())
@@ -464,24 +489,29 @@ public class ActivityHotelSearchlist extends Activity implements
 				MyApp ma = new MyApp(context);
 				Message msg = new Message();
 				String str1 = "";
-				//URLEncoder.encode(city, "utf-8")
-				str1 = "{\"city\":\"" + city
-						+ "\",\"pgsize\":\"" + pgsize + "\",\"pgindex\":\""
-						+ pgindex + "\",\"hn\":\""
-						+ keywords
-						+ "\",\"key\":\"" + strEm + "\",\"yufu\":\""
+				// URLEncoder.encode(city, "utf-8")
+				str1 = "{\"city\":\"" + city + "\",\"pgsize\":\"" + pgsize
+						+ "\",\"pgindex\":\"" + pgindex + "\",\"hn\":\""
+						+ keywords + "\",\"key\":\"" + strEm + "\",\"yufu\":\""
 						+ strEm + "\",\"esdid\":\"" + strEm
 						+ "\",\"minprice\":\"" + minprice
-						+ "\",\"maxprice\":\"" + maxprice
-						+ "\",\"lsid\":\"" + strEm + "\",\"areid\":\""
-						+ strEm + "\",\"star\":\"" + star
-						+ "\",\"fw\":\"\"}";
-				String param1="";
+						+ "\",\"maxprice\":\"" + maxprice + "\",\"lsid\":\""
+						+ strEm + "\",\"areid\":\"" + strEm + "\",\"star\":\""
+						+ star + "\",\"fw\":\"\"}";
+				String param1 = "";
 				try {
-					param1 = "action=hlist&str=" +URLEncoder.encode(str1 , "utf-8") + "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+					param1 = "action=hlist&str="
+							+ URLEncoder.encode(str1, "utf-8")
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
 							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hlist" + str1);
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "hlist" + str1);
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -490,10 +520,18 @@ public class ActivityHotelSearchlist extends Activity implements
 				str2 = "{\"lng\":\"" + longtitude + "\",\"pagesize\":\""
 						+ pgsize + "\",\"pg\":\"" + pgindex + "\",\"lat\":\""
 						+ latitude + "\"}";
-				String param2 = "action=nearby&str=" + str2 + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param2 = "action=nearby&str="
+						+ str2
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "nearby" + str2);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "nearby" + str2);
 				if (!isNearby) {
 					hotelsReturnJson = HttpUtils.getJsonContent(
 							ma.getServeUrl(), param1);
@@ -635,7 +673,7 @@ public class ActivityHotelSearchlist extends Activity implements
 			if (b != null && b.containsKey("keywords")) {
 				keywords = b.getString("keywords");
 			}
-//			adapter.updateListView(filterData(reqdata_List));
+			// adapter.updateListView(filterData(reqdata_List));
 		}
 	}
 
@@ -689,7 +727,7 @@ public class ActivityHotelSearchlist extends Activity implements
 			} else {
 				filterDateList2 = filterDateList1;
 			}
-//			adapter.updateListView(filterDateList2);
+			// adapter.updateListView(filterDateList2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -837,7 +875,8 @@ public class ActivityHotelSearchlist extends Activity implements
 				area_tv.setText(str.get(position).getCBD());
 			} else {
 				juli_tv.setVisibility(View.GONE);
-				area_tv.setText(str.get(position).getCBD().replace("区域", "").replace(":", "").replace("：", "").replace(" ", ""));
+				area_tv.setText(str.get(position).getCBD().replace("区域", "")
+						.replace(":", "").replace("：", "").replace(" ", ""));
 			}
 			hotel_name_tv.setText(str.get(position).getName());
 			score_tv.setText(Float.valueOf(str.get(position).getHaoping()) == -1f ? "暂无"
@@ -868,14 +907,22 @@ public class ActivityHotelSearchlist extends Activity implements
 
 	@Override
 	public void OnLoadMore() {
-		LoadMoreDataAsynTask mLoadMoreAsynTask = new LoadMoreDataAsynTask();
-		mLoadMoreAsynTask.execute();
+		try {
+			LoadMoreDataAsynTask mLoadMoreAsynTask = new LoadMoreDataAsynTask();
+			mLoadMoreAsynTask.execute();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	@Override
 	public void OnRefresh() {
-		RefreshDataAsynTask mRefreshAsynTask = new RefreshDataAsynTask();
-		mRefreshAsynTask.execute();
+		try {
+			RefreshDataAsynTask mRefreshAsynTask = new RefreshDataAsynTask();
+			mRefreshAsynTask.execute();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	class RefreshDataAsynTask extends AsyncTask<Void, Void, Void> {
