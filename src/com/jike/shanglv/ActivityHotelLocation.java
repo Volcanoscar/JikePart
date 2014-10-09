@@ -49,6 +49,7 @@ public class ActivityHotelLocation extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_hotel_location);
+		((MyApplication)getApplication()).addActivity(this);
 		
 		mMapView=(MapView) findViewById(R.id.bmapView);
 		mBaidumap = mMapView.getMap();

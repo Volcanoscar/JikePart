@@ -96,6 +96,7 @@ public class ActivityTrainBooking extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_train_booking);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

@@ -105,6 +105,7 @@ public class ActivityHotelSearchlist extends Activity implements
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

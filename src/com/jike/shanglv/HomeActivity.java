@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import com.jike.shanglv.Common.MyRolateAnimImageView;
+import com.jike.shanglv.Enums.PackageKeys;
 
 public class HomeActivity extends Activity{
 
@@ -28,6 +30,7 @@ public class HomeActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home2);
 		context=this;
+		((MyApplication)getApplication()).addActivity(this);
 		sp=this.getSharedPreferences("mySPData",Context.MODE_PRIVATE);
 		
 //		UpdateChecker.checkForDialog(MainActivity.this,"jike");
@@ -60,6 +63,9 @@ public class HomeActivity extends Activity{
 		btn_hfcz.setOnClickListener(btnClickListner);
 		btn_zhcz.setOnClickListener(btnClickListner);
 		btn_hcp.setOnClickListener(btnClickListner);
+		
+		MyApp mApp=new MyApp(getApplicationContext());	
+		((ImageView)findViewById(R.id.menu_logo)).setBackgroundResource((Integer) mApp.getHm().get(PackageKeys.MENU_LOGO_DRAWABLE.getString()));
 		
 		//¼ì²é¸üÐÂ
 //		UpdateChecker.checkForDialog(HomeActivity.this,"jike");

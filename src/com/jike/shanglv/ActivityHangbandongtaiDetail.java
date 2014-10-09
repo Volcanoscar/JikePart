@@ -22,6 +22,7 @@ public class ActivityHangbandongtaiDetail extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hangbandongtai_detail);
+		((MyApplication)getApplication()).addActivity(this);
 
 		flight_tv = (TextView) findViewById(R.id.flight_tv);
 		state_tv = (TextView) findViewById(R.id.state_tv);

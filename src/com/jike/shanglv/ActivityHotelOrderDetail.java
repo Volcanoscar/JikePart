@@ -57,6 +57,7 @@ public class ActivityHotelOrderDetail extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		((MyApplication)getApplication()).addActivity(this);
 	}
 	
 	@Override

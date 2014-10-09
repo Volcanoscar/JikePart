@@ -68,6 +68,7 @@ public class ActivityHotel extends Activity {
 		setContentView(R.layout.activity_hotel);
 		initView();
 		myNear();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void myNear() {

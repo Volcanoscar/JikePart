@@ -48,6 +48,7 @@ public class ActivityInlandAirlineticket extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inland_airlineticket);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {
@@ -218,6 +219,9 @@ public class ActivityInlandAirlineticket extends Activity {
 				if (HttpUtils.showNetCannotUse(context)) {
 					return;
 				}
+				MyApplication application = (MyApplication)getApplication();
+				application.setStartcity_code(startcity_code_tv.getText().toString());
+				application.setArrivecity_code(endcity_code_tv.getText().toString());
 				
 				Intent intents=new Intent(context,ActivityInlandAirlineticketSearchlist.class);
 				intents.putExtra("wayType", wayType);

@@ -40,6 +40,7 @@ public class ActivityChangePsw extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_changepsw);
+		((MyApplication)getApplication()).addActivity(this);
 
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		context = this;

@@ -104,6 +104,7 @@ public class ActivityHotelBooking extends Activity {
 		initView();
 		getIntentString();
 		startQueryRoomsRI();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void getIntentString() {

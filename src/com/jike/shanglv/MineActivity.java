@@ -39,7 +39,8 @@ public class MineActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mine);
-
+		((MyApplication)getApplication()).addActivity(this);
+		
 		context=this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		welcome_tv=(TextView) findViewById(R.id.welcome_tv);
@@ -68,6 +69,7 @@ public class MineActivity extends Activity {
 			zhanghuyue_tv.setText(sp.getString(SPkeys.amount.getString(), ""));
 			chongzhi_tv.setOnClickListener(btnClickListner);
 		}
+		welcome_tv.setText("»¶Ó­Äú£¬À´µ½"+getApplication().getResources().getString((Integer) (new MyApp(getApplicationContext()).getHm().get(PackageKeys.APP_NAME.getString()))));
 		queryUserInfo();
 	}
 
@@ -121,7 +123,7 @@ public class MineActivity extends Activity {
 			public void run() {
 				int utype = 0;
 				MyApp ma = new MyApp(context);
-				Platform pf = ma.getPlatform();
+				Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
 				if (pf == Platform.B2B)
 					utype = 1;
 				else if (pf == Platform.B2C)
@@ -195,6 +197,7 @@ public class MineActivity extends Activity {
 								.putBoolean(SPkeys.loginState.getString(), true)
 								.commit();
 						zhanghuyue_tv.setText(user.getAmmount());
+						username_tv.setText(user.getUsername());
 					} else if (state.equals("1003")){
 						sp.edit().putString(SPkeys.userid.getString(),"").commit();
 						sp.edit().putString(SPkeys.username.getString(),"").commit();

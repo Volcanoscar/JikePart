@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.ImageView;
 
+import com.jike.shanglv.Enums.PackageKeys;
+import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 
 /**
@@ -46,9 +49,12 @@ public class WelcomeActivity  extends Activity {
 		setContentView(R.layout.welcome);
 
 		init();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void init() {
+		MyApp mApp=new MyApp(getApplicationContext());	
+		((ImageView)findViewById(R.id.welcome_iv)).setBackgroundResource((Integer) mApp.getHm().get(PackageKeys.WELCOME_DRAWABLE.getString()));
 		// 读取SharedPreferences中需要的数据
 		// 使用SharedPreferences来记录程序的使用次数
 		preferences = getSharedPreferences(
@@ -70,7 +76,12 @@ public class WelcomeActivity  extends Activity {
 	}
 
 	private void goHome() {
-		Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+		Intent intent =null;
+		if((new MyApp(WelcomeActivity.this).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2C)){
+			intent = new Intent(WelcomeActivity.this, MainActivity.class);
+		}else if((new MyApp(WelcomeActivity.this).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B)){
+			intent = new Intent(WelcomeActivity.this, ActivityBMenu.class);
+		}
 		WelcomeActivity.this.startActivity(intent);
 		WelcomeActivity.this.finish();
 	}

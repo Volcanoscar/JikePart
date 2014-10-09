@@ -67,6 +67,7 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 		setContentView(R.layout.activity_hangbandongtai_searchlist);
 		initView();
 		startQuery();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void startQuery() {

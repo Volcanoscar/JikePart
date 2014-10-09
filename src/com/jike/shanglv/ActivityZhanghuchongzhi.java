@@ -40,6 +40,7 @@ public class ActivityZhanghuchongzhi extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_zhanghuchongzhi);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {
@@ -134,6 +135,7 @@ public class ActivityZhanghuchongzhi extends Activity {
 				// url?action=phonepro&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
 				// &str={"phone":"","value":"","userid":"","siteid":""}
 				MyApp ma = new MyApp(context);
+				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
 				String str = "";
 				try {
 					str = "{\"orderID\":\""	+ ""
@@ -143,7 +145,7 @@ public class ActivityZhanghuchongzhi extends Activity {
 							+ "\",\"pageIndex\":\""+1
 							+ "\",\"userid\":\""
 							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"siteid\":\"65\"}";
+							+ "\",\"siteid\":\""+siteid+"\"}";
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

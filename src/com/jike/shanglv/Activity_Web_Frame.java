@@ -34,6 +34,7 @@ public class Activity_Web_Frame extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_web_frame);
+		((MyApplication)getApplication()).addActivity(this);
 
 		((ImageButton) findViewById(R.id.back)).setOnClickListener(new OnClickListener() {
 			@Override

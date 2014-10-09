@@ -77,6 +77,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_international_requisition_form);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

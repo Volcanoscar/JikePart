@@ -48,6 +48,7 @@ public class ActivityTrainBaoxian extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_train_baoxian);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 
 		adapter = new MyListAdapter(context, list);
 		adapter.setCurrentID(currentID);

@@ -37,6 +37,7 @@ public class ActivityHotelComments extends Activity {
 		setContentView(R.layout.activity_hotel_comments);
 		initView();
 		assign();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

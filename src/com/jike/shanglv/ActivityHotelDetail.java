@@ -95,6 +95,7 @@ public class ActivityHotelDetail extends Activity {
 		setContentView(R.layout.activity_hotel_detail);
 
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	@Override

@@ -61,6 +61,7 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 			initView();
 		} catch (Exception e) {
 		}
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

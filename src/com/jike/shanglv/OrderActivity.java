@@ -25,6 +25,7 @@ public class OrderActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_order);
 		sp=getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+		((MyApplication)getApplication()).addActivity(this);
 		
 	    back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
 	    back_iv.setOnClickListener(new OnClickListener() {

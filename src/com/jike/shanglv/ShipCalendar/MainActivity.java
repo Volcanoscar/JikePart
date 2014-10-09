@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jike.shanglv.MyApplication;
 import com.jike.shanglv.R;
 import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.CalendarPickerView.OnDateSelectedListener;
@@ -24,6 +26,7 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar_picker);
+		((MyApplication)getApplication()).addActivity(this);
 		
 		String title="«Î—°‘Ò»’∆⁄";
 		Bundle bundle=getIntent().getExtras();

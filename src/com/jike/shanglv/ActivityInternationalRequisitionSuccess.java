@@ -19,6 +19,7 @@ public class ActivityInternationalRequisitionSuccess extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_international_requisition_success);
+		((MyApplication)getApplication()).addActivity(this);
 		
 		back_imgbtn=(ImageButton) findViewById(R.id.back_imgbtn);
 		home_imgbtn=(ImageButton) findViewById(R.id.home_imgbtn);

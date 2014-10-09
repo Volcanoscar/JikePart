@@ -56,7 +56,8 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:layout_marginTop="20dp"
+              
+                android:layout_marginLeft="10dp"
                 android:background="@color/deep_gray" />
 
             <RelativeLayout
@@ -111,12 +112,18 @@
                 </TextView>
             </RelativeLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@id/flightInfo_bg"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
+                android:layout_height="wrap_content"
+                android:background="@color/white" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/flightInfo_bg"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/deep_gray" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/flightInfo_rl"
@@ -282,11 +289,72 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
+                android:layout_height="wrap_content"
+                android:background="@color/white" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/deep_gray" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/zhengce_rl"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/list_item_color_bg"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="政策"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/booking_item_content_textsize" />
+
+                <TextView
+                    android:id="@+id/zhengcefandian_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text=""
+                    android:textColor="#bb1192CB"
+                    android:textSize="@dimen/booking_item_content_textsize" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:text="选择政策"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/booking_item_content_textsize" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/rightsmallarrow" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/deep_gray" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/tuiGaiQian_rl"
@@ -315,8 +383,9 @@
 
             <TextView
                 android:id="@+id/tuiGaiQian_state_tv"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="#44dddddd"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -346,8 +415,8 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:paddingTop="10dp" 
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:paddingTop="10dp" >
 
                 <TextView
                     android:id="@+id/jipiaojia_label_tv"
@@ -374,9 +443,9 @@
                     android:id="@+id/fanMoney_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:layout_alignParentRight="true"
                     android:background="@drawable/text_view_fan_border"
                     android:text=""
                     android:textAlignment="center"
@@ -430,12 +499,17 @@
                     android:textSize="@dimen/booking_item_content_textsize" />
             </LinearLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@id/flightInfo_rl"
-                android:layout_marginLeft="10dp"
-                android:background="@color/deep_gray" />
+                android:layout_height="wrap_content"
+                android:background="@color/white" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/deep_gray" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -488,15 +562,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:lineSpacingExtra="2dp"
                     android:paddingBottom="10dp"
                     android:paddingTop="5dp"
-                    android:layout_gravity="center_vertical"
                     android:text="请仔细核对乘机人姓名、证件号码，以免在办理登机手续时发生问题。请确保儿童票乘机人有成人陪伴乘机。"
                     android:textColor="@color/huise_txt_color"
                     android:textSize="@dimen/booking_item_small_textsize" />
-
-            
             </LinearLayout>
 
             <View
@@ -550,12 +622,12 @@
                 android:layout_marginLeft="15dp"
                 android:background="@color/deep_gray"
                 android:visibility="invisible" />
-<!--  android:divider="@null" -->
+            <!-- android:divider="@null" -->
+
             <ListView
                 android:id="@+id/passenger_listview"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content" >
             </ListView>
 
             <View
@@ -575,8 +647,8 @@
                 android:id="@+id/add_contact_person_phone_rl"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
-                android:gravity="center_vertical"
                 android:background="@color/white"
+                android:gravity="center_vertical"
                 android:padding="10dp" >
 
                 <ImageView

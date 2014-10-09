@@ -59,6 +59,7 @@ public class Activity_Login extends Activity {
 		setContentView(R.layout.activity_login);
 
 		init();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void init() {
@@ -178,8 +179,12 @@ public class Activity_Login extends Activity {
 								.commit();
 						finish();
 					} else {
-						String message = jsonObject.getJSONObject("d")
-								.getString("msg");
+						String message="";
+						try {
+							message = jsonObject.getJSONObject("d").getString("msg");
+						} catch (Exception e) {
+							message = jsonObject.getString("msg");
+						}
 						// new AlertDialog.Builder(context).setTitle("µÇÂ¼Ê§°Ü")
 						// .setMessage(message)
 						// .setPositiveButton("È·ÈÏ", null).show();
@@ -267,7 +272,7 @@ public class Activity_Login extends Activity {
 					public void run() {
 						int utype = 0;
 						MyApp ma = new MyApp(context);
-						Platform pf = ma.getPlatform();
+						Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
 						if (pf == Platform.B2B)
 							utype = 1;
 						else if (pf == Platform.B2C)

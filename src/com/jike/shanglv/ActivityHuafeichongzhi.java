@@ -57,6 +57,7 @@ public class ActivityHuafeichongzhi extends Activity {
 		setContentView(R.layout.activity_huafeichongzhi);
 		initView();
 		chongzhi_button.setEnabled(false);
+		((MyApplication)getApplication()).addActivity(this);
 	}
 	
 	private void startLoadingAni() {

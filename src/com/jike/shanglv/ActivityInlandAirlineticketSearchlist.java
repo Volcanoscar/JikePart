@@ -72,7 +72,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inland_airlineticket_searchlist);
 		initView();
-
+		((MyApplication)getApplication()).addActivity(this);
 		startQuery();
 	}
 
@@ -329,11 +329,12 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			public void run() {
 				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
 				MyApp ma = new MyApp(context);
+				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
 				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
 						+ arrivecity_code + "\",\"sd\":\"" + currentdate
 						+ "\",\"userid\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\"65\"}";
+						+ "\",\"siteid\":\""+siteid+"\"}";
 				String param = "action=flist&str="
 						+ str
 						+ "&userkey="

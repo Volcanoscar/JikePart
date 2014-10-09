@@ -93,6 +93,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			initInternationalView();
 		}
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

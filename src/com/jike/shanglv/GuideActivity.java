@@ -15,6 +15,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.jike.shanglv.Enums.PackageKeys;
+import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 
 /**
@@ -38,7 +41,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 
 		// 初始化页面
 		initViews();
-
+		((MyApplication)getApplication()).addActivity(this);
 		// 初始化底部小点
 		initDots();
 	}
@@ -162,11 +165,21 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 			return views.get(arg1);
 		}
 
+//		private void goHome() {
+//			// 跳转
+//			Intent intent = new Intent(activity, MainActivity.class);
+//			activity.startActivity(intent);
+//			activity.finish();
+//		}
 		private void goHome() {
-			// 跳转
-			Intent intent = new Intent(activity, MainActivity.class);
-			activity.startActivity(intent);
-			activity.finish();
+			Intent intent =null;
+			if((new MyApp(GuideActivity.this).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2C)){
+				intent = new Intent(GuideActivity.this, MainActivity.class);
+			}else if((new MyApp(GuideActivity.this).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B)){
+				intent = new Intent(GuideActivity.this, ActivityBMenu.class);
+			}
+			GuideActivity.this.startActivity(intent);
+			GuideActivity.this.finish();
 		}
 
 		/**

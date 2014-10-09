@@ -35,6 +35,7 @@ public class Activity_Web_Pay extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_web_pay);
+		((MyApplication)getApplication()).addActivity(this);
 
 		loading_ll=(LinearLayout) findViewById(R.id.loading_ll);
 		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);

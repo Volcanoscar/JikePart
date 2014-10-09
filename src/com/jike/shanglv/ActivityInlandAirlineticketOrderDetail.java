@@ -73,6 +73,7 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		((MyApplication)getApplication()).addActivity(this);
 	}
 	
 	@Override

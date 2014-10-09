@@ -39,6 +39,7 @@ public class ActivityTrain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_train);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

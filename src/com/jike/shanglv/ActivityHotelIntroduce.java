@@ -23,6 +23,7 @@ public class ActivityHotelIntroduce extends Activity {
 		setContentView(R.layout.activity_hotel_introduce);
 		initView();
 		assign();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

@@ -49,6 +49,7 @@ public class ActivityInternationalAirlineticket extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_international_airlineticket);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

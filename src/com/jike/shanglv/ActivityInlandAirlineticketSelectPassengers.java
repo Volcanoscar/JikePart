@@ -69,6 +69,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 					passengerList);
 			history_passenger_listview.setAdapter(adapter);
 		}
+		((MyApplication)getApplication()).addActivity(this);
 	}
 	
 	private void loadingAni(){
@@ -243,10 +244,11 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 			public void run() {
 				// url?action=passenger&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&str={"userid":"","siteid":"","systype":"0国内 1国际 2火车票","psgtype":"1成人 2儿童 3婴儿"}&sitekey=defage
 				MyApp ma = new MyApp(context);
+				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
 				String str = "{\"systype\":\"" + systype + "\",\"psgtype\":\"" + "1"
 						+ "\",\"userid\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\"65\"}";
+						+ "\",\"siteid\":\""+siteid+"\"}";
 				String param = "action=passenger&str=" + str + "&userkey="
 						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
 						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "passenger" + str);

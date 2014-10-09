@@ -14,8 +14,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -26,7 +24,6 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.jike.shanglv.Common.CommonFunc;
-import com.jike.shanglv.Common.CustomerAlertDialog;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
@@ -43,15 +40,17 @@ public class MainActivity extends ActivityGroup  implements
 	private RadioGroup radio_group;
 	private Intent mIntent;
 	private ViewFlipper container;
-	private SharedPreferences sp;
 	private RadioButton radio_order, radio_home, radio_mine, radio_more;
 	private Context context;
+	private SharedPreferences sp;
 	private String loginReturnJson="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		((MyApplication)getApplication()).addActivity(this);
+		goB2BHome();
 		initView();
 		initHomePage();
 		radio_group.setOnCheckedChangeListener(this);
@@ -65,13 +64,23 @@ public class MainActivity extends ActivityGroup  implements
 		queryUserInfo();
 	}
 	
+	/*如果为B2B程序，则跳到商旅助手的主菜单界面
+	 * */
+	private void goB2BHome() {
+		if((new MyApp(MainActivity.this).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B)){
+			Intent intent = new Intent(MainActivity.this, ActivityBMenu.class);
+			MainActivity.this.startActivity(intent);
+			MainActivity.this.finish();
+		}
+	}
+	
 	private void queryUserInfo(){
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				int utype = 0;
 				MyApp ma = new MyApp(context);
-				Platform pf = ma.getPlatform();
+				Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
 				if (pf == Platform.B2B)
 					utype = 1;
 				else if (pf == Platform.B2C)
@@ -257,9 +266,10 @@ public class MainActivity extends ActivityGroup  implements
 			} else {
 //				finish();
 //				SysApplication.getInstance().exit();
+				 ((MyApplication)getApplication()).exit();
 				  android.os.Process.killProcess(android.os.Process.myPid());
 				  finish();
-				  System.exit(0); 
+				  System.exit(0);
 				  //http://864331652.blog.163.com/blog/static/1168625632013415112635566/
 			}
 			return true;

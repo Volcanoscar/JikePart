@@ -101,6 +101,7 @@ public class ActivityOrderList extends Activity implements
 		order_List_hotel = new ArrayList<OrderList_Hotel>();
 		order_List_phone = new ArrayList<OrderList_Phone>();
 		context = this;
+		((MyApplication)getApplication()).addActivity(this);
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);

@@ -25,6 +25,7 @@ public class MoreActivity extends Activity {
 		setContentView(R.layout.activity_more);
 		sp=getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		mContext=this;
+		((MyApplication)getApplication()).addActivity(this);
 		
 		 back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
 		 back_iv.setOnClickListener(btnClickListner);

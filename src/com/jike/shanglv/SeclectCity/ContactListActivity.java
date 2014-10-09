@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.jike.shanglv.MainActivity;
+import com.jike.shanglv.MyApplication;
 import com.jike.shanglv.R;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.SeclectCity.SideBarContact.OnTouchingLetterChangedListener;
@@ -61,6 +62,7 @@ public class ContactListActivity extends Activity {
 		setContentView(R.layout.contact_select_activity);
 		context=this;
 		initViews();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initViews() {

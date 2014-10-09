@@ -51,6 +51,7 @@ public class ActivityHotelFilter extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hotel_filter);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 

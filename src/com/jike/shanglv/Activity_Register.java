@@ -48,6 +48,7 @@ public class Activity_Register extends Activity {
 		setContentView(R.layout.activity_register);
 
 		init();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void init() {
@@ -106,10 +107,15 @@ public class Activity_Register extends Activity {
 								cad.dismiss();
 							}});
 					} else {
-						String message = data.getString("msg");
 //						new AlertDialog.Builder(context).setTitle("注册失败")
 //								.setMessage(message)
 //								.setPositiveButton("确认", null).show();
+						String message="";
+						try {
+							message = data.getJSONObject("d").getString("msg");
+						} catch (Exception e) {
+							message = data.getString("msg");
+						}
 						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
 						cad.setTitle(message);
 						cad.setPositiveButton("确定", new OnClickListener(){

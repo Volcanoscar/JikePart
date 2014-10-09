@@ -47,6 +47,7 @@ public class ActivityHangbandongtai extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hangbandongtai);
 		initView();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {

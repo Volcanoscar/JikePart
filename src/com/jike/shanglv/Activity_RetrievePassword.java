@@ -56,6 +56,7 @@ public class Activity_RetrievePassword extends Activity {
 		setContentView(R.layout.activity_retrieve_password);
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		context = this;
+		((MyApplication)getApplication()).addActivity(this);
 
 		retrieve_btn = (Button) findViewById(R.id.retrieve_btn);
 		phone_input_et = (EditText) findViewById(R.id.phone_input_et);

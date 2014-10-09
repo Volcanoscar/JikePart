@@ -68,6 +68,8 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	protected static final int NEW_ORDER_DETAIL_CODE = 7;
 	protected static final int TUIGAIQIAN_MSG_CODE = 8;
 	protected static final int TUIGAIQIAN_MSG_CODE3 = 9;
+	protected static final int SELECTPOLICYREQUESTCODE = 10;
+	protected static final int SELECTPOLICYREQUESTCODE3 = 11;
 
 	private Context context;
 	private ImageButton back_imgbtn, home_imgbtn, lianxiren_icon_imgbtn,
@@ -78,19 +80,19 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			startoff_date_tv, CarrinerName_tv, FlightNo_tv, canbin_grade_tv,
 			startoff_time_tv, arrive_time_tv, start_port_tv, arrive_port_tv,
 			start_port_tv2, arrive_port_tv2, jipiaojia_tv, jijian_price_tv,
-			ranyou_price_tv, fanMoney_tv, tuiGaiQian_state_tv, runtime_tv,
+			ranyou_price_tv, fanMoney_tv, tuiGaiQian_state_tv,zhengcefandian_tv, runtime_tv,
 
 			startoff_date_tv3, CarrinerName_tv3, FlightNo_tv3,
 			canbin_grade_tv3, startoff_time_tv3, arrive_time_tv3,
 			start_port_tv3, arrive_port_tv3, start_port_tv23, arrive_port_tv23,
 			jipiaojia_tv3, jijian_price_tv3, ranyou_price_tv3, fanMoney_tv3,
-			tuiGaiQian_state_tv3, runtime_tv3,
+			tuiGaiQian_state_tv3,zhengcefandian_tv3, runtime_tv3,
 
 			total_jipiaojia_tv, total_jijian_price_tv, total_ranyou_price_tv,
 			total_fanMoney_tv;
 	private ClearEditText contact_person_phone_et;
 	private Button order_now_btn;
-	private RelativeLayout add_passager_rl, tuiGaiQian_rl, baoxian_rl;
+	private RelativeLayout add_passager_rl, tuiGaiQian_rl,zhengce_rl, baoxian_rl;
 	private ImageView up_down_arrow_iv,flight_company_logo;
 	private ListView passenger_listview;
 	private View passenger_head_divid_line;
@@ -104,11 +106,12 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	private JSONObject jsonObject3;
 	private int selectCabinListIndex3 = 0;
 	private float jipiaojia3 = 0, youhui3 = 0, jijianfei3 = 0, ranyoufei3 = 0;
-	private RelativeLayout tuiGaiQian_rl3;
+	private RelativeLayout tuiGaiQian_rl3,zhengce_rl3;
 	private ImageView up_down_arrow_iv3;
 
 	private Boolean needBaoxianBoolean = true;// 是否购买保险
-	private String baoxianReturnJson = "", commitReturnJson = "",tuigaiqianReturnJson="";
+	private String baoxianReturnJson = "", commitReturnJson = "",tuigaiqianReturnJson="",
+			cabin="",cabin3="",startcity_code="",arrivecity_code="";
 	private ArrayList<Passenger> passengerList;// 选择的乘机人列表
 	private ArrayList<Passenger> allPassengerList;// 当前所有乘机人的列表（服务端和用户新增的）
 	private CustomProgressDialog progressdialog;
@@ -130,6 +133,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initView() {
@@ -172,6 +176,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		order_totalmoney_tv = (TextView) findViewById(R.id.order_totalmoney_tv);
 		baoxian_price_and_count_tv = (TextView) findViewById(R.id.baoxian_price_and_count_tv);
 		add_passager_tv = (TextView) findViewById(R.id.add_passager_tv);
+		zhengcefandian_tv=(TextView) findViewById(R.id.zhengcefandian_tv);
 		flight_company_logo=(ImageView) findViewById(R.id.flight_company_logo);
 
 		contact_person_phone_et = (ClearEditText) findViewById(R.id.contact_person_phone_et);
@@ -183,13 +188,17 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 
 		tuiGaiQian_rl = (RelativeLayout) findViewById(R.id.tuiGaiQian_rl);
 		tuiGaiQian_rl.setOnClickListener(btnClickListner);
+		zhengce_rl=(RelativeLayout) findViewById(R.id.zhengce_rl);
+		zhengce_rl.setOnClickListener(btnClickListner);
 		passenger_listview = (ListView) findViewById(R.id.passenger_listview);
 		up_down_arrow_iv = (ImageView) findViewById(R.id.up_down_arrow_iv);
 
 		// B2C保险固定为20，B2B保险价格从服务器获取
-		if (MyApp.platform == Platform.B2C) {
+		MyApp ma = new MyApp(context);
+		Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
+		if (pf== Platform.B2C) {
 			baoxian_unitPrice = 20;
-		} else if (MyApp.platform == Platform.B2B) {
+		} else if (pf== Platform.B2B) {
 			startQueryBaoxian();
 		}
 		// 对于常用联系人，直接返回上次订票时的联系人手机号，若不存在则返回本机手机号码
@@ -233,6 +242,9 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					+ jsonObject.getJSONArray("CabList")
 							.getJSONObject(selectCabinListIndex)
 							.getString("Cabin"));
+			cabin=jsonObject.getJSONArray("CabList")
+					.getJSONObject(selectCabinListIndex)
+					.getString("Cabin");
 			startQueryTuigaiqian(ia.getFlightNo(), jsonObject.getJSONArray("CabList")
 					.getJSONObject(selectCabinListIndex)
 					.getString("Cabin"), startoff_date_tv.getText().toString(), TUIGAIQIAN_MSG_CODE);
@@ -243,7 +255,6 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		fanMoney_tv.setText("返￥" + youhui);
 		
 		String picN=ia.getFlightNo().substring(0, 2);
-		MyApp ma = new MyApp(context);
 		String imgUrl=String.format(ma.getFlightCompanyLogo(),picN);
 		imageLoader.DisplayImage(imgUrl, flight_company_logo);
 
@@ -258,7 +269,48 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		baoxian_price_and_count_tv.setTextColor(getResources().getColor(
 				R.color.price_yellow));
 	}
-
+	
+	private String getPolicyStr(){
+		String string="";
+		String siteid=sp.getString(SPkeys.siteid.getString(), "65");
+		string ="\"fare\":\""+jipiaojia
+				+"\",\"scode\":\""+startcity_code
+				+"\",\"ecode\":\""+arrivecity_code
+				+"\",\"godate\":\""+startoff_date_tv.getText().toString().trim()
+				+"\",\"flightno\":\""+FlightNo_tv.getText().toString().trim()
+				+"\",\"userid\":\""+sp.getString(SPkeys.userid.getString(), "")
+				+"\",\"stime\":\""+startoff_time_tv.getText().toString().trim()
+				+"\",\"etime\":\""+arrive_time_tv.getText().toString().trim()
+				+"\",\"st\":\""+start_port_tv.getText().toString().trim().substring(start_port_tv.getText().toString().trim().length()-2)
+				+"\",\"et\":\""+arrive_port_tv.getText().toString().trim().substring(arrive_port_tv.getText().toString().trim().length()-2)
+				+"\",\"tax\":\""+jijianfei
+				+"\",\"oil\":\""+ranyoufei
+				+"\",\"cabin\":\""+cabin
+				+"\",\"psgtype\":\""+1
+				+"\",\"siteid\":\""+siteid+"\"";
+		return string;
+	}
+	
+	private String getPolicyStr3(){
+		String string="";
+		String siteid=sp.getString(SPkeys.siteid.getString(), "65");
+		string ="\"fare\":\""+jipiaojia3
+				+"\",\"scode\":\""+arrivecity_code
+				+"\",\"ecode\":\""+ startcity_code
+				+"\",\"godate\":\""+startoff_date_tv3.getText().toString().trim()
+				+"\",\"flightno\":\""+FlightNo_tv3.getText().toString().trim()
+				+"\",\"userid\":\""+sp.getString(SPkeys.userid.getString(), "")
+				+"\",\"stime\":\""+startoff_time_tv3.getText().toString().trim()
+				+"\",\"etime\":\""+arrive_time_tv3.getText().toString().trim()
+				+"\",\"st\":\""+start_port_tv3.getText().toString().trim().substring(start_port_tv3.getText().toString().trim().length()-2)
+				+"\",\"et\":\""+arrive_port_tv3.getText().toString().trim().substring(arrive_port_tv3.getText().toString().trim().length()-2)
+				+"\",\"tax\":\""+jijianfei3
+				+"\",\"oil\":\""+ranyoufei3
+				+"\",\"cabin\":\""+cabin3
+				+"\",\"psgtype\":\""+1
+				+"\",\"siteid\":\""+siteid+"\"";
+		return string;
+	}
 	private void initView3() {
 		startoff_date_tv3 = (TextView) findViewById(R.id.startoff_date_tv3);
 		CarrinerName_tv3 = (TextView) findViewById(R.id.CarrinerName_tv3);
@@ -277,6 +329,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		tuiGaiQian_state_tv3 = (TextView) findViewById(R.id.tuiGaiQian_state_tv3);
 		runtime_tv3 = (TextView) findViewById(R.id.runtime_tv3);
 		up_down_arrow_iv3 = (ImageView) findViewById(R.id.up_down_arrow_iv3);
+		zhengcefandian_tv3=(TextView) findViewById(R.id.zhengcefandian_tv3);
 
 		InlandAirlineInfo ia = new InlandAirlineInfo();
 		// if (getOrderWayType()==SingleOrDouble.singleWay) {
@@ -314,6 +367,9 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					+ jsonObject3.getJSONArray("CabList")
 							.getJSONObject(selectCabinListIndex3)
 							.getString("Cabin"));
+			cabin3=jsonObject3.getJSONArray("CabList")
+					.getJSONObject(selectCabinListIndex3)
+					.getString("Cabin");
 			startQueryTuigaiqian(ia.getFlightNo(), jsonObject3.getJSONArray("CabList")
 					.getJSONObject(selectCabinListIndex)
 					.getString("Cabin"), startoff_date_tv3.getText().toString(), TUIGAIQIAN_MSG_CODE3);
@@ -325,6 +381,8 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 
 		tuiGaiQian_rl3 = (RelativeLayout) findViewById(R.id.tuiGaiQian_rl3);
 		tuiGaiQian_rl3.setOnClickListener(btnClickListner);
+		zhengce_rl3=(RelativeLayout) findViewById(R.id.zhengce_rl3);
+		zhengce_rl3.setOnClickListener(btnClickListner);
 		
 		caculateBaoxian(baoxian_unitPrice);
 	}
@@ -334,6 +392,9 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		try {
 			if (bundle != null) {
+				MyApplication application = (MyApplication)getApplication();
+				startcity_code=application.getStartcity_code();
+				arrivecity_code=application.getArrivecity_code();
 				sd = (SingleOrDouble) bundle.get(ORDERWAYTYPE);
 			}
 		} catch (Exception e) {
@@ -370,7 +431,6 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return ia;
 	}
 
@@ -430,7 +490,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 
 					if (state.equals("0000")) {
 						String tgq=jsonObject.getJSONObject("d").getString("visor");
-						tuiGaiQian_state_tv.setText(tgq);
+						tuiGaiQian_state_tv.setText(tgq.replace("<br/>", "\r\n"));
 					}
 				}catch (Exception e) {
 					// TODO: handle exception
@@ -444,7 +504,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 
 					if (state.equals("0000")) {
 						String tgq=jsonObject.getJSONObject("d").getString("visor");
-						tuiGaiQian_state_tv3.setText(tgq);
+						tuiGaiQian_state_tv3.setText(tgq.replace("<br/>", "\r\n"));
 					}
 				}catch (Exception e) {
 					// TODO: handle exception
@@ -460,9 +520,10 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			public void run() {
 				// url?action=flightisu&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&str={"userid":"","siteid":""}&sitekey=defage
 				MyApp ma = new MyApp(context);
+				String siteid=sp.getString(SPkeys.siteid.getString(), "");
 				String str = "{\"userid\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\"65\"}";
+						+ "\",\"siteid\":\""+siteid+"\"}";
 				String param = "action=flightisu&str=" + str + "&userkey="
 						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
 						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flightisu" + str);
@@ -513,6 +574,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 							+ ","
 							+ getFlightsJsonString(SingleOrDouble.doubleWayBack);
 				}
+				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
 				String str = "{\"userid\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
 						+ "\",\"amount\": \"" + totalPrice
@@ -520,7 +582,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						+ ",\"flights\":[" + flightString + "],\"passenger\":"
 						+ getPassengerJsonString() + ",\"content\":"
 						+ getContentJsonString() + ",\"itinerary\":{}"
-						+ ",\"siteid\":\"65\"}";
+						+ ",\"siteid\":\""+siteid+"\"}";
 				str=str.replace("null", "");
 				String param = "?action=forder&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 						+ "&sign="
@@ -687,12 +749,21 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				+ "\",\"tel\": \"\",\"email\": \"\"}";
 		return str;
 	}
-
+	
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
+			Bundle bundle=new Bundle();
 			switch (v.getId()) {
+			case R.id.zhengce_rl:
+				bundle.putString(SelectZhengceActivity.PLICYLISTSTR, getPolicyStr());
+				startActivityForResult(new Intent(context,SelectZhengceActivity.class), SELECTPOLICYREQUESTCODE,bundle);
+				break;
+			case R.id.zhengce_rl3:
+				bundle.putString(SelectZhengceActivity.PLICYLISTSTR, getPolicyStr3());
+				startActivityForResult(new Intent(context,SelectZhengceActivity.class), SELECTPOLICYREQUESTCODE,bundle);
+				break;
 			case R.id.back_imgbtn:
 //				AlertDialog.Builder builder = new AlertDialog.Builder(context);  
 //		        builder.setTitle("提示");  

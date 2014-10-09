@@ -63,7 +63,7 @@ public class ActivityTrainSearchlist extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_train_searchlist);
 		initView();
-
+		((MyApplication)getApplication()).addActivity(this);
 		startQuery();
 	}
 

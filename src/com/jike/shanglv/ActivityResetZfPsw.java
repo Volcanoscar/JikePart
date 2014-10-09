@@ -41,7 +41,8 @@ public class ActivityResetZfPsw extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_reset_zfpsw);
-
+		((MyApplication)getApplication()).addActivity(this);
+		
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		context = this;
 		back_iv = (ImageButton) findViewById(R.id.back_imgbtn);

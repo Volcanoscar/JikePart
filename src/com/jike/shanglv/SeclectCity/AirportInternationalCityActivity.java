@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.jike.shanglv.MainActivity;
+import com.jike.shanglv.MyApplication;
 import com.jike.shanglv.R;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.SeclectCity.SideBar.OnTouchingLetterChangedListener;
@@ -69,6 +70,7 @@ public class AirportInternationalCityActivity extends Activity {
 		setContentView(R.layout.city_select_international_activity);
 		context=this;
 		initViews();
+		((MyApplication)getApplication()).addActivity(this);
 	}
 
 	private void initViews() {

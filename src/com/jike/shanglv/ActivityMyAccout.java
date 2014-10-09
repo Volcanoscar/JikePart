@@ -41,7 +41,8 @@ public class ActivityMyAccout extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_myaccount);
-
+		((MyApplication)getApplication()).addActivity(this);
+		
 		context=this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
