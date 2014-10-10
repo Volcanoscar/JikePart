@@ -385,7 +385,7 @@
                 android:id="@+id/tuiGaiQian_state_tv"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:background="#44dddddd"
+                android:background="@color/white"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"

@@ -37,7 +37,7 @@ public class HttpUtils {
 		try {
 			// 根据路径创建URL地址
 			URL url = new URL(path + "?" + param);
-			// 通过url地址打开连接  	
+			// 通过url地址打开连接  
 			Log.v("URL：",url.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			// 设置超时时间

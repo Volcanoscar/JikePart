@@ -173,7 +173,7 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_khgl:
 			case R.id.khgl_ll:
-
+				startActivity(new Intent(context, ActivityClientManage.class));
 				break;
 			case R.id.imgBtn_zhgl:
 			case R.id.zhgl_ll:

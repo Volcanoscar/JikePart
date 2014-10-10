@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFFFFFFF"
+    android:background="#efefef"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -51,7 +51,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#FFFFFFFF"
             android:orientation="vertical" >
 
             <View
@@ -64,7 +63,7 @@
                 android:id="@+id/flightInfo_bg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_bg"
+                 android:background="#ffffff"
                 android:padding="10dp" >
 
                 <LinearLayout
@@ -122,6 +121,7 @@
                 android:id="@+id/flightInfo_rl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="#ffffff"
                 android:padding="10dp" >
 
                 <LinearLayout
@@ -297,6 +297,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
+                android:background="#ffffff"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" >
@@ -466,7 +467,7 @@
             <TextView
                 android:id="@+id/tuiGaiQian_state_tv"
                 android:layout_width="fill_parent"
-                android:background="#44dddddd"
+                android:background="@color/white"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
@@ -494,7 +495,7 @@
                 android:id="@+id/flightInfo_bg3"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_bg"
+                android:background="#ffffff"
                 android:padding="10dp" >
 
                 <LinearLayout
@@ -552,6 +553,7 @@
                 android:id="@+id/flightInfo_rl3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="#ffffff"
                 android:padding="10dp" >
 
                 <LinearLayout
@@ -727,6 +729,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
+                android:background="#ffffff"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" >
@@ -896,7 +899,7 @@
             <TextView
                 android:id="@+id/tuiGaiQian_state_tv3"
                 android:layout_width="fill_parent"
-                android:background="#44dddddd"
+                android:background="@color/white"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
@@ -925,6 +928,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
+                android:background="#ffffff"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" >
 
@@ -964,6 +968,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
+                android:background="#ffffff"
                 android:padding="10dp" >
 
                 <TextView
@@ -1021,6 +1026,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
+                android:background="#ffffff"
                 android:padding="10dp" >
 
                 <TextView

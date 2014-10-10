@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -14,16 +15,16 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -50,6 +51,7 @@ import com.jike.shanglv.Models.CuandanFlight;
 import com.jike.shanglv.Models.CuandanPassenger;
 import com.jike.shanglv.Models.InlandAirlineInfo;
 import com.jike.shanglv.Models.Passenger;
+import com.jike.shanglv.Models.PolicyList;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 
@@ -114,6 +116,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			cabin="",cabin3="",startcity_code="",arrivecity_code="";
 	private ArrayList<Passenger> passengerList;// 选择的乘机人列表
 	private ArrayList<Passenger> allPassengerList;// 当前所有乘机人的列表（服务端和用户新增的）
+	private PolicyList selectedPolicyB;//B2B用户自定义选择的政策信息
 	private CustomProgressDialog progressdialog;
 	private ImageLoader imageLoader;
 
@@ -273,7 +276,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	private String getPolicyStr(){
 		String string="";
 		String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-		string ="\"fare\":\""+jipiaojia
+		string ="{\"fare\":\""+jipiaojia
 				+"\",\"scode\":\""+startcity_code
 				+"\",\"ecode\":\""+arrivecity_code
 				+"\",\"godate\":\""+startoff_date_tv.getText().toString().trim()
@@ -287,14 +290,14 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				+"\",\"oil\":\""+ranyoufei
 				+"\",\"cabin\":\""+cabin
 				+"\",\"psgtype\":\""+1
-				+"\",\"siteid\":\""+siteid+"\"";
+				+"\",\"siteid\":\""+siteid+"\"}";
 		return string;
 	}
 	
 	private String getPolicyStr3(){
 		String string="";
 		String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-		string ="\"fare\":\""+jipiaojia3
+		string ="{\"fare\":\""+jipiaojia3
 				+"\",\"scode\":\""+arrivecity_code
 				+"\",\"ecode\":\""+ startcity_code
 				+"\",\"godate\":\""+startoff_date_tv3.getText().toString().trim()
@@ -308,7 +311,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				+"\",\"oil\":\""+ranyoufei3
 				+"\",\"cabin\":\""+cabin3
 				+"\",\"psgtype\":\""+1
-				+"\",\"siteid\":\""+siteid+"\"";
+				+"\",\"siteid\":\""+siteid+"\"}";
 		return string;
 	}
 	private void initView3() {
@@ -490,10 +493,11 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 
 					if (state.equals("0000")) {
 						String tgq=jsonObject.getJSONObject("d").getString("visor");
+						if(tgq.endsWith("<br/>"))tgq.substring(0, tgq.length()-5);
 						tuiGaiQian_state_tv.setText(tgq.replace("<br/>", "\r\n"));
 					}
 				}catch (Exception e) {
-					// TODO: handle exception
+					e.printStackTrace();
 				}
 				break;
 			case TUIGAIQIAN_MSG_CODE3:
@@ -504,6 +508,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 
 					if (state.equals("0000")) {
 						String tgq=jsonObject.getJSONObject("d").getString("visor");
+						if(tgq.endsWith("<br/>"))tgq.substring(0, tgq.length()-5);
 						tuiGaiQian_state_tv3.setText(tgq.replace("<br/>", "\r\n"));
 					}
 				}catch (Exception e) {
@@ -693,13 +698,23 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		cf.setIsspe(cabin.getIsSpe());
 		cf.setOil(flight.getOil());
 		cf.setPlane(flight.getPlaneModel());
-		cf.setPolicyid(cabin.getPolicyID());
-		cf.setPolicytype(cabin.getIsSpePolicy() == "true" ? "1" : "0");
-		cf.setRate(cabin.getRate());
-		cf.setRateinfo(cabin.getRateInfo().replace("\n", "").replace("\r", "")
-				.replace(" ", ""));
-		cf.setRebate(cabin.getRate());
-		cf.setRemark("");
+		if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2C) {
+			cf.setPolicyid(cabin.getPolicyID());
+			cf.setPolicytype(cabin.getIsSpePolicy() == "true" ? "1" : "0");
+			cf.setRate(cabin.getRate());
+			cf.setRateinfo(cabin.getRateInfo().replace("\n", "").replace("\r", "")
+					.replace(" ", ""));
+			cf.setRebate(cabin.getRate());
+			cf.setRemark("");
+		}else if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B) {
+			cf.setPolicyid(selectedPolicyB.getPolicyid());
+			cf.setPolicytype(selectedPolicyB.getIsspepolicy());
+			cf.setRate(selectedPolicyB.getUserrate());
+			cf.setRateinfo(selectedPolicyB.getRateinfo());
+			cf.setRebate(selectedPolicyB.getTotalrate());//总返点
+			cf.setRemark(selectedPolicyB.getRemark());
+		}
+		
 		cf.setRt("");// 供应商退票时间
 		cf.setRuntime(flight.getRunTime());
 		cf.setScname(flight.getStartPortName());
@@ -754,32 +769,17 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			Bundle bundle=new Bundle();
+			Intent intent1=new Intent(context,SelectZhengceActivity.class);
 			switch (v.getId()) {
 			case R.id.zhengce_rl:
-				bundle.putString(SelectZhengceActivity.PLICYLISTSTR, getPolicyStr());
-				startActivityForResult(new Intent(context,SelectZhengceActivity.class), SELECTPOLICYREQUESTCODE,bundle);
+				intent1.putExtra(SelectZhengceActivity.PLICYLISTSTR, getPolicyStr());
+				startActivityForResult(intent1, SELECTPOLICYREQUESTCODE);
 				break;
 			case R.id.zhengce_rl3:
-				bundle.putString(SelectZhengceActivity.PLICYLISTSTR, getPolicyStr3());
-				startActivityForResult(new Intent(context,SelectZhengceActivity.class), SELECTPOLICYREQUESTCODE,bundle);
+				intent1.putExtra(SelectZhengceActivity.PLICYLISTSTR, getPolicyStr3());
+				startActivityForResult(intent1, SELECTPOLICYREQUESTCODE3);
 				break;
 			case R.id.back_imgbtn:
-//				AlertDialog.Builder builder = new AlertDialog.Builder(context);  
-//		        builder.setTitle("提示");  
-//		        builder.setMessage("您的订单尚未完成，确认放弃填写吗？");  
-//		        builder.setPositiveButton("确认放弃",  
-//		                new DialogInterface.OnClickListener() {  
-//		                    public void onClick(DialogInterface dialog, int whichButton) {  
-//		                    	finish();  
-//		                    }  
-//		                });  
-//		        builder.setNegativeButton("继续填写",  
-//		                new DialogInterface.OnClickListener() {  
-//		                    public void onClick(DialogInterface dialog, int whichButton) {  
-//		                    }  
-//		                });  
-//		        builder.show();
 				final CustomerAlertDialog cad=new CustomerAlertDialog(context,false);
 				cad.setTitle("您的订单尚未完成，确认放弃填写吗？");
 				cad.setPositiveButton("确认放弃", new OnClickListener() {
@@ -797,7 +797,21 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				});
 				break;
 			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
+				final CustomerAlertDialog cad1=new CustomerAlertDialog(context,false);
+				cad1.setTitle("您的订单尚未完成，确认放弃填写吗？");
+				cad1.setPositiveButton("返回主页", new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						startActivity(new Intent(context, MainActivity.class));
+						cad1.dismiss();
+					}
+				});
+				cad1.setNegativeButton1("继续填写",new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						cad1.dismiss();
+					}
+				});
 				break;
 			case R.id.lianxiren_icon_imgbtn:
 				startActivityForResult(
@@ -853,23 +867,17 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				break;
 			case R.id.order_now_btn:
 				if (passengerList.size() == 0) {
-//					new AlertDialog.Builder(context).setTitle("乘机人不能为空")
-//							.setMessage("请添加乘机人！")
-//							.setPositiveButton("确定", null).show();
-					final CustomerAlertDialog cad1=new CustomerAlertDialog(context,true);
-					cad1.setTitle("请添加乘机人");
-					cad1.setPositiveButton("确定", new OnClickListener(){
+					final CustomerAlertDialog cad3=new CustomerAlertDialog(context,true);
+					cad3.setTitle("请添加乘机人");
+					cad3.setPositiveButton("确定", new OnClickListener(){
 						@Override
 						public void onClick(View arg0) {
-							cad1.dismiss();
+							cad3.dismiss();
 						}});
 					break;
 				}
 				if (!CommonFunc.isMobileNO(contact_person_phone_et.getText()
 						.toString().trim())) {
-//					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
-//							.setMessage("请输入合法的手机号码！")
-//							.setPositiveButton("确定", null).show();
 					final CustomerAlertDialog cad2=new CustomerAlertDialog(context,true);
 					cad2.setTitle("手机号码格式不正确");
 					cad2.setPositiveButton("确定", new OnClickListener(){
@@ -896,6 +904,37 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (resultCode) {
+		case SelectZhengceActivity.SELECTED_POLICY_CODE:
+			Bundle b1 = null;
+			if (data != null) {
+				b1 = data.getExtras();
+			} else
+				break;
+			String policyString = "";
+			if (b1 != null && b1.containsKey(SelectZhengceActivity.SELECTEDPOLICY)) {
+				policyString = b1.getString(SelectZhengceActivity.SELECTEDPOLICY);
+				try {
+					selectedPolicyB=JSONHelper.parseObject(policyString, PolicyList.class);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (requestCode==SELECTPOLICYREQUESTCODE) {
+					jipiaojia =Float.valueOf(selectedPolicyB.getFare());
+					youhui = Float.valueOf(selectedPolicyB.getFare())-Float.valueOf(selectedPolicyB.getSale());
+					zhengcefandian_tv.setText("返点："+selectedPolicyB.getUserrate()+"%");
+					jipiaojia_tv.setText("￥" + String.valueOf(jipiaojia));
+					fanMoney_tv.setText("返￥" + youhui);
+					caculateBaoxian(baoxian_unitPrice);
+				}else if (requestCode==SELECTPOLICYREQUESTCODE3) {
+					jipiaojia3 =Float.valueOf(selectedPolicyB.getFare());
+					youhui3 = Float.valueOf(selectedPolicyB.getFare())-Float.valueOf(selectedPolicyB.getSale());
+					zhengcefandian_tv3.setText("返点："+selectedPolicyB.getUserrate()+"%");
+					jipiaojia_tv3.setText("￥" + String.valueOf(jipiaojia));
+					fanMoney_tv3.setText("返￥" + youhui);
+					caculateBaoxian(baoxian_unitPrice);
+				}
+			}
+			break;
 		case ActivityInlandAirlineticketSelectPassengers.SELECTED_FINISH:
 			Bundle b = null;
 			if (data != null) {
@@ -1033,7 +1072,6 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					caculateBaoxian(baoxian_unitPrice);
 				}
 			});
-
 			return convertView;
 		}
 	}
@@ -1087,14 +1125,12 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		if (listAdapter == null) {
 			return;
 		}
-
 		int totalHeight = 0;
 		for (int i = 0; i < listAdapter.getCount(); i++) {
 			View listItem = listAdapter.getView(i, null, listView);
 			listItem.measure(0, 0);
 			totalHeight += listItem.getMeasuredHeight();
 		}
-
 		ViewGroup.LayoutParams params = listView.getLayoutParams();
 		params.height = totalHeight
 				+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
