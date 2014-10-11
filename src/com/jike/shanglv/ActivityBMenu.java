@@ -116,7 +116,6 @@ public class ActivityBMenu extends Activity {
 		zhgl_ll.setOnClickListener(btnClickListner);
 		ddgl_ll.setOnClickListener(btnClickListner);
 		wd_ll.setOnClickListener(btnClickListner);
-		
 	}
 
 	@Override
@@ -169,15 +168,19 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_fxgl:
 			case R.id.fxgl_ll:
-
+				Intent intent1=new Intent(context,ActivityClientManage.class);
+				intent1.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING, ActivitySetClientGrad.DEALER_DISPLAYNAME);
+				startActivity(intent1);
 				break;
 			case R.id.imgBtn_khgl:
 			case R.id.khgl_ll:
-				startActivity(new Intent(context, ActivityClientManage.class));
+				Intent intent=new Intent(context,ActivityClientManage.class);
+				intent.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING, ActivitySetClientGrad.CUSTOMER_DISPLAYNAME);
+				startActivity(intent);
 				break;
 			case R.id.imgBtn_zhgl:
 			case R.id.zhgl_ll:
-
+				startActivity(new Intent(context, ActivityZhanghuchongzhi.class));
 				break;
 			case R.id.imgBtn_ddgl:
 			case R.id.ddgl_ll:

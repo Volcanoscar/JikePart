@@ -243,5 +243,12 @@
         android:textColor="#FFF0F0F0"
         android:textSize="20sp" >
     </Button>
+    
+    <ImageView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/train_bottom_icon"
+        />
 
 </RelativeLayout>

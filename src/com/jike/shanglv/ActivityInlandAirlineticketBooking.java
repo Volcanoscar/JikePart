@@ -136,6 +136,14 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		//仅B2B可进行政策选择
+		if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())== Platform.B2C) {
+			zhengce_rl.setVisibility(View.GONE);
+			zhengce_rl3.setVisibility(View.GONE);
+		}else if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())== Platform.B2B) {
+			zhengce_rl.setVisibility(View.VISIBLE);
+			zhengce_rl3.setVisibility(View.VISIBLE);
+		}
 		((MyApplication)getApplication()).addActivity(this);
 	}
 

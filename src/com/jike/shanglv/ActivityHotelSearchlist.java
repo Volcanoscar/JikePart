@@ -619,7 +619,6 @@ public class ActivityHotelSearchlist extends Activity implements
 							.getDrawable(R.drawable.sort_arrow_down));
 					Collections.sort(reqdata_List, comparator_starlevel_asc);
 					adapter.notifyDataSetChanged();
-					adapter.notifyDataSetChanged();
 				}
 				break;
 			case R.id.back_imgbtn:

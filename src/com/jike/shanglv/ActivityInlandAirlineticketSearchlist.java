@@ -324,6 +324,9 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 	};
 
 	private void startQuery() {
+		if (HttpUtils.showNetCannotUse(context)) {
+			return;
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
