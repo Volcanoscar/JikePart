@@ -154,7 +154,7 @@
         android:layout_height="1px"
         android:layout_marginTop="15dp"
         android:background="@color/deep_gray" />
-    <ListView
+    <com.jike.shanglv.Common.QQListView
         android:id="@+id/listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

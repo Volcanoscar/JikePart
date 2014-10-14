@@ -19,6 +19,7 @@
      <string name="formal_about">http://m.51jp.cn/Aboutv2?productType=%1$s&amp;userKey=%2$s&amp;version=%3$s</string>
      <string name="test_about">http://m.51jp.cn/Aboutv2?productType=%1$s&amp;userKey=%2$s&amp;version=%3$s</string>
     
+     <string name="weipingtai_url">http://www.ivpin.com/index.php?g=Wap&amp;m=Index&amp;a=index&amp;token=worfgy1407749355&amp;wecha_id=o3wS7uPFDFcwJML3_w8Hz2guObMo</string>
      <string name="btoc_baoxian_price">￥20</string>
      
      <string name="app_name">商旅管家</string>

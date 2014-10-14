@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
@@ -148,7 +149,10 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_wpt:
 			case R.id.wpt_ll:
-//				startActivity(new Intent(context, Guojijipiao_Search.class));
+				Intent intent=new Intent(context,Activity_Web_Frame.class);
+				intent.putExtra(Activity_Web_Frame.TITLE, "΢ƽ̨");
+				intent.putExtra(Activity_Web_Frame.URL, getResources().getString(R.string.weipingtai_url));
+				startActivity(intent);
 				break;
 			case R.id.imgBtn_hfcz:
 			case R.id.hfcz_ll:
@@ -169,14 +173,14 @@ public class ActivityBMenu extends Activity {
 			case R.id.imgBtn_fxgl:
 			case R.id.fxgl_ll:
 				Intent intent1=new Intent(context,ActivityClientManage.class);
-				intent1.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING, ActivitySetClientGrad.DEALER_DISPLAYNAME);
+				intent1.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING, ActivityClientManageSetGrad.DEALER_DISPLAYNAME);
 				startActivity(intent1);
 				break;
 			case R.id.imgBtn_khgl:
 			case R.id.khgl_ll:
-				Intent intent=new Intent(context,ActivityClientManage.class);
-				intent.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING, ActivitySetClientGrad.CUSTOMER_DISPLAYNAME);
-				startActivity(intent);
+				Intent intent2=new Intent(context,ActivityClientManage.class);
+				intent2.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING, ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME);
+				startActivity(intent2);
 				break;
 			case R.id.imgBtn_zhgl:
 			case R.id.zhgl_ll:

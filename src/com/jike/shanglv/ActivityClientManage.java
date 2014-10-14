@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -29,17 +32,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.jike.shanglv.ActivityHangbandongtaiSearchlist.LoadMoreDataAsynTask;
-import com.jike.shanglv.ActivityHangbandongtaiSearchlist.RefreshDataAsynTask;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.DateUtil;
 import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.CustomerUser;
+import com.jike.shanglv.Models.Passenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 import com.jike.shanglv.SeclectCity.ClearEditText;
@@ -96,14 +97,14 @@ public class ActivityClientManage extends Activity implements
 		Bundle bundle=new Bundle();
 		bundle=getIntent().getExtras();
 		if (bundle!=null) {
-			displayName=bundle.containsKey(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING)?bundle.getString(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING):"";
+			displayName=bundle.containsKey(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING)?bundle.getString(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING):"";
 			add_client_tv.setText("添加"+displayName);
 			client_grade_set_tv.setText(displayName+"级别设置");
 			title_tv.setText(displayName+"管理");
 		}
-		if (displayName.equals(ActivitySetClientGrad.CUSTOMER_DISPLAYNAME)) {
+		if (displayName.equals(ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME)) {
 			ActionName="customeruserlist";
-		}else if (displayName.equals(ActivitySetClientGrad.DEALER_DISPLAYNAME)) {
+		}else if (displayName.equals(ActivityClientManageSetGrad.DEALER_DISPLAYNAME)) {
 			ActionName="dealeruserlist";
 		}
 		filter_edit.addTextChangedListener(new TextWatcher() {
@@ -127,13 +128,14 @@ public class ActivityClientManage extends Activity implements
 		public void onClick(View arg0) {
 			switch (arg0.getId()) {
 			case R.id.client_grad_set_rl:
-				Intent intent=new Intent(context,ActivitySetClientGrad.class);
-				intent.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING,displayName );
+				Intent intent=new Intent(context,ActivityClientManageSetGrad.class);
+				intent.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,displayName );
 				startActivity(intent);
 				break;
 			case R.id.add_client_rl:
 				Intent intent1=new Intent(context,ActivityClientManageAddoredit.class);
-				intent1.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING,displayName );
+				intent1.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,displayName );
+				intent1.putExtra(ActivityClientManageAddoredit.EDIT_OR_ADD,0 );
 				startActivity(intent1);
 				break;
 			case R.id.home_imgbtn:
@@ -185,7 +187,7 @@ public class ActivityClientManage extends Activity implements
 	Comparator<CustomerUser> comparator_grad_asc = new Comparator<CustomerUser>() {
 		@Override
 		public int compare(CustomerUser s1, CustomerUser s2) {
-			if (!s1.getDealerLevel().equals(s2.getDealerLevel())) {
+			if (s1.getDealerLevel()!=null&&s2.getDealerLevel()!=null&&!s1.getDealerLevel().equals(s2.getDealerLevel())) {
 				return s1.getDealerLevel().compareTo(s2.getDealerLevel());
 			} else
 				return 0;
@@ -195,7 +197,7 @@ public class ActivityClientManage extends Activity implements
 	Comparator<CustomerUser> comparator_grad_desc = new Comparator<CustomerUser>() {
 		@Override
 		public int compare(CustomerUser s1, CustomerUser s2) {
-			if (!s1.getDealerLevel().equals(s2.getDealerLevel())) {
+			if (s1.getDealerLevel()!=null&&s2.getDealerLevel()!=null&&!s1.getDealerLevel().equals(s2.getDealerLevel())) {
 				return s2.getDealerLevel().compareTo(s1.getDealerLevel());
 			} else
 				return 0;
@@ -205,7 +207,7 @@ public class ActivityClientManage extends Activity implements
 	Comparator<CustomerUser> comparator_state_asc = new Comparator<CustomerUser>() {
 		@Override
 		public int compare(CustomerUser s1, CustomerUser s2) {
-			if (!s1.getStatus().equals(s2.getStatus())) {
+			if (s1.getStatus()!=null&&s2.getStatus()!=null&&!s1.getStatus().equals(s2.getStatus())) {
 				return s1.getStatus().compareTo(s2.getStatus());
 			} else
 				return 0;
@@ -215,7 +217,7 @@ public class ActivityClientManage extends Activity implements
 	Comparator<CustomerUser> comparator_state_desc = new Comparator<CustomerUser>() {
 		@Override
 		public int compare(CustomerUser s1, CustomerUser s2) {
-			if (!s1.getStatus().equals(s2.getStatus())) {
+			if (s1.getStatus()!=null&&s2.getStatus()!=null&&!s1.getStatus().equals(s2.getStatus())) {
 				return s2.getStatus().compareTo(s1.getStatus());
 			} else
 				return 0;
@@ -277,11 +279,12 @@ public class ActivityClientManage extends Activity implements
 
 					if (state.equals("0000")) {
 						JSONArray cArray= jsonObject.getJSONArray("d");
-						customers_List.clear();
+//						if(cArray.length()>0)customers_List.clear();
 						for (int i = 0; i < cArray.length(); i++) {
 							CustomerUser cUser=JSONHelper.parseObject(cArray.getJSONObject(i), CustomerUser.class);
 							customers_List.add(cUser);
 						}
+						customers_List=removeDuplicteCustomerUsers(customers_List );
 						adapter=new ListAdapter(context, customers_List);
 						listview.setAdapter(adapter);
 						if (customers_List.size() == 0){
@@ -297,15 +300,13 @@ public class ActivityClientManage extends Activity implements
 									View view, int position, long id) {
 								CustomerUser cu = customers_List
 										.get(position - 1);
-//								Intent intents = new Intent(context,
-//										ActivityCustomerUserDetail.class);
-//								intents.putExtra(
-//										ActivityCustomerUserDetail.FLIGHTINFO,
-//										JSONHelper.toJSON(cu));
-//								startActivity(intents);
+								Intent intent1=new Intent(context,ActivityClientManageAddoredit.class);
+								intent1.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,displayName );
+								intent1.putExtra(ActivityClientManageAddoredit.EDIT_OR_ADD,1);
+								intent1.putExtra(ActivityClientManageAddoredit.CUSTOMERINFO_OF_EDIT,JSONHelper.toJSON(cu));
+								startActivity(intent1);
 							}
 						});
-
 					} else {
 						query_status_tv.setText("查询客户信息失败");
 						frame_ani_iv.setVisibility(View.INVISIBLE);
@@ -316,8 +317,21 @@ public class ActivityClientManage extends Activity implements
 				break;
 			}
 		}
-
 	};
+	
+	// 去除重复
+	public static ArrayList<CustomerUser> removeDuplicteCustomerUsers(
+			ArrayList<CustomerUser> userList) {
+		Set<CustomerUser> s = new TreeSet<CustomerUser>(new Comparator<CustomerUser>() {
+
+			@Override
+			public int compare(CustomerUser o1, CustomerUser o2) {
+				return o1.getUserName().compareTo(o2.getUserName());
+			}
+		});
+		s.addAll(userList);
+		return new ArrayList<CustomerUser>(s);
+	}
 
 	private class ListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;

@@ -468,7 +468,7 @@
         </activity>
           <!-- 客户级别设置-->
         <activity
-            android:name=".ActivitySetClientGrad"
+            android:name=".ActivityClientManageSetGrad"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
              >
