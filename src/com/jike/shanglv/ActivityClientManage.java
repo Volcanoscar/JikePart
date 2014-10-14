@@ -132,7 +132,9 @@ public class ActivityClientManage extends Activity implements
 				startActivity(intent);
 				break;
 			case R.id.add_client_rl:
-//				startActivity(new Intent(context,ActivitySetClientGrad.class));
+				Intent intent1=new Intent(context,ActivityClientManageAddoredit.class);
+				intent1.putExtra(ActivitySetClientGrad.DISPLAY_TYPENAME_STRING,displayName );
+				startActivity(intent1);
 				break;
 			case R.id.home_imgbtn:
 			case R.id.back_imgbtn:
@@ -275,6 +277,7 @@ public class ActivityClientManage extends Activity implements
 
 					if (state.equals("0000")) {
 						JSONArray cArray= jsonObject.getJSONArray("d");
+						customers_List.clear();
 						for (int i = 0; i < cArray.length(); i++) {
 							CustomerUser cUser=JSONHelper.parseObject(cArray.getJSONObject(i), CustomerUser.class);
 							customers_List.add(cUser);

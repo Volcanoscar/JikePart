@@ -209,7 +209,7 @@ public class Activity_Register extends Activity {
 //					.setMessage("为保证密码的安全性，请输入6-12位的数字、字母或下划线的组合！")
 //					.setPositiveButton("确定", null).show();
 			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-			cad.setTitle("为保证密码的安全性，请输入6-12位的数字、字母或下划线的组合！");
+			cad.setTitle("请输入用户名，由6-12位的数字、字母或下划线的组合！");
 			cad.setPositiveButton("确定", new OnClickListener(){
 				@Override
 				public void onClick(View arg0) {

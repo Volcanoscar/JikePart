@@ -473,6 +473,14 @@
             android:screenOrientation="portrait"
              >
         </activity>
+         <!-- 增加修改客户-->
+        <activity
+            android:name=".ActivityClientManageAddoredit"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+             >
+        </activity>
         
     </application>
 

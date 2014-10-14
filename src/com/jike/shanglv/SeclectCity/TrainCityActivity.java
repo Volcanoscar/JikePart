@@ -167,11 +167,6 @@ public class TrainCityActivity extends Activity {
 		ArrayList<TrainCityModel> names = new ArrayList<TrainCityModel>();
 		try {
 			String jsonStr = getJson("traincity");
-//			JSONTokener jsonParser = new JSONTokener(jsonStr);
-//			JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
-//			String cities = jsonObject.getString("d");
-//			JSONArray array = new JSONArray(cities);
-			
 			JSONArray array = new JSONArray(jsonStr);
 			int len = array.length();
 			Map<String, String> map;
