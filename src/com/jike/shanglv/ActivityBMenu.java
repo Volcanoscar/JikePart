@@ -46,6 +46,7 @@ public class ActivityBMenu extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_b_menu);
 		context = this;
+		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		((MyApplication) getApplication()).addActivity(this);
 
 		MyApp mApp = new MyApp(getApplicationContext());
@@ -172,12 +173,20 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_fxgl:
 			case R.id.fxgl_ll:
+				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+					startActivity(new Intent(context, Activity_Login.class));
+					break;
+				}
 				Intent intent1=new Intent(context,ActivityClientManage.class);
 				intent1.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING, ActivityClientManageSetGrad.DEALER_DISPLAYNAME);
 				startActivity(intent1);
 				break;
 			case R.id.imgBtn_khgl:
 			case R.id.khgl_ll:
+				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+					startActivity(new Intent(context, Activity_Login.class));
+					break;
+				}
 				Intent intent2=new Intent(context,ActivityClientManage.class);
 				intent2.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING, ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME);
 				startActivity(intent2);

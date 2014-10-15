@@ -139,10 +139,10 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		//仅B2B可进行政策选择
 		if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())== Platform.B2C) {
 			zhengce_rl.setVisibility(View.GONE);
-			zhengce_rl3.setVisibility(View.GONE);
+			if (getOrderWayType() == SingleOrDouble.doubleWayBack)zhengce_rl3.setVisibility(View.GONE);
 		}else if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())== Platform.B2B) {
 			zhengce_rl.setVisibility(View.VISIBLE);
-			zhengce_rl3.setVisibility(View.VISIBLE);
+			if (getOrderWayType() == SingleOrDouble.doubleWayBack)zhengce_rl3.setVisibility(View.VISIBLE);
 		}
 		((MyApplication)getApplication()).addActivity(this);
 	}
@@ -714,6 +714,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					.replace(" ", ""));
 			cf.setRebate(cabin.getRate());
 			cf.setRemark("");
+			cf.setUserrebate(cabin.getUserRate());
 		}else if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B) {
 			cf.setPolicyid(selectedPolicyB.getPolicyid());
 			cf.setPolicytype(selectedPolicyB.getIsspepolicy());
@@ -721,6 +722,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			cf.setRateinfo(selectedPolicyB.getRateinfo());
 			cf.setRebate(selectedPolicyB.getTotalrate());//总返点
 			cf.setRemark(selectedPolicyB.getRemark());
+			cf.setUserrebate(selectedPolicyB.getUserrate());
 		}
 		
 		cf.setRt("");// 供应商退票时间
@@ -732,7 +734,6 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		cf.setSt(flight.getStartT());
 		cf.setTax(flight.getTax());
 		cf.setType("1");// 单程
-		cf.setUserrebate(cabin.getUserRate());
 		cf.setWt("");// "供应商上下班时间"
 
 		str = JSONHelper.toJSON(cf);
@@ -900,6 +901,16 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 									SPkeys.gnjpContactPhone.getString(),
 									contact_person_phone_et.getText()
 											.toString()).commit();
+				}
+				if(selectedPolicyB==null){
+					final CustomerAlertDialog cad3=new CustomerAlertDialog(context,true);
+					cad3.setTitle("请选择政策");
+					cad3.setPositiveButton("确定", new OnClickListener(){
+						@Override
+						public void onClick(View arg0) {
+							cad3.dismiss();
+						}});
+					break;
 				}
 				commitOrder();
 				break;

@@ -4,16 +4,16 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_color_bg"
     android:padding="10dp" >
-    <TextView 
+    <TextView
         android:id="@+id/dealerLevelName_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="普通级别"
+        android:text=""
         android:textColor="@color/black6"
         android:textSize="18sp"
         />
-    <TextView 
+    <TextView
         android:id="@+id/modify_tv"
         android:layout_width="150dp"
         android:layout_height="35dp"

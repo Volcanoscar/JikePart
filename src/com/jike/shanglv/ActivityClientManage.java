@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -40,7 +39,6 @@ import com.jike.shanglv.Common.RefreshListView;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
 import com.jike.shanglv.Models.CustomerUser;
-import com.jike.shanglv.Models.Passenger;
 import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 import com.jike.shanglv.SeclectCity.ClearEditText;
@@ -224,6 +222,12 @@ public class ActivityClientManage extends Activity implements
 		}
 	};
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		startQueryCustomer();
+	}
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
@@ -419,7 +423,7 @@ public class ActivityClientManage extends Activity implements
 			}
 		}
 		filterDateList=DateUtil.removeDuplicateWithOrder(filterDateList);
-		adapter.refreshData(filterDateList);
+		if(adapter!=null)adapter.refreshData(filterDateList);
 	}
 	
 	@Override

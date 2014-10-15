@@ -1,5 +1,6 @@
 package com.jike.shanglv.Common;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +15,18 @@ import android.net.ParseException;
 
 @SuppressLint("SimpleDateFormat")
 public class DateUtil {
+	/*
+	 * 比较两个日期时间的大小
+	 */
+	public static boolean isDateBefore(String date1, String date2) {
+		try {
+			DateFormat df = DateFormat.getDateTimeInstance();
+			return df.parse(date1).before(df.parse(date2));
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public static String GetTodayDate() {
 		String temp_str = "";
 		Date dt = new Date();

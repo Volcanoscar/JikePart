@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jike.shanglv.MyApplication;
 import com.jike.shanglv.R;
 import com.squareup.timessquare.CalendarPickerView;

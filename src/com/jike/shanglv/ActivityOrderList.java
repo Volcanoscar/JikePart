@@ -502,28 +502,19 @@ public class ActivityOrderList extends Activity implements
 	Comparator<OrderList_AirlineTicket> comparator_airline = new Comparator<OrderList_AirlineTicket>() {
 		@Override
 		public int compare(OrderList_AirlineTicket s1, OrderList_AirlineTicket s2) {
-			if (!s1.getOrderTime().equals(s2.getOrderTime())) {
-				return s2.getOrderTime().compareTo(s1.getOrderTime());
-			} else
-				return 0;
+			return DateUtil.isDateBefore(s1.getOrderTime(),s2.getOrderTime())?1:-1;
 		}
 	};
 	Comparator<OrderList_Hotel> comparator_hotel = new Comparator<OrderList_Hotel>() {
 		@Override
 		public int compare(OrderList_Hotel s1, OrderList_Hotel s2) {
-			if (!s1.getOrderDate().equals(s2.getOrderDate())) {
-				return s2.getOrderDate().compareTo(s1.getOrderDate());
-			} else
-				return 0;
+			return DateUtil.isDateBefore(s1.getOrderDate(),s2.getOrderDate())?1:-1;
 		}
 	};
 	Comparator<OrderList_Phone> comparator_phone = new Comparator<OrderList_Phone>() {
 		@Override
 		public int compare(OrderList_Phone s1, OrderList_Phone s2) {
-			if (!s1.getAddtime().equals(s2.getAddtime())) {
-				return s2.getAddtime().compareTo(s1.getAddtime());
-			} else
-				return 0;
+			return DateUtil.isDateBefore(s1.getAddtime(),s2.getAddtime())?1:-1;
 		}
 	};
 

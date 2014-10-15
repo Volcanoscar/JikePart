@@ -123,6 +123,7 @@ public class ActivityClientManageAddoredit extends Activity {
 		endValidDay_tv.setOnClickListener(onClickListener);
 		title_tv = (TextView) findViewById(R.id.title_tv);
 		default_grad_tv = (TextView) findViewById(R.id.default_grad_tv);
+		startValidDay=DateUtil.GetTodayDate();
 		startValidDay_tv.setText(DateUtil.GetTodayDate());
 
 		Bundle bundle = new Bundle();
@@ -142,8 +143,8 @@ public class ActivityClientManageAddoredit extends Activity {
 				levellistActionName = "dealerlevallist";
 			}
 			title_tv.setText("添加" + displayName);
+			startQueryGrad();
 			if (add_edit == 1) {// 编辑
-				startQueryGrad();// 编辑时可以设置用户级别，新增时设置为默认级别
 				title_tv.setText("编辑" + displayName);
 				if (displayName
 						.equals(ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME)) {
@@ -153,7 +154,6 @@ public class ActivityClientManageAddoredit extends Activity {
 					modifyAction = "modifydealer";
 				}
 				password_ll.setVisibility(View.GONE);
-				setgrad_ll.setVisibility(View.VISIBLE);
 				String cuString = bundle.containsKey(CUSTOMERINFO_OF_EDIT) ? bundle
 						.getString(CUSTOMERINFO_OF_EDIT) : "";
 				try {
@@ -337,6 +337,7 @@ public class ActivityClientManageAddoredit extends Activity {
 							+ contactPerson_et.getText().toString().trim()
 							+ "\",\"contactPhone\":\""
 							+ contactPhone_et.getText().toString().trim()
+							+ "\",\"dealerLevel\":\"" + levelId
 							+ "\",\"province\":\"" + province
 							+ "\",\"city\":\"" + city + "\"}";
 				else if (addAction.equals("adddealeruser")) {
@@ -350,6 +351,7 @@ public class ActivityClientManageAddoredit extends Activity {
 							+ contactPerson_et.getText().toString().trim()
 							+ "\",\"contactPhone\":\""
 							+ contactPhone_et.getText().toString().trim()
+							+ "\",\"dealerLevel\":\"" + levelId
 							+ "\",\"startDate\":\"" + startValidDay
 							+ "\",\"endDate\":\"" + endValidDay
 							+ "\",\"companyName\":\""
@@ -415,7 +417,7 @@ public class ActivityClientManageAddoredit extends Activity {
 							+ sp.getString(SPkeys.userid.getString(), "")
 							+ "\",\"userName\":\""
 							+ username_et.getText().toString().trim()
-							+ "\",\"dealerLeval\":\"" + levelId
+							+ "\",\"dealerLevel\":\"" + levelId
 							+ "\",\"provinceName\":\"" + province
 							+ "\",\"cityName\":\"" + city + "\"}";
 				else if (addAction.equals("adddealeruser")) {
@@ -423,7 +425,7 @@ public class ActivityClientManageAddoredit extends Activity {
 							+ sp.getString(SPkeys.userid.getString(), "")
 							+ "\",\"userName\":\""
 							+ username_et.getText().toString().trim()
-							+ "\",\"dealerLeval\":\"" + levelId
+							+ "\",\"dealerLevel\":\"" + levelId
 							+ "\",\"startDate\":\"" + startValidDay
 							+ "\",\"endDate\":\"" + endValidDay
 							+ "\",\"companyName\":\""

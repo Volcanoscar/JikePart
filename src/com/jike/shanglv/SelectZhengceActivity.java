@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -125,6 +126,8 @@ public class SelectZhengceActivity extends Activity {
 				}else {
 					special_policy_status_tv.setVisibility(View.VISIBLE);
 					special_policy_status_tv.setText("该航班没有特殊高返政策");
+					special_policy_status_tv.setTextSize(18);
+					special_policy_status_tv.setGravity(Gravity.CENTER);
 					special_policy_status_tv.setTextColor(getResources().getColor(R.color.black6));
 				}
 			}

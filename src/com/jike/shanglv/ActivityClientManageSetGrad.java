@@ -139,8 +139,8 @@ public class ActivityClientManageSetGrad extends Activity {
 			        builder.setPositiveButton("确定",
 			                new DialogInterface.OnClickListener() {
 			                    public void onClick(DialogInterface dialog, int which) {
-			                        String inputName = inputServer.getText().toString();
-			                        startAddGrad(inputName);
+			                        String inputName = inputServer.getText().toString().trim();
+			                        if(inputName.length()>0)startAddGrad(inputName);
 			                    }
 			                });
 			        builder.show();
@@ -310,10 +310,8 @@ public class ActivityClientManageSetGrad extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			JSONTokener jsonParser;
-			Boolean isModifyBoolean=false;
 			switch (msg.what) {
 			case MODIFYLEVELMSGCODE:
-				isModifyBoolean=true;
 			case DELETELEVELMSGCODE:
 			case SETDEFAULTLEVELMSGCODE:
 				jsonParser = new JSONTokener(setdefaultlevalReturnJson);
@@ -329,7 +327,7 @@ public class ActivityClientManageSetGrad extends Activity {
 							public void onClick(View arg0) {
 								cad.dismiss();
 							}});
-					}else if(isModifyBoolean&&state.equals("0000"))
+					}else if(state.equals("0000"))
 						 startQueryGrad();//修改删除后刷新数据
 				} catch (Exception e) {
 					e.printStackTrace();
