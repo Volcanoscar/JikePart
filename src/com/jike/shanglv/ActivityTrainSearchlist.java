@@ -158,7 +158,12 @@ public class ActivityTrainSearchlist extends Activity {
 						});
 
 					} else {
-						String message = jsonObject.getString("msg");
+						String message = "";
+						try{
+							message = jsonObject.getJSONObject("d").getString("msg");
+						}catch(Exception ex){
+							message = jsonObject.getString("msg");
+						}
 //						new AlertDialog.Builder(context).setTitle("≤È—Ø ß∞‹")
 //								.setMessage(message)
 //								.setPositiveButton("»∑»œ", null).show();

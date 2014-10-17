@@ -175,6 +175,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
+				progressdialog.dismiss();
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(flistReturnJson);
 				if (flistReturnJson.length()==0) {
@@ -193,6 +194,19 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 					String state = jsonObject.getString("c");
 
 					if (state.equals("0000")) {
+						String num=jsonObject.getString("num");
+						if(num.equals("0")){
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle("未查到该航段的航班信息");
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+							return;
+						}
 						flights = jsonObject.getJSONArray("al");
 						flist = jsonObject.getJSONArray("d");
 						String db = jsonObject.getString("db");
@@ -260,7 +274,6 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				progressdialog.dismiss();
 				break;
 			}
 		}

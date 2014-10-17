@@ -50,7 +50,7 @@ public class InlandAirlineInfo {
 			Distance = json.getJSONObject("Base").getString("Distance");
 			Tax = json.getJSONObject("Base").getString("Tax");
 			ETicket = json.getJSONObject("Base").getString("ETicket");
-			MinFare = json.getJSONObject("Base").getString("MinFare");
+//			MinFare = json.getJSONObject("Base").getString("MinFare");
 			EndT = json.getJSONObject("Base").getString("EndT");
 			EndPortName = json.getJSONObject("Base").getString("EndPortName");
 			JoinPort = json.getJSONObject("Base").getString("JoinPort");
@@ -62,6 +62,9 @@ public class InlandAirlineInfo {
 			IndexID = json.getJSONObject("Base").getString("IndexID");
 			cablist=json.getJSONArray("CabList");
 			
+//			MinFare = json.getJSONObject("Base").getString("MinFare");//最低价格的票面价
+			//20141017   最低报价改为取售价的最低价，而不是票面
+			MinFare = json.getJSONArray("CabList").getJSONObject(0).getString("Sale");
 			YouHui=json.getJSONArray("CabList").getJSONObject(0).getString("YouHui");
 			CabinName=json.getJSONArray("CabList").getJSONObject(0).getString("CabinName");
 		} catch (JSONException e) {
