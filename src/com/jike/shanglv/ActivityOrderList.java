@@ -663,6 +663,8 @@ public class ActivityOrderList extends Activity implements
 				ruzhu_date_tv.setText(DateUtil.getDate(str.get(position)
 						.getInDate()));
 			} catch (ParseException e) {
+				ruzhu_date_tv.setText(str.get(position)
+						.getInDate());
 				e.printStackTrace();
 			}
 			hotel_name_tv.setText(str.get(position).getHotelName());

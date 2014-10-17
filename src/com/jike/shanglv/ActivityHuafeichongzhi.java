@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-//import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
@@ -269,9 +268,23 @@ public class ActivityHuafeichongzhi extends Activity {
 				}else if (myNum.startsWith("+86")) {
 					myNum=myNum.substring(3);
 				}
+				if (!CommonFunc.isMobileNO(myNum)) {
+					phonenum_et.setText("");
+					confirm_phonenum_et.setText("");
+					guishudi_tv.setText("");
+					paymoney_tv.setText("");
+					hedui_ll.setVisibility(View.GONE);
+					final CustomerAlertDialog cad2=new CustomerAlertDialog(context,true);
+					cad2.setTitle("手机号码格式不正确");
+					cad2.setPositiveButton("确定", new OnClickListener(){
+						@Override
+						public void onClick(View arg0) {
+							cad2.dismiss();
+						}});
+					return;
+				}
 				phonenum_et.setText(myNum);
 				confirm_phonenum_et.setText(myNum);
-				
 				thephonenum_tv.setText("");
 				guishudi_tv.setText("");
 				paymoney_tv.setText("");
@@ -386,6 +399,8 @@ public class ActivityHuafeichongzhi extends Activity {
 						chongzhi_button.setEnabled(true);
 						loading_ll.setVisibility(View.GONE);
 						hedui_ll.setVisibility(View.VISIBLE);
+						chongzhi_button.setBackground(getResources().getDrawable(R.drawable.btn_3));
+						chongzhi_button.setEnabled(true);
 					} else {
 //						String message = jsonObject.getString("msg");
 //						new AlertDialog.Builder(context).setTitle("验证价格失败")
