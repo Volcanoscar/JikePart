@@ -1,6 +1,6 @@
 package com.jike.shanglv.Update;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.content.Context;
@@ -69,7 +69,7 @@ public class CityUpdate {
 					} else {
 						
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;

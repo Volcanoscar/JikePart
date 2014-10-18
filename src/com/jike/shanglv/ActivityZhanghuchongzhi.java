@@ -1,6 +1,6 @@
 package com.jike.shanglv;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -203,7 +203,7 @@ public class ActivityZhanghuchongzhi extends Activity {
 								.getColor(R.color.gray));
 						chongzhi_button.setEnabled(false);
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();

@@ -1,6 +1,6 @@
 package com.jike.shanglv.Models;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 public class OrderList_AirlineTicket {
@@ -25,7 +25,7 @@ public class OrderList_AirlineTicket {
 				this.endCity=object.getJSONArray("FlightInfo").getJSONObject(0).getString("eCityName");
 				this.StartOffDate=object.getJSONArray("FlightInfo").getJSONObject(0).getString("beginDate");
 				this.OrderTime=object.getString("OrderTime");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}else if(inland_inter_train==2) {//国际需求单
@@ -37,7 +37,7 @@ public class OrderList_AirlineTicket {
 				this.endCity=object.getString("Endname");
 				this.StartOffDate=object.getString("Startdate");
 				this.OrderTime=object.getString("OrderTime");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}else if (inland_inter_train==3) {//火车票
@@ -49,7 +49,7 @@ public class OrderList_AirlineTicket {
 				this.endCity=object.getString("ECity");
 				this.StartOffDate=object.getString("SDate");
 				this.OrderTime=object.getString("OrderTime");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}else if (inland_inter_train==4) {//国际机票
@@ -63,7 +63,7 @@ public class OrderList_AirlineTicket {
 				this.StartOffDate=object.getJSONArray("Info")
 						.getJSONObject(0).getString("startTime");
 				this.OrderTime=object.getString("OrderDate");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -125,7 +125,7 @@ public class ActivityHotelBooking extends Activity {
 				try {
 					roomInfoObject = new HotelRoom(new JSONObject(roomInfo),
 							true);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -605,7 +605,7 @@ public class ActivityHotelBooking extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -645,7 +645,7 @@ public class ActivityHotelBooking extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;

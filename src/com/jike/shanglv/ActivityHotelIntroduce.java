@@ -1,6 +1,6 @@
 package com.jike.shanglv;
 
-import org.json.JSONException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,7 +54,7 @@ public class ActivityHotelIntroduce extends Activity {
 			if (bundle.containsKey("hotelDetail"))
 				try {
 					hotelDetail = JSONHelper.parseObject(bundle.getString("hotelDetail"), HotelDetail.class);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 		}

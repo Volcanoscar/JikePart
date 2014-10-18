@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -175,7 +175,7 @@ public class ActivityTrainSearchlist extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();

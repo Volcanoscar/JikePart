@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
@@ -80,7 +80,7 @@ public class ActivityHotelComments extends Activity {
 						HotelComment hComment = JSONHelper.parseObject(jArray.getJSONObject(i), HotelComment.class);
 						hCommentList.add(hComment);
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			if (bundle.containsKey("pingfen")) {

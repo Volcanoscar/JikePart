@@ -17,7 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONStringer;
 import android.util.Log;
@@ -45,7 +45,7 @@ public class JSONHelper {
 		if (isNull(o)) {
 			try {
 				js.value(null);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return;
@@ -65,7 +65,7 @@ public class JSONHelper {
 		} else { // 单个值
 			try {
 				js.value(o);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -337,9 +337,9 @@ public class JSONHelper {
 	 * @param jo	json对象
 	 * @param clazz	实体类类型
 	 * @return	反序列化后的实例
-	 * @throws JSONException 
+	 * @throws Exception 
 	 */
-	public static <T> T parseObject(JSONObject jo, Class<T> clazz) throws JSONException {
+	public static <T> T parseObject(JSONObject jo, Class<T> clazz) throws Exception {
 		if (clazz == null || isNull(jo)) {
 			return null;
 		}
@@ -375,9 +375,9 @@ public class JSONHelper {
 	 * @param jsonStr	json字符串
 	 * @param clazz	实体类类型
 	 * @return	反序列化后的实例
-	 * @throws JSONException 
+	 * @throws Exception 
 	 */
-	public static <T> T parseObject(String jsonStr, Class<T> clazz) throws JSONException {
+	public static <T> T parseObject(String jsonStr, Class<T> clazz) throws Exception {
 		if (clazz == null || jsonStr == null || jsonStr.length() == 0) {
 			return null;
 		}
@@ -412,7 +412,7 @@ public class JSONHelper {
 				JSONObject jo = ja.getJSONObject(i);
 				T o = parseObject(jo, clazz);
 				array[i] = o;
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -434,7 +434,7 @@ public class JSONHelper {
 		JSONArray jo = null;
 		try {
 			jo = new JSONArray(jsonStr);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -451,11 +451,11 @@ public class JSONHelper {
 	 * @param collectionClazz	集合类型
 	 * @param genericType	实体类类型
 	 * @return
-	 * @throws JSONException 
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Collection<T> parseCollection(JSONArray ja, Class<?> collectionClazz,
-			Class<T> genericType) throws JSONException {
+			Class<T> genericType) throws Exception {
 
 		if (collectionClazz == null || genericType == null || isNull(ja)) {
 			return null;
@@ -468,7 +468,7 @@ public class JSONHelper {
 				JSONObject jo = ja.getJSONObject(i);
 				T o = parseObject(jo, genericType);
 				collection.add(o);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -482,10 +482,10 @@ public class JSONHelper {
 	 * @param collectionClazz	集合类型
 	 * @param genericType	实体类类型
 	 * @return	反序列化后的数组
-	 * @throws JSONException 
+	 * @throws Exception 
 	 */
 	public static <T> Collection<T> parseCollection(String jsonStr, Class<?> collectionClazz,
-			Class<T> genericType) throws JSONException {
+			Class<T> genericType) throws Exception {
 		if (collectionClazz == null || genericType == null || jsonStr == null
 				|| jsonStr.length() == 0) {
 			return null;
@@ -509,7 +509,7 @@ public class JSONHelper {
 				jo = new JSONArray(jsonStr);
 			}
 			
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -524,10 +524,10 @@ public class JSONHelper {
 	 * 根据类型创建对象
 	 * @param clazz	待创建实例的类型
 	 * @return	实例对象
-	 * @throws JSONException 
+	 * @throws Exception 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static <T> T newInstance(Class<T> clazz) throws JSONException {
+	private static <T> T newInstance(Class<T> clazz) throws Exception {
 		if (clazz == null)
 			return null;
 		T obj = null;
@@ -539,13 +539,13 @@ public class JSONHelper {
 			}else if (clazz.equals(Set.class)) {
 				obj = (T) new HashSet();
 			}else{
-				throw new JSONException("unknown interface: " + clazz);
+				throw new Exception("unknown interface: " + clazz);
 			}
 		}else{
 			try {
 				obj = clazz.newInstance();
 			}catch (Exception e) {
-				throw new JSONException("unknown class type: " + clazz);
+				throw new Exception("unknown class type: " + clazz);
 			}
 		}	
 		return obj;
@@ -570,7 +570,7 @@ public class JSONHelper {
 				valueMap.put(key, value);
 
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}	
@@ -835,7 +835,7 @@ void testObj(){
 		sourceList.add(user1);			
 		String jsonStrUserList = JSONHelper.toJSON(sourceList);			//序列化
 		List listUser = (List) JSONHelper.parseCollection(jsonStrUserList, List.class, User.class);	//反序列化
-	} catch (JSONException e) {
+	} catch (Exception e) {
 		e.printStackTrace();
 	}
 	

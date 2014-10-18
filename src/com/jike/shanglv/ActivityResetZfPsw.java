@@ -1,7 +1,7 @@
 //÷ÿ÷√µ«¬º/÷ß∏∂√‹¬Î
 package com.jike.shanglv;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -197,7 +197,7 @@ public class ActivityResetZfPsw extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();

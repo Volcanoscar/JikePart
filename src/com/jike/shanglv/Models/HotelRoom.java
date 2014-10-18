@@ -2,7 +2,7 @@ package com.jike.shanglv.Models;
 
 import java.util.ArrayList;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import com.jike.shanglv.NetAndJson.JSONHelper;
@@ -66,7 +66,7 @@ public class HotelRoom {
 					plans.add(hrp);
 				}
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -97,7 +97,7 @@ public class HotelRoom {
 			if(object.has("jiangjin"))this.jiangjin=object.getString("jiangjin");
 			if(object.has("menshi"))this.menshi=object.getString("menshi");
 			if(object.has("planStatus"))this.planStatus=object.getString("planStatus");
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

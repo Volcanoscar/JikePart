@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -435,7 +435,7 @@ public class ActivityTrainBooking extends Activity {
 					// yanzhengma_input_et.setText("");
 					// }
 					progressdialog.dismiss();
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					getValidCodePic();// 提交失败后需刷新验证码
 					yanzhengma_input_et.setText("");
@@ -604,7 +604,7 @@ public class ActivityTrainBooking extends Activity {
 				passenger_listview.setAdapter(adapter);
 				ActivityInlandAirlineticketBooking
 						.setListViewHeightBasedOnChildren(passenger_listview);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				break;
 			}

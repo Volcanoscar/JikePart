@@ -1,7 +1,7 @@
 //ÓÃ»§µÇÂ¼
 package com.jike.shanglv;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -199,7 +199,7 @@ public class Activity_Login extends Activity {
 							}
 						});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();

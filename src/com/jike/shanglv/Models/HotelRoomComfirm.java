@@ -2,7 +2,7 @@ package com.jike.shanglv.Models;
 
 import java.util.ArrayList;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 public class HotelRoomComfirm {
@@ -72,7 +72,7 @@ public class HotelRoomComfirm {
 					this.roomsInfo=new CroomsInfo(jsonObject.getJSONObject("roomsInfo"));
 				}
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -269,7 +269,7 @@ public class HotelRoomComfirm {
 				if (object.has("area"))this.area=object.getString("area");
 				if (object.has("floor"))this.floor=object.getString("floor");
 				if (object.has("RatePlanName"))this.RatePlanName=object.getString("RatePlanName");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -348,7 +348,7 @@ public class HotelRoomComfirm {
 				}
 				this.daill=cdlist;
 				
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -453,7 +453,7 @@ public class HotelRoomComfirm {
 				if (object.has("stattime"))this.stattime=object.getString("stattime");
 				if (object.has("endtime"))this.endtime=object.getString("endtime");
 				if (object.has("desc"))this.desc=object.getString("desc");
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

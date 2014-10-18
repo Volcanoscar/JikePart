@@ -1,7 +1,7 @@
 package com.jike.shanglv.Models;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 public class InlandAirlineInfo {
@@ -67,7 +67,7 @@ public class InlandAirlineInfo {
 			MinFare = json.getJSONArray("CabList").getJSONObject(0).getString("Sale");
 			YouHui=json.getJSONArray("CabList").getJSONObject(0).getString("YouHui");
 			CabinName=json.getJSONArray("CabList").getJSONObject(0).getString("CabinName");
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -121,7 +121,7 @@ public class ActivityInlandAirlineticketSelectCabin extends Activity {
 		//搜索列表选择的航班信息
 		try {
 			jsonObject = new JSONObject(bundle.get(TOKEN_NAME).toString());
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		//用户搜索条件数据

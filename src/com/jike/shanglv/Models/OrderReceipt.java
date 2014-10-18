@@ -1,6 +1,6 @@
 package com.jike.shanglv.Models;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 public class OrderReceipt {
@@ -16,7 +16,7 @@ public class OrderReceipt {
 			if(jsonString.contains("amount"))this.amount=json.getString("amount");
 			if(jsonString.contains("pnr"))this.pnr=json.getString("pnr");
 			if(jsonString.contains("ordertime"))this.ordertime=json.getString("ordertime");
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

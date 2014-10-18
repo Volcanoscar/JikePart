@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -230,7 +229,7 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 					} else {
 						Toast.makeText(context, "Õ¯¬Á“Ï≥££°", 0).show();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -334,7 +333,7 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 				contact_person_phone_tv.setText(orderDetailObject
 						.getJSONObject("orders").getString("Mobile"));
 				// baoxian_tv.setText(orderDetailObject.getJSONObject("orders").getString(""));
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

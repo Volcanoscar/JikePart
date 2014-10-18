@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -159,7 +159,7 @@ public class ActivityClientManageAddoredit extends Activity {
 				try {
 					editCustomerUser = JSONHelper.parseObject(cuString,
 							CustomerUser.class);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				default_grad_tv.setText(editCustomerUser.getDealerLevel());
@@ -525,7 +525,7 @@ public class ActivityClientManageAddoredit extends Activity {
 					// } else {
 					// Toast.makeText(context, "发生未知异常，注册失败！", 0).show();
 					// }
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					progressdialog.dismiss();
 					e.printStackTrace();
 					Toast.makeText(context, "发生未知异常,操作失败", 0).show();

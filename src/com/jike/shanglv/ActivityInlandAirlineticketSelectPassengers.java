@@ -3,7 +3,7 @@ package com.jike.shanglv;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -136,7 +136,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 				if (bookingPassengerList!=null&&bookingPassengerList.size()>0) {
 					return true;
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				if (allPassengersListString.equals("")) {
 					startQueryCommonPassengers();	
 				}
@@ -216,7 +216,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 						history_passenger_listview.setAdapter(adapter);
 					} else {// "≤È—Ø ß∞‹"
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -424,7 +424,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 						ActivityInlandAirlineticketSelectPassengers.this,
 						passengerList);
 				history_passenger_listview.setAdapter(adapter);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				break;
 			}

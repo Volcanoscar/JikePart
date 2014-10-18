@@ -1,6 +1,6 @@
 package com.jike.shanglv.Models;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 public class CabList {
@@ -44,7 +44,7 @@ public class CabList {
 			this.generalFare= json.getString("generalFare");
 			this.ExtFee2= json.getString("ExtFee2");
 			this.TicketCount= json.getString("TicketCount");
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

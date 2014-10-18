@@ -1,6 +1,6 @@
 package com.jike.shanglv;
 
-import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -76,7 +76,7 @@ public class ActivityHotelLocation extends Activity {
 			if (bundle.containsKey("hotel"))
 				try {
 					maphotel =JSONHelper.parseObject(bundle.getString("hotel"),HotelDetail.class);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 		LatLng latLng = new LatLng(Double.parseDouble(maphotel.getY()),Double.parseDouble(maphotel.getX()));

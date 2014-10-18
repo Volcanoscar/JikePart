@@ -1,7 +1,7 @@
 //º½°à¶¯Ì¬ÏêÇé
 package com.jike.shanglv;
 
-import org.json.JSONException;
+
 import com.jike.shanglv.Models.Hangbandongtai;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 import android.app.Activity;
@@ -77,7 +77,7 @@ public class ActivityHangbandongtaiDetail extends Activity {
 				state_tv.setTextColor(getResources().getColor(
 						R.color.state_blue));
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
