@@ -6,11 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -34,7 +31,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jike.shanglv.Common.ClearEditText;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
@@ -902,7 +898,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 									contact_person_phone_et.getText()
 											.toString()).commit();
 				}
-				if(selectedPolicyB==null){
+				if((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B&&selectedPolicyB==null){
 					final CustomerAlertDialog cad3=new CustomerAlertDialog(context,true);
 					cad3.setTitle("请选择政策");
 					cad3.setPositiveButton("确定", new OnClickListener(){

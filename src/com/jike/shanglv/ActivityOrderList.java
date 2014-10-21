@@ -357,6 +357,16 @@ public class ActivityOrderList extends Activity implements
 							adapter = new PhoneListAdapter(context,
 									order_List_phone);
 						}
+						if (order_List_airlineticket.size() == Integer
+								.valueOf(count)
+								|| order_List_hotel.size() == Integer
+										.valueOf(count)
+								|| order_List_phone.size() == Integer
+										.valueOf(count)) {
+							listview.removeFootView();// 如果数据就几条一次就加载完了，移除查看更多
+							listview.setOnRefreshListener(null);
+							listview.setOnLoadMoreListener(null);// 禁用刷新功能
+						}
 						listview.setAdapter((ListAdapter) adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
 							@Override
