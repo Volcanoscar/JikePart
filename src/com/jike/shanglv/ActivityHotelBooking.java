@@ -95,16 +95,20 @@ public class ActivityHotelBooking extends Activity {
 	private HotelRoomComfirm hotelRoomComfirm;
 	private CustomProgressDialog progressdialog;
 	private ArrayList<Map<String, Object>> arriveTimeList = new ArrayList<Map<String, Object>>();
-	int totalPrice = 0;//一间房N天的房价  显示时需乘以房间数
-	
+	int totalPrice = 0;// 一间房N天的房价 显示时需乘以房间数
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel_booking);
-		initView();
-		getIntentString();
-		startQueryRoomsRI();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hotel_booking);
+			initView();
+			getIntentString();
+			startQueryRoomsRI();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void getIntentString() {
@@ -230,89 +234,103 @@ public class ActivityHotelBooking extends Activity {
 	View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			case R.id.contact_person_phone_iv:
-				startActivityForResult(
-						new Intent(
-								context,
-								com.jike.shanglv.SeclectCity.ContactListActivity.class),
-						13);
-				break;
-			case R.id.ruzhu_date_ll:
-				Intent dateIntent = new Intent();
-				dateIntent.setClass(context,
-						com.jike.shanglv.ShipCalendar.MainActivity.class);
-				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "入住日期");
-				startActivityForResult(dateIntent, ruzhudate);
-				break;
-			case R.id.lidian_date_ll:
-				Intent dateIntent1 = new Intent();
-				dateIntent1.setClass(context,
-						com.jike.shanglv.ShipCalendar.MainActivity.class);
-				dateIntent1.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "离店日期");
-				startActivityForResult(dateIntent1, lidiandate);
-				break;
-			case R.id.room_count_tv:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				// popupWindow_order_room_count.showAtLocation(one_room_btn,Gravity.BOTTOM,
-				// 0, 0);
-				iniPopupWindow(0, initRoomCountData());
-				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0, 0);
-				break;
-			case R.id.will_arrive_time_tv:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				// popupWindow_order_will_arrive_time.showAtLocation(time1_btn,Gravity.BOTTOM,
-				// 0, 0);
-
-				iniPopupWindow(1, arriveTimeList);// 到达时间的数据动态变化
-				pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM, 0, 0);
-				break;
-			case R.id.identificationType_rl:
-			case R.id.identificationType_tv:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				popupWindow_hotel_guarantee_identification_type.showAtLocation(
-						shenfenzheng_btn, Gravity.BOTTOM, 0, 0);
-				break;
-			case R.id.creadit_card_validity_rl:
-				Calendar c = Calendar.getInstance();
-				new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								// TODO Auto-generated method stub
-								String month = String
-										.valueOf((monthOfYear + 1));
-								creditYear = year + "";
-								creditMonth = month + "";
-								if (month.length() == 1)
-									month = "0" + month;
-								creadit_card_validity_tv.setText(month + "/"
-										+ String.valueOf(year).substring(2, 4));
-							}
-						}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), 0)
-						.show();
-
-				break;
-			case R.id.commit_order_tv:
-				if (!validInput())
+			try {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
 					break;
-				startCommitHotelOrder();
-				break;
-			default:
-				break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				case R.id.contact_person_phone_iv:
+					startActivityForResult(
+							new Intent(
+									context,
+									com.jike.shanglv.SeclectCity.ContactListActivity.class),
+							13);
+					break;
+				case R.id.ruzhu_date_ll:
+					Intent dateIntent = new Intent();
+					dateIntent.setClass(context,
+							com.jike.shanglv.ShipCalendar.MainActivity.class);
+					dateIntent.putExtra(
+							com.jike.shanglv.ShipCalendar.MainActivity.TITLE,
+							"入住日期");
+					startActivityForResult(dateIntent, ruzhudate);
+					break;
+				case R.id.lidian_date_ll:
+					Intent dateIntent1 = new Intent();
+					dateIntent1.setClass(context,
+							com.jike.shanglv.ShipCalendar.MainActivity.class);
+					dateIntent1.putExtra(
+							com.jike.shanglv.ShipCalendar.MainActivity.TITLE,
+							"离店日期");
+					startActivityForResult(dateIntent1, lidiandate);
+					break;
+				case R.id.room_count_tv:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					// popupWindow_order_room_count.showAtLocation(one_room_btn,Gravity.BOTTOM,
+					// 0, 0);
+					iniPopupWindow(0, initRoomCountData());
+					pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM,
+							0, 0);
+					break;
+				case R.id.will_arrive_time_tv:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					// popupWindow_order_will_arrive_time.showAtLocation(time1_btn,Gravity.BOTTOM,
+					// 0, 0);
+
+					iniPopupWindow(1, arriveTimeList);// 到达时间的数据动态变化
+					pwMyPopWindow.showAtLocation(back_imgbtn, Gravity.BOTTOM,
+							0, 0);
+					break;
+				case R.id.identificationType_rl:
+				case R.id.identificationType_tv:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					popupWindow_hotel_guarantee_identification_type
+							.showAtLocation(shenfenzheng_btn, Gravity.BOTTOM,
+									0, 0);
+					break;
+				case R.id.creadit_card_validity_rl:
+					Calendar c = Calendar.getInstance();
+					new DatePickerDialog(context,
+							new DatePickerDialog.OnDateSetListener() {
+								@Override
+								public void onDateSet(DatePicker view,
+										int year, int monthOfYear,
+										int dayOfMonth) {
+									// TODO Auto-generated method stub
+									String month = String
+											.valueOf((monthOfYear + 1));
+									creditYear = year + "";
+									creditMonth = month + "";
+									if (month.length() == 1)
+										month = "0" + month;
+									creadit_card_validity_tv.setText(month
+											+ "/"
+											+ String.valueOf(year).substring(2,
+													4));
+								}
+							}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), 0)
+							.show();
+
+					break;
+				case R.id.commit_order_tv:
+					if (!validInput())
+						break;
+					startCommitHotelOrder();
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -339,10 +357,18 @@ public class ActivityHotelBooking extends Activity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=roomsrid&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action=roomsrid&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "roomsrid" + str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "roomsrid" + str);
 				roomsriReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -443,17 +469,23 @@ public class ActivityHotelBooking extends Activity {
 					e.printStackTrace();
 				}
 				String param = "?action=hotelorder&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hotelorder" + str);
-//				orderReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-//						param);
-//				try {
-//					str = URLEncoder.encode(str, "utf-8");
-//				} catch (UnsupportedEncodingException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "hotelorder" + str);
+				// orderReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
+				// param);
+				// try {
+				// str = URLEncoder.encode(str, "utf-8");
+				// } catch (UnsupportedEncodingException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 				orderReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -513,15 +545,16 @@ public class ActivityHotelBooking extends Activity {
 						}
 						jsonObject = jsonObject.getJSONObject("d");
 						hotelRoomComfirm = new HotelRoomComfirm(jsonObject);
-						
+
 						if (hotelRoomComfirm.getPrices() != null) {
-							float f=Float.valueOf(hotelRoomComfirm.getPrices().getTotalPrice());
-							totalPrice = (int)f;
-//							DecimalFormat df = new DecimalFormat("#.#");
-//							totalPrice = Double.parseDouble(df
-//									.format(totalPrice));
+							float f = Float.valueOf(hotelRoomComfirm
+									.getPrices().getTotalPrice());
+							totalPrice = (int) f;
+							// DecimalFormat df = new DecimalFormat("#.#");
+							// totalPrice = Double.parseDouble(df
+							// .format(totalPrice));
 						}
-						total_price_tv.setText("￥" + totalPrice*room_count);
+						total_price_tv.setText("￥" + totalPrice * room_count);
 						if (!Boolean.valueOf(hotelRoomComfirm.getYuding()
 								.trim())) {
 							commit_order_tv.setEnabled(false);
@@ -593,17 +626,21 @@ public class ActivityHotelBooking extends Activity {
 						will_arrive_time_tv.setText(arriveTimeList.get(0)
 								.get("title").toString());
 					} else {
-//						String message = jsonObject.getJSONObject("d").getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// String message =
+						// jsonObject.getJSONObject("d").getString("msg");
+						// new
+						// AlertDialog.Builder(context).setTitle("查询酒店房间信息失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("查询酒店房间信息失败");
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -618,8 +655,8 @@ public class ActivityHotelBooking extends Activity {
 
 					if (state.equals("0000")) {
 						successOrderId = jsonObject.getString("d");
-//						Toast.makeText(context,
-//								"订单提交成功，OrderId：" + successOrderId, 0).show();
+						// Toast.makeText(context,
+						// "订单提交成功，OrderId：" + successOrderId, 0).show();
 						// String orderID =
 						// jsonObject.getJSONObject("d").getString("orderid");
 						Intent intent = new Intent(context,
@@ -628,22 +665,25 @@ public class ActivityHotelBooking extends Activity {
 								successOrderId);
 						startActivityForResult(intent, 22);
 					} else {
-						String message="";
-						try{
-							message= jsonObject.getJSONObject("d").getString("msg");
-						}catch(Exception e){
-							message= jsonObject.getString("msg");
+						String message = "";
+						try {
+							message = jsonObject.getJSONObject("d").getString(
+									"msg");
+						} catch (Exception e) {
+							message = jsonObject.getString("msg");
 						}
-//						new AlertDialog.Builder(context).setTitle("提交订单失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("提交订单失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -699,7 +739,7 @@ public class ActivityHotelBooking extends Activity {
 				Garantee_LL.setVisibility(View.GONE);
 				need_guarantee = false;
 			}
-			total_price_tv.setText("￥" + totalPrice*room_count);
+			total_price_tv.setText("￥" + totalPrice * room_count);
 			popupWindow_order_room_count.dismiss();
 		}
 	};
@@ -742,153 +782,179 @@ public class ActivityHotelBooking extends Activity {
 	private Boolean validInput() {
 		if (room_count > 0
 				&& name_cet1.getText().toString().trim().length() == 0) {
-//			new AlertDialog.Builder(context).setTitle("请输入入住人姓名")
-//					.setPositiveButton("确定", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("请输入入住人姓名")
+			// .setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("请输入入住人姓名");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		} else if (room_count > 1
 				&& name_cet2.getText().toString().trim().length() == 0) {
-//			new AlertDialog.Builder(context).setTitle("请输入第二个入住人姓名")
-//					.setPositiveButton("确定", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("请输入第二个入住人姓名")
+			// .setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("请输入第二个入住人姓名");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		} else if (room_count > 2
 				&& name_cet3.getText().toString().trim().length() == 0) {
-//			new AlertDialog.Builder(context).setTitle("请输入第三个入住人姓名")
-//					.setPositiveButton("确定", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("请输入第三个入住人姓名")
+			// .setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("请输入第三个入住人姓名");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		} else if (room_count > 3
 				&& name_cet4.getText().toString().trim().length() == 0) {
-//			new AlertDialog.Builder(context).setTitle("请输入第四个入住人姓名")
-//					.setPositiveButton("确定", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("请输入第四个入住人姓名")
+			// .setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("请输入第四个入住人姓名");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		} else if (room_count > 4
 				&& name_cet5.getText().toString().trim().length() == 0) {
-//			new AlertDialog.Builder(context).setTitle("请输入第五个入住人姓名")
-//					.setPositiveButton("确定", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("请输入第五个入住人姓名")
+			// .setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("请输入第五个入住人姓名");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		}
 		if (!CommonFunc.isMobileNO(contact_person_phone_cet.getText()
 				.toString().trim())) {
-//			new AlertDialog.Builder(context).setTitle("请输入合法的联系人手机号")
-//					.setPositiveButton("确定", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("请输入合法的联系人手机号")
+			// .setPositiveButton("确定", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("请输入合法的联系人手机号");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		}
 		if (need_guarantee) {
 			if (creditCard_num_cet.getText().toString().trim().length() == 0) {
-//				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡卡号")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡卡号")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请输入担保使用的信用卡卡号");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				return false;
 			}
 			if (creadit_card_validity_tv.getText().toString().trim().length() == 0) {
-//				new AlertDialog.Builder(context).setTitle("请选择信用卡的有效期")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new AlertDialog.Builder(context).setTitle("请选择信用卡的有效期")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请选择信用卡的有效期");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				return false;
 			}
 			if (cvv_num_cet.getText().toString().trim().length() == 0) {
-//				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的CVV2码")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new
+				// AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的CVV2码")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请输入担保使用的信用卡的CVV2码");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				return false;
 			}
 			if (chikaren_name_cet.getText().toString().trim().length() == 0) {
-//				new AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的持卡人姓名")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new
+				// AlertDialog.Builder(context).setTitle("请输入担保使用的信用卡的持卡人姓名")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请输入担保使用的信用卡的持卡人姓名");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				return false;
 			}
 			if (creditCard_identificationNum_cet.getText().toString().trim()
 					.length() == 0) {
-//				new AlertDialog.Builder(context).setTitle("请输入证件号码")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new AlertDialog.Builder(context).setTitle("请输入证件号码")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请输入证件号码");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				return false;
 			}
 			if (guarantee_identification_type_isID == 0
 					&& !(new IDCard().verify(creditCard_identificationNum_cet
 							.getText().toString().trim()))) {
-//				new AlertDialog.Builder(context).setTitle("身份证号不合法")
-//						.setMessage("请输入担保人合法的身份证号码！")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new AlertDialog.Builder(context).setTitle("身份证号不合法")
+				// .setMessage("请输入担保人合法的身份证号码！")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请输入担保人合法的身份证号码");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 			}
 		}
 		if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
@@ -898,30 +964,34 @@ public class ActivityHotelBooking extends Activity {
 		if (isSevenDayHotel) {
 			if (!(new IDCard().verify(identificationNum_et.getText().toString()
 					.trim()))) {
-//				new AlertDialog.Builder(context).setTitle("身份证号不合法")
-//						.setMessage("请输入一个入住人的合法身份证号码！")
-//						.setPositiveButton("确定", null).show();
-				final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+				// new AlertDialog.Builder(context).setTitle("身份证号不合法")
+				// .setMessage("请输入一个入住人的合法身份证号码！")
+				// .setPositiveButton("确定", null).show();
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
 				cad.setTitle("请输入一个入住人的合法身份证号码");
-				cad.setPositiveButton("确定", new OnClickListener(){
+				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						cad.dismiss();
-					}});
+					}
+				});
 				return false;
 			}
 		}
 		if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText().toString(),
 				lidian_date_tv.getText().toString())) {
-//			new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
-//					.setPositiveButton("知道了", null).show();
-			final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+			// new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
+			// .setPositiveButton("知道了", null).show();
+			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+					true);
 			cad.setTitle("入住日期不能大于离店日期");
-			cad.setPositiveButton("确定", new OnClickListener(){
+			cad.setPositiveButton("确定", new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					cad.dismiss();
-				}});
+				}
+			});
 			return false;
 		}
 		if (HttpUtils.showNetCannotUse(context)) {
@@ -935,64 +1005,71 @@ public class ActivityHotelBooking extends Activity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (data == null)
-			return;
-		Bundle b = data.getExtras();
-		String myDate = DateUtil.GetTodayDate();// 获取从com.jike.jikepart.ShipCalendar.MainActivity中回传的值
-		switch (requestCode) {
-		case ruzhudate:
-			if (b != null && b.containsKey("pickedDate")) {
-				myDate = b.getString("pickedDate");
-				ruzhu_date = myDate;
-				try {
-					ruzhu_date_tv.setText(DateUtil.getMonthDayDate(myDate));
-					if (DateUtil.compareDateIsBefore(myDate, lidian_date)) {
-						lidian_date_tv.setText(DateUtil
-								.getMonthDayDate(DateUtil
-										.getSpecifiedDayAfter(myDate)));
-					}
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				startQueryRoomsRI();
-			}
-			break;
-		case lidiandate:
-			if (b != null && b.containsKey("pickedDate")) {
-				myDate = b.getString("pickedDate");
-				lidian_date = myDate;
-				try {
-					lidian_date_tv.setText(DateUtil.getMonthDayDate(myDate));
-					if (DateUtil.compareDateIsBefore(ruzhu_date, myDate)) {
-						if (DateUtil.IsMoreThanToday(myDate)) {
-							ruzhu_date_tv.setText(DateUtil
+		try {
+			if (data == null)
+				return;
+			Bundle b = data.getExtras();
+			String myDate = DateUtil.GetTodayDate();// 获取从com.jike.jikepart.ShipCalendar.MainActivity中回传的值
+			switch (requestCode) {
+			case ruzhudate:
+				if (b != null && b.containsKey("pickedDate")) {
+					myDate = b.getString("pickedDate");
+					ruzhu_date = myDate;
+					try {
+						ruzhu_date_tv.setText(DateUtil.getMonthDayDate(myDate));
+						if (DateUtil.compareDateIsBefore(myDate, lidian_date)) {
+							lidian_date_tv.setText(DateUtil
 									.getMonthDayDate(DateUtil
-											.getSpecifiedDayBefore(myDate)));
-						} else {
-							ruzhu_date_tv.setText(DateUtil
-									.getMonthDayDate(DateUtil.GetTodayDate()));
+											.getSpecifiedDayAfter(myDate)));
 						}
+					} catch (ParseException e) {
+						e.printStackTrace();
 					}
-				} catch (ParseException e) {
-					e.printStackTrace();
+					startQueryRoomsRI();
 				}
-				startQueryRoomsRI();
+				break;
+			case lidiandate:
+				if (b != null && b.containsKey("pickedDate")) {
+					myDate = b.getString("pickedDate");
+					lidian_date = myDate;
+					try {
+						lidian_date_tv
+								.setText(DateUtil.getMonthDayDate(myDate));
+						if (DateUtil.compareDateIsBefore(ruzhu_date, myDate)) {
+							if (DateUtil.IsMoreThanToday(myDate)) {
+								ruzhu_date_tv
+										.setText(DateUtil.getMonthDayDate(DateUtil
+												.getSpecifiedDayBefore(myDate)));
+							} else {
+								ruzhu_date_tv.setText(DateUtil
+										.getMonthDayDate(DateUtil
+												.GetTodayDate()));
+							}
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					startQueryRoomsRI();
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		default:
-			break;
-		}
 
-		if (requestCode == 13) {
-			if (data != null && b != null && b.containsKey("pickedPhoneNum")) {
-				String myNum = b.getString("pickedPhoneNum");
-				if (myNum.startsWith("17951")) {
-					myNum = myNum.substring(5);
-				} else if (myNum.startsWith("+86")) {
-					myNum = myNum.substring(3);
+			if (requestCode == 13) {
+				if (data != null && b != null
+						&& b.containsKey("pickedPhoneNum")) {
+					String myNum = b.getString("pickedPhoneNum");
+					if (myNum.startsWith("17951")) {
+						myNum = myNum.substring(5);
+					} else if (myNum.startsWith("+86")) {
+						myNum = myNum.substring(3);
+					}
+					contact_person_phone_cet.setText(myNum);
 				}
-				contact_person_phone_cet.setText(myNum);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -1067,7 +1144,7 @@ public class ActivityHotelBooking extends Activity {
 						Garantee_LL.setVisibility(View.GONE);
 						need_guarantee = false;
 					}
-					total_price_tv.setText("￥" + totalPrice*room_count);
+					total_price_tv.setText("￥" + totalPrice * room_count);
 					pwMyPopWindow.dismiss();
 				} else if (fjOrSj == 1) {// 1：时间
 					will_arrive_time_tv.setText(list1.get(position)
@@ -1152,7 +1229,6 @@ public class ActivityHotelBooking extends Activity {
 	}
 
 	private class MyListAdapter extends BaseAdapter {
-
 		@Override
 		public void notifyDataSetChanged() {
 			super.notifyDataSetChanged();
@@ -1191,24 +1267,30 @@ public class ActivityHotelBooking extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title.setText(list.get(position).get("title")
+						.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title.setText(list.get(position).get("title").toString());
 			return convertView;
 		}
 

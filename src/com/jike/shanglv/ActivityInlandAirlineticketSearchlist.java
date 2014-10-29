@@ -69,11 +69,15 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_inland_airlineticket_searchlist);
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
-		startQuery();
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_inland_airlineticket_searchlist);
+			initView();
+			((MyApplication) getApplication()).addActivity(this);
+			startQuery();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -178,7 +182,7 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 				progressdialog.dismiss();
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(flistReturnJson);
-				if (flistReturnJson.length()==0) {
+				if (flistReturnJson.length() == 0) {
 					final CustomerAlertDialog cad = new CustomerAlertDialog(
 							context, true);
 					cad.setTitle("查询失败");
@@ -194,8 +198,8 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 					String state = jsonObject.getString("c");
 
 					if (state.equals("0000")) {
-						String num=jsonObject.getString("num");
-						if(num.equals("0")){
+						String num = jsonObject.getString("num");
+						if (num.equals("0")) {
 							final CustomerAlertDialog cad = new CustomerAlertDialog(
 									context, true);
 							cad.setTitle("未查到该航段的航班信息");
@@ -345,12 +349,12 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 			public void run() {
 				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
 				MyApp ma = new MyApp(context);
-				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
+				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
 				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
 						+ arrivecity_code + "\",\"sd\":\"" + currentdate
 						+ "\",\"userid\":\""
 						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\""+siteid+"\"}";
+						+ "\",\"siteid\":\"" + siteid + "\"}";
 				String param = "action=flist&str="
 						+ str
 						+ "&userkey="
@@ -383,88 +387,94 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.date_yesterday_ll:
+			try {
+				switch (v.getId()) {
+				case R.id.date_yesterday_ll:
 
-				if (!DateUtil.IsMoreThanToday(currentdate)) {
-					left_arrow_iv.setBackground(getResources().getDrawable(
-							R.drawable.solid_arrow_left_disable));
-					date_yesterday_ll.setEnabled(false);
+					if (!DateUtil.IsMoreThanToday(currentdate)) {
+						left_arrow_iv.setBackground(getResources().getDrawable(
+								R.drawable.solid_arrow_left_disable));
+						date_yesterday_ll.setEnabled(false);
+						break;
+					}
+					try {
+						currentdate = DateUtil
+								.getSpecifiedDayBefore(currentdate);
+						// date_current_tv.setText(currentdate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					if (!DateUtil.IsMoreThanToday(currentdate)) {
+						left_arrow_iv.setBackground(getResources().getDrawable(
+								R.drawable.solid_arrow_left_disable));
+						date_yesterday_ll.setEnabled(true);
+					}
+					startQuery();
+					break;
+				case R.id.date_tomorrow_ll:
+					try {
+						currentdate = DateUtil
+								.getSpecifiedDayAfter(currentdate);
+						// date_current_tv.setText(currentdate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					if (DateUtil.IsMoreThanToday(currentdate))
+						left_arrow_iv.setBackground(getResources().getDrawable(
+								R.drawable.solid_arrow_left));
+					startQuery();
+					break;
+				case R.id.bytime_LL:
+					sort_time_tv.setSelected(true);
+					sort_arrow_time_iv.setSelected(true);
+					sort_price_tv.setSelected(false);
+					sort_arrow_price_iv.setSelected(false);
+					byTimeAsc = !byTimeAsc;
+					if (byTimeAsc) {
+						sort_arrow_time_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(InlandAirline_List, comparator3);
+						adapter = new ListAdapter(context, InlandAirline_List);
+						listview.setAdapter(adapter);
+					} else {
+						sort_arrow_time_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections.sort(InlandAirline_List, comparator4);
+						adapter = new ListAdapter(context, InlandAirline_List);
+						listview.setAdapter(adapter);
+					}
+					break;
+				case R.id.byprice_ll:
+					sort_price_tv.setSelected(true);
+					sort_arrow_price_iv.setSelected(true);
+					sort_time_tv.setSelected(false);
+					sort_arrow_time_iv.setSelected(false);
+					byPriceAsc = !byPriceAsc;
+					if (byPriceAsc) {
+						sort_arrow_price_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(InlandAirline_List, comparator1);
+						adapter = new ListAdapter(context, InlandAirline_List);
+						listview.setAdapter(adapter);
+					} else {
+						sort_arrow_price_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections.sort(InlandAirline_List, comparator2);
+						adapter = new ListAdapter(context, InlandAirline_List);
+						listview.setAdapter(adapter);
+					}
+					break;
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				default:
 					break;
 				}
-				try {
-					currentdate = DateUtil.getSpecifiedDayBefore(currentdate);
-					// date_current_tv.setText(currentdate);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				if (!DateUtil.IsMoreThanToday(currentdate)) {
-					left_arrow_iv.setBackground(getResources().getDrawable(
-							R.drawable.solid_arrow_left_disable));
-					date_yesterday_ll.setEnabled(true);
-				}
-				startQuery();
-				break;
-			case R.id.date_tomorrow_ll:
-				try {
-					currentdate = DateUtil.getSpecifiedDayAfter(currentdate);
-					// date_current_tv.setText(currentdate);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				if (DateUtil.IsMoreThanToday(currentdate))
-					left_arrow_iv.setBackground(getResources().getDrawable(
-							R.drawable.solid_arrow_left));
-				startQuery();
-				break;
-			case R.id.bytime_LL:
-				sort_time_tv.setSelected(true);
-				sort_arrow_time_iv.setSelected(true);
-				sort_price_tv.setSelected(false);
-				sort_arrow_price_iv.setSelected(false);
-				byTimeAsc = !byTimeAsc;
-				if (byTimeAsc) {
-					sort_arrow_time_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(InlandAirline_List, comparator3);
-					adapter = new ListAdapter(context, InlandAirline_List);
-					listview.setAdapter(adapter);
-				} else {
-					sort_arrow_time_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(InlandAirline_List, comparator4);
-					adapter = new ListAdapter(context, InlandAirline_List);
-					listview.setAdapter(adapter);
-				}
-				break;
-			case R.id.byprice_ll:
-				sort_price_tv.setSelected(true);
-				sort_arrow_price_iv.setSelected(true);
-				sort_time_tv.setSelected(false);
-				sort_arrow_time_iv.setSelected(false);
-				byPriceAsc = !byPriceAsc;
-				if (byPriceAsc) {
-					sort_arrow_price_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(InlandAirline_List, comparator1);
-					adapter = new ListAdapter(context, InlandAirline_List);
-					listview.setAdapter(adapter);
-				} else {
-					sort_arrow_price_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(InlandAirline_List, comparator2);
-					adapter = new ListAdapter(context, InlandAirline_List);
-					listview.setAdapter(adapter);
-				}
-				break;
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -499,82 +509,89 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(
-						R.layout.item_inland_airlineticket_searchlist, null);
-			}
-			TextView startTime_tv = (TextView) convertView
-					.findViewById(R.id.startTime_tv);
-			TextView endTime_tv = (TextView) convertView
-					.findViewById(R.id.endTime_tv);
-			TextView startCity_tv = (TextView) convertView
-					.findViewById(R.id.startCity_tv);
-			TextView endCity_tv = (TextView) convertView
-					.findViewById(R.id.endCity_tv);
-			TextView discount_tv = (TextView) convertView
-					.findViewById(R.id.discount_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView FlightName_tv = (TextView) convertView
-					.findViewById(R.id.FlightName_tv);
-			TextView FlightNo_tv = (TextView) convertView
-					.findViewById(R.id.FlightNo_tv);
-			TextView PlaneTypeAndModel = (TextView) convertView
-					.findViewById(R.id.PlaneTypeAndModel);
-			TextView CabinName_tv = (TextView) convertView
-					.findViewById(R.id.CabinName_tv);
-			TextView ticketCount_tv = (TextView) convertView
-					.findViewById(R.id.ticketCount_tv);
-			TextView fanMoney_tv = (TextView) convertView
-					.findViewById(R.id.fanMoney_tv);
-
-			LinearLayout fanMoney_ll = (LinearLayout) convertView
-					.findViewById(R.id.fanMoney_ll);
-			// if (MyApp.platform==Platform.B2C) {
-			// fanMoney_ll.setVisibility(View.GONE);
-			// }
-			// else if (MyApp.platform==Platform.B2B)
-			// {
-			// fanMoney_ll.setVisibility(View.VISIBLE);
-			// }
-
 			try {
-				startTime_tv.setText(DateUtil.getTime(str.get(position)
-						.getOffTime()));
-				endTime_tv.setText(DateUtil.getTime(str.get(position)
-						.getArriveTime()));
-			} catch (ParseException e) {
+				if (convertView == null) {
+					convertView = inflater
+							.inflate(
+									R.layout.item_inland_airlineticket_searchlist,
+									null);
+				}
+				TextView startTime_tv = (TextView) convertView
+						.findViewById(R.id.startTime_tv);
+				TextView endTime_tv = (TextView) convertView
+						.findViewById(R.id.endTime_tv);
+				TextView startCity_tv = (TextView) convertView
+						.findViewById(R.id.startCity_tv);
+				TextView endCity_tv = (TextView) convertView
+						.findViewById(R.id.endCity_tv);
+				TextView discount_tv = (TextView) convertView
+						.findViewById(R.id.discount_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView FlightName_tv = (TextView) convertView
+						.findViewById(R.id.FlightName_tv);
+				TextView FlightNo_tv = (TextView) convertView
+						.findViewById(R.id.FlightNo_tv);
+				TextView PlaneTypeAndModel = (TextView) convertView
+						.findViewById(R.id.PlaneTypeAndModel);
+				TextView CabinName_tv = (TextView) convertView
+						.findViewById(R.id.CabinName_tv);
+				TextView ticketCount_tv = (TextView) convertView
+						.findViewById(R.id.ticketCount_tv);
+				TextView fanMoney_tv = (TextView) convertView
+						.findViewById(R.id.fanMoney_tv);
+
+				LinearLayout fanMoney_ll = (LinearLayout) convertView
+						.findViewById(R.id.fanMoney_ll);
+				// if (MyApp.platform==Platform.B2C) {
+				// fanMoney_ll.setVisibility(View.GONE);
+				// }
+				// else if (MyApp.platform==Platform.B2B)
+				// {
+				// fanMoney_ll.setVisibility(View.VISIBLE);
+				// }
+
+				try {
+					startTime_tv.setText(DateUtil.getTime(str.get(position)
+							.getOffTime()));
+					endTime_tv.setText(DateUtil.getTime(str.get(position)
+							.getArriveTime()));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				String startPort = str.get(position).getStartPortName();
+				String endPort = str.get(position).getEndPortName();
+				if (AirportConvert.AIRPORT.containsKey(startPort)) {
+					startCity_tv.setText(AirportConvert.AIRPORT.get(startPort)
+							+ str.get(position).getStartT());
+				} else
+					startCity_tv.setText(startPort
+							+ str.get(position).getStartT());
+				if (AirportConvert.AIRPORT.containsKey(endPort)) {
+					endCity_tv.setText(AirportConvert.AIRPORT.get(endPort)
+							+ str.get(position).getEndT());
+				} else
+					endCity_tv.setText(endPort + str.get(position).getEndT());
+
+				if (startCity_tv.getText().toString().length()
+						+ endCity_tv.getText().toString().length() > 10) {
+					startCity_tv.setText(" " + str.get(position).getStartT());
+					endCity_tv.setText(" " + str.get(position).getEndT());
+				}
+				discount_tv.setText(discountDeal(str.get(position)
+						.getMinDiscount().trim()));
+				price_tv.setText(" ￥" + str.get(position).getMinFare());
+				FlightName_tv.setText(str.get(position).getCarrinerName());
+				FlightNo_tv.setText(str.get(position).getFlightNo());
+				PlaneTypeAndModel.setText(str.get(position).getPlaneType()
+						+ str.get(position).getPlaneModel());
+				ticketCount_tv.setText(tiecketCountDeal(str.get(position)
+						.getMinTicketCount()) + "张");
+				CabinName_tv.setText(str.get(position).getCabinName());
+				fanMoney_tv.setText(str.get(position).getYouHui());
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String startPort = str.get(position).getStartPortName();
-			String endPort = str.get(position).getEndPortName();
-			if (AirportConvert.AIRPORT.containsKey(startPort)) {
-				startCity_tv.setText(AirportConvert.AIRPORT.get(startPort)
-						+ str.get(position).getStartT());
-			} else
-				startCity_tv.setText(startPort + str.get(position).getStartT());
-			if (AirportConvert.AIRPORT.containsKey(endPort)) {
-				endCity_tv.setText(AirportConvert.AIRPORT.get(endPort)
-						+ str.get(position).getEndT());
-			} else
-				endCity_tv.setText(endPort + str.get(position).getEndT());
-
-			if (startCity_tv.getText().toString().length()
-					+ endCity_tv.getText().toString().length() > 10) {
-				startCity_tv.setText(" " + str.get(position).getStartT());
-				endCity_tv.setText(" " + str.get(position).getEndT());
-			}
-			discount_tv.setText(discountDeal(str.get(position).getMinDiscount()
-					.trim()));
-			price_tv.setText(" ￥" + str.get(position).getMinFare());
-			FlightName_tv.setText(str.get(position).getCarrinerName());
-			FlightNo_tv.setText(str.get(position).getFlightNo());
-			PlaneTypeAndModel.setText(str.get(position).getPlaneType()
-					+ str.get(position).getPlaneModel());
-			ticketCount_tv.setText(tiecketCountDeal(str.get(position)
-					.getMinTicketCount()) + "张");
-			CabinName_tv.setText(str.get(position).getCabinName());
-			fanMoney_tv.setText(str.get(position).getYouHui());
 			return convertView;
 		}
 

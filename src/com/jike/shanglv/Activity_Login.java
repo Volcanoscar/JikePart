@@ -1,7 +1,6 @@
 //用户登录
 package com.jike.shanglv;
 
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -54,12 +53,16 @@ public class Activity_Login extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_login);
-
-		init();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			getWindow()
+					.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			setContentView(R.layout.activity_login);
+			init();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void init() {
@@ -179,9 +182,10 @@ public class Activity_Login extends Activity {
 								.commit();
 						finish();
 					} else {
-						String message="";
+						String message = "";
 						try {
-							message = jsonObject.getJSONObject("d").getString("msg");
+							message = jsonObject.getJSONObject("d").getString(
+									"msg");
 						} catch (Exception e) {
 							message = jsonObject.getString("msg");
 						}
@@ -211,110 +215,118 @@ public class Activity_Login extends Activity {
 	OnClickListener myListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.autologin_rl:
-				auto = !auto;
-				if (auto) {
-					autologin_checkbox_iv.setBackground(checkedDrawable);
-				} else {
-					autologin_checkbox_iv.setBackground(uncheckedDrawable);
-				}
-				break;
-			case R.id.registernew_tv:
-				startActivity(new Intent(context, Activity_Register.class));
-				break;
-			case R.id.forgetpassword_tv:// 找回密码
-				startActivity(new Intent(context,
-						Activity_RetrievePassword.class));
-				break;
-			case R.id.login_btn:
-				if (uername_input_et.getText().toString().trim().length() == 0) {
-					// new AlertDialog.Builder(context).setTitle("用户名不能为空")
-					// .setMessage("请输入用户名").setPositiveButton("确定", null)
-					// .show();
-					final CustomerAlertDialog cad = new CustomerAlertDialog(
-							context, true);
-					cad.setTitle("请输入用户名");
-					cad.setPositiveButton("确定", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}
-					});
-					break;
-				}
-				if (password_input_et.getText().toString().trim().length() == 0) {
-					// new AlertDialog.Builder(context).setTitle("密码不能为空")
-					// .setMessage("请输入密码").setPositiveButton("确定", null)
-					// .show();
-					final CustomerAlertDialog cad = new CustomerAlertDialog(
-							context, true);
-					cad.setTitle("请输入密码");
-					cad.setPositiveButton("确定", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}
-					});
-					break;
-				}
-				// 登录验证
+			try {
 
-				if (HttpUtils.showNetCannotUse(context)) {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
 					break;
-				}
-
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						int utype = 0;
-						MyApp ma = new MyApp(context);
-						Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
-						if (pf == Platform.B2B)
-							utype = 1;
-						else if (pf == Platform.B2C)
-							utype = 2;
-						String str = "{\"uname\":\""
-								+ uername_input_et.getText().toString().trim()
-								+ "\",\"upwd\":\""
-								+ password_input_et.getText().toString().trim()
-								+ "\",\"utype\":\"" + utype + "\"}";
-						String param = "action=userlogin&sitekey=&userkey="
-								+ ma.getHm()
-										.get(PackageKeys.USERKEY.getString())
-										.toString()
-								+ "&str="
-								+ str
-								+ "&sign="
-								+ CommonFunc.MD5(ma.getHm()
-										.get(PackageKeys.USERKEY.getString())
-										.toString()
-										+ "userlogin" + str);
-						loginReturnJson = HttpUtils.getJsonContent(
-								ma.getServeUrl(), param);
-						Log.v("loginReturnJson", loginReturnJson);
-						Message msg = new Message();
-						msg.what = 1;
-						handler.sendMessage(msg);
+				case R.id.autologin_rl:
+					auto = !auto;
+					if (auto) {
+						autologin_checkbox_iv.setBackground(checkedDrawable);
+					} else {
+						autologin_checkbox_iv.setBackground(uncheckedDrawable);
 					}
-				}).start();
-				progressdialog = CustomProgressDialog.createDialog(context);
-				progressdialog.setMessage("正在登录，请稍候...");
-				progressdialog.setCancelable(true);
-				progressdialog.show();
-				break;
-			default:
-				break;
+					break;
+				case R.id.registernew_tv:
+					startActivity(new Intent(context, Activity_Register.class));
+					break;
+				case R.id.forgetpassword_tv:// 找回密码
+					startActivity(new Intent(context,
+							Activity_RetrievePassword.class));
+					break;
+				case R.id.login_btn:
+					if (uername_input_et.getText().toString().trim().length() == 0) {
+						// new AlertDialog.Builder(context).setTitle("用户名不能为空")
+						// .setMessage("请输入用户名").setPositiveButton("确定", null)
+						// .show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("请输入用户名");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					}
+					if (password_input_et.getText().toString().trim().length() == 0) {
+						// new AlertDialog.Builder(context).setTitle("密码不能为空")
+						// .setMessage("请输入密码").setPositiveButton("确定", null)
+						// .show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("请输入密码");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					}
+					// 登录验证
+
+					if (HttpUtils.showNetCannotUse(context)) {
+						break;
+					}
+
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							int utype = 0;
+							MyApp ma = new MyApp(context);
+							Platform pf = (Platform) ma.getHm().get(
+									PackageKeys.PLATFORM.getString());
+							if (pf == Platform.B2B)
+								utype = 1;
+							else if (pf == Platform.B2C)
+								utype = 2;
+							String str = "{\"uname\":\""
+									+ uername_input_et.getText().toString()
+											.trim()
+									+ "\",\"upwd\":\""
+									+ password_input_et.getText().toString()
+											.trim() + "\",\"utype\":\"" + utype
+									+ "\"}";
+							String param = "action=userlogin&sitekey=&userkey="
+									+ ma.getHm()
+											.get(PackageKeys.USERKEY
+													.getString()).toString()
+									+ "&str="
+									+ str
+									+ "&sign="
+									+ CommonFunc.MD5(ma
+											.getHm()
+											.get(PackageKeys.USERKEY
+													.getString()).toString()
+											+ "userlogin" + str);
+							loginReturnJson = HttpUtils.getJsonContent(
+									ma.getServeUrl(), param);
+							Log.v("loginReturnJson", loginReturnJson);
+							Message msg = new Message();
+							msg.what = 1;
+							handler.sendMessage(msg);
+						}
+					}).start();
+					progressdialog = CustomProgressDialog.createDialog(context);
+					progressdialog.setMessage("正在登录，请稍候...");
+					progressdialog.setCancelable(true);
+					progressdialog.show();
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			finish();
 		}

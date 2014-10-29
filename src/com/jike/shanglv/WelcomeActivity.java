@@ -1,8 +1,10 @@
 package com.jike.shanglv;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +21,7 @@ import com.jike.shanglv.Enums.SPkeys;
 public class WelcomeActivity  extends Activity {
 	boolean isFirstIn = false;
 	SharedPreferences preferences;
+	Context mContext;
 	private static final int GO_HOME = 1000;
 	private static final int GO_GUIDE = 1001;
 	// 延迟3秒
@@ -47,7 +50,7 @@ public class WelcomeActivity  extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome);
-
+		mContext=this;
 		init();
 		((MyApplication)getApplication()).addActivity(this);
 	}
@@ -60,7 +63,13 @@ public class WelcomeActivity  extends Activity {
 		preferences = getSharedPreferences(
 				SPkeys.SPNAME.getString(), MODE_PRIVATE);
 		
-		isFirstIn = preferences.getBoolean(SPkeys.isFirstIn.getString(), false);
+		try {
+			isFirstIn = preferences.getBoolean(SPkeys.isFirstIn.getString()+mContext.getPackageManager().getPackageInfo(
+					mContext.getPackageName(), 0).versionCode, false);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// 判断程序与第几次运行，如果是第一次运行则跳转到引导界面，否则跳转到主界面
 		if (isFirstIn) {

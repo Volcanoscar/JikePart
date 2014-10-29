@@ -61,7 +61,7 @@ public class ActivityHotelDetail extends Activity {
 
 	private TextView hotel_name_tv, score_tv, dianping_cout_tv,
 			pinglun_yulan_tv, hotel_adress_tv, hotel_js_tv, ruzhu_date_tv,
-			lidian_date_tv,no_rooms_status;
+			lidian_date_tv, no_rooms_status;
 	private RelativeLayout adress_map_ll, hotel_js_rl, pinglun_rl;
 	private LinearLayout loading_ll;
 	private ImageView hotel_pic_iv, frame_ani_iv;
@@ -69,7 +69,7 @@ public class ActivityHotelDetail extends Activity {
 	private Context context;
 	private String hotelsDetailReturnJson = "", roomsReturnJson = "",
 			commentsReturnJson = "", hotelId = "", ruzhu_date = "",
-			lidian_date = "",hotelName="",starLevel="";
+			lidian_date = "", hotelName = "", starLevel = "";
 	private RoomListAdapter adapter;
 	private CustomProgressDialog progressdialog;
 	public ImageLoader imageLoader;
@@ -78,7 +78,7 @@ public class ActivityHotelDetail extends Activity {
 	private HotelDetail hotelDetail;
 	private JSONArray roomArray;
 	private ArrayList<HotelRoom> hotelRoomsList;
-	private String selectRoomIndexString="0";
+	private String selectRoomIndexString = "0";
 	private JSONObject commentObject;
 
 	private PopupWindow popupWindow_order;
@@ -91,11 +91,15 @@ public class ActivityHotelDetail extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel_detail);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hotel_detail);
 
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
+			initView();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -126,8 +130,8 @@ public class ActivityHotelDetail extends Activity {
 		lidian_date_tv = (TextView) findViewById(R.id.lidian_date_tv);
 		hotel_pic_iv = (ImageView) findViewById(R.id.hotel_pic_iv);
 		frame_ani_iv = (ImageView) findViewById(R.id.frame_ani_iv);
-		no_rooms_status=(TextView) findViewById(R.id.no_rooms_status);
-		
+		no_rooms_status = (TextView) findViewById(R.id.no_rooms_status);
+
 		adress_map_ll = (RelativeLayout) findViewById(R.id.adress_map_ll);
 		hotel_js_rl = (RelativeLayout) findViewById(R.id.hotel_js_rl);
 		pinglun_rl = (RelativeLayout) findViewById(R.id.pinglun_rl);
@@ -135,44 +139,44 @@ public class ActivityHotelDetail extends Activity {
 		listview = (ListView) findViewById(R.id.listview);
 
 		getIntentData();
-		
-		hotel_js_rl.setOnClickListener(
-			new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent=new Intent(context,ActivityHotelIntroduce.class);
-					intent.putExtra("hotelDetail", JSONHelper.toJSON(hotelDetail));
-					startActivity(intent);
-			   }
+
+		hotel_js_rl.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context,
+						ActivityHotelIntroduce.class);
+				intent.putExtra("hotelDetail", JSONHelper.toJSON(hotelDetail));
+				startActivity(intent);
+			}
 		});
-		
-		pinglun_rl.setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent intent=new Intent(context,ActivityHotelComments.class);
-						intent.putExtra("commentObjectString",commentObject.toString());
-						intent.putExtra("pingfen",score_tv.getText().toString());
-						intent.putExtra("pingfencount",dianping_cout_tv.getText().toString());
-						startActivity(intent);
-				   }
+
+		pinglun_rl.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, ActivityHotelComments.class);
+				intent.putExtra("commentObjectString", commentObject.toString());
+				intent.putExtra("pingfen", score_tv.getText().toString());
+				intent.putExtra("pingfencount", dianping_cout_tv.getText()
+						.toString());
+				startActivity(intent);
+			}
 		});
 
 		findViewById(R.id.back_imgbtn).setOnClickListener(
-			new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					finish();
-				}
-		});
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						finish();
+					}
+				});
 		findViewById(R.id.home_imgbtn).setOnClickListener(
-			new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					startActivity(new Intent(ActivityHotelDetail.this,
-							MainActivity.class));
-				}
-		});
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						startActivity(new Intent(ActivityHotelDetail.this,
+								MainActivity.class));
+					}
+				});
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		popupWindowView_order = inflater.inflate(
@@ -206,36 +210,36 @@ public class ActivityHotelDetail extends Activity {
 		adress_map_ll.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent=new Intent(context,ActivityHotelLocation.class);
-				intent.putExtra("hotel",  JSONHelper.toJSON(hotelDetail));
+				Intent intent = new Intent(context, ActivityHotelLocation.class);
+				intent.putExtra("hotel", JSONHelper.toJSON(hotelDetail));
 				startActivity(intent);
 			}
 		});
 		commit_order_tv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent=new Intent(context,ActivityHotelBooking.class);
+				Intent intent = new Intent(context, ActivityHotelBooking.class);
 				intent.putExtra("hotelId", hotelId);
 				intent.putExtra("hotelName", hotelName);
 				intent.putExtra("starLevel", starLevel);
 				intent.putExtra("ruzhu_date", ruzhu_date);
 				intent.putExtra("lidian_date", lidian_date);
-				HotelRoom selectHotelRoom=hotelRoomsList.get(Integer.valueOf(selectRoomIndexString));
-				String roomString=JSONHelper.toJSON(selectHotelRoom);
+				HotelRoom selectHotelRoom = hotelRoomsList.get(Integer
+						.valueOf(selectRoomIndexString));
+				String roomString = JSONHelper.toJSON(selectHotelRoom);
 				intent.putExtra("roomInfo", roomString);
 				startActivityForResult(intent, REQ_BOOKING_FOR_DISSMISS_POP);
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode==REQ_BOOKING_FOR_DISSMISS_POP) {
+		if (requestCode == REQ_BOOKING_FOR_DISSMISS_POP) {
 			popupWindow_order.dismiss();
 		}
 	}
-
 
 	// 获取Intent数据,并给到页面和做搜索数据使用
 	private void getIntentData() {
@@ -273,10 +277,18 @@ public class ActivityHotelDetail extends Activity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=hotelinfo&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action=hotelinfo&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "hotelinfo" + str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "hotelinfo" + str);
 				hotelsDetailReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 				Message msg = new Message();
@@ -312,10 +324,18 @@ public class ActivityHotelDetail extends Activity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=rooms&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action=rooms&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "rooms" + str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "rooms" + str);
 				roomsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -339,10 +359,18 @@ public class ActivityHotelDetail extends Activity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=comments&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action=comments&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "comments" + str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "comments" + str);
 				commentsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -365,23 +393,27 @@ public class ActivityHotelDetail extends Activity {
 
 					if (state.equals("0000")) {
 						if (jsonObject.getJSONObject("d").length() == 0) {
-//							new AlertDialog.Builder(context).setTitle("未查询到数据")
-//									.setPositiveButton("确定", null).show();
-							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							// new
+							// AlertDialog.Builder(context).setTitle("未查询到数据")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
 							cad.setTitle("未查询到数据");
-							cad.setPositiveButton("确定", new OnClickListener(){
+							cad.setPositiveButton("确定", new OnClickListener() {
 								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
-								}});
+								}
+							});
 							progressdialog.dismiss();
 							break;
 						}
 						jsonObject = jsonObject.getJSONObject("d");
 						hotelDetail = JSONHelper.parseObject(jsonObject,
 								HotelDetail.class);
-						starLevel=StarLevel.Starlevel.get(hotelDetail.getStar());
-						hotelName=hotelDetail.getHotelname();
+						starLevel = StarLevel.Starlevel.get(hotelDetail
+								.getStar());
+						hotelName = hotelDetail.getHotelname();
 						hotel_name_tv.setText(hotelName);
 						score_tv.setText(ActivityHotelSearchlist
 								.getScore(hotelDetail.getHaoping()) + "分");
@@ -393,16 +425,18 @@ public class ActivityHotelDetail extends Activity {
 								hotel_pic_iv);
 					} else {
 						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询酒店详情失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询酒店详情失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("查询酒店详情失败");
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -414,23 +448,26 @@ public class ActivityHotelDetail extends Activity {
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
-//{"c":"0000","d":[{"hotelid":"11290","tm1":"2014-09-03","tm2":"2014-09-04","rooms":[]}]}
+					// {"c":"0000","d":[{"hotelid":"11290","tm1":"2014-09-03","tm2":"2014-09-04","rooms":[]}]}
 					if (state.equals("0000")) {
 						if (jsonObject.get("d") == null) {
-//							new AlertDialog.Builder(context)
-//									.setTitle("查询房型信息失败")
-//									.setPositiveButton("确定", null).show();
-							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							// new AlertDialog.Builder(context)
+							// .setTitle("查询房型信息失败")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
 							cad.setTitle("查询房型信息失败");
-							cad.setPositiveButton("确定", new OnClickListener(){
+							cad.setPositiveButton("确定", new OnClickListener() {
 								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
-								}});
+								}
+							});
 							progressdialog.dismiss();
 							break;
-						}
-						else if (jsonObject.getJSONArray("d").getJSONObject(0).getJSONArray("rooms").length()==0) {
+						} else if (jsonObject.getJSONArray("d")
+								.getJSONObject(0).getJSONArray("rooms")
+								.length() == 0) {
 							no_rooms_status.setVisibility(View.VISIBLE);
 						}
 						roomArray = jsonObject.getJSONArray("d")
@@ -438,8 +475,9 @@ public class ActivityHotelDetail extends Activity {
 						for (int i = 0; i < roomArray.length(); i++) {
 							HotelRoom hr = new HotelRoom(
 									roomArray.getJSONObject(i));
-							ArrayList<HotelRoom> hrlist=new ArrayList<HotelRoom>();
-							hrlist=hr.HotelRoomList(roomArray.getJSONObject(i));
+							ArrayList<HotelRoom> hrlist = new ArrayList<HotelRoom>();
+							hrlist = hr.HotelRoomList(roomArray
+									.getJSONObject(i));
 							hotelRoomsList.addAll(hrlist);
 						}
 						adapter = new RoomListAdapter(context, hotelRoomsList);
@@ -449,49 +487,58 @@ public class ActivityHotelDetail extends Activity {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								selectRoomIndexString=position+"";
+								selectRoomIndexString = position + "";
 								int index = position;
-								imm.hideSoftInputFromWindow(((Activity) context)
-										.getCurrentFocus().getWindowToken(),
+								imm.hideSoftInputFromWindow(
+										((Activity) context).getCurrentFocus()
+												.getWindowToken(),
 										InputMethodManager.HIDE_NOT_ALWAYS);
 								popupWindow_order.showAtLocation(room_type_tv,
 										Gravity.BOTTOM, 0, 0);
 
 								if (hotelRoomsList.get(index).getImg() != null
-										&& hotelRoomsList.get(index).getImg().size() > 0) {
-									imageLoader.DisplayImage(hotelRoomsList.get(index)
-											.getImg().get(0).getImgurl(), room_pic_iv);
+										&& hotelRoomsList.get(index).getImg()
+												.size() > 0) {
+									imageLoader.DisplayImage(hotelRoomsList
+											.get(index).getImg().get(0)
+											.getImgurl(), room_pic_iv);
 								}
-								room_type_tv.setText(hotelRoomsList.get(index).getTitle());
+								room_type_tv.setText(hotelRoomsList.get(index)
+										.getTitle());
 								floor_tv.setText("楼层    "
 										+ hotelRoomsList.get(index).getFloor());
 								area_tv.setText("面积    "
 										+ hotelRoomsList.get(index).getArea());
 								breakfast_tv.setText("早餐    "
-										+ hotelRoomsList.get(index).getPlanname());
+										+ hotelRoomsList.get(index)
+												.getPlanname());
 								bedtype_tv.setText("床型    "
 										+ hotelRoomsList.get(index).getBed());
-								total_price_tv.setText(hotelRoomsList.get(index).getTotalprice()
-										+ hotelRoomsList.get(index).getPriceCode());
+								total_price_tv.setText(hotelRoomsList
+										.get(index).getTotalprice()
+										+ hotelRoomsList.get(index)
+												.getPriceCode());
 							}
 						});
-						
+
 						ActivityInlandAirlineticketBooking
-						.setListViewHeightBasedOnChildren(listview);
+								.setListViewHeightBasedOnChildren(listview);
 						loading_ll.setVisibility(View.GONE);
 
 					} else {
 						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询酒店详情失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询酒店详情失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -505,37 +552,42 @@ public class ActivityHotelDetail extends Activity {
 
 					if (state.equals("0000")) {
 						if (jsonObject.get("d") == null) {
-//							new AlertDialog.Builder(context)
-//									.setTitle("查询用户评论信息失败")
-//									.setPositiveButton("确定", null).show();
-							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+							// new AlertDialog.Builder(context)
+							// .setTitle("查询用户评论信息失败")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
 							cad.setTitle("查询用户评论信息失败");
-							cad.setPositiveButton("确定", new OnClickListener(){
+							cad.setPositiveButton("确定", new OnClickListener() {
 								@Override
 								public void onClick(View arg0) {
 									cad.dismiss();
-								}});
+								}
+							});
 							progressdialog.dismiss();
 							break;
 						}
-						commentObject=jsonObject.getJSONObject("d");//传到评论页面的值
-						JSONObject commentObject0 = jsonObject.getJSONObject("d")
-								.getJSONArray("comment").getJSONObject(0);
+						commentObject = jsonObject.getJSONObject("d");// 传到评论页面的值
+						JSONObject commentObject0 = jsonObject
+								.getJSONObject("d").getJSONArray("comment")
+								.getJSONObject(0);
 						HotelComment hComment = JSONHelper.parseObject(
 								commentObject0, HotelComment.class);
 						pinglun_yulan_tv.setText(hComment.getContent());
 					} else {
 						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询用户评论失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询用户评论失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -592,83 +644,87 @@ public class ActivityHotelDetail extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_hotel_roomlist,
-						null);
-			}
-			TextView room_title_tv = (TextView) convertView
-					.findViewById(R.id.room_title_tv);
-			TextView room_area_tv = (TextView) convertView
-					.findViewById(R.id.room_area_tv);
-			TextView remark_tv = (TextView) convertView
-					.findViewById(R.id.remark_tv);
-			TextView AvailableAmount_tv = (TextView) convertView
-					.findViewById(R.id.AvailableAmount_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView yufujia_tv = (TextView) convertView
-					.findViewById(R.id.yufujia_tv);
-			TextView fanMoney_tv = (TextView) convertView
-					.findViewById(R.id.fanMoney_tv);
-			ImageButton booking_imgbtn = (ImageButton) convertView
-					.findViewById(R.id.booking_imgbtn);
-			RelativeLayout fanMoney_rl = (RelativeLayout) convertView
-					.findViewById(R.id.fanMoney_rl);
-
-			room_title_tv.setText(str.get(position).getTitle());
-			if (str.get(position).getArea().length() > 0) {
-				room_area_tv.setText(str.get(position).getArea() + "平米");
-			}
-			remark_tv
-					.setText(str.get(position).getPlanname());
-			AvailableAmount_tv.setText(str.get(position).getAvailableAmount());
-			price_tv.setText("￥"
-					+ str.get(position).getTotalprice());
-			if (str.get(position).getRoomtype().equals("0")) {// 0现付，1预付
-				fanMoney_rl.setVisibility(View.VISIBLE);
-				yufujia_tv.setVisibility(View.INVISIBLE);
-				fanMoney_tv.setText("￥"
-						+ str.get(position).getJiangjin());
-			} else if (str.get(position).getRoomtype().equals("1")) {// 0现付，1预付
-				fanMoney_rl.setVisibility(View.INVISIBLE);
-				yufujia_tv.setVisibility(View.VISIBLE);
-			}
-
-			if (str.get(position).getAvailableAmount().trim().equals("订完")) {
-				booking_imgbtn.setEnabled(false);
-				booking_imgbtn.setBackground(getResources().getDrawable(R.drawable.hotel_fullhouse_button));
-			}
-			booking_imgbtn.setTag(position + "");// 给Item中的button设置tag，根据tag判断用户点击了第几行
-			booking_imgbtn.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					int index = Integer.valueOf(v.getTag().toString().trim());
-					selectRoomIndexString=v.getTag().toString().trim();
-					imm.hideSoftInputFromWindow(((Activity) context)
-							.getCurrentFocus().getWindowToken(),
-							InputMethodManager.HIDE_NOT_ALWAYS);
-					popupWindow_order.showAtLocation(room_type_tv,
-							Gravity.BOTTOM, 0, 0);
-
-					if (hotelRoomsList.get(index).getImg() != null
-							&& hotelRoomsList.get(index).getImg().size() > 0) {
-						imageLoader.DisplayImage(hotelRoomsList.get(index)
-								.getImg().get(0).getImgurl(), room_pic_iv);
-					}
-					room_type_tv.setText(hotelRoomsList.get(index).getTitle());
-					floor_tv.setText("楼层    "
-							+ hotelRoomsList.get(index).getFloor());
-					area_tv.setText("面积    "
-							+ hotelRoomsList.get(index).getArea());
-					breakfast_tv.setText("早餐    "
-							+ hotelRoomsList.get(index).getPlanname());
-					bedtype_tv.setText("床型    "
-							+ hotelRoomsList.get(index).getBed());
-					total_price_tv.setText(str.get(index)
-							.getTotalprice()
-							+ hotelRoomsList.get(index).getPriceCode());
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_hotel_roomlist, null);
 				}
-			});
+				TextView room_title_tv = (TextView) convertView
+						.findViewById(R.id.room_title_tv);
+				TextView room_area_tv = (TextView) convertView
+						.findViewById(R.id.room_area_tv);
+				TextView remark_tv = (TextView) convertView
+						.findViewById(R.id.remark_tv);
+				TextView AvailableAmount_tv = (TextView) convertView
+						.findViewById(R.id.AvailableAmount_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView yufujia_tv = (TextView) convertView
+						.findViewById(R.id.yufujia_tv);
+				TextView fanMoney_tv = (TextView) convertView
+						.findViewById(R.id.fanMoney_tv);
+				ImageButton booking_imgbtn = (ImageButton) convertView
+						.findViewById(R.id.booking_imgbtn);
+				RelativeLayout fanMoney_rl = (RelativeLayout) convertView
+						.findViewById(R.id.fanMoney_rl);
+
+				room_title_tv.setText(str.get(position).getTitle());
+				if (str.get(position).getArea().length() > 0) {
+					room_area_tv.setText(str.get(position).getArea() + "平米");
+				}
+				remark_tv.setText(str.get(position).getPlanname());
+				AvailableAmount_tv.setText(str.get(position)
+						.getAvailableAmount());
+				price_tv.setText("￥" + str.get(position).getTotalprice());
+				if (str.get(position).getRoomtype().equals("0")) {// 0现付，1预付
+					fanMoney_rl.setVisibility(View.VISIBLE);
+					yufujia_tv.setVisibility(View.INVISIBLE);
+					fanMoney_tv.setText("￥" + str.get(position).getJiangjin());
+				} else if (str.get(position).getRoomtype().equals("1")) {// 0现付，1预付
+					fanMoney_rl.setVisibility(View.INVISIBLE);
+					yufujia_tv.setVisibility(View.VISIBLE);
+				}
+
+				if (str.get(position).getAvailableAmount().trim().equals("订完")) {
+					booking_imgbtn.setEnabled(false);
+					booking_imgbtn.setBackground(getResources().getDrawable(
+							R.drawable.hotel_fullhouse_button));
+				}
+				booking_imgbtn.setTag(position + "");// 给Item中的button设置tag，根据tag判断用户点击了第几行
+				booking_imgbtn.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						int index = Integer.valueOf(v.getTag().toString()
+								.trim());
+						selectRoomIndexString = v.getTag().toString().trim();
+						imm.hideSoftInputFromWindow(((Activity) context)
+								.getCurrentFocus().getWindowToken(),
+								InputMethodManager.HIDE_NOT_ALWAYS);
+						popupWindow_order.showAtLocation(room_type_tv,
+								Gravity.BOTTOM, 0, 0);
+
+						if (hotelRoomsList.get(index).getImg() != null
+								&& hotelRoomsList.get(index).getImg().size() > 0) {
+							imageLoader.DisplayImage(hotelRoomsList.get(index)
+									.getImg().get(0).getImgurl(), room_pic_iv);
+						}
+						room_type_tv.setText(hotelRoomsList.get(index)
+								.getTitle());
+						floor_tv.setText("楼层    "
+								+ hotelRoomsList.get(index).getFloor());
+						area_tv.setText("面积    "
+								+ hotelRoomsList.get(index).getArea());
+						breakfast_tv.setText("早餐    "
+								+ hotelRoomsList.get(index).getPlanname());
+						bedtype_tv.setText("床型    "
+								+ hotelRoomsList.get(index).getBed());
+						total_price_tv.setText(str.get(index).getTotalprice()
+								+ hotelRoomsList.get(index).getPriceCode());
+					}
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return convertView;
 		}
 	}

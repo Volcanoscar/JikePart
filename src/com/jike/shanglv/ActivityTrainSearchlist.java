@@ -44,9 +44,10 @@ public class ActivityTrainSearchlist extends Activity {
 
 	private Context context;
 	private ImageButton back_imgbtn;
-	private TextView title_tv, total_train_count_tv,sort_type_tv,sort_time_tv;
+	private TextView title_tv, total_train_count_tv, sort_type_tv,
+			sort_time_tv;
 	private LinearLayout bytraintype_LL, bytime_ll;
-	private ImageView sort_type_iv,sort_time_iv;
+	private ImageView sort_type_iv, sort_time_iv;
 	private ListView listview;
 	private String startcity_code = "", arrivecity_code = "", startcity = "",
 			arrivecity = "", startoff_date = "";// 从搜索页面获取的数据
@@ -56,15 +57,19 @@ public class ActivityTrainSearchlist extends Activity {
 
 	private ListAdapter adapter;
 	private ArrayList<TrainListItem> train_List;
-	private Boolean byTimeAsc=false,byTypeAsc=false;
+	private Boolean byTimeAsc = false, byTypeAsc = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_train_searchlist);
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
-		startQuery();
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_train_searchlist);
+			initView();
+			((MyApplication) getApplication()).addActivity(this);
+			startQuery();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -78,10 +83,10 @@ public class ActivityTrainSearchlist extends Activity {
 		total_train_count_tv = (TextView) findViewById(R.id.total_train_count_tv);
 		bytraintype_LL = (LinearLayout) findViewById(R.id.bytraintype_LL);
 		bytime_ll = (LinearLayout) findViewById(R.id.bytime_ll);
-		sort_type_tv=(TextView) findViewById(R.id.sort_type_tv);
-		sort_time_tv=(TextView) findViewById(R.id.sort_time_tv);
-		sort_type_iv=(ImageView) findViewById(R.id.sort_type_iv);
-		sort_time_iv=(ImageView) findViewById(R.id.sort_time_iv);
+		sort_type_tv = (TextView) findViewById(R.id.sort_type_tv);
+		sort_time_tv = (TextView) findViewById(R.id.sort_time_tv);
+		sort_type_iv = (ImageView) findViewById(R.id.sort_type_iv);
+		sort_time_iv = (ImageView) findViewById(R.id.sort_time_iv);
 		bytraintype_LL.setOnClickListener(btnClickListner);
 		bytime_ll.setOnClickListener(btnClickListner);
 
@@ -115,16 +120,19 @@ public class ActivityTrainSearchlist extends Activity {
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(trainsReturnJson);
 				try {
-					if (trainsReturnJson.length()==0) {
-//						new AlertDialog.Builder(context).setTitle("未查到该车段的列车信息")
-//						.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					if (trainsReturnJson.length() == 0) {
+						// new
+						// AlertDialog.Builder(context).setTitle("未查到该车段的列车信息")
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("未查到该车段的列车信息");
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 						progressdialog.dismiss();
 						break;
 					}
@@ -143,37 +151,42 @@ public class ActivityTrainSearchlist extends Activity {
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
 								TrainListItem ti = train_List.get(position);
-								Intent intents = new Intent(
-										context,
+								Intent intents = new Intent(context,
 										ActivityTrainBooking.class);
-								String tiString=JSONHelper.toJSON(ti);
-								String seatListString=JSONHelper.toJSON(ti.getSeatList());
-								intents.putExtra("TrainListItemString", tiString);
-								intents.putExtra("SeatListString", seatListString);
+								String tiString = JSONHelper.toJSON(ti);
+								String seatListString = JSONHelper.toJSON(ti
+										.getSeatList());
+								intents.putExtra("TrainListItemString",
+										tiString);
+								intents.putExtra("SeatListString",
+										seatListString);
 								intents.putExtra("startcity", startcity);
 								intents.putExtra("arrivecity", arrivecity);
-								intents.putExtra("startdate",startoff_date);
+								intents.putExtra("startdate", startoff_date);
 								startActivity(intents);
 							}
 						});
 
 					} else {
 						String message = "";
-						try{
-							message = jsonObject.getJSONObject("d").getString("msg");
-						}catch(Exception ex){
+						try {
+							message = jsonObject.getJSONObject("d").getString(
+									"msg");
+						} catch (Exception ex) {
 							message = jsonObject.getString("msg");
 						}
-//						new AlertDialog.Builder(context).setTitle("查询失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(message);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -195,13 +208,17 @@ public class ActivityTrainSearchlist extends Activity {
 			try {
 				TrainListItem ti = JSONHelper.parseObject(
 						flist_list.getJSONObject(i), TrainListItem.class);
-				JSONArray seatListArray=flist_list.getJSONObject(i).getJSONArray("SeatList");
-				ArrayList<Seat> SeatList=new ArrayList<Seat>();
+				JSONArray seatListArray = flist_list.getJSONObject(i)
+						.getJSONArray("SeatList");
+				ArrayList<Seat> SeatList = new ArrayList<Seat>();
 				for (int j = 0; j < seatListArray.length(); j++) {
-					Seat seat =new Seat();
-					seat.setPrice(seatListArray.getJSONObject(j).getString("price"));
-					seat.setShengyu(seatListArray.getJSONObject(j).getString("shengyu"));
-					seat.setType(seatListArray.getJSONObject(j).getString("type"));
+					Seat seat = new Seat();
+					seat.setPrice(seatListArray.getJSONObject(j).getString(
+							"price"));
+					seat.setShengyu(seatListArray.getJSONObject(j).getString(
+							"shengyu"));
+					seat.setType(seatListArray.getJSONObject(j).getString(
+							"type"));
 					SeatList.add(seat);
 				}
 				ti.setSeatList(SeatList);
@@ -210,7 +227,7 @@ public class ActivityTrainSearchlist extends Activity {
 				ti.setPrice(SeatList.get(0).getPrice());
 				train_List.add(ti);
 			} catch (Exception e) {
-		}
+			}
 		}
 	}
 
@@ -224,10 +241,17 @@ public class ActivityTrainSearchlist extends Activity {
 				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
 						+ arrivecity_code + "\",\"t\":\"" + startoff_date
 						+ "\"}";
-				String param = "action=trainlistv2&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainlistv2" + str)
-						+ "&sitekey=" + MyApp.sitekey;
+				String param = "action=trainlistv2&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "trainlistv2" + str) + "&sitekey="
+						+ MyApp.sitekey;
 				trainsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -245,6 +269,7 @@ public class ActivityTrainSearchlist extends Activity {
 		});
 		progressdialog.show();
 	}
+
 	Comparator<TrainListItem> comparator_time_asc = new Comparator<TrainListItem>() {
 		@Override
 		public int compare(TrainListItem s1, TrainListItem s2) {
@@ -273,59 +298,63 @@ public class ActivityTrainSearchlist extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.date_yesterday_ll:
-				startQuery();
+			try {
+				switch (v.getId()) {
+				case R.id.date_yesterday_ll:
+					startQuery();
 
-				break;
-			case R.id.date_tomorrow_ll:
-				startQuery();
-				break;
-				//bytime_ll
-			case R.id.bytraintype_LL://sort_type_tv,sort_time_tv
-				sort_type_tv.setSelected(true);
-				sort_time_tv.setSelected(false);
-				sort_type_iv.setSelected(true);
-				sort_time_iv.setSelected(false);
-				byTypeAsc = !byTypeAsc;
-				if (byTypeAsc) {
-					sort_type_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(train_List, comparator_type_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_type_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(train_List, comparator_type_asc);
-					adapter.notifyDataSetChanged();
+					break;
+				case R.id.date_tomorrow_ll:
+					startQuery();
+					break;
+				// bytime_ll
+				case R.id.bytraintype_LL:// sort_type_tv,sort_time_tv
+					sort_type_tv.setSelected(true);
+					sort_time_tv.setSelected(false);
+					sort_type_iv.setSelected(true);
+					sort_time_iv.setSelected(false);
+					byTypeAsc = !byTypeAsc;
+					if (byTypeAsc) {
+						sort_type_iv.setBackground(getResources().getDrawable(
+								R.drawable.sort_arrow_up));
+						Collections.sort(train_List, comparator_type_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_type_iv.setBackground(getResources().getDrawable(
+								R.drawable.sort_arrow_down));
+						Collections.sort(train_List, comparator_type_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				case R.id.bytime_ll:// sort_type_tv,sort_time_tv
+					sort_type_tv.setSelected(false);
+					sort_time_tv.setSelected(true);
+					sort_type_iv.setSelected(false);
+					sort_time_iv.setSelected(true);
+					byTimeAsc = !byTimeAsc;
+					if (byTimeAsc) {
+						sort_time_iv.setBackground(getResources().getDrawable(
+								R.drawable.sort_arrow_up));
+						Collections.sort(train_List, comparator_time_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_time_iv.setBackground(getResources().getDrawable(
+								R.drawable.sort_arrow_down));
+						Collections.sort(train_List, comparator_time_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				default:
+					break;
 				}
-				break;
-			case R.id.bytime_ll://sort_type_tv,sort_time_tv
-				sort_type_tv.setSelected(false);
-				sort_time_tv.setSelected(true);
-				sort_type_iv.setSelected(false);
-				sort_time_iv.setSelected(true);
-				byTimeAsc = !byTimeAsc;
-				if (byTimeAsc) {
-					sort_time_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(train_List, comparator_time_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_time_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(train_List, comparator_time_asc);
-					adapter.notifyDataSetChanged();
-				}
-				break;
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -360,112 +389,118 @@ public class ActivityTrainSearchlist extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_train_searchlist,
-						null);
-			}
-			TextView train_num_tv = (TextView) convertView
-					.findViewById(R.id.train_num_tv);
-			TextView train_type_tv = (TextView) convertView
-					.findViewById(R.id.train_type_tv);
-			TextView start_time_tv = (TextView) convertView
-					.findViewById(R.id.start_time_tv);
-			TextView arrive_time_tv = (TextView) convertView
-					.findViewById(R.id.arrive_time_tv);
-			TextView used_time_tv = (TextView) convertView
-					.findViewById(R.id.used_time_tv);
-			TextView start_station_tv = (TextView) convertView
-					.findViewById(R.id.start_station_tv);
-			TextView end_station_tv = (TextView) convertView
-					.findViewById(R.id.end_station_tv);
-			TextView seat_grad_tv = (TextView) convertView
-					.findViewById(R.id.seat_grad_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView remain_count_tv = (TextView) convertView
-					.findViewById(R.id.remain_count_tv);
-			ImageView start_station_icon_iv = (ImageView) convertView
-					.findViewById(R.id.start_station_icon_iv);
-			ImageView end_station_icon_iv = (ImageView) convertView
-					.findViewById(R.id.end_station_icon_iv);
-			ImageView no_ticket_iv=(ImageView) convertView.findViewById(R.id.no_ticket_iv);
-
-			if (!Boolean.valueOf(str.get(position).getYuDing().toLowerCase())) {//不可预订，显示无票
-				no_ticket_iv.setVisibility(View.VISIBLE);
-			}else {
-				no_ticket_iv.setVisibility(View.GONE);
-			}
-			train_num_tv.setText(str.get(position).getTrainID());
-			train_type_tv.setText(str.get(position).getTrainType());
-			start_time_tv.setText(str.get(position).getGoTime());
-			arrive_time_tv.setText(str.get(position).getETime());
-			used_time_tv.setText("历时： " + str.get(position).getRunTime());
-			start_station_tv.setText(str.get(position).getStationS());
-			end_station_tv.setText(str.get(position).getStationE());
-			seat_grad_tv.setText(str.get(position).getSeat_Type());
-			price_tv.setText("￥" + str.get(position).getPrice());
-			if (str.get(position).getRemain_Count().equals("40")) {
-				remain_count_tv.setText("票源充足 ");
-			}else {
-				remain_count_tv.setText("余票 " + str.get(position).getRemain_Count()
-						+ "张");
-			}		
-			String SFType = str.get(position).getSFType();
-			if (SFType.length() == 3) {
-				String SType = SFType.substring(0, 1);
-				String FType = SFType.substring(2, 3);
-				if (SType.equals("始")) {
-					start_station_icon_iv.setBackground(getResources()
-							.getDrawable(R.drawable.trains_start));
-				} else if (SType.equals("过")) {
-					start_station_icon_iv.setBackground(getResources()
-							.getDrawable(R.drawable.train_over));
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_train_searchlist, null);
 				}
+				TextView train_num_tv = (TextView) convertView
+						.findViewById(R.id.train_num_tv);
+				TextView train_type_tv = (TextView) convertView
+						.findViewById(R.id.train_type_tv);
+				TextView start_time_tv = (TextView) convertView
+						.findViewById(R.id.start_time_tv);
+				TextView arrive_time_tv = (TextView) convertView
+						.findViewById(R.id.arrive_time_tv);
+				TextView used_time_tv = (TextView) convertView
+						.findViewById(R.id.used_time_tv);
+				TextView start_station_tv = (TextView) convertView
+						.findViewById(R.id.start_station_tv);
+				TextView end_station_tv = (TextView) convertView
+						.findViewById(R.id.end_station_tv);
+				TextView seat_grad_tv = (TextView) convertView
+						.findViewById(R.id.seat_grad_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView remain_count_tv = (TextView) convertView
+						.findViewById(R.id.remain_count_tv);
+				ImageView start_station_icon_iv = (ImageView) convertView
+						.findViewById(R.id.start_station_icon_iv);
+				ImageView end_station_icon_iv = (ImageView) convertView
+						.findViewById(R.id.end_station_icon_iv);
+				ImageView no_ticket_iv = (ImageView) convertView
+						.findViewById(R.id.no_ticket_iv);
 
-				if (FType.equals("终")) {
-					end_station_icon_iv.setBackground(getResources()
-							.getDrawable(R.drawable.train_final));
-				} else if (FType.equals("过")) {
-					end_station_icon_iv.setBackground(getResources()
-							.getDrawable(R.drawable.train_over));
+				if (!Boolean.valueOf(str.get(position).getYuDing()
+						.toLowerCase())) {// 不可预订，显示无票
+					no_ticket_iv.setVisibility(View.VISIBLE);
+				} else {
+					no_ticket_iv.setVisibility(View.GONE);
 				}
-			}
-//			if (!Boolean.valueOf(str.get(position).getYuDing().toLowerCase())) {
-//				train_num_tv.setTextColor(getResources().getColor(R.color.gray));
-//				train_type_tv.setTextColor(getResources().getColor(R.color.gray));
-//				start_time_tv.setTextColor(getResources().getColor(R.color.gray));
-//				arrive_time_tv.setTextColor(getResources().getColor(R.color.gray));
-//				used_time_tv.setTextColor(getResources().getColor(R.color.gray));
-//				start_station_tv.setTextColor(getResources().getColor(R.color.gray));
-//				end_station_tv.setTextColor(getResources().getColor(R.color.gray));
-//				seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
-//				price_tv.setTextColor(getResources().getColor(R.color.gray));
-//				remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
-//				if (SFType.length() == 3) {
-//					String SType = SFType.substring(0, 1);
-//					String FType = SFType.substring(2, 3);
-//					if (SType.equals("始")) {
-//						start_station_icon_iv.setBackground(getResources()
-//								.getDrawable(R.drawable.trains_startgray));
-//					} else if (SType.equals("过")) {
-//						start_station_icon_iv.setBackground(getResources()
-//								.getDrawable(R.drawable.train_overgray));
-//					}
-//
-//					if (FType.equals("终")) {
-//						end_station_icon_iv.setBackground(getResources()
-//								.getDrawable(R.drawable.train_finalgray));
-//					} else if (FType.equals("过")) {
-//						end_station_icon_iv.setBackground(getResources()
-//								.getDrawable(R.drawable.train_overgray));
-//					}
-//				}
-//				convertView.setEnabled(false);
-//				convertView.setOnClickListener(null);
-//			}
+				train_num_tv.setText(str.get(position).getTrainID());
+				train_type_tv.setText(str.get(position).getTrainType());
+				start_time_tv.setText(str.get(position).getGoTime());
+				arrive_time_tv.setText(str.get(position).getETime());
+				used_time_tv.setText("历时： " + str.get(position).getRunTime());
+				start_station_tv.setText(str.get(position).getStationS());
+				end_station_tv.setText(str.get(position).getStationE());
+				seat_grad_tv.setText(str.get(position).getSeat_Type());
+				price_tv.setText("￥" + str.get(position).getPrice());
+				if (str.get(position).getRemain_Count().equals("40")) {
+					remain_count_tv.setText("票源充足 ");
+				} else {
+					remain_count_tv.setText("余票 "
+							+ str.get(position).getRemain_Count() + "张");
+				}
+				String SFType = str.get(position).getSFType();
+				if (SFType.length() == 3) {
+					String SType = SFType.substring(0, 1);
+					String FType = SFType.substring(2, 3);
+					if (SType.equals("始")) {
+						start_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.trains_start));
+					} else if (SType.equals("过")) {
+						start_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.train_over));
+					}
 
+					if (FType.equals("终")) {
+						end_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.train_final));
+					} else if (FType.equals("过")) {
+						end_station_icon_iv.setBackground(getResources()
+								.getDrawable(R.drawable.train_over));
+					}
+				}
+				// if
+				// (!Boolean.valueOf(str.get(position).getYuDing().toLowerCase()))
+				// {
+				// train_num_tv.setTextColor(getResources().getColor(R.color.gray));
+				// train_type_tv.setTextColor(getResources().getColor(R.color.gray));
+				// start_time_tv.setTextColor(getResources().getColor(R.color.gray));
+				// arrive_time_tv.setTextColor(getResources().getColor(R.color.gray));
+				// used_time_tv.setTextColor(getResources().getColor(R.color.gray));
+				// start_station_tv.setTextColor(getResources().getColor(R.color.gray));
+				// end_station_tv.setTextColor(getResources().getColor(R.color.gray));
+				// seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
+				// price_tv.setTextColor(getResources().getColor(R.color.gray));
+				// remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
+				// if (SFType.length() == 3) {
+				// String SType = SFType.substring(0, 1);
+				// String FType = SFType.substring(2, 3);
+				// if (SType.equals("始")) {
+				// start_station_icon_iv.setBackground(getResources()
+				// .getDrawable(R.drawable.trains_startgray));
+				// } else if (SType.equals("过")) {
+				// start_station_icon_iv.setBackground(getResources()
+				// .getDrawable(R.drawable.train_overgray));
+				// }
+				//
+				// if (FType.equals("终")) {
+				// end_station_icon_iv.setBackground(getResources()
+				// .getDrawable(R.drawable.train_finalgray));
+				// } else if (FType.equals("过")) {
+				// end_station_icon_iv.setBackground(getResources()
+				// .getDrawable(R.drawable.train_overgray));
+				// }
+				// }
+				// convertView.setEnabled(false);
+				// convertView.setOnClickListener(null);
+				// }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return convertView;
 		}
-		
 	}
 }

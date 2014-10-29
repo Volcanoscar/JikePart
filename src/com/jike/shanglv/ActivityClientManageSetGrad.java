@@ -48,109 +48,126 @@ import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.NetAndJson.JSONHelper;
 
 public class ActivityClientManageSetGrad extends Activity {
-	protected static final int DEALERLEVELMSGCODE=0;
+	protected static final int DEALERLEVELMSGCODE = 0;
 	protected static final int ADDLEVELMSGCODE = 1;
 	protected static final int SETDEFAULTLEVELMSGCODE = 2;
-	protected static final int DELETELEVELMSGCODE=3;
-	protected static final int MODIFYLEVELMSGCODE=4;
-	public static final String DISPLAY_TYPENAME_STRING="DISPLAY_TYPENAME_STRING";
-	public static final String CUSTOMER_DISPLAYNAME="客户";
-	public static final String DEALER_DISPLAYNAME="分销商";
-	
-	private RelativeLayout set_default_rl,add_grad_rl;
+	protected static final int DELETELEVELMSGCODE = 3;
+	protected static final int MODIFYLEVELMSGCODE = 4;
+	public static final String DISPLAY_TYPENAME_STRING = "DISPLAY_TYPENAME_STRING";
+	public static final String CUSTOMER_DISPLAYNAME = "客户";
+	public static final String DEALER_DISPLAYNAME = "分销商";
+
+	private RelativeLayout set_default_rl, add_grad_rl;
 	private LinearLayout loading_ll;
 	private ImageView frame_ani_iv;
-	private TextView query_status_tv,default_grad_tv,title_tv;
+	private TextView query_status_tv, default_grad_tv, title_tv;
 	private com.jike.shanglv.Common.QQListView listview;
 	private Context context;
 	private SharedPreferences sp;
-	private String dealerlevallistReturnJson="",addcustomerlevalReturnJson="",setdefaultlevalReturnJson="",displayName="",levellistActionName="",addlevelActionName="",setdefaultlevalActionName="";
-	private ArrayList<DealerLevel> customerlever_List;//客户级别、经商上级别列表使用同一个Model
+	private String dealerlevallistReturnJson = "",
+			addcustomerlevalReturnJson = "", setdefaultlevalReturnJson = "",
+			displayName = "", levellistActionName = "",
+			addlevelActionName = "", setdefaultlevalActionName = "";
+	private ArrayList<DealerLevel> customerlever_List;// 客户级别、经商上级别列表使用同一个Model
 	private ListAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_clientmange_set_grad);
-		
-		context=this;
-		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		customerlever_List=new ArrayList<DealerLevel>();
-		listview=(com.jike.shanglv.Common.QQListView) findViewById(R.id.listview);
-		listview.setDelButtonClickListener(new com.jike.shanglv.Common.QQListView.DelButtonClickListener()
-		{
-			@Override
-			public void clickHappend(final int position)
-			{
-				startDeleteGrad(customerlever_List.get(position).getLevalID());
-//				customerlever_List.remove(position);
-//				adapter.refreshData((List<DealerLevel>) customerlever_List);
-			}
-		});
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_clientmange_set_grad);
 
-		loading_ll=(LinearLayout) findViewById(R.id.loading_ll);
-		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
-		query_status_tv=(TextView) findViewById(R.id.query_status_tv);
-		set_default_rl=(RelativeLayout) findViewById(R.id.set_default_rl);
-		add_grad_rl=(RelativeLayout) findViewById(R.id.add_grad_rl);
-		default_grad_tv=(TextView) findViewById(R.id.default_grad_tv);
-		title_tv=(TextView) findViewById(R.id.title_tv);
-		((ImageButton)findViewById(R.id.back_imgbtn)).setOnClickListener(clickListener);
-		set_default_rl.setOnClickListener(clickListener);
-		add_grad_rl.setOnClickListener(clickListener);
-		Bundle bundle=new Bundle();
-		bundle=getIntent().getExtras();
-		if (bundle!=null) {
-			displayName=bundle.containsKey(DISPLAY_TYPENAME_STRING)?bundle.getString(DISPLAY_TYPENAME_STRING):"";
-			title_tv.setText(displayName+"级别设置");
+			context = this;
+			sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+			customerlever_List = new ArrayList<DealerLevel>();
+			listview = (com.jike.shanglv.Common.QQListView) findViewById(R.id.listview);
+			listview.setDelButtonClickListener(new com.jike.shanglv.Common.QQListView.DelButtonClickListener() {
+				@Override
+				public void clickHappend(final int position) {
+					startDeleteGrad(customerlever_List.get(position)
+							.getLevalID());
+					// customerlever_List.remove(position);
+					// adapter.refreshData((List<DealerLevel>)
+					// customerlever_List);
+				}
+			});
+
+			loading_ll = (LinearLayout) findViewById(R.id.loading_ll);
+			frame_ani_iv = (ImageView) findViewById(R.id.frame_ani_iv);
+			query_status_tv = (TextView) findViewById(R.id.query_status_tv);
+			set_default_rl = (RelativeLayout) findViewById(R.id.set_default_rl);
+			add_grad_rl = (RelativeLayout) findViewById(R.id.add_grad_rl);
+			default_grad_tv = (TextView) findViewById(R.id.default_grad_tv);
+			title_tv = (TextView) findViewById(R.id.title_tv);
+			((ImageButton) findViewById(R.id.back_imgbtn))
+					.setOnClickListener(clickListener);
+			set_default_rl.setOnClickListener(clickListener);
+			add_grad_rl.setOnClickListener(clickListener);
+			Bundle bundle = new Bundle();
+			bundle = getIntent().getExtras();
+			if (bundle != null) {
+				displayName = bundle.containsKey(DISPLAY_TYPENAME_STRING) ? bundle
+						.getString(DISPLAY_TYPENAME_STRING) : "";
+				title_tv.setText(displayName + "级别设置");
+			}
+			if (displayName.equals(CUSTOMER_DISPLAYNAME)) {
+				levellistActionName = "customerlevallist";
+				addlevelActionName = "addcustomerleval";
+				setdefaultlevalActionName = "setdefaultcustomerlevel";
+			} else if (displayName.equals(DEALER_DISPLAYNAME)) {
+				levellistActionName = "dealerlevallist";
+				addlevelActionName = "adddealerleval";
+				setdefaultlevalActionName = "setdefaultlevel";
+			}
+			startQueryGrad();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (displayName.equals(CUSTOMER_DISPLAYNAME)) {
-			levellistActionName="customerlevallist";
-			addlevelActionName="addcustomerleval";
-			setdefaultlevalActionName="setdefaultcustomerlevel";
-		}else if (displayName.equals(DEALER_DISPLAYNAME)) {
-			levellistActionName="dealerlevallist";
-			addlevelActionName="adddealerleval";
-			setdefaultlevalActionName="setdefaultlevel";
-		}
-		startQueryGrad();
 	}
-	
-	View.OnClickListener clickListener=new View.OnClickListener() {
+
+	View.OnClickListener clickListener = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View arg0) {
-			switch (arg0.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.set_default_rl:
-				iniPopupWindow(0, initLevelData());
-				pwMyPopWindow.showAtLocation(set_default_rl, Gravity.BOTTOM, 0,
-						0);
-				break;
-			case R.id.add_grad_rl:
-				 final EditText inputServer = new EditText(context);
-			        inputServer.setFocusable(true);
+			try {
+				switch (arg0.getId()) {
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.set_default_rl:
+					iniPopupWindow(0, initLevelData());
+					pwMyPopWindow.showAtLocation(set_default_rl,
+							Gravity.BOTTOM, 0, 0);
+					break;
+				case R.id.add_grad_rl:
+					final EditText inputServer = new EditText(context);
+					inputServer.setFocusable(true);
 
-			        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-			        builder.setTitle("新增"+displayName+"级别").setView(inputServer).setNegativeButton(
-			                "取消", null);
-			        builder.setPositiveButton("确定",
-			                new DialogInterface.OnClickListener() {
-			                    public void onClick(DialogInterface dialog, int which) {
-			                        String inputName = inputServer.getText().toString().trim();
-			                        if(inputName.length()>0)startAddGrad(inputName);
-			                    }
-			                });
-			        builder.show();
-				break;
-			default:
-				break;
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							context);
+					builder.setTitle("新增" + displayName + "级别")
+							.setView(inputServer).setNegativeButton("取消", null);
+					builder.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									String inputName = inputServer.getText()
+											.toString().trim();
+									if (inputName.length() > 0)
+										startAddGrad(inputName);
+								}
+							});
+					builder.show();
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
-	
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
@@ -160,7 +177,7 @@ public class ActivityClientManageSetGrad extends Activity {
 		anim.setOneShot(false);
 		anim.start();
 	}
-	
+
 	private void startQueryGrad() {
 		if (HttpUtils.showNetCannotUse(context)) {
 			loading_ll.setVisibility(View.GONE);
@@ -172,19 +189,29 @@ public class ActivityClientManageSetGrad extends Activity {
 				MyApp ma = new MyApp(context);
 				String str = "{\"userID\":\""
 						+ sp.getString(SPkeys.userid.getString(), "") + "\"}";
-				String param = "action="+levellistActionName+"&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action="
+						+ levellistActionName
+						+ "&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + levellistActionName + str);
-				dealerlevallistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ levellistActionName + str);
+				dealerlevallistReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
 				Message msg = new Message();
 				msg.what = DEALERLEVELMSGCODE;
 				handler.sendMessage(msg);
 			}
 		}).start();
 	}
-	
+
 	private void startAddGrad(final String newName) {
 		if (HttpUtils.showNetCannotUse(context)) {
 			loading_ll.setVisibility(View.GONE);
@@ -194,27 +221,38 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void run() {
 				MyApp ma = new MyApp(context);
-				String str="";
-				str = "{\"userID\":\""+ sp.getString(SPkeys.userid.getString(), "") 
-						+"\",\"lname\":\""+ newName+ "\"}";
-				String param="";
+				String str = "";
+				str = "{\"userID\":\""
+						+ sp.getString(SPkeys.userid.getString(), "")
+						+ "\",\"lname\":\"" + newName + "\"}";
+				String param = "";
 				try {
-					param = "action="+addlevelActionName+"&str=" + URLEncoder.encode(str, "utf-8") + "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+					param = "action="
+							+ addlevelActionName
+							+ "&str="
+							+ URLEncoder.encode(str, "utf-8")
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
 							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + addlevelActionName+ str);
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ addlevelActionName + str);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				addcustomerlevalReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+				addcustomerlevalReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
 				Message msg = new Message();
 				msg.what = ADDLEVELMSGCODE;
 				handler.sendMessage(msg);
 			}
 		}).start();
 	}
-	
+
 	private void startSetDefaultGrad(final String id) {
 		if (HttpUtils.showNetCannotUse(context)) {
 			loading_ll.setVisibility(View.GONE);
@@ -224,27 +262,38 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void run() {
 				MyApp ma = new MyApp(context);
-				String str="";
-				str = "{\"userID\":\""+ sp.getString(SPkeys.userid.getString(), "") 
-						+"\",\"lID\":\""+ id+ "\"}";
-				String param="";
+				String str = "";
+				str = "{\"userID\":\""
+						+ sp.getString(SPkeys.userid.getString(), "")
+						+ "\",\"lID\":\"" + id + "\"}";
+				String param = "";
 				try {
-					param = "action="+setdefaultlevalActionName+"&str=" + URLEncoder.encode(str, "utf-8") + "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+					param = "action="
+							+ setdefaultlevalActionName
+							+ "&str="
+							+ URLEncoder.encode(str, "utf-8")
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
 							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + setdefaultlevalActionName+ str);
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ setdefaultlevalActionName + str);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
 				Message msg = new Message();
 				msg.what = SETDEFAULTLEVELMSGCODE;
 				handler.sendMessage(msg);
 			}
 		}).start();
 	}
-	
+
 	private void startDeleteGrad(final String id) {
 		if (HttpUtils.showNetCannotUse(context)) {
 			loading_ll.setVisibility(View.GONE);
@@ -254,28 +303,37 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void run() {
 				MyApp ma = new MyApp(context);
-				String str="";
-				str = "{\"userID\":\""+ sp.getString(SPkeys.userid.getString(), "") 
-						+"\",\"lID\":\""+ id+ "\"}";
-				String param="";
+				String str = "";
+				str = "{\"userID\":\""
+						+ sp.getString(SPkeys.userid.getString(), "")
+						+ "\",\"lID\":\"" + id + "\"}";
+				String param = "";
 				try {
-					param = "action=deletelevel&str=" + URLEncoder.encode(str, "utf-8") + "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+					param = "action=deletelevel&str="
+							+ URLEncoder.encode(str, "utf-8")
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
 							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "deletelevel"+ str);
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "deletelevel" + str);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
 				Message msg = new Message();
 				msg.what = DELETELEVELMSGCODE;
 				handler.sendMessage(msg);
 			}
 		}).start();
 	}
-	
-	private void startModifyGrad(final String id,final String name) {
+
+	private void startModifyGrad(final String id, final String name) {
 		if (HttpUtils.showNetCannotUse(context)) {
 			loading_ll.setVisibility(View.GONE);
 			return;
@@ -284,21 +342,30 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void run() {
 				MyApp ma = new MyApp(context);
-				String str="";
-				str = "{\"userID\":\""+ sp.getString(SPkeys.userid.getString(), "") 
-						+"\",\"lname\":\""+ name
-						+"\",\"lID\":\""+ id+ "\"}";
-				String param="";
+				String str = "";
+				str = "{\"userID\":\""
+						+ sp.getString(SPkeys.userid.getString(), "")
+						+ "\",\"lname\":\"" + name + "\",\"lID\":\"" + id
+						+ "\"}";
+				String param = "";
 				try {
-					param = "action=modifylevel&str=" + URLEncoder.encode(str, "utf-8") + "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+					param = "action=modifylevel&str="
+							+ URLEncoder.encode(str, "utf-8")
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
 							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "modifylevel"+ str);
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "modifylevel" + str);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
+				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
 				Message msg = new Message();
 				msg.what = MODIFYLEVELMSGCODE;
 				handler.sendMessage(msg);
@@ -318,17 +385,20 @@ public class ActivityClientManageSetGrad extends Activity {
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
-					String msgString=jsonObject.getJSONObject("d").getString("msg");
+					String msgString = jsonObject.getJSONObject("d").getString(
+							"msg");
 					if (!state.equals("0000")) {
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(msgString);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
-					}else if(state.equals("0000"))
-						 startQueryGrad();//修改删除后刷新数据
+							}
+						});
+					} else if (state.equals("0000"))
+						startQueryGrad();// 修改删除后刷新数据
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -338,24 +408,29 @@ public class ActivityClientManageSetGrad extends Activity {
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
-					String msgString=jsonObject.getJSONObject("d").getString("msg");
+					String msgString = jsonObject.getJSONObject("d").getString(
+							"msg");
 					if (state.equals("0000")) {
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("添加用户级别信息成功");
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 						startQueryGrad();
 					} else {
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle(msgString);
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -368,18 +443,19 @@ public class ActivityClientManageSetGrad extends Activity {
 					String state = jsonObject.getString("c");
 
 					if (state.equals("0000")) {
-						JSONArray cArray= jsonObject.getJSONArray("d");
+						JSONArray cArray = jsonObject.getJSONArray("d");
 						customerlever_List.clear();
 						for (int i = 0; i < cArray.length(); i++) {
-							DealerLevel cUser=JSONHelper.parseObject(cArray.getJSONObject(i), DealerLevel.class);
+							DealerLevel cUser = JSONHelper.parseObject(
+									cArray.getJSONObject(i), DealerLevel.class);
 							customerlever_List.add(cUser);
 							if (cUser.getIsDefault().equals("1")) {
 								default_grad_tv.setText(cUser.getLevalName());
 							}
 						}
-						adapter=new ListAdapter(context, customerlever_List);
+						adapter = new ListAdapter(context, customerlever_List);
 						listview.setAdapter(adapter);
-						if (customerlever_List.size() == 0){
+						if (customerlever_List.size() == 0) {
 							query_status_tv.setText("未查询到客户级别信息");
 							frame_ani_iv.setVisibility(View.INVISIBLE);
 							break;
@@ -438,46 +514,63 @@ public class ActivityClientManageSetGrad extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(
-						R.layout.item_dealerlevel, null);
-			}
-			TextView dealerLevelName_tv = (TextView) convertView
-					.findViewById(R.id.dealerLevelName_tv);
-			TextView modify_tv=(TextView) convertView.findViewById(R.id.modify_tv);
-
-			if(str.get(position).getLevalName()!=null&&str.get(position).getLevalName().length()>0)
-				dealerLevelName_tv.setText(str.get(position).getLevalName());
-			modify_tv.setTag(position+"");
-			modify_tv.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					final int index=Integer.valueOf(arg0.getTag().toString());
-					final EditText inputServer = new EditText(context);
-				        inputServer.setFocusable(true);
-				        inputServer.setText(customerlever_List.get(index).getLevalName());
-				        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				        builder.setTitle("修改"+displayName+"级别").setView(inputServer).setNegativeButton(
-				                "取消", null);
-				        builder.setPositiveButton("确定",
-				                new DialogInterface.OnClickListener() {
-				                    public void onClick(DialogInterface dialog, int which) {
-				                        String inputName = inputServer.getText().toString();
-				                        startModifyGrad(customerlever_List.get(index).getLevalID(),inputName);
-				                    }
-				                });
-//				        builder.setNeutralButton("删除", new DialogInterface.OnClickListener() {
-//							public void onClick(DialogInterface arg0, int arg1) {
-//								startDeleteGrad(customerlever_List.get(index).getLevalID());
-//							}
-//						});
-				        builder.show();
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(R.layout.item_dealerlevel,
+							null);
 				}
-			});
+				TextView dealerLevelName_tv = (TextView) convertView
+						.findViewById(R.id.dealerLevelName_tv);
+				TextView modify_tv = (TextView) convertView
+						.findViewById(R.id.modify_tv);
+
+				if (str.get(position).getLevalName() != null
+						&& str.get(position).getLevalName().length() > 0)
+					dealerLevelName_tv
+							.setText(str.get(position).getLevalName());
+				modify_tv.setTag(position + "");
+				modify_tv.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						final int index = Integer.valueOf(arg0.getTag()
+								.toString());
+						final EditText inputServer = new EditText(context);
+						inputServer.setFocusable(true);
+						inputServer.setText(customerlever_List.get(index)
+								.getLevalName());
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								context);
+						builder.setTitle("修改" + displayName + "级别")
+								.setView(inputServer)
+								.setNegativeButton("取消", null);
+						builder.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+										String inputName = inputServer
+												.getText().toString();
+										startModifyGrad(
+												customerlever_List.get(index)
+														.getLevalID(),
+												inputName);
+									}
+								});
+						// builder.setNeutralButton("删除", new
+						// DialogInterface.OnClickListener() {
+						// public void onClick(DialogInterface arg0, int arg1) {
+						// startDeleteGrad(customerlever_List.get(index).getLevalID());
+						// }
+						// });
+						builder.show();
+					}
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return convertView;
 		}
 	}
-	
+
 	private PopupWindow pwMyPopWindow;// popupwindow
 	private ListView lvPopupList;
 	private int currentID_XJ = 0;
@@ -498,10 +591,13 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				default_grad_tv.setText(list1.get(position).get("title")!=null?list1.get(position).get("title")
-						.toString():"");
+				default_grad_tv
+						.setText(list1.get(position).get("title") != null ? list1
+								.get(position).get("title").toString()
+								: "");
 				currentID_XJ = position;
-				startSetDefaultGrad(customerlever_List.get(position).getLevalID());
+				startSetDefaultGrad(customerlever_List.get(position)
+						.getLevalID());
 				pwMyPopWindow.dismiss();
 			}
 		});
@@ -602,7 +698,9 @@ public class ActivityClientManageSetGrad extends Activity {
 			else
 				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
 						R.drawable.radio));
-			myHolder.title.setText(list.get(position).get("title")!=null?list.get(position).get("title").toString():"");
+			myHolder.title
+					.setText(list.get(position).get("title") != null ? list
+							.get(position).get("title").toString() : "");
 			return convertView;
 		}
 
@@ -615,7 +713,5 @@ public class ActivityClientManageSetGrad extends Activity {
 			this.currentID = currentID;
 		}
 	}
-	
-	
-	
+
 }

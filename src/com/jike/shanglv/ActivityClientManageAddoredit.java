@@ -86,9 +86,13 @@ public class ActivityClientManageAddoredit extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_clientmanage_addoredit_client);
-		initView();
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_clientmanage_addoredit_client);
+			initView();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -123,7 +127,7 @@ public class ActivityClientManageAddoredit extends Activity {
 		endValidDay_tv.setOnClickListener(onClickListener);
 		title_tv = (TextView) findViewById(R.id.title_tv);
 		default_grad_tv = (TextView) findViewById(R.id.default_grad_tv);
-		startValidDay=DateUtil.GetTodayDate();
+		startValidDay = DateUtil.GetTodayDate();
 		startValidDay_tv.setText(DateUtil.GetTodayDate());
 
 		Bundle bundle = new Bundle();
@@ -197,74 +201,85 @@ public class ActivityClientManageAddoredit extends Activity {
 	View.OnClickListener onClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-			Date date = null;
-			switch (arg0.getId()) {
-			case R.id.setgrad_ll:
-				iniPopupWindow(0, initLevelData());
-				pwMyPopWindow.showAtLocation(setgrad_ll, Gravity.BOTTOM, 0, 0);
-				break;
-			case R.id.province_city_tv:
-				SelectProvinceCityAlertDialog sad = new SelectProvinceCityAlertDialog(
-						ActivityClientManageAddoredit.this);
-				break;
-			case R.id.cancel_tv:
-				finish();
-				break;
-			case R.id.finish_tv:
-				if (add_edit == 0 && validInput())// 新增
-					startAdd();
-				else if (add_edit == 1 && validInput())// 修改
-					startModify();
-				break;
-			case R.id.startValidDay_tv:
-				Calendar c1 = Calendar.getInstance();
-				try {
-					if (!startValidDay.isEmpty()) {
-						date = sdf.parse(startValidDay);
-						c1.setTime(date);
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+				Date date = null;
+				switch (arg0.getId()) {
+				case R.id.setgrad_ll:
+					iniPopupWindow(0, initLevelData());
+					pwMyPopWindow.showAtLocation(setgrad_ll, Gravity.BOTTOM, 0,
+							0);
+					break;
+				case R.id.province_city_tv:
+					SelectProvinceCityAlertDialog sad = new SelectProvinceCityAlertDialog(
+							ActivityClientManageAddoredit.this);
+					break;
+				case R.id.cancel_tv:
+					finish();
+					break;
+				case R.id.finish_tv:
+					if (add_edit == 0 && validInput())// 新增
+						startAdd();
+					else if (add_edit == 1 && validInput())// 修改
+						startModify();
+					break;
+				case R.id.startValidDay_tv:
+					Calendar c1 = Calendar.getInstance();
+					try {
+						if (!startValidDay.isEmpty()) {
+							date = sdf.parse(startValidDay);
+							c1.setTime(date);
+						}
+					} catch (java.text.ParseException e) {
+						e.printStackTrace();
 					}
-				} catch (java.text.ParseException e) {
-					e.printStackTrace();
-				}
-				new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								startValidDay_tv.setText(year + "/"
-										+ (monthOfYear + 1) + "/" + dayOfMonth);
-								startValidDay = year + "/" + (monthOfYear + 1)
-										+ "/" + dayOfMonth;
-							}
-						}, c1.get(Calendar.YEAR), c1.get(Calendar.MONTH), c1
-								.get(Calendar.DAY_OF_MONTH)).show();
-				break;
-			case R.id.endValidDay_tv:
-				Calendar c11 = Calendar.getInstance();
-				try {
-					if (!startValidDay.isEmpty()) {
-						date = sdf.parse(endValidDay);
-						c11.setTime(date);
+					new DatePickerDialog(context,
+							new DatePickerDialog.OnDateSetListener() {
+								@Override
+								public void onDateSet(DatePicker view,
+										int year, int monthOfYear,
+										int dayOfMonth) {
+									startValidDay_tv.setText(year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth);
+									startValidDay = year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth;
+								}
+							}, c1.get(Calendar.YEAR), c1.get(Calendar.MONTH),
+							c1.get(Calendar.DAY_OF_MONTH)).show();
+					break;
+				case R.id.endValidDay_tv:
+					Calendar c11 = Calendar.getInstance();
+					try {
+						if (!startValidDay.isEmpty()) {
+							date = sdf.parse(endValidDay);
+							c11.setTime(date);
+						}
+					} catch (java.text.ParseException e) {
+						e.printStackTrace();
 					}
-				} catch (java.text.ParseException e) {
-					e.printStackTrace();
+					new DatePickerDialog(context,
+							new DatePickerDialog.OnDateSetListener() {
+								@Override
+								public void onDateSet(DatePicker view,
+										int year, int monthOfYear,
+										int dayOfMonth) {
+									endValidDay_tv.setText(year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth);
+									endValidDay = year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth;
+								}
+							}, c11.get(Calendar.YEAR), c11.get(Calendar.MONTH),
+							c11.get(Calendar.DAY_OF_MONTH)).show();
+					break;
+				default:
+					break;
 				}
-				new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								endValidDay_tv.setText(year + "/"
-										+ (monthOfYear + 1) + "/" + dayOfMonth);
-								endValidDay = year + "/" + (monthOfYear + 1)
-										+ "/" + dayOfMonth;
-							}
-						}, c11.get(Calendar.YEAR), c11.get(Calendar.MONTH), c11
-								.get(Calendar.DAY_OF_MONTH)).show();
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -759,35 +774,38 @@ public class ActivityClientManageAddoredit extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title
+						.setText(list.get(position).get("title") != null ? list
+								.get(position).get("title").toString() : "");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title
-					.setText(list.get(position).get("title") != null ? list
-							.get(position).get("title").toString() : "");
 			return convertView;
 		}
-
 		class Holder {
 			ImageView iv;
 			TextView title;
 		}
-
 		public void setCurrentID(int currentID) {
 			this.currentID = currentID;
 		}

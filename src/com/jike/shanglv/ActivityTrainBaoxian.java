@@ -45,40 +45,46 @@ public class ActivityTrainBaoxian extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_train_baoxian);
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_train_baoxian);
+			initView();
+			((MyApplication) getApplication()).addActivity(this);
 
-		adapter = new MyListAdapter(context, list);
-		adapter.setCurrentID(currentID);
-		baoxian_listview.setAdapter(adapter);
-		baoxian_listview.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				if (position != currentID) {
-					adapter.setCurrentID(position);
-					adapter.notifyDataSetChanged();
+			adapter = new MyListAdapter(context, list);
+			adapter.setCurrentID(currentID);
+			baoxian_listview.setAdapter(adapter);
+			baoxian_listview.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					if (position != currentID) {
+						adapter.setCurrentID(position);
+						adapter.notifyDataSetChanged();
+					}
+					currentID = position;
+					switch (currentID) {
+					case 0:
+						curentBaoxian = No_Baoxian;
+						break;
+					case 1:
+						curentBaoxian = Baoxian_Five;
+						break;
+					case 2:
+						curentBaoxian = Baoxian_Ten;
+						break;
+					default:
+						break;
+					}
+					setResult(
+							0,
+							getIntent().putExtra(BAOXIAN_BUNDSTRING,
+									curentBaoxian));
 				}
-				currentID = position;
-				switch (currentID) {
-				case 0:
-					curentBaoxian = No_Baoxian;
-					break;
-				case 1:
-					curentBaoxian = Baoxian_Five;
-					break;
-				case 2:
-					curentBaoxian = Baoxian_Ten;
-					break;
-				default:
-					break;
-				}
-				setResult(0,
-						getIntent().putExtra(BAOXIAN_BUNDSTRING, curentBaoxian));
-			}
-		});
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -184,27 +190,33 @@ public class ActivityTrainBaoxian extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				// myHolder.iv.setBackgroundResource((Integer)
+				// list.get(position).get("img"));
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title.setText(list.get(position).get("title")
+						.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			// myHolder.iv.setBackgroundResource((Integer)
-			// list.get(position).get("img"));
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title.setText(list.get(position).get("title").toString());
 			return convertView;
 		}
 
@@ -212,12 +224,9 @@ public class ActivityTrainBaoxian extends Activity {
 			ImageView iv;
 			TextView title;
 		}
-
 		public void setCurrentID(int currentID) {
 			this.currentID = currentID;
 		}
-
 	}
-
 
 }

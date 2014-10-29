@@ -81,9 +81,9 @@ public class ActivityTrainBooking extends Activity {
 	private ImageLoader imageLoader;
 
 	private TrainListItem ti = new TrainListItem();// 从列表传过来的车票信息
-	private String startdate, commitReturnJson,seat_Type;
+	private String startdate, commitReturnJson, seat_Type;
 	private float ticket_price, baoxian_unitPrice = 10, totalPrice;// 保费：0、5、10
-	private int selectedSeatIndex = -1,remainTicketCount=1;//当前选择席别及剩余票数
+	private int selectedSeatIndex = -1, remainTicketCount = 1;// 当前选择席别及剩余票数
 	private Bitmap validCodeBitmap;
 	private ArrayList<Passenger> passengerList;// 选择的乘机人列表
 	private ArrayList<Passenger> allPassengerList;// 当前所有乘机人的列表（服务端和用户新增的）
@@ -92,11 +92,15 @@ public class ActivityTrainBooking extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_train_booking);
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_train_booking);
+			initView();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -162,8 +166,8 @@ public class ActivityTrainBooking extends Activity {
 		end_time_tv.setText(ti.getETime());
 		adapter_xibie = new MyListAdapter(context, ti.getSeatList());
 		adapter_xibie.setCurrentID(selectedSeatIndex);
-		remainTicketCount=Integer.valueOf(ti.getRemain_Count());
-//		adapter_xibie.notifyDataSetChanged();
+		remainTicketCount = Integer.valueOf(ti.getRemain_Count());
+		// adapter_xibie.notifyDataSetChanged();
 		xibie_listview.setAdapter(adapter_xibie);
 		ActivityInlandAirlineticketBooking
 				.setListViewHeightBasedOnChildren(xibie_listview);
@@ -176,16 +180,18 @@ public class ActivityTrainBooking extends Activity {
 					adapter_xibie.notifyDataSetChanged();
 				}
 				selectedSeatIndex = position;
-//				adapter_xibie.notifyDataSetChanged();
+				// adapter_xibie.notifyDataSetChanged();
 				ticket_price = Float.valueOf(ti.getSeatList().get(position)
 						.getPrice());
-				remainTicketCount=Integer.valueOf(ti.getSeatList().get(position).getShengyu());
+				remainTicketCount = Integer.valueOf(ti.getSeatList()
+						.get(position).getShengyu());
 				caculateMoney();
 			}
 		});
-		if (selectedSeatIndex==-1) {
+		if (selectedSeatIndex == -1) {
 			order_now_btn.setEnabled(false);
-			order_now_btn.setBackground(getResources().getDrawable(R.drawable.booking_immediately_button_d));
+			order_now_btn.setBackground(getResources().getDrawable(
+					R.drawable.booking_immediately_button_d));
 		}
 
 		String SFType = ti.getSFType();
@@ -245,7 +251,7 @@ public class ActivityTrainBooking extends Activity {
 					JSONArray array = new JSONArray(
 							bundle.getString("SeatListString"));
 					ArrayList<Seat> seats = new ArrayList<Seat>();
-					Boolean hasSelectedASeatBoolean=false;
+					Boolean hasSelectedASeatBoolean = false;
 					for (int i = 0; i < array.length(); i++) {
 						Seat seat = new Seat();
 						seat.setPrice(array.getJSONObject(i).getString("price"));
@@ -253,10 +259,12 @@ public class ActivityTrainBooking extends Activity {
 								"shengyu"));
 						seat.setType(array.getJSONObject(i).getString("type"));
 						seats.add(seat);
-						if (!hasSelectedASeatBoolean&&!seat.getShengyu().equals("0")) {
-							selectedSeatIndex=i;
-							ticket_price=Float.valueOf(array.getJSONObject(i).getString("price"));
-							hasSelectedASeatBoolean=true;
+						if (!hasSelectedASeatBoolean
+								&& !seat.getShengyu().equals("0")) {
+							selectedSeatIndex = i;
+							ticket_price = Float.valueOf(array.getJSONObject(i)
+									.getString("price"));
+							hasSelectedASeatBoolean = true;
 						}
 					}
 					ti.setSeatList(seats);
@@ -272,8 +280,7 @@ public class ActivityTrainBooking extends Activity {
 					Time run_time = new Time(ti.getRunTime());
 					c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)
 							+ Time.HOUR);
-					c.set(Calendar.MINUTE, c.get(Calendar.MINUTE)
-							+ Time.MINUTE);
+					c.set(Calendar.MINUTE, c.get(Calendar.MINUTE) + Time.MINUTE);
 					String arriveDay = new SimpleDateFormat("yyyy-MM-dd")
 							.format(c.getTime());
 					end_date_tv.setText(arriveDay);
@@ -321,15 +328,22 @@ public class ActivityTrainBooking extends Activity {
 						+ "\",\"TicketCount\":\"" + passengerList.size()
 						+ "\",\"PsgInfo\":" + getPassengers() + "}";
 				str = str.replace("null", "");
-				String param = "?action=trainorderv2&userkey=" + ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
-						+ "&sitekey=" + MyApp.sitekey + "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainorderv2" + str);
-//				try {
-//					str = URLEncoder.encode(str, "utf-8");
-//				} catch (UnsupportedEncodingException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				String param = "?action=trainorderv2&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "trainorderv2" + str);
+				// try {
+				// str = URLEncoder.encode(str, "utf-8");
+				// } catch (UnsupportedEncodingException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
 						"&str=" + str);
 				Message msg = new Message();
@@ -358,12 +372,17 @@ public class ActivityTrainBooking extends Activity {
 			trainOrderPassenger.setCardType(passengerList.get(i)
 					.getIdentificationType());
 			trainOrderPassenger.setIncAmount(String.valueOf(baoxian_unitPrice));
-			trainOrderPassenger.setPhone(passengerList.get(i).getMobie()==null?"":passengerList.get(i).getMobie());
-			trainOrderPassenger.setSaleprice(ticket_price+"");
+			trainOrderPassenger
+					.setPhone(passengerList.get(i).getMobie() == null ? ""
+							: passengerList.get(i).getMobie());
+			trainOrderPassenger.setSaleprice(ticket_price + "");
 			trainOrderPassenger.setSeatType(seat_Type);
-			try {//URLEncoder.encode(passengerList.get(i).getPassengerName(), "utf-8")
-				trainOrderPassenger.setPsgName(passengerList.get(i).getPassengerName());
-				trainOrderPassenger.setTicketType(passengerList.get(i).getPassengerType());
+			try {// URLEncoder.encode(passengerList.get(i).getPassengerName(),
+					// "utf-8")
+				trainOrderPassenger.setPsgName(passengerList.get(i)
+						.getPassengerName());
+				trainOrderPassenger.setTicketType(passengerList.get(i)
+						.getPassengerType());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -386,15 +405,17 @@ public class ActivityTrainBooking extends Activity {
 					getValidCodePic();// 提交失败后需刷新验证码
 					yanzhengma_input_et.setText("");
 					progressdialog.dismiss();
-//					new AlertDialog.Builder(context).setTitle("发生异常，订单提交失败！")
-//							.setPositiveButton("确认", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+					// new AlertDialog.Builder(context).setTitle("发生异常，订单提交失败！")
+					// .setPositiveButton("确认", null).show();
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, true);
 					cad.setTitle("发生异常，订单提交失败");
-					cad.setPositiveButton("知道了", new OnClickListener(){
+					cad.setPositiveButton("知道了", new OnClickListener() {
 						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
-						}});
+						}
+					});
 					break;
 				}
 				JSONTokener jsonParser;
@@ -413,19 +434,21 @@ public class ActivityTrainBooking extends Activity {
 						startActivityForResult(intent, NEW_ORDER_DETAIL_CODE);
 
 					} else {
-//						new AlertDialog.Builder(context)
-//								.setTitle(
-//										jsonObject.getJSONObject("d")
-//												.getString("msg"))
-//								.setPositiveButton("确定", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-						cad.setTitle(jsonObject.getJSONObject("d")
-								.getString("msg"));
-						cad.setPositiveButton("知道了", new OnClickListener(){
+						// new AlertDialog.Builder(context)
+						// .setTitle(
+						// jsonObject.getJSONObject("d")
+						// .getString("msg"))
+						// .setPositiveButton("确定", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle(jsonObject.getJSONObject("d").getString(
+								"msg"));
+						cad.setPositiveButton("知道了", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 						getValidCodePic();// 提交失败后需刷新验证码
 						yanzhengma_input_et.setText("");
 					}
@@ -450,199 +473,220 @@ public class ActivityTrainBooking extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			case R.id.lianxiren_icon_imgbtn:
-				startActivityForResult(
-						new Intent(
-								context,
-								com.jike.shanglv.SeclectCity.ContactListActivity.class),
-						CONTANCT_REQUEST_CODE);
-				break;
-			case R.id.modify_seat_tv:
-				finish();
-				break;
-			case R.id.djsx_tv:
-			case R.id.yanzhengma_iv:
-				getValidCodePic();
-				break;
-			case R.id.add_passager_rl:
-				Intent intent = new Intent(context,
-						ActivityInlandAirlineticketSelectPassengers.class);
-				intent.putExtra(
-						ActivityInlandAirlineticketSelectPassengers.SYSTYPE,
-						"2");
-				intent.putExtra(
-						ActivityInlandAirlineticketSelectPassengers.TITLE_NAME,
-						"选择旅客");
-				intent.putExtra(ALLPASSENGERSLIST,
-						JSONHelper.toJSON(allPassengerList));
-				intent.putExtra(SELECTEDPASSENGERSLIST,
-						JSONHelper.toJSON(passengerList));
-				startActivityForResult(intent, ADD_PASSENGERS_FORRESULET_CODE);
-				break;
-			case R.id.baoxian_price_and_count_tv:
-			case R.id.baoxian_check_imgbtn:
-			case R.id.baoxian_rl:
-				Intent intent_bx = new Intent(context,
-						ActivityTrainBaoxian.class);
-				intent_bx.putExtra(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING,
-						baoxian_price_and_count_tv.getText().toString().trim());
-				startActivityForResult(intent_bx, BAOXIAN_REQUEST_CODE);
-				break;
-			case R.id.order_now_btn:
-				if (selectedSeatIndex==-1) {
-					order_now_btn.setEnabled(false);
+			try {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				case R.id.lianxiren_icon_imgbtn:
+					startActivityForResult(
+							new Intent(
+									context,
+									com.jike.shanglv.SeclectCity.ContactListActivity.class),
+							CONTANCT_REQUEST_CODE);
+					break;
+				case R.id.modify_seat_tv:
+					finish();
+					break;
+				case R.id.djsx_tv:
+				case R.id.yanzhengma_iv:
+					getValidCodePic();
+					break;
+				case R.id.add_passager_rl:
+					Intent intent = new Intent(context,
+							ActivityInlandAirlineticketSelectPassengers.class);
+					intent.putExtra(
+							ActivityInlandAirlineticketSelectPassengers.SYSTYPE,
+							"2");
+					intent.putExtra(
+							ActivityInlandAirlineticketSelectPassengers.TITLE_NAME,
+							"选择旅客");
+					intent.putExtra(ALLPASSENGERSLIST,
+							JSONHelper.toJSON(allPassengerList));
+					intent.putExtra(SELECTEDPASSENGERSLIST,
+							JSONHelper.toJSON(passengerList));
+					startActivityForResult(intent,
+							ADD_PASSENGERS_FORRESULET_CODE);
+					break;
+				case R.id.baoxian_price_and_count_tv:
+				case R.id.baoxian_check_imgbtn:
+				case R.id.baoxian_rl:
+					Intent intent_bx = new Intent(context,
+							ActivityTrainBaoxian.class);
+					intent_bx.putExtra(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING,
+							baoxian_price_and_count_tv.getText().toString()
+									.trim());
+					startActivityForResult(intent_bx, BAOXIAN_REQUEST_CODE);
+					break;
+				case R.id.order_now_btn:
+					if (selectedSeatIndex == -1) {
+						order_now_btn.setEnabled(false);
+						break;
+					}
+					if (passengerList.size() == 0) {
+						// new AlertDialog.Builder(context).setTitle("乘客不能为空")
+						// .setMessage("请添加乘客信息！")
+						// .setPositiveButton("确定", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("请添加乘客信息");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					} else if (remainTicketCount < passengerList.size()) {
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("当前仅剩余" + remainTicketCount + "张票，无法满足"
+								+ passengerList.size() + "个人的预订需求");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					}
+
+					if (yanzhengma_input_et.getText().toString().length() != 4) {
+						// new AlertDialog.Builder(context).setTitle("请输入验证码")
+						// .setPositiveButton("确定", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("请输入验证码");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					}
+					if (!CommonFunc.isMobileNO(contact_person_phone_et
+							.getText().toString().trim())) {
+						// new
+						// AlertDialog.Builder(context).setTitle("手机号码格式不正确")
+						// .setMessage("请输入合法的手机号码！")
+						// .setPositiveButton("确定", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("手机号码格式不正确");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					} else {
+						sp.edit()
+								.putString(
+										SPkeys.trainContactPhone.getString(),
+										contact_person_phone_et.getText()
+												.toString()).commit();
+					}
+					commitOrder();
+					break;
+				default:
 					break;
 				}
-				if (passengerList.size() == 0) {
-//					new AlertDialog.Builder(context).setTitle("乘客不能为空")
-//							.setMessage("请添加乘客信息！")
-//							.setPositiveButton("确定", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-					cad.setTitle("请添加乘客信息");
-					cad.setPositiveButton("确定", new OnClickListener(){
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}});
-					break;
-				}else if(remainTicketCount<passengerList.size()){
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-					cad.setTitle("当前仅剩余"+remainTicketCount+"张票，无法满足"+passengerList.size()+"个人的预订需求");
-					cad.setPositiveButton("确定", new OnClickListener(){
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}});
-					break;
-				}
-				
-				if (yanzhengma_input_et.getText().toString().length() != 4) {
-//					new AlertDialog.Builder(context).setTitle("请输入验证码")
-//							.setPositiveButton("确定", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-					cad.setTitle("请输入验证码");
-					cad.setPositiveButton("确定", new OnClickListener(){
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}});
-					break;
-				}
-				if (!CommonFunc.isMobileNO(contact_person_phone_et.getText()
-						.toString().trim())) {
-//					new AlertDialog.Builder(context).setTitle("手机号码格式不正确")
-//							.setMessage("请输入合法的手机号码！")
-//							.setPositiveButton("确定", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-					cad.setTitle("手机号码格式不正确");
-					cad.setPositiveButton("确定", new OnClickListener(){
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}});
-					break;
-				} else {
-					sp.edit()
-							.putString(
-									SPkeys.trainContactPhone.getString(),
-									contact_person_phone_et.getText()
-											.toString()).commit();
-				}
-				commitOrder();
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (resultCode) {
-		case ActivityInlandAirlineticketSelectPassengers.SELECTED_FINISH:
-			Bundle b = null;
-			if (data != null) {
-				b = data.getExtras();
-			} else
+		try {
+			switch (resultCode) {
+			case ActivityInlandAirlineticketSelectPassengers.SELECTED_FINISH:
+				Bundle b = null;
+				if (data != null) {
+					b = data.getExtras();
+				} else
+					break;
+				String passengerListString = "",
+				allPassengerListString = "";
+				if (b != null && b.containsKey(SELECTEDPASSENGERSLIST)) {
+					passengerListString = b.getString(SELECTEDPASSENGERSLIST);
+				}
+				if (b != null && b.containsKey(ALLPASSENGERSLIST)) {
+					allPassengerListString = b.getString(ALLPASSENGERSLIST);
+				} else
+					break;
+				try {
+					passengerList.clear();
+					passengerList = (ArrayList<Passenger>) JSONHelper
+							.parseCollection(passengerListString, List.class,
+									Passenger.class);
+					allPassengerList = (ArrayList<Passenger>) JSONHelper
+							.parseCollection(allPassengerListString,
+									List.class, Passenger.class);
+					passengerList = ActivityInlandAirlineticketBooking
+							.removeDuplictePassengers(passengerList);
+					caculateMoney();
+					if (passengerList.size() > 0) {
+						add_passager_tv.setText("修改乘客");
+						passenger_head_divid_line.setVisibility(View.VISIBLE);
+					} else if (passengerList.size() == 0) {
+						add_passager_tv.setText("新增乘客");
+						passenger_head_divid_line.setVisibility(View.GONE);
+					}
+					ListAdapter adapter = new PassengerListAdapter(context,
+							passengerList);
+					passenger_listview.setAdapter(adapter);
+					ActivityInlandAirlineticketBooking
+							.setListViewHeightBasedOnChildren(passenger_listview);
+				} catch (Exception e) {
+					e.printStackTrace();
+					break;
+				}
 				break;
-			String passengerListString = "",
-			allPassengerListString = "";
-			if (b != null && b.containsKey(SELECTEDPASSENGERSLIST)) {
-				passengerListString = b.getString(SELECTEDPASSENGERSLIST);
+			default:
+				break;
 			}
-			if (b != null && b.containsKey(ALLPASSENGERSLIST)) {
-				allPassengerListString = b.getString(ALLPASSENGERSLIST);
-			} else
-				break;
-			try {
-				passengerList.clear();
-				passengerList = (ArrayList<Passenger>) JSONHelper
-						.parseCollection(passengerListString, List.class,
-								Passenger.class);
-				allPassengerList = (ArrayList<Passenger>) JSONHelper
-						.parseCollection(allPassengerListString, List.class,
-								Passenger.class);
-				passengerList = ActivityInlandAirlineticketBooking
-						.removeDuplictePassengers(passengerList);
+			if (requestCode == CONTANCT_REQUEST_CODE) {// 联系人
+				if (data == null)
+					return;
+				Bundle b = data.getExtras();
+				if (b != null && b.containsKey("pickedPhoneNum")) {
+					String myNum = b.getString("pickedPhoneNum");
+					if (myNum.startsWith("17951")) {
+						myNum = myNum.substring(5);
+					} else if (myNum.startsWith("+86")) {
+						myNum = myNum.substring(3);
+					}
+					contact_person_phone_et.setText(myNum);
+				}
+			} else if (requestCode == BAOXIAN_REQUEST_CODE) {
+				if (data == null)
+					return;
+				Bundle b = data.getExtras();
+				if (b != null
+						&& b.containsKey(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING)) {
+					String baoxian = b
+							.getString(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING);
+					baoxian_price_and_count_tv.setText(baoxian);
+					if (baoxian.equals(ActivityTrainBaoxian.No_Baoxian)) {
+						baoxian_unitPrice = 0;
+					} else if (baoxian
+							.equals(ActivityTrainBaoxian.Baoxian_Five)) {
+						baoxian_unitPrice = 5;
+					} else if (baoxian.equals(ActivityTrainBaoxian.Baoxian_Ten)) {
+						baoxian_unitPrice = 10;
+					}
+				}
 				caculateMoney();
-				if (passengerList.size() > 0) {
-					add_passager_tv.setText("修改乘客");
-					passenger_head_divid_line.setVisibility(View.VISIBLE);
-				} else if (passengerList.size() == 0) {
-					add_passager_tv.setText("新增乘客");
-					passenger_head_divid_line.setVisibility(View.GONE);
-				}
-				ListAdapter adapter = new PassengerListAdapter(context,
-						passengerList);
-				passenger_listview.setAdapter(adapter);
-				ActivityInlandAirlineticketBooking
-						.setListViewHeightBasedOnChildren(passenger_listview);
-			} catch (Exception e) {
-				e.printStackTrace();
-				break;
 			}
-			break;
-		default:
-			break;
-		}
-		if (requestCode == CONTANCT_REQUEST_CODE) {// 联系人
-			if (data == null)
-				return;
-			Bundle b = data.getExtras();
-			if (b != null && b.containsKey("pickedPhoneNum")) {
-				String myNum = b.getString("pickedPhoneNum");
-				if (myNum.startsWith("17951")) {
-					myNum = myNum.substring(5);
-				} else if (myNum.startsWith("+86")) {
-					myNum = myNum.substring(3);
-				}
-				contact_person_phone_et.setText(myNum);
-			}
-		} else if (requestCode == BAOXIAN_REQUEST_CODE) {
-			if (data == null)
-				return;
-			Bundle b = data.getExtras();
-			if (b != null
-					&& b.containsKey(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING)) {
-				String baoxian = b
-						.getString(ActivityTrainBaoxian.BAOXIAN_BUNDSTRING);
-				baoxian_price_and_count_tv.setText(baoxian);
-				if (baoxian.equals(ActivityTrainBaoxian.No_Baoxian)) {
-					baoxian_unitPrice = 0;
-				} else if (baoxian.equals(ActivityTrainBaoxian.Baoxian_Five)) {
-					baoxian_unitPrice = 5;
-				} else if (baoxian.equals(ActivityTrainBaoxian.Baoxian_Ten)) {
-					baoxian_unitPrice = 10;
-				}
-			}
-			caculateMoney();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -673,56 +717,58 @@ public class ActivityTrainBooking extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater
-						.inflate(
-								R.layout.item_inland_airlineticket_passenger_list,
-								null);
-			}
-			View divid_line = convertView.findViewById(R.id.divid_line);
-			TextView passengerName_tv = (TextView) convertView
-					.findViewById(R.id.passengerName_tv);
-			TextView identificationType_tv = (TextView) convertView
-					.findViewById(R.id.identificationType_tv);
-			TextView identificationNum_tv = (TextView) convertView
-					.findViewById(R.id.identificationNum_tv);
-			TextView passengerType_tv = (TextView) convertView
-					.findViewById(R.id.passengerType_tv);
-
-			passengerName_tv.setText(str.get(position).getPassengerName());
-			identificationType_tv.setText(str.get(position)
-					.getIdentificationType());
-			identificationNum_tv.setText(str.get(position)
-					.getIdentificationNum());
-			passengerType_tv.setText("(" + str.get(position).getPassengerType()
-					+ ")");
-			RelativeLayout passenger_rl = (RelativeLayout) convertView
-					.findViewById(R.id.passenger_rl);
-			passenger_rl.setTag(position + "");
-			if (position == passengerList.size() - 1) {
-				divid_line.setVisibility(View.GONE);
-			}
-
-			ImageButton delete_imgbtn = (ImageButton) convertView
-					.findViewById(R.id.delete_imgbtn);
-			delete_imgbtn.setTag(position + "");// 给Item中的button设置tag，根据tag判断用户点击了第几行
-			delete_imgbtn.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					int index = Integer.parseInt(v.getTag().toString());
-					passengerList.remove(index);
-					notifyDataSetChanged();
-					ActivityInlandAirlineticketBooking
-							.setListViewHeightBasedOnChildren(passenger_listview);
-					if (passengerList.size() == 0) {
-						add_passager_tv.setText(getResources().getString(
-								R.string.add_passenger));
-						passenger_head_divid_line.setVisibility(View.GONE);
-					}
-					caculateMoney();
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_inland_airlineticket_passenger_list,
+							null);
 				}
-			});
+				View divid_line = convertView.findViewById(R.id.divid_line);
+				TextView passengerName_tv = (TextView) convertView
+						.findViewById(R.id.passengerName_tv);
+				TextView identificationType_tv = (TextView) convertView
+						.findViewById(R.id.identificationType_tv);
+				TextView identificationNum_tv = (TextView) convertView
+						.findViewById(R.id.identificationNum_tv);
+				TextView passengerType_tv = (TextView) convertView
+						.findViewById(R.id.passengerType_tv);
 
+				passengerName_tv.setText(str.get(position).getPassengerName());
+				identificationType_tv.setText(str.get(position)
+						.getIdentificationType());
+				identificationNum_tv.setText(str.get(position)
+						.getIdentificationNum());
+				passengerType_tv.setText("("
+						+ str.get(position).getPassengerType() + ")");
+				RelativeLayout passenger_rl = (RelativeLayout) convertView
+						.findViewById(R.id.passenger_rl);
+				passenger_rl.setTag(position + "");
+				if (position == passengerList.size() - 1) {
+					divid_line.setVisibility(View.GONE);
+				}
+
+				ImageButton delete_imgbtn = (ImageButton) convertView
+						.findViewById(R.id.delete_imgbtn);
+				delete_imgbtn.setTag(position + "");// 给Item中的button设置tag，根据tag判断用户点击了第几行
+				delete_imgbtn.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						int index = Integer.parseInt(v.getTag().toString());
+						passengerList.remove(index);
+						notifyDataSetChanged();
+						ActivityInlandAirlineticketBooking
+								.setListViewHeightBasedOnChildren(passenger_listview);
+						if (passengerList.size() == 0) {
+							add_passager_tv.setText(getResources().getString(
+									R.string.add_passenger));
+							passenger_head_divid_line.setVisibility(View.GONE);
+						}
+						caculateMoney();
+					}
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return convertView;
 		}
 	}
@@ -769,82 +815,87 @@ public class ActivityTrainBooking extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_xibie_list_single, null);
-				myHolder.seat_grad_tv = (TextView) convertView
-						.findViewById(R.id.seat_grad_tv);
-				myHolder.ticket_price_tv = (TextView) convertView
-						.findViewById(R.id.ticket_price_tv);
-				myHolder.remain_count_tv = (TextView) convertView
-						.findViewById(R.id.remain_count_tv);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
-			}
-			// myHolder.iv.setBackgroundResource((Integer)
-			// list.get(position).get("img"));
-			if (position == this.currentID
-					&& !seats.get(position).getShengyu().equals("0")) {
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.checkmark_icon_selected));
-				hasSelected = true;
-				selectedSeatIndex = position;
-				//票价格和剩余票数 随所选座位变化
-				ticket_price=Float.valueOf(seats.get(selectedSeatIndex).getPrice());
-				remainTicketCount=Integer.valueOf(seats.get(selectedSeatIndex).getShengyu());
-				seat_Type=seats.get(selectedSeatIndex).getType();
-			} else if (!hasSelected
-					&& !seats.get(position).getShengyu().equals("0")) {
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.checkmark_icon_selected));
-				hasSelected = true;
-				selectedSeatIndex = position;
-				ticket_price=Float.valueOf(seats.get(selectedSeatIndex).getPrice());
-				remainTicketCount=Integer.valueOf(seats.get(selectedSeatIndex).getShengyu());
-				seat_Type=seats.get(selectedSeatIndex).getType();
-			} else {
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.checkmark_icon_unselected));
-			}
-			myHolder.seat_grad_tv.setText(seats.get(position).getType());
-			myHolder.ticket_price_tv.setText("￥"
-					+ seats.get(position).getPrice());
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_xibie_list_single, null);
+					myHolder.seat_grad_tv = (TextView) convertView
+							.findViewById(R.id.seat_grad_tv);
+					myHolder.ticket_price_tv = (TextView) convertView
+							.findViewById(R.id.ticket_price_tv);
+					myHolder.remain_count_tv = (TextView) convertView
+							.findViewById(R.id.remain_count_tv);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				// myHolder.iv.setBackgroundResource((Integer)
+				// list.get(position).get("img"));
+				if (position == this.currentID
+						&& !seats.get(position).getShengyu().equals("0")) {
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.checkmark_icon_selected));
+					hasSelected = true;
+					selectedSeatIndex = position;
+					// 票价格和剩余票数 随所选座位变化
+					ticket_price = Float.valueOf(seats.get(selectedSeatIndex)
+							.getPrice());
+					remainTicketCount = Integer.valueOf(seats.get(
+							selectedSeatIndex).getShengyu());
+					seat_Type = seats.get(selectedSeatIndex).getType();
+				} else if (!hasSelected
+						&& !seats.get(position).getShengyu().equals("0")) {
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.checkmark_icon_selected));
+					hasSelected = true;
+					selectedSeatIndex = position;
+					ticket_price = Float.valueOf(seats.get(selectedSeatIndex)
+							.getPrice());
+					remainTicketCount = Integer.valueOf(seats.get(
+							selectedSeatIndex).getShengyu());
+					seat_Type = seats.get(selectedSeatIndex).getType();
+				} else {
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.checkmark_icon_unselected));
+				}
+				myHolder.seat_grad_tv.setText(seats.get(position).getType());
+				myHolder.ticket_price_tv.setText("￥"
+						+ seats.get(position).getPrice());
 
-			if (seats.get(position).getShengyu().equals("40")) {
-				myHolder.remain_count_tv.setText("票源充足 ");
-			} else {
-				myHolder.remain_count_tv.setText("余票"
-						+ seats.get(position).getShengyu() + "张");
-			}
-			if (ti.getSeat_Type().equals(seats.get(position).getType())) {// 默认选中席别与前页列表中展现的相同
-				selectedSeatIndex = currentID;
-			}
-			if (seats.get(position).getShengyu().equals("0")) {// 余票为0，不可预订
-				myHolder.seat_grad_tv.setTextColor(getResources().getColor(
-						R.color.gray));
-				myHolder.ticket_price_tv.setTextColor(getResources().getColor(
-						R.color.gray));
-				myHolder.remain_count_tv.setTextColor(getResources().getColor(
-						R.color.gray));
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
+				if (seats.get(position).getShengyu().equals("40")) {
+					myHolder.remain_count_tv.setText("票源充足 ");
+				} else {
+					myHolder.remain_count_tv.setText("余票"
+							+ seats.get(position).getShengyu() + "张");
+				}
+				if (ti.getSeat_Type().equals(seats.get(position).getType())) {// 默认选中席别与前页列表中展现的相同
+					selectedSeatIndex = currentID;
+				}
+				if (seats.get(position).getShengyu().equals("0")) {// 余票为0，不可预订
+					myHolder.seat_grad_tv.setTextColor(getResources().getColor(
+							R.color.gray));
+					myHolder.ticket_price_tv.setTextColor(getResources()
+							.getColor(R.color.gray));
+					myHolder.remain_count_tv.setTextColor(getResources()
+							.getColor(R.color.gray));
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return convertView;
 		}
-
 		class Holder {
 			ImageView iv;
 			TextView seat_grad_tv, ticket_price_tv, remain_count_tv;
 		}
-
 		public void setCurrentID(int currentID) {
 			this.currentID = currentID;
 		}
-
 	}
-
 }

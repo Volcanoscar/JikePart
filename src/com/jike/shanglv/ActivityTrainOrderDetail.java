@@ -45,22 +45,20 @@ public class ActivityTrainOrderDetail extends Activity {
 
 	private Context context;
 	private ImageButton back_imgbtn, home_imgbtn;
-	private TextView order_state_tv, order_no_tv, order_date_tv,order_totalmoney_tv,
-		train_num_tv, train_type_tv, seat_type_tv,
-		start_station_tv, end_station_tv, start_time_tv,
-		end_time_tv, startoffdate_tv,
-		contact_person_phone_tv, baoxian_tv;
-	private ImageView start_station_icon_iv,end_station_icon_iv,frame_ani_iv;
+	private TextView order_state_tv, order_no_tv, order_date_tv,
+			order_totalmoney_tv, train_num_tv, train_type_tv, seat_type_tv,
+			start_station_tv, end_station_tv, start_time_tv, end_time_tv,
+			startoffdate_tv, contact_person_phone_tv, baoxian_tv;
+	private ImageView start_station_icon_iv, end_station_icon_iv, frame_ani_iv;
 	private ListView passenger_listview;
 	private Button pay_now_btn;
 	private RelativeLayout loading_ll;
 	private ScrollView scrollview;
 	private SharedPreferences sp;
 	private ArrayList<Passenger> passengerList;// 乘客列表
-	private String orderID = "",  amount = "";// amount为订单金额
-	private String orderDetailReturnJson,comfirmOrderReturnJson;
+	private String orderID = "", amount = "";// amount为订单金额
+	private String orderDetailReturnJson, comfirmOrderReturnJson;
 	private JSONObject orderDetailObject;// 返回的订单详情对象
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +72,9 @@ public class ActivityTrainOrderDetail extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		((MyApplication)getApplication()).addActivity(this);
+		((MyApplication) getApplication()).addActivity(this);
 	}
-	
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
@@ -91,9 +89,9 @@ public class ActivityTrainOrderDetail extends Activity {
 		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		passengerList = new ArrayList<Passenger>();
-		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
-		loading_ll=(RelativeLayout) findViewById(R.id.loading_ll);
-		scrollview=(ScrollView) findViewById(R.id.scrollview);
+		frame_ani_iv = (ImageView) findViewById(R.id.frame_ani_iv);
+		loading_ll = (RelativeLayout) findViewById(R.id.loading_ll);
+		scrollview = (ScrollView) findViewById(R.id.scrollview);
 
 		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
 		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
@@ -101,16 +99,16 @@ public class ActivityTrainOrderDetail extends Activity {
 		home_imgbtn.setOnClickListener(btnClickListner);
 		pay_now_btn = (Button) findViewById(R.id.pay_now_btn);
 		pay_now_btn.setOnClickListener(btnClickListner);
-		start_station_icon_iv= (ImageView) findViewById(R.id.start_station_icon_iv);
-		end_station_icon_iv= (ImageView) findViewById(R.id.end_station_icon_iv);
-		train_num_tv= (TextView) findViewById(R.id.train_num_tv); 
-		train_type_tv= (TextView) findViewById(R.id.train_type_tv);
-		seat_type_tv= (TextView) findViewById(R.id.seat_type_tv);
-		start_station_tv= (TextView) findViewById(R.id.start_station_tv);
-		end_station_tv= (TextView) findViewById(R.id.end_station_tv);
-		start_time_tv= (TextView) findViewById(R.id.start_time_tv);
-		end_time_tv= (TextView) findViewById(R.id.end_time_tv); 
-		startoffdate_tv= (TextView) findViewById(R.id.startoffdate_tv); 
+		start_station_icon_iv = (ImageView) findViewById(R.id.start_station_icon_iv);
+		end_station_icon_iv = (ImageView) findViewById(R.id.end_station_icon_iv);
+		train_num_tv = (TextView) findViewById(R.id.train_num_tv);
+		train_type_tv = (TextView) findViewById(R.id.train_type_tv);
+		seat_type_tv = (TextView) findViewById(R.id.seat_type_tv);
+		start_station_tv = (TextView) findViewById(R.id.start_station_tv);
+		end_station_tv = (TextView) findViewById(R.id.end_station_tv);
+		start_time_tv = (TextView) findViewById(R.id.start_time_tv);
+		end_time_tv = (TextView) findViewById(R.id.end_time_tv);
+		startoffdate_tv = (TextView) findViewById(R.id.startoffdate_tv);
 		order_state_tv = (TextView) findViewById(R.id.order_state_tv);
 		order_no_tv = (TextView) findViewById(R.id.order_no_tv);
 		order_date_tv = (TextView) findViewById(R.id.order_date_tv);
@@ -125,44 +123,52 @@ public class ActivityTrainOrderDetail extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			case R.id.pay_now_btn:
-				final CustomerAlertDialog cad = new CustomerAlertDialog(
-						context, false);
-				cad.setTitle("是否确认购买火车票？确认后，系统将自动扣款，用于支付本次订单。");
-				cad.setPositiveButton("确定", new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						comfirmOrder();
-						cad.dismiss();
-					}
-				});
-				cad.setNegativeButton1("取消",new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						cad.dismiss();
-					}
-				});
-				
-//				String userid=sp.getString(SPkeys.userid.getString(), "");
-//				int paysystype=14;
-//				String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-//				String sign=CommonFunc. MD5(orderID + amount + userid + paysystype + siteid);
-//				MyApp ma = new MyApp(context);
-//				String url=String.format(ma.getPayServeUrl(),orderID, amount,userid,paysystype,siteid,sign);
-//				Intent intent=new Intent(context,Activity_Web_Pay.class);
-//				intent.putExtra(Activity_Web_Pay.URL, url);
-//				intent.putExtra(Activity_Web_Pay.TITLE, "火车票订单支付");
-//				startActivity(intent);
-				break;
-			default:
-				break;
+			try {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				case R.id.pay_now_btn:
+					final CustomerAlertDialog cad = new CustomerAlertDialog(
+							context, false);
+					cad.setTitle("是否确认购买火车票？确认后，系统将自动扣款，用于支付本次订单。");
+					cad.setPositiveButton("确定", new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+							comfirmOrder();
+							cad.dismiss();
+						}
+					});
+					cad.setNegativeButton1("取消", new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+							cad.dismiss();
+						}
+					});
+
+					// String userid=sp.getString(SPkeys.userid.getString(),
+					// "");
+					// int paysystype=14;
+					// String siteid=sp.getString(SPkeys.siteid.getString(),
+					// "65");
+					// String sign=CommonFunc. MD5(orderID + amount + userid +
+					// paysystype + siteid);
+					// MyApp ma = new MyApp(context);
+					// String url=String.format(ma.getPayServeUrl(),orderID,
+					// amount,userid,paysystype,siteid,sign);
+					// Intent intent=new Intent(context,Activity_Web_Pay.class);
+					// intent.putExtra(Activity_Web_Pay.URL, url);
+					// intent.putExtra(Activity_Web_Pay.TITLE, "火车票订单支付");
+					// startActivity(intent);
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -208,23 +214,29 @@ public class ActivityTrainOrderDetail extends Activity {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
 
-					if (state.equals("0000")||state.equals("1111")) {
-						String mesString = jsonObject.getJSONObject("d").getString("msg");
+					if (state.equals("0000") || state.equals("1111")) {
+						String mesString = jsonObject.getJSONObject("d")
+								.getString("msg");
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle(mesString);
 						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
-								Intent intent=new Intent(context,ActivityOrderList.class);
-								intent.putExtra(ActivityOrderList.ACTION_TOKENNAME, ActivityOrderList.TRAIN_ORDERLIST);
-								intent.putExtra(ActivityOrderList.TITLE_TOKENNAME,"火车票订单");
+								Intent intent = new Intent(context,
+										ActivityOrderList.class);
+								intent.putExtra(
+										ActivityOrderList.ACTION_TOKENNAME,
+										ActivityOrderList.TRAIN_ORDERLIST);
+								intent.putExtra(
+										ActivityOrderList.TITLE_TOKENNAME,
+										"火车票订单");
 								startActivity(intent);
 								cad.dismiss();
 							}
 						});
-					} else{
-						Toast.makeText(context,"发生异常", 0).show();
+					} else {
+						Toast.makeText(context, "发生异常", 0).show();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -245,11 +257,11 @@ public class ActivityTrainOrderDetail extends Activity {
 					p.setIdentificationNum(passengersArray.getJSONObject(i)
 							.getString("CardNo"));
 					p.setPassengerType(passengersArray.getJSONObject(i)
-							.getString("SeatType"));//将用户座位席别存在乘客类型中
-					p.setGangao(passengersArray.getJSONObject(i)
-							.getString("SeatNo"));//将用户座位存在港澳通行证号码中
-					p.setHuzhao(passengersArray.getJSONObject(i)
-							.getString("IncAmount"));//将用户保险存在护照号码中
+							.getString("SeatType"));// 将用户座位席别存在乘客类型中
+					p.setGangao(passengersArray.getJSONObject(i).getString(
+							"SeatNo"));// 将用户座位存在港澳通行证号码中
+					p.setHuzhao(passengersArray.getJSONObject(i).getString(
+							"IncAmount"));// 将用户保险存在护照号码中
 					passengerList.add(p);
 				}
 				if (passengerList.size() > 0) {
@@ -262,25 +274,31 @@ public class ActivityTrainOrderDetail extends Activity {
 				String stateString = orderDetailObject.getString("Status");
 				order_state_tv.setText(stateString);
 				if (stateString.equals("新订单"))
-					((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.VISIBLE);
+					((RelativeLayout) findViewById(R.id.bottom_rl))
+							.setVisibility(View.VISIBLE);
 				else
-					((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.GONE);
+					((RelativeLayout) findViewById(R.id.bottom_rl))
+							.setVisibility(View.GONE);
 				order_no_tv.setText(orderDetailObject.getString("OrderID"));
 				order_date_tv.setText(orderDetailObject.getString("OrderTime"));
-				order_totalmoney_tv.setText("￥"	+ orderDetailObject.getString("Amount"));
-				contact_person_phone_tv.setText(orderDetailObject.getString("Mobile"));
-				
+				order_totalmoney_tv.setText("￥"
+						+ orderDetailObject.getString("Amount"));
+				contact_person_phone_tv.setText(orderDetailObject
+						.getString("Mobile"));
+
 				train_num_tv.setText(orderDetailObject.getString("TrainNo"));
-				//返回的数据没有车次类型，此处显示车票张数
-				train_type_tv.setText(orderDetailObject.getString("TicketCount")+"张");
-//				seat_type_tv.setText(passengerList.get(0).getPassengerType());
+				// 返回的数据没有车次类型，此处显示车票张数
+				train_type_tv.setText(orderDetailObject
+						.getString("TicketCount") + "张");
+				// seat_type_tv.setText(passengerList.get(0).getPassengerType());
 				seat_type_tv.setVisibility(View.GONE);
 				start_station_tv.setText(orderDetailObject.getString("SCity"));
 				end_station_tv.setText(orderDetailObject.getString("ECity"));
 				start_time_tv.setText(orderDetailObject.getString("STime"));
 				end_time_tv.setText(orderDetailObject.getString("ETime"));
 				try {
-					startoffdate_tv.setText(DateUtil.getDate(orderDetailObject.getString("SDate")));
+					startoffdate_tv.setText(DateUtil.getDate(orderDetailObject
+							.getString("SDate")));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -289,21 +307,24 @@ public class ActivityTrainOrderDetail extends Activity {
 			}
 		}
 	};
-	
+
 	private void comfirmOrder() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				MyApp ma = new MyApp(context);
-				String str = "{\"orderid\":\"" + orderID
-						+ "\",\"userid\":\""+sp.getString(SPkeys.userid.getString(), "")+"\"}";
+				String str = "{\"orderid\":\"" + orderID + "\",\"userid\":\""
+						+ sp.getString(SPkeys.userid.getString(), "") + "\"}";
 				String param = "action=trainOrderConfirmV2&str="
 						+ str
 						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainOrderConfirmV2"
-								+ str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "trainOrderConfirmV2" + str);
 				comfirmOrderReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 				Message msg = new Message();
@@ -318,15 +339,18 @@ public class ActivityTrainOrderDetail extends Activity {
 			@Override
 			public void run() {
 				MyApp ma = new MyApp(context);
-				String str = "{\"orderID\":\"" + orderID
-						+ "\",\"siteid\":\""+sp.getString(SPkeys.siteid.getString(), "65")+"\"}";
+				String str = "{\"orderID\":\"" + orderID + "\",\"siteid\":\""
+						+ sp.getString(SPkeys.siteid.getString(), "65") + "\"}";
 				String param = "action=trainorderdetail&str="
 						+ str
 						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "trainorderdetail"
-								+ str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "trainorderdetail" + str);
 				orderDetailReturnJson = HttpUtils.getJsonContent(
 						ma.getServeUrl(), param);
 				Message msg = new Message();
@@ -362,31 +386,35 @@ public class ActivityTrainOrderDetail extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater
-						.inflate(
-								R.layout.item_inland_airlineticket_passenger_list,
-								null);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_inland_airlineticket_passenger_list,
+							null);
+				}
+				TextView passengerName_tv = (TextView) convertView
+						.findViewById(R.id.passengerName_tv);
+				TextView identificationType_tv = (TextView) convertView
+						.findViewById(R.id.identificationType_tv);
+				TextView identificationNum_tv = (TextView) convertView
+						.findViewById(R.id.identificationNum_tv);
+				TextView passengerType_tv = (TextView) convertView
+						.findViewById(R.id.passengerType_tv);
+
+				passengerName_tv.setText(str.get(position).getPassengerName());
+				passengerType_tv.setText("("
+						+ str.get(position).getIdentificationNum() + ")");
+				identificationNum_tv.setText("座位号："
+						+ str.get(position).getGangao().replace("null", "未知"));
+				identificationType_tv.setText(str.get(position)
+						.getPassengerType());
+
+				ImageButton delete_imgbtn = (ImageButton) convertView
+						.findViewById(R.id.delete_imgbtn);
+				delete_imgbtn.setVisibility(View.GONE);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			TextView passengerName_tv = (TextView) convertView
-					.findViewById(R.id.passengerName_tv);
-			TextView identificationType_tv = (TextView) convertView
-					.findViewById(R.id.identificationType_tv);
-			TextView identificationNum_tv = (TextView) convertView
-					.findViewById(R.id.identificationNum_tv);
-			TextView passengerType_tv = (TextView) convertView
-					.findViewById(R.id.passengerType_tv);
-
-			passengerName_tv.setText(str.get(position).getPassengerName());
-			passengerType_tv.setText("("
-					+ str.get(position).getIdentificationNum() + ")");
-			identificationNum_tv.setText("座位号："+ str.get(position).getGangao().replace("null", "未知"));
-			identificationType_tv.setText(str.get(position).getPassengerType());
-			
-			ImageButton delete_imgbtn = (ImageButton) convertView
-					.findViewById(R.id.delete_imgbtn);
-			delete_imgbtn.setVisibility(View.GONE);
-
 			return convertView;
 		}
 	}

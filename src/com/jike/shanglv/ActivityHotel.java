@@ -64,11 +64,15 @@ public class ActivityHotel extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel);
-		initView();
-		myNear();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hotel);
+			initView();
+			myNear();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void myNear() {
@@ -131,19 +135,22 @@ public class ActivityHotel extends Activity {
 	 * 实现实位回调监听
 	 */
 	public class MyLocationListener implements BDLocationListener {
-
 		@Override
 		public void onReceiveLocation(BDLocation location) {// Receive Location
-			latitude = location.getLatitude();
-			longtitude = location.getLongitude();
-			myaddress = location.getAddrStr();
-			errorCode = location.getLocType();
-			// ((TextView)findViewById(R.id.test_tv)).setText(myaddress);
-			if (errorCode == 63 || errorCode == 63 || errorCode == 67
-					|| (errorCode > 500 && errorCode < 701)) {
-				// Toast.makeText(context, "网络异常，自动定位失败", 0).show();
-				city_tv.setText("上海");
-				isNearby = false;
+			try {
+				latitude = location.getLatitude();
+				longtitude = location.getLongitude();
+				myaddress = location.getAddrStr();
+				errorCode = location.getLocType();
+				// ((TextView)findViewById(R.id.test_tv)).setText(myaddress);
+				if (errorCode == 63 || errorCode == 63 || errorCode == 67
+						|| (errorCode > 500 && errorCode < 701)) {
+					// Toast.makeText(context, "网络异常，自动定位失败", 0).show();
+					city_tv.setText("上海");
+					isNearby = false;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -151,106 +158,121 @@ public class ActivityHotel extends Activity {
 	View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			case R.id.my_position_ll:
-				myNear();
-				break;
-			case R.id.city_ll:
-				Intent cityIntent = new Intent();
-				cityIntent.setClass(context,
-						com.jike.shanglv.SeclectCity.HotelCityActivity.class);
-				startActivityForResult(cityIntent, ruzhucity);
-				break;
-			case R.id.ruzhu_date_ll:
-				Intent dateIntent = new Intent();
-				dateIntent.setClass(context,
-						com.jike.shanglv.ShipCalendar.MainActivity.class);
-				dateIntent.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "入住日期");
-				startActivityForResult(dateIntent, ruzhudate);
-				break;
-			case R.id.lidian_date_ll:
-				Intent dateIntent1 = new Intent();
-				dateIntent1.setClass(context,
-						com.jike.shanglv.ShipCalendar.MainActivity.class);
-				dateIntent1.putExtra(com.jike.shanglv.ShipCalendar.MainActivity.TITLE, "离店日期");
-				startActivityForResult(dateIntent1, lidiandate);
-				break;
-			case R.id.xingji_ll:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				// popupWindow_xingji.showAtLocation(buxian_xingji_btn,Gravity.BOTTOM,
-				// 0, 0);
+			try {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				case R.id.my_position_ll:
+					myNear();
+					break;
+				case R.id.city_ll:
+					Intent cityIntent = new Intent();
+					cityIntent
+							.setClass(
+									context,
+									com.jike.shanglv.SeclectCity.HotelCityActivity.class);
+					startActivityForResult(cityIntent, ruzhucity);
+					break;
+				case R.id.ruzhu_date_ll:
+					Intent dateIntent = new Intent();
+					dateIntent.setClass(context,
+							com.jike.shanglv.ShipCalendar.MainActivity.class);
+					dateIntent.putExtra(
+							com.jike.shanglv.ShipCalendar.MainActivity.TITLE,
+							"入住日期");
+					startActivityForResult(dateIntent, ruzhudate);
+					break;
+				case R.id.lidian_date_ll:
+					Intent dateIntent1 = new Intent();
+					dateIntent1.setClass(context,
+							com.jike.shanglv.ShipCalendar.MainActivity.class);
+					dateIntent1.putExtra(
+							com.jike.shanglv.ShipCalendar.MainActivity.TITLE,
+							"离店日期");
+					startActivityForResult(dateIntent1, lidiandate);
+					break;
+				case R.id.xingji_ll:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					// popupWindow_xingji.showAtLocation(buxian_xingji_btn,Gravity.BOTTOM,
+					// 0, 0);
 
-				iniPopupWindow(0, initXingjiData());
-				pwMyPopWindow.showAtLocation(search_button, Gravity.BOTTOM, 0,
-						0);
-				break;
-			case R.id.jiage_ll:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				// popupWindow_jiage.showAtLocation(buxian_price_btn,Gravity.BOTTOM,
-				// 0, 0);
-				iniPopupWindow(1, initJiageData());
-				pwMyPopWindow.showAtLocation(search_button, Gravity.BOTTOM, 0,
-						0);
-				break;
-			case R.id.chongzhi_button:
-				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
-					startActivity(new Intent(context, Activity_Login.class));
+					iniPopupWindow(0, initXingjiData());
+					pwMyPopWindow.showAtLocation(search_button, Gravity.BOTTOM,
+							0, 0);
+					break;
+				case R.id.jiage_ll:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					// popupWindow_jiage.showAtLocation(buxian_price_btn,Gravity.BOTTOM,
+					// 0, 0);
+					iniPopupWindow(1, initJiageData());
+					pwMyPopWindow.showAtLocation(search_button, Gravity.BOTTOM,
+							0, 0);
+					break;
+				case R.id.chongzhi_button:
+					if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+						startActivity(new Intent(context, Activity_Login.class));
+						break;
+					}
+					if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
+							.toString(), lidian_date_tv.getText().toString())) {
+						// new
+						// AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
+						// .setPositiveButton("知道了", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle("入住日期不能大于离店日期");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					}
+					if (HttpUtils.showNetCannotUse(context)) {
+						break;
+					}
+					if (city_tv.getText().toString().equals("我附近的酒店")) {
+						isNearby = true;
+					}
+					if (city_tv.getText().toString().equals("我附近的酒店")
+							&& (myaddress == null || myaddress.equals(""))) {// 定位失败
+						city_tv.setText("上海");
+						isNearby = false;
+						Toast.makeText(context, "定位失败，请选择城市进行查询", 0).show();
+						break;
+					}
+					Intent intents = new Intent(context,
+							ActivityHotelSearchlist.class);
+					intents.putExtra("nearby", isNearby);
+					intents.putExtra("latitude", latitude);
+					intents.putExtra("longtitude", longtitude);
+					intents.putExtra("myaddress", myaddress);
+					intents.putExtra("city", city_tv.getText());
+					intents.putExtra("ruzhu_date", ruzhu_date_tv.getText()
+							.toString());
+					intents.putExtra("lidian_date", lidian_date_tv.getText()
+							.toString());
+					intents.putExtra("starlevel", xingji_tv.getText()
+							.toString());
+					intents.putExtra("price", jiage_tv.getText().toString());
+					intents.putExtra("keywords", keywords_et.getText()
+							.toString());
+					startActivity(intents);
+					break;
+				default:
 					break;
 				}
-				if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
-						.toString(), lidian_date_tv.getText().toString())) {
-//					new AlertDialog.Builder(context).setTitle("入住日期不能大于离店日期")
-//							.setPositiveButton("知道了", null).show();
-					final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-					cad.setTitle("入住日期不能大于离店日期");
-					cad.setPositiveButton("确定", new OnClickListener(){
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}});
-					break;
-				}
-				if (HttpUtils.showNetCannotUse(context)) {
-					break;
-				}
-				if (city_tv.getText().toString().equals("我附近的酒店")) {
-					isNearby = true;
-				}
-				if (city_tv.getText().toString().equals("我附近的酒店")
-						&& (myaddress == null || myaddress.equals(""))) {// 定位失败
-					city_tv.setText("上海");
-					isNearby = false;
-					Toast.makeText(context, "定位失败，请选择城市进行查询", 0).show();
-					break;
-				}
-				Intent intents = new Intent(context,
-						ActivityHotelSearchlist.class);
-				intents.putExtra("nearby", isNearby);
-				intents.putExtra("latitude", latitude);
-				intents.putExtra("longtitude", longtitude);
-				intents.putExtra("myaddress", myaddress);
-				intents.putExtra("city", city_tv.getText());
-				intents.putExtra("ruzhu_date", ruzhu_date_tv.getText()
-						.toString());
-				intents.putExtra("lidian_date", lidian_date_tv.getText()
-						.toString());
-				intents.putExtra("starlevel", xingji_tv.getText().toString());
-				intents.putExtra("price", jiage_tv.getText().toString());
-				intents.putExtra("keywords", keywords_et.getText().toString());
-				startActivity(intents);
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -260,54 +282,58 @@ public class ActivityHotel extends Activity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (data == null)
-			return;
-		Bundle b = data.getExtras();
-		String myDate = DateUtil.GetTodayDate();// 获取从com.jike.jikepart.ShipCalendar.MainActivity中回传的值
-		switch (requestCode) {
-		case ruzhudate:
-			if (b != null && b.containsKey("pickedDate")) {
-				myDate = b.getString("pickedDate");
-				ruzhu_date_tv.setText(myDate);
-				if (DateUtil.compareDateIsBefore(myDate, lidian_date_tv
-						.getText().toString().trim())) {
-					try {
-						lidian_date_tv.setText(DateUtil
-								.getSpecifiedDayAfter(myDate));
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			break;
-		case lidiandate:
-			if (b != null && b.containsKey("pickedDate")) {
-				myDate = b.getString("pickedDate");
-				lidian_date_tv.setText(myDate);
-				if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
-						.toString().trim(), myDate)) {
-					try {
-						if (DateUtil.IsMoreThanToday(myDate)) {
-							ruzhu_date_tv.setText(DateUtil
-									.getSpecifiedDayBefore(myDate));
-						} else {
-							ruzhu_date_tv.setText(DateUtil.GetTodayDate());
+		try {
+			if (data == null)
+				return;
+			Bundle b = data.getExtras();
+			String myDate = DateUtil.GetTodayDate();// 获取从com.jike.jikepart.ShipCalendar.MainActivity中回传的值
+			switch (requestCode) {
+			case ruzhudate:
+				if (b != null && b.containsKey("pickedDate")) {
+					myDate = b.getString("pickedDate");
+					ruzhu_date_tv.setText(myDate);
+					if (DateUtil.compareDateIsBefore(myDate, lidian_date_tv
+							.getText().toString().trim())) {
+						try {
+							lidian_date_tv.setText(DateUtil
+									.getSpecifiedDayAfter(myDate));
+						} catch (ParseException e) {
+							e.printStackTrace();
 						}
-					} catch (ParseException e) {
-						e.printStackTrace();
 					}
 				}
+				break;
+			case lidiandate:
+				if (b != null && b.containsKey("pickedDate")) {
+					myDate = b.getString("pickedDate");
+					lidian_date_tv.setText(myDate);
+					if (DateUtil.compareDateIsBefore(ruzhu_date_tv.getText()
+							.toString().trim(), myDate)) {
+						try {
+							if (DateUtil.IsMoreThanToday(myDate)) {
+								ruzhu_date_tv.setText(DateUtil
+										.getSpecifiedDayBefore(myDate));
+							} else {
+								ruzhu_date_tv.setText(DateUtil.GetTodayDate());
+							}
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				break;
+			case ruzhucity:
+				if (b != null && b.containsKey("pickedCity")) {
+					String myCity = b.getString("pickedCity");
+					city_tv.setText(myCity);
+					isNearby = false;
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		case ruzhucity:
-			if (b != null && b.containsKey("pickedCity")) {
-				String myCity = b.getString("pickedCity");
-				city_tv.setText(myCity);
-				isNearby = false;
-			}
-			break;
-		default:
-			break;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -466,25 +492,31 @@ public class ActivityHotel extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title.setText(list.get(position).get("title")
+						.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title.setText(list.get(position).get("title").toString());
 			return convertView;
 		}
 

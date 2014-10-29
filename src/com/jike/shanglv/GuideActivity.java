@@ -3,8 +3,10 @@ package com.jike.shanglv;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -30,7 +32,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 
 	// 底部小点图片
 	private ImageView[] dots;
-
+	private Context mContext;
 	// 记录当前选中位置
 	private int currentIndex;
 
@@ -38,7 +40,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activityguide);
-
+		mContext=this;
 		// 初始化页面
 		initViews();
 		((MyApplication)getApplication()).addActivity(this);
@@ -189,7 +191,13 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
 		private void setGuided() {
 			SharedPreferences preferences = getSharedPreferences(
 					SPkeys.SPNAME.getString(), MODE_PRIVATE);
-			preferences.edit().putBoolean(SPkeys.isFirstIn.getString(), true).commit();
+			try {
+				preferences.edit().putBoolean(SPkeys.isFirstIn.getString()+mContext.getPackageManager().getPackageInfo(
+						mContext.getPackageName(), 0).versionCode, true).commit();
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		// 判断是否由对象生成界面

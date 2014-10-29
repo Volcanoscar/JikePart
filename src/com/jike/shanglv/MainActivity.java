@@ -1,6 +1,5 @@
 package com.jike.shanglv;
 
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -33,7 +32,7 @@ import com.jike.shanglv.NetAndJson.UserInfo;
 import com.jike.shanglv.Update.UpdateManager;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public class MainActivity extends ActivityGroup  implements
+public class MainActivity extends ActivityGroup implements
 		OnCheckedChangeListener {
 
 	public static MainActivity instance = null;
@@ -43,44 +42,53 @@ public class MainActivity extends ActivityGroup  implements
 	private RadioButton radio_order, radio_home, radio_mine, radio_more;
 	private Context context;
 	private SharedPreferences sp;
-	private String loginReturnJson="";
+	private String loginReturnJson = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		((MyApplication)getApplication()).addActivity(this);
-		goB2BHome();
-		initView();
-		initHomePage();
-		radio_group.setOnCheckedChangeListener(this);
-		
-		if(!((MyApplication)getApplication()).getHasCheckedUpdate()){
-			MyApp ma=new MyApp(MainActivity.this);
-			UpdateManager manager=new UpdateManager(MainActivity.this,ma.getHm().get(PackageKeys.UPDATE_NOTE.getString()).toString());
-			manager.checkForUpdates(false);
-			((MyApplication)getApplication()).setHasCheckedUpdate(true);
+		((MyApplication) getApplication()).addActivity(this);
+		try {
+			goB2BHome();
+			initView();
+			initHomePage();
+			radio_group.setOnCheckedChangeListener(this);
+
+			if (!((MyApplication) getApplication()).getHasCheckedUpdate()) {
+				MyApp ma = new MyApp(MainActivity.this);
+				UpdateManager manager = new UpdateManager(MainActivity.this, ma
+						.getHm().get(PackageKeys.UPDATE_NOTE.getString())
+						.toString());
+				manager.checkForUpdates(false);
+				((MyApplication) getApplication()).setHasCheckedUpdate(true);
+			}
+			queryUserInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		queryUserInfo();
 	}
-	
-	/*如果为B2B程序，则跳到商旅助手的主菜单界面
-	 * */
+
+	/*
+	 * 如果为B2B程序，则跳到商旅助手的主菜单界面
+	 */
 	private void goB2BHome() {
-		if((new MyApp(MainActivity.this).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B)){
+		if ((new MyApp(MainActivity.this).getHm().get(
+				PackageKeys.PLATFORM.getString()) == Platform.B2B)) {
 			Intent intent = new Intent(MainActivity.this, ActivityBMenu.class);
 			MainActivity.this.startActivity(intent);
 			MainActivity.this.finish();
 		}
 	}
-	
-	private void queryUserInfo(){
+
+	private void queryUserInfo() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				int utype = 0;
 				MyApp ma = new MyApp(context);
-				Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
+				Platform pf = (Platform) ma.getHm().get(
+						PackageKeys.PLATFORM.getString());
 				if (pf == Platform.B2B)
 					utype = 1;
 				else if (pf == Platform.B2C)
@@ -91,8 +99,7 @@ public class MainActivity extends ActivityGroup  implements
 						+ sp.getString(SPkeys.lastPassword.getString(), "")
 						+ "\",\"utype\":\"" + utype + "\"}";
 				String param = "action=userlogin&sitekey=&userkey="
-						+ ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
 								.toString()
 						+ "&str="
 						+ str
@@ -101,8 +108,8 @@ public class MainActivity extends ActivityGroup  implements
 								.get(PackageKeys.USERKEY.getString())
 								.toString()
 								+ "userlogin" + str);
-				loginReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
+				loginReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
+						param);
 				Log.v("loginReturnJson", loginReturnJson);
 				Message msg = new Message();
 				msg.what = 1;
@@ -110,8 +117,8 @@ public class MainActivity extends ActivityGroup  implements
 			}
 		}).start();
 	}
-	
-	private Handler handler = new Handler() {//在主界面判断用户名密码是否失效
+
+	private Handler handler = new Handler() {// 在主界面判断用户名密码是否失效
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -153,10 +160,14 @@ public class MainActivity extends ActivityGroup  implements
 						sp.edit()
 								.putBoolean(SPkeys.loginState.getString(), true)
 								.commit();
-					} else if (state.equals("1003")){
-						sp.edit().putString(SPkeys.userid.getString(),"").commit();
-						sp.edit().putString(SPkeys.username.getString(),"").commit();
-						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
+					} else if (state.equals("1003")) {
+						sp.edit().putString(SPkeys.userid.getString(), "")
+								.commit();
+						sp.edit().putString(SPkeys.username.getString(), "")
+								.commit();
+						sp.edit()
+								.putBoolean(SPkeys.loginState.getString(),
+										false).commit();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -198,21 +209,25 @@ public class MainActivity extends ActivityGroup  implements
 	 */
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		switch (checkedId) {
-		case R.id.radio_order:
-			switchPage(0);
-			break;
-		case R.id.radio_home:
-			switchPage(1);
-			break;
-		case R.id.radio_mine:
-			switchPage(2);
-			break;
-		case R.id.radio_more:
-			switchPage(3);
-			break;
-		default:
-			break;
+		try {
+			switch (checkedId) {
+			case R.id.radio_order:
+				switchPage(0);
+				break;
+			case R.id.radio_home:
+				switchPage(1);
+				break;
+			case R.id.radio_mine:
+				switchPage(2);
+				break;
+			case R.id.radio_more:
+				switchPage(3);
+				break;
+			default:
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -231,7 +246,7 @@ public class MainActivity extends ActivityGroup  implements
 	 * 初始化各种控件
 	 */
 	private void initView() {
-		context=this;
+		context = this;
 		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
 		container = (ViewFlipper) findViewById(R.id.container);
 		radio_group = (RadioGroup) findViewById(R.id.radio_group);
@@ -264,13 +279,13 @@ public class MainActivity extends ActivityGroup  implements
 				mExitTime = System.currentTimeMillis();
 
 			} else {
-//				finish();
-//				SysApplication.getInstance().exit();
-				 ((MyApplication)getApplication()).exit();
-				  android.os.Process.killProcess(android.os.Process.myPid());
-				  finish();
-				  System.exit(0);
-				  //http://864331652.blog.163.com/blog/static/1168625632013415112635566/
+				// finish();
+				// SysApplication.getInstance().exit();
+				((MyApplication) getApplication()).exit();
+				android.os.Process.killProcess(android.os.Process.myPid());
+				finish();
+				System.exit(0);
+				// http://864331652.blog.163.com/blog/static/1168625632013415112635566/
 			}
 			return true;
 		}
