@@ -260,8 +260,6 @@ public class Activity_RetrievePassword extends Activity {
 						startGetYanzhengma();
 					} else {
 						String emsg = jsonObject.getString("msg");
-						// new AlertDialog.Builder(context).setTitle(emsg)
-						// .setPositiveButton("确认", null).show();
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle(emsg);
@@ -280,8 +278,6 @@ public class Activity_RetrievePassword extends Activity {
 				jsonParser = new JSONTokener(yanzhengmaReturnJson);
 				try {
 					if (yanzhengmaReturnJson.length() == 0) {
-						// new AlertDialog.Builder(context).setTitle("验证码发送失败")
-						// .setPositiveButton("确认", null).show();
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle("验证码发送失败");

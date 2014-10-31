@@ -115,6 +115,9 @@ public class Activity_Login extends Activity {
 		autologin_rl.setOnClickListener(myListener);
 		registernew_tv.setOnClickListener(myListener);
 		forgetpassword_tv.setOnClickListener(myListener);
+		if((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B){
+			registernew_tv.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	private Handler handler = new Handler() {

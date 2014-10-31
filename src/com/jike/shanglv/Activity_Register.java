@@ -1,6 +1,9 @@
 //用户注册
 package com.jike.shanglv;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -20,6 +23,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
@@ -30,15 +35,18 @@ import com.jike.shanglv.NetAndJson.HttpUtils;
 public class Activity_Register extends Activity {
 
 	private ImageView back_imgbtn;
+	private TextView get_yanzhengma_tv;
 	private EditText uername_input_et, password_input_et, confirm_input_et,
 			mobile_input_et, email_input_et, recommend_input_et,
-			realname_input_et;
+			realname_input_et, checkcode_input_et;
 	private Button register_btn;
 	private Context context;
 
 	private CustomProgressDialog progressdialog;
 	private SharedPreferences sp;
-	private String registerReturnJson;
+	private String registerReturnJson, yanzhengmaReturnJson;
+	Timer timer = new Timer();
+	int interval = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +75,15 @@ public class Activity_Register extends Activity {
 		email_input_et = (EditText) findViewById(R.id.email_input_et);
 		recommend_input_et = (EditText) findViewById(R.id.recommend_input_et);
 		realname_input_et = (EditText) findViewById(R.id.realname_input_et);
+		checkcode_input_et = (EditText) findViewById(R.id.checkcode_input_et);
+		get_yanzhengma_tv = (TextView) findViewById(R.id.get_yanzhengma_tv);
 
 		register_btn = (Button) findViewById(R.id.register_btn);
 		back_imgbtn = (ImageView) findViewById(R.id.back_imgbtn);
 
 		register_btn.setOnClickListener(myListener);
 		back_imgbtn.setOnClickListener(myListener);
+		get_yanzhengma_tv.setOnClickListener(myListener);
 	}
 
 	private Handler handler = new Handler() {
@@ -89,18 +100,6 @@ public class Activity_Register extends Activity {
 					JSONObject data = jsonObject.getJSONObject("d");
 
 					if (state.equals("0000")) {
-						// new AlertDialog.Builder(context).setTitle("注册成功")
-						// .setMessage("注册成功,请登录！")
-						// .setPositiveButton("确认",
-						// new DialogInterface.OnClickListener() {
-						// public void onClick(
-						// DialogInterface dialog,
-						// int id) {
-						// startActivity(new Intent(
-						// context,
-						// Activity_Login.class));
-						// }
-						// }).show();
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle("注册成功,请登录！");
@@ -110,12 +109,10 @@ public class Activity_Register extends Activity {
 								startActivity(new Intent(context,
 										Activity_Login.class));
 								cad.dismiss();
+								Activity_Register.this.finish();
 							}
 						});
 					} else {
-						// new AlertDialog.Builder(context).setTitle("注册失败")
-						// .setMessage(message)
-						// .setPositiveButton("确认", null).show();
 						String message = "";
 						try {
 							message = data.getJSONObject("d").getString("msg");
@@ -137,7 +134,66 @@ public class Activity_Register extends Activity {
 				}
 				progressdialog.dismiss();
 				break;
+			case 2:
+				jsonParser = new JSONTokener(yanzhengmaReturnJson);
+				try {
+					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
+					String state = jsonObject.getString("c");
+					JSONObject data = jsonObject.getJSONObject("d");
+
+					if (state.equals("0000")) {
+						try {
+							interval = Integer.valueOf(data.getString("interval"));
+						} catch (Exception ee) {
+							
+						}
+						if (interval != 0) {
+							timer.schedule(task, 1000, 1000);
+						}
+					} else {
+						String message = "";
+						try {
+							message = data.getString("msg");
+						} catch (Exception e) {
+							message = data.getString("msg");
+						}
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				break;
 			}
+		}
+	};
+
+	TimerTask task = new TimerTask() {
+		@Override
+		public void run() {
+
+			runOnUiThread(new Runnable() { // UI thread
+				@Override
+				public void run() {
+					interval--;
+					get_yanzhengma_tv.setText(interval + "秒后重发");
+					get_yanzhengma_tv.setTextColor(getResources().getColor(
+							R.color.deep_gray));
+					if (interval < 0) {
+						timer.cancel();
+						get_yanzhengma_tv.setText("重新发送");
+						get_yanzhengma_tv.setTextColor(getResources().getColor(
+								R.color.blue_title_color));
+					}
+				}
+			});
 		}
 	};
 
@@ -152,6 +208,21 @@ public class Activity_Register extends Activity {
 				case R.id.register_btn:
 					if (checkValid())
 						startRegister();
+					break;
+				case R.id.get_yanzhengma_tv:
+					if (!CommonFunc.isMobileNO(mobile_input_et.getText().toString().trim())) {
+						final CustomerAlertDialog cad = new CustomerAlertDialog(context,
+								true);
+						cad.setTitle("手机号码格式不正确");
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+						break;
+					}
+					startGetVerifyCode();
 					break;
 				default:
 					break;
@@ -180,6 +251,8 @@ public class Activity_Register extends Activity {
 						+ password_input_et.getText().toString().trim()
 						+ "\",\"realName\":\""
 						+ realname_input_et.getText().toString().trim()
+						+ "\",\"smscode\":\""
+						+ checkcode_input_et.getText().toString().trim()
 						+ "\",\"email\":\""
 						+ email_input_et.getText().toString().trim() + "\"}";
 
@@ -210,6 +283,34 @@ public class Activity_Register extends Activity {
 			}
 		});
 		progressdialog.show();
+	}
+
+	// 获取验证码
+	private void startGetVerifyCode() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MyApp ma = new MyApp(getApplicationContext());
+				String str = "{\"phone\":\""
+						+ mobile_input_et.getText().toString().trim() + "\"}";
+				String param = "action=getregcode&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sign="
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "getregcode" + str) + "&sitekey="
+						+ MyApp.sitekey;
+				yanzhengmaReturnJson = HttpUtils.getJsonContent(
+						ma.getServeUrl(), param);
+				Message msg = new Message();
+				msg.what = 2;
+				handler.sendMessage(msg);
+			}
+		}).start();
 	}
 
 	/**
@@ -355,6 +456,7 @@ public class Activity_Register extends Activity {
 		return true;
 	}
 
+	// blue_title_color deep_gray
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
