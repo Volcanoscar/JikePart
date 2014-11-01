@@ -17,6 +17,7 @@ public class CustomerAlertDialog {
 		try {
 			this.context = context;
 			ad = new android.app.AlertDialog.Builder(context).create();
+			ad.setCancelable(false);
 			ad.show();
 			// 关键在下面的两行,使用window.setContentView,替换整个对话框窗口的布局
 			Window window = ad.getWindow();

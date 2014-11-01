@@ -63,13 +63,17 @@ public class ActivityHuafeichongzhi extends Activity {
 	}
 
 	private void startLoadingAni() {
-		loading_ll.setVisibility(View.VISIBLE);
-		hedui_ll.setVisibility(View.GONE);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani_small);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			loading_ll.setVisibility(View.VISIBLE);
+			hedui_ll.setVisibility(View.GONE);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani_small);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {

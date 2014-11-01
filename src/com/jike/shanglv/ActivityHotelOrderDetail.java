@@ -61,12 +61,16 @@ public class ActivityHotelOrderDetail extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {

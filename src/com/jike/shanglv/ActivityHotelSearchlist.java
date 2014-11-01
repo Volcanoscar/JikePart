@@ -96,16 +96,16 @@ public class ActivityHotelSearchlist extends Activity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		SDKInitializer.initialize(getApplicationContext());
-		setContentView(R.layout.activity_hotel_searchlist);
 		try {
+			super.onCreate(savedInstanceState);
+			SDKInitializer.initialize(getApplicationContext());
+			setContentView(R.layout.activity_hotel_searchlist);
 			initView();
 			startQuery();
+			((MyApplication) getApplication()).addActivity(this);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
-		((MyApplication) getApplication()).addActivity(this);
 	}
 
 	private void initView() {

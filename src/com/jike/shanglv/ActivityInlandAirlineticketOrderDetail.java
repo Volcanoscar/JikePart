@@ -416,31 +416,34 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater
-						.inflate(
-								R.layout.item_inland_airlineticket_passenger_list,
-								null);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_inland_airlineticket_passenger_list,
+							null);
+				}
+				TextView passengerName_tv = (TextView) convertView
+						.findViewById(R.id.passengerName_tv);
+				TextView identificationType_tv = (TextView) convertView
+						.findViewById(R.id.identificationType_tv);
+				TextView identificationNum_tv = (TextView) convertView
+						.findViewById(R.id.identificationNum_tv);
+				TextView passengerType_tv = (TextView) convertView
+						.findViewById(R.id.passengerType_tv);
+
+				passengerName_tv.setText(str.get(position).getPassengerName());
+				identificationNum_tv.setText("");
+				passengerType_tv.setText("("
+						+ str.get(position).getIdentificationNum() + ")");
+				identificationType_tv.setText("Æ±ºÅ£º"
+						+ str.get(position).getTicketNumber());
+
+				ImageButton delete_imgbtn = (ImageButton) convertView
+						.findViewById(R.id.delete_imgbtn);
+				delete_imgbtn.setVisibility(View.GONE);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			TextView passengerName_tv = (TextView) convertView
-					.findViewById(R.id.passengerName_tv);
-			TextView identificationType_tv = (TextView) convertView
-					.findViewById(R.id.identificationType_tv);
-			TextView identificationNum_tv = (TextView) convertView
-					.findViewById(R.id.identificationNum_tv);
-			TextView passengerType_tv = (TextView) convertView
-					.findViewById(R.id.passengerType_tv);
-
-			passengerName_tv.setText(str.get(position).getPassengerName());
-			identificationNum_tv.setText("");
-			passengerType_tv.setText("("
-					+ str.get(position).getIdentificationNum() + ")");
-			identificationType_tv.setText("Æ±ºÅ£º"
-					+ str.get(position).getTicketNumber());
-
-			ImageButton delete_imgbtn = (ImageButton) convertView
-					.findViewById(R.id.delete_imgbtn);
-			delete_imgbtn.setVisibility(View.GONE);
 			return convertView;
 		}
 	}

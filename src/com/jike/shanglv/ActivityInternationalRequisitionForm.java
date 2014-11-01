@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -32,7 +31,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Common.CustomProgressDialog;
 import com.jike.shanglv.Common.CustomerAlertDialog;
@@ -265,6 +263,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 										contact_person_phone_et.getText()
 												.toString()).commit();
 					}
+					if(getStr().equals(""))break;
 					commitOrder();
 					break;
 				default:
@@ -296,7 +295,17 @@ public class ActivityInternationalRequisitionForm extends Activity {
 								orderID);
 						startActivityForResult(intent, NEW_DEMAND_SUCCEED_CODE);
 					} else {
-						Toast.makeText(context, "发生未知异常，提交订单失败！", 0).show();
+//						Toast.makeText(context, "发生未知异常，提交订单失败！", 0).show();
+						String message = jsonObject.getJSONObject("d").getString("msg");
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
 					}
 					progressdialog.dismiss();
 				} catch (Exception e) {
@@ -316,7 +325,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 				// &sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81
 
 				MyApp ma = new MyApp(context);
-				String str = getStr().replace("null", "");
+				String str = getStr();
 				// String param = "action=intdemand&sitekey=&userkey=" +
 				// ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
 				// + "&sign="
@@ -388,6 +397,10 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		interDemandStr.setEmail("");
 		interDemandStr.setRemark(remark_et.getText().toString().trim());
 		// str=JSONHelper.toJSON(interDemandStr);//TODO 直接转化成json
+		String psgStr=getPsgInfo();
+		if (psgStr.equals("")) {
+			return "";
+		}
 		// String失败，只有部分属性，暂先使用以下拼接方式
 		str = "{\"uid\":\"" + interDemandStr.getUid() + "\",\"sid\":\""
 				+ interDemandStr.getSid() + "\",\"sCity\":\""
@@ -421,12 +434,24 @@ public class ActivityInternationalRequisitionForm extends Activity {
 				interDemandPassenger.setGivenname(name[1]);
 			}
 			interDemandPassenger.setCardNo(passenger.getIdentificationNum());
-			interDemandPassenger.setSex(passenger.getGender());
+			interDemandPassenger.setSex(passenger.getGender().equals("男")?"1":"2");
 			interDemandPassenger.setCardType(String
 					.valueOf(IdType.IdTypeReverse.get(passenger
 							.getIdentificationType())));
 			interDemandPassenger.setCusBirth(passenger.getBirthDay());
 			interDemandPassenger.setNumberValiddate(passenger.getIDdeadline());
+			if (passenger.getIDdeadline()==null||passenger.getIDdeadline().contains("null")) {
+				final CustomerAlertDialog cad = new CustomerAlertDialog(
+						context, true);
+				cad.setTitle("用户信息非法，请编辑用户"+ passenger.getPassengerName()+"的证件有效期，再尝试提交需求单");
+				cad.setPositiveButton("确定", new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						cad.dismiss();
+					}
+				});
+				return "";
+			}
 			try {// URLEncoder.encode(passenger.getNation(), "utf-8")
 				interDemandPassenger.setCountry(passenger.getNation());
 				interDemandPassenger.setQianfadi(passenger.getIssueAt());
@@ -439,7 +464,8 @@ public class ActivityInternationalRequisitionForm extends Activity {
 							: "false");
 			cpList.add(interDemandPassenger);
 		}
-		str = JSONHelper.toJSON(cpList).replace("\\", "");
+		str = JSONHelper.toJSON(cpList);
+		str=str.replace("\"null\"", "null").replace("null", "\"\"");
 		return str;
 	}
 

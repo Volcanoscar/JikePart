@@ -75,12 +75,15 @@ public class ActivityInternationalAirlineticketOrderDetail extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
+		try{
 		super.onWindowFocusChanged(hasFocus);
 		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
 		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
 				.getBackground();
 		anim.setOneShot(false);
-		anim.start();
+		anim.start();} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {

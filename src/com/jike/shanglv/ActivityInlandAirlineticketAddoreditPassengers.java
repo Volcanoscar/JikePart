@@ -181,8 +181,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 					nation_et.setText(editPassenger.getNation());
 				if (editPassenger.getGender() != null
 						&& !editPassenger.getGender().equals("null"))
-					gender_et.setText(editPassenger.getGender().trim()
-							.equals("1") ? "ÄÐ" : "Å®");
+					gender_et.setText(editPassenger.getGender());//.trim().equals("1") ? "ÄÐ" : "Å®"
 				if (editPassenger.getBirthDay() != null
 						&& !editPassenger.getBirthDay().equals("null"))
 					birthDay_et.setText(editPassenger.getBirthDay());
@@ -268,10 +267,14 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 							.toString().trim());
 					passenger.setIdentificationType(identificationType_tv
 							.getText().toString().trim());
-					passenger.setNation(nation);
-					passenger.setGender(gender);
-					passenger.setBirthDay(birthDay);
-					passenger.setIDdeadline(IDdeadline);
+//					passenger.setNation(nation);
+//					passenger.setGender(gender);
+//					passenger.setBirthDay(birthDay);
+//					passenger.setIDdeadline(IDdeadline);
+					passenger.setNation(nation_et.getText().toString());
+					passenger.setGender(gender_et.getText().toString());
+					passenger.setBirthDay(birthDay_et.getText().toString());
+					passenger.setIDdeadline(IDdeadline_et.getText().toString());
 					if (systype.equals("1"))
 						issueAt = issueAt_et.getText().toString().trim();
 					passenger.setIssueAt(issueAt);

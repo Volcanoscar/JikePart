@@ -1,6 +1,7 @@
 //ÓÃ»§×¢²á
 package com.jike.shanglv;
 
+import java.net.URLEncoder;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -257,7 +258,7 @@ public class Activity_Register extends Activity {
 						+ email_input_et.getText().toString().trim() + "\"}";
 
 				String param = "action=userreg&str="
-						+ str
+						+  URLEncoder.encode(str)
 						+ "&userkey="
 						+ ma.getHm().get(PackageKeys.USERKEY.getString())
 								.toString()
@@ -266,7 +267,6 @@ public class Activity_Register extends Activity {
 								.get(PackageKeys.USERKEY.getString())
 								.toString()
 								+ "userreg" + str);
-				;
 				registerReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();

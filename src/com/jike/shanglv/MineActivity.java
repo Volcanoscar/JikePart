@@ -125,16 +125,20 @@ public class MineActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		super.onResume();
-		loginState = sp.getBoolean(SPkeys.loginState.getString(), false);
-		if (!loginState) {
-			hasLogin_rl.setVisibility(View.GONE);
-			noLogin_rl.setVisibility(View.VISIBLE);
-		} else {
-			hasLogin_rl.setVisibility(View.VISIBLE);
-			noLogin_rl.setVisibility(View.GONE);
+		try {
+			super.onResume();
+			loginState = sp.getBoolean(SPkeys.loginState.getString(), false);
+			if (!loginState) {
+				hasLogin_rl.setVisibility(View.GONE);
+				noLogin_rl.setVisibility(View.VISIBLE);
+			} else {
+				hasLogin_rl.setVisibility(View.VISIBLE);
+				noLogin_rl.setVisibility(View.GONE);
+			}
+			queryUserInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		queryUserInfo();
 	}
 
 	private void queryUserInfo() {

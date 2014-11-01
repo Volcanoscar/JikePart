@@ -12,43 +12,43 @@ import android.widget.ImageView;
 import com.jike.shanglv.Common.MyRolateAnimImageView;
 import com.jike.shanglv.Enums.PackageKeys;
 
-public class HomeActivity extends Activity{
+public class HomeActivity extends Activity {
 
 	public static HomeActivity instance = null;
 	private SharedPreferences sp;
-//	private ImageButton btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg, btn_hfcz,
-//			btn_jdmp, btn_zhcz, btn_hcp;
-	
-	private MyRolateAnimImageView btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg, btn_hfcz,
-	btn_jdmp, btn_zhcz, btn_hcp;
+	// private ImageButton btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg,
+	// btn_hfcz,
+	// btn_jdmp, btn_zhcz, btn_hcp;
+
+	private MyRolateAnimImageView btn_gnjp, btn_gjjp, btn_hbdt, btn_jd, btn_tg,
+			btn_hfcz, btn_jdmp, btn_zhcz, btn_hcp;
 	private Context context;
-	
-//	AppUpdate appUpdate;
-    
+
+	// AppUpdate appUpdate;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home2);
-		context=this;
-		((MyApplication)getApplication()).addActivity(this);
-		sp=this.getSharedPreferences("mySPData",Context.MODE_PRIVATE);
-		
-//		UpdateChecker.checkForDialog(MainActivity.this,"jike");
+		context = this;
+		((MyApplication) getApplication()).addActivity(this);
+		sp = this.getSharedPreferences("mySPData", Context.MODE_PRIVATE);
+
+		// UpdateChecker.checkForDialog(MainActivity.this,"jike");
 		/*
-		btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
-		btn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);
-		btn_hbdt = (ImageButton) findViewById(R.id.imgBtn_hbdt);
-		btn_hfcz = (ImageButton) findViewById(R.id.imgBtn_hfcz);
-		btn_zhcz = (ImageButton) findViewById(R.id.imgBtn_zhcz);
-		btn_hcp = (ImageButton) findViewById(R.id.imgBtn_hcp);
-		btn_jd = (ImageButton) findViewById(R.id.imgBtn_jd);
-		
-//		btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg);
-//		btn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp);
-//		btn_tg.setOnClickListener(btnClickListner);
-//		btn_jdmp.setOnClickListener(btnClickListner);
-		
-		*/
+		 * btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp); btn_gjjp =
+		 * (ImageButton) findViewById(R.id.imgBtn_gjjp); btn_hbdt =
+		 * (ImageButton) findViewById(R.id.imgBtn_hbdt); btn_hfcz =
+		 * (ImageButton) findViewById(R.id.imgBtn_hfcz); btn_zhcz =
+		 * (ImageButton) findViewById(R.id.imgBtn_zhcz); btn_hcp = (ImageButton)
+		 * findViewById(R.id.imgBtn_hcp); btn_jd = (ImageButton)
+		 * findViewById(R.id.imgBtn_jd);
+		 * 
+		 * // btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg); // btn_jdmp =
+		 * (ImageButton) findViewById(R.id.imgBtn_jdmp); //
+		 * btn_tg.setOnClickListener(btnClickListner); //
+		 * btn_jdmp.setOnClickListener(btnClickListner);
+		 */
 		btn_gnjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gnjp);
 		btn_gjjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gjjp);
 		btn_hbdt = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hbdt);
@@ -63,68 +63,74 @@ public class HomeActivity extends Activity{
 		btn_hfcz.setOnClickListener(btnClickListner);
 		btn_zhcz.setOnClickListener(btnClickListner);
 		btn_hcp.setOnClickListener(btnClickListner);
-		
-		MyApp mApp=new MyApp(getApplicationContext());	
-		((ImageView)findViewById(R.id.menu_logo)).setBackgroundResource((Integer) mApp.getHm().get(PackageKeys.MENU_LOGO_DRAWABLE.getString()));
-		
-		//检查更新
-//		UpdateChecker.checkForDialog(HomeActivity.this,"jike");
-//		appUpdate = AppUpdateService.getAppUpdate(this);
-//		appUpdate.checkLatestVersion("UPDATE_URL", 
-//				new SimpleJSONParser());
-	}		
-	
+
+		MyApp mApp = new MyApp(getApplicationContext());
+		((ImageView) findViewById(R.id.menu_logo))
+				.setBackgroundResource((Integer) mApp.getHm().get(
+						PackageKeys.MENU_LOGO_DRAWABLE.getString()));
+
+		// 检查更新
+		// UpdateChecker.checkForDialog(HomeActivity.this,"jike");
+		// appUpdate = AppUpdateService.getAppUpdate(this);
+		// appUpdate.checkLatestVersion("UPDATE_URL",
+		// new SimpleJSONParser());
+	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-		SharedPreferences.Editor edit = sp.edit();  
-		edit.putLong("adjustFontSize", adjustFontSize());  
-		edit.commit();//将按屏幕分辨率计算好的合适文字大小存起来供后面的自定义控件使用
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putLong("adjustFontSize", adjustFontSize());
+		edit.commit();// 将按屏幕分辨率计算好的合适文字大小存起来供后面的自定义控件使用
 	}
-	
+
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.imgBtn_gnjp:
-				startActivity(new Intent(HomeActivity.this,
-					ActivityInlandAirlineticket.class));
-				break;
-			case R.id.imgBtn_gjjp:
-				startActivity(new Intent(HomeActivity.this,
-						ActivityInternationalAirlineticket.class));
-				break;
-			case R.id.imgBtn_hbdt:
-				startActivity(new Intent(HomeActivity.this,
-						ActivityHangbandongtai.class));
-				break;
-			case R.id.imgBtn_jd:
-				startActivity(new Intent(HomeActivity.this,
-						ActivityHotel.class));
-				break;
-//			case R.id.imgBtn_tg:
-//				startActivity(new Intent(HomeActivity.this,
-//						Guojijipiao_Search.class));
-//				break;
-			case R.id.imgBtn_hfcz:
-				startActivity(new Intent(HomeActivity.this,
-						ActivityHuafeichongzhi.class));
-				break;
-//			case R.id.imgBtn_jdmp:
-//				startActivity(new Intent(HomeActivity.this,
-//						Guojijipiao_Search.class));
-//				break;
-			case R.id.imgBtn_zhcz:
-				startActivity(new Intent(HomeActivity.this,
-						ActivityZhanghuchongzhi.class));
-				break;
-			case R.id.imgBtn_hcp:
-				startActivity(new Intent(HomeActivity.this,
-						ActivityTrain.class));
-				break;
-			default:
-				break;
+			try {
+				switch (v.getId()) {
+				case R.id.imgBtn_gnjp:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityInlandAirlineticket.class));
+					break;
+				case R.id.imgBtn_gjjp:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityInternationalAirlineticket.class));
+					break;
+				case R.id.imgBtn_hbdt:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityHangbandongtai.class));
+					break;
+				case R.id.imgBtn_jd:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityHotel.class));
+					break;
+				// case R.id.imgBtn_tg:
+				// startActivity(new Intent(HomeActivity.this,
+				// Guojijipiao_Search.class));
+				// break;
+				case R.id.imgBtn_hfcz:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityHuafeichongzhi.class));
+					break;
+				// case R.id.imgBtn_jdmp:
+				// startActivity(new Intent(HomeActivity.this,
+				// Guojijipiao_Search.class));
+				// break;
+				case R.id.imgBtn_zhcz:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityZhanghuchongzhi.class));
+					break;
+				case R.id.imgBtn_hcp:
+					startActivity(new Intent(HomeActivity.this,
+							ActivityTrain.class));
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -140,10 +146,10 @@ public class HomeActivity extends Activity{
 	public void onDestroy() {
 		super.onDestroy();
 	}
-	
-	/* 
+
+	/*
 	 * 根据屏幕分辨率获取字体大小(例如城市列表右侧的字母搜索条)
-	*/
+	 */
 	public int adjustFontSize() {
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
