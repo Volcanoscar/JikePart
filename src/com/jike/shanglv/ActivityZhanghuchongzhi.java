@@ -151,39 +151,45 @@ public class ActivityZhanghuchongzhi extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// url?action=phonepro&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				// &str={"phone":"","value":"","userid":"","siteid":""}
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "";
 				try {
-					str = "{\"orderID\":\"" + "" + "\",\"tm1\":\""
-							+ DateUtil.GetDateAfterToday(-30) + "\",\"tm2\":\""
-							+ DateUtil.GetTodayDate() + "\",\"pageSize\":\""
-							+ 50 + "\",\"pageIndex\":\"" + 1
-							+ "\",\"userid\":\""
-							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"siteid\":\"" + siteid + "\"}";
+					// url?action=phonepro&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+					// &str={"phone":"","value":"","userid":"","siteid":""}
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String str = "";
+					try {
+						str = "{\"orderID\":\"" + "" + "\",\"tm1\":\""
+								+ DateUtil.GetDateAfterToday(-30)
+								+ "\",\"tm2\":\"" + DateUtil.GetTodayDate()
+								+ "\",\"pageSize\":\"" + 50
+								+ "\",\"pageIndex\":\"" + 1
+								+ "\",\"userid\":\""
+								+ sp.getString(SPkeys.userid.getString(), "")
+								+ "\",\"siteid\":\"" + siteid + "\"}";
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					String param = "action=phoneprov2&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "phoneprov2" + str);
+					phoneproReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=phoneprov2&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "phoneprov2" + str);
-				phoneproReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}

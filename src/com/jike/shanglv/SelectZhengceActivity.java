@@ -98,43 +98,51 @@ public class SelectZhengceActivity extends Activity {
 		putongzhengce_tv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				putongzhengce_tv.setTextColor(context.getResources().getColor(
-						R.color.blue_title_color));
-				gaofanzhengce_tv.setTextColor(context.getResources().getColor(
-						R.color.black_txt_color));
+				try {
+					putongzhengce_tv.setTextColor(context.getResources()
+							.getColor(R.color.blue_title_color));
+					gaofanzhengce_tv.setTextColor(context.getResources()
+							.getColor(R.color.black_txt_color));
 
-				animation = new TranslateAnimation(one, 0, 0, 0);
-				animation.setFillAfter(true);// True:图片停在动画结束位置
-				animation.setDuration(300);
-				scrollbar_iv.startAnimation(animation);
-				isSpecialPolicy = false;
-				blindListData(basePolicyLists);
-				special_policy_status_tv.setVisibility(View.GONE);
+					animation = new TranslateAnimation(one, 0, 0, 0);
+					animation.setFillAfter(true);// True:图片停在动画结束位置
+					animation.setDuration(300);
+					scrollbar_iv.startAnimation(animation);
+					isSpecialPolicy = false;
+					blindListData(basePolicyLists);
+					special_policy_status_tv.setVisibility(View.GONE);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		gaofanzhengce_tv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				putongzhengce_tv.setTextColor(context.getResources().getColor(
-						R.color.black_txt_color));
-				gaofanzhengce_tv.setTextColor(context.getResources().getColor(
-						R.color.blue_title_color));
+				try {
+					putongzhengce_tv.setTextColor(context.getResources()
+							.getColor(R.color.black_txt_color));
+					gaofanzhengce_tv.setTextColor(context.getResources()
+							.getColor(R.color.blue_title_color));
 
-				animation = new TranslateAnimation(offset, one, 0, 0);
-				animation.setFillAfter(true);// True:图片停在动画结束位置
-				animation.setDuration(300);
-				scrollbar_iv.startAnimation(animation);
-				isSpecialPolicy = true;
-				blindListData(specialPolicyLists);
-				if (specialPolicyLists.size() > 0) {
-					special_policy_status_tv.setVisibility(View.VISIBLE);
-				} else {
-					special_policy_status_tv.setVisibility(View.VISIBLE);
-					special_policy_status_tv.setText("该航班没有特殊高返政策");
-					special_policy_status_tv.setTextSize(18);
-					special_policy_status_tv.setGravity(Gravity.CENTER);
-					special_policy_status_tv.setTextColor(getResources()
-							.getColor(R.color.black6));
+					animation = new TranslateAnimation(offset, one, 0, 0);
+					animation.setFillAfter(true);// True:图片停在动画结束位置
+					animation.setDuration(300);
+					scrollbar_iv.startAnimation(animation);
+					isSpecialPolicy = true;
+					blindListData(specialPolicyLists);
+					if (specialPolicyLists.size() > 0) {
+						special_policy_status_tv.setVisibility(View.VISIBLE);
+					} else {
+						special_policy_status_tv.setVisibility(View.VISIBLE);
+						special_policy_status_tv.setText("该航班没有特殊高返政策");
+						special_policy_status_tv.setTextSize(18);
+						special_policy_status_tv.setGravity(Gravity.CENTER);
+						special_policy_status_tv.setTextColor(getResources()
+								.getColor(R.color.black6));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
@@ -152,22 +160,26 @@ public class SelectZhengceActivity extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String param = "action=policylist&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "policylist" + str);
-				policyReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String param = "action=policylist&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "policylist" + str);
+					policyReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -241,19 +253,23 @@ public class SelectZhengceActivity extends Activity {
 					@Override
 					public void onClick(View listView, View buttonview,
 							int position) {
-						String policy = "";
-						if (!isSpecialPolicy
-								&& basePolicyLists.size() > position) {
-							policy = JSONHelper.toJSON(basePolicyLists
-									.get(position));
-						} else if (isSpecialPolicy
-								&& specialPolicyLists.size() > position) {
-							policy = JSONHelper.toJSON(specialPolicyLists
-									.get(position));
+						try {
+							String policy = "";
+							if (!isSpecialPolicy
+									&& basePolicyLists.size() > position) {
+								policy = JSONHelper.toJSON(basePolicyLists
+										.get(position));
+							} else if (isSpecialPolicy
+									&& specialPolicyLists.size() > position) {
+								policy = JSONHelper.toJSON(specialPolicyLists
+										.get(position));
+							}
+							setResult(SELECTED_POLICY_CODE, getIntent()
+									.putExtra(SELECTEDPOLICY, policy));
+							finish();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-						setResult(SELECTED_POLICY_CODE,
-								getIntent().putExtra(SELECTEDPOLICY, policy));
-						finish();
 					}
 				}, R.id.select_btn);
 	}
@@ -285,28 +301,31 @@ public class SelectZhengceActivity extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_policy_expandable,
-						null);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_policy_expandable, null);
+				}
+				TextView policy_name_tv = (TextView) convertView
+						.findViewById(R.id.policy_name_tv);
+				TextView fandian_tv = (TextView) convertView
+						.findViewById(R.id.fandian_tv);
+				TextView time_section_tv = (TextView) convertView
+						.findViewById(R.id.time_section_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView shuoming_tv = (TextView) convertView
+						.findViewById(R.id.shuoming_tv);
+
+				policy_name_tv.setText("政策" + (position + 1));
+				fandian_tv.setText(str.get(position).getUserrate() + "%");
+				time_section_tv.setText(str.get(position).getWtime()
+						.replace(",", "\r\n").replace(" ", ""));
+				price_tv.setText("￥" + str.get(position).getSale());
+				shuoming_tv.setText(str.get(position).getRemark());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			TextView policy_name_tv = (TextView) convertView
-					.findViewById(R.id.policy_name_tv);
-			TextView fandian_tv = (TextView) convertView
-					.findViewById(R.id.fandian_tv);
-			TextView time_section_tv = (TextView) convertView
-					.findViewById(R.id.time_section_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView shuoming_tv = (TextView) convertView
-					.findViewById(R.id.shuoming_tv);
-
-			policy_name_tv.setText("政策" + (position + 1));
-			fandian_tv.setText(str.get(position).getUserrate() + "%");
-			time_section_tv.setText(str.get(position).getWtime()
-					.replace(",", "\r\n").replace(" ", ""));
-			price_tv.setText("￥" + str.get(position).getSale());
-			shuoming_tv.setText(str.get(position).getRemark());
-
 			return convertView;
 		}
 	}

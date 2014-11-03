@@ -189,16 +189,20 @@ public class ActivityHotelFilter extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (xjOrJg == 0) {// 0:星级
-					xingji_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_XJ = position;
-					pwMyPopWindow.dismiss();
-				} else if (xjOrJg == 1) {// 1：价格
-					jiage_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_JG = position;
-					pwMyPopWindow.dismiss();
+				try {
+					if (xjOrJg == 0) {// 0:星级
+						xingji_tv.setText(list1.get(position).get("title")
+								.toString());
+						currentID_XJ = position;
+						pwMyPopWindow.dismiss();
+					} else if (xjOrJg == 1) {// 1：价格
+						jiage_tv.setText(list1.get(position).get("title")
+								.toString());
+						currentID_JG = position;
+						pwMyPopWindow.dismiss();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
@@ -220,14 +224,18 @@ public class ActivityHotelFilter extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}
@@ -319,25 +327,31 @@ public class ActivityHotelFilter extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title.setText(list.get(position).get("title")
+						.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title.setText(list.get(position).get("title").toString());
 			return convertView;
 		}
 

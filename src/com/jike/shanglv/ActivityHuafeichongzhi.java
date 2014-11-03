@@ -102,25 +102,29 @@ public class ActivityHuafeichongzhi extends Activity {
 		confirm_phonenum_et.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				String mobile = confirm_phonenum_et.getText().toString();
-				if (mobile.length() == 11) {
-					if (!phonenum_et
-							.getText()
-							.toString()
-							.trim()
-							.equals(confirm_phonenum_et.getText().toString()
-									.trim())) {
-						final CustomerAlertDialog cad = new CustomerAlertDialog(
-								context, true);
-						cad.setTitle("两次号码输入不一致，请重新输入");
-						cad.setPositiveButton("确定", new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-								cad.dismiss();
-							}
-						});
+				try {
+					String mobile = confirm_phonenum_et.getText().toString();
+					if (mobile.length() == 11) {
+						if (!phonenum_et
+								.getText()
+								.toString()
+								.trim()
+								.equals(confirm_phonenum_et.getText()
+										.toString().trim())) {
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle("两次号码输入不一致，请重新输入");
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+						}
+						startQueryPhonepro();
 					}
-					startQueryPhonepro();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 
@@ -317,14 +321,77 @@ public class ActivityHuafeichongzhi extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// url?action=phonepro&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				// &str={"phone":"","value":"","userid":"","siteid":""}
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "";
 				try {
-					str = "{\"phone\":\""
+					// url?action=phonepro&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+					// &str={"phone":"","value":"","userid":"","siteid":""}
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String str = "";
+					try {
+						str = "{\"phone\":\""
+								+ phonenum_et.getText().toString().trim()
+								+ "\",\"value\":\""
+								+ chongzhijine_tv
+										.getText()
+										.toString()
+										.trim()
+										.substring(
+												0,
+												chongzhijine_tv.getText()
+														.toString().trim()
+														.length() - 1)
+								+ "\",\"userid\":\""
+								+ sp.getString(SPkeys.userid.getString(), "")
+								+ "\",\"siteid\":\"" + siteid + "\"}";
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					String param = "action=phoneprov2&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "phoneprov2" + str);
+					phoneproReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = PHONEPRO;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
+	private void startCommitOrder() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					// url?action=phoneorder&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+					// &str={"phone":"","amount":"","pid":"","value":"","sid":"","uid":""}
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String czAmount = "";
+					czAmount = paymoney_tv.getText().toString().trim();
+					if (czAmount.length() > 0) {
+						czAmount = czAmount.substring(1);
+					}
+					String str = "{\"phone\":\""
 							+ phonenum_et.getText().toString().trim()
+							+ "\",\"amount\":\""
+							+ czAmount
+							+ "\",\"pid\":\""
+							+ prodid
 							+ "\",\"value\":\""
 							+ chongzhijine_tv
 									.getText()
@@ -334,81 +401,29 @@ public class ActivityHuafeichongzhi extends Activity {
 											0,
 											chongzhijine_tv.getText()
 													.toString().trim().length() - 1)
-							+ "\",\"userid\":\""
+							+ "\",\"uid\":\""
 							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"siteid\":\"" + siteid + "\"}";
+							+ "\",\"sid\":\"" + siteid + "\"}";
+					String param = "action=phoneorder&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "phoneorder" + str);
+					commitReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = COMMITMSG;
+					handler.sendMessage(msg);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action=phoneprov2&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "phoneprov2" + str);
-				phoneproReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = PHONEPRO;
-				handler.sendMessage(msg);
-			}
-		}).start();
-	}
-
-	private void startCommitOrder() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// url?action=phoneorder&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				// &str={"phone":"","amount":"","pid":"","value":"","sid":"","uid":""}
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String czAmount = "";
-				czAmount = paymoney_tv.getText().toString().trim();
-				if (czAmount.length() > 0) {
-					czAmount = czAmount.substring(1);
-				}
-				String str = "{\"phone\":\""
-						+ phonenum_et.getText().toString().trim()
-						+ "\",\"amount\":\""
-						+ czAmount
-						+ "\",\"pid\":\""
-						+ prodid
-						+ "\",\"value\":\""
-						+ chongzhijine_tv
-								.getText()
-								.toString()
-								.trim()
-								.substring(
-										0,
-										chongzhijine_tv.getText().toString()
-												.trim().length() - 1)
-						+ "\",\"uid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"sid\":\"" + siteid + "\"}";
-				String param = "action=phoneorder&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "phoneorder" + str);
-				commitReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = COMMITMSG;
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);

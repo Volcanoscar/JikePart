@@ -175,17 +175,21 @@ public class ActivityTrainBooking extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (position != selectedSeatIndex) {
-					adapter_xibie.setCurrentID(position);
-					adapter_xibie.notifyDataSetChanged();
+				try {
+					if (position != selectedSeatIndex) {
+						adapter_xibie.setCurrentID(position);
+						adapter_xibie.notifyDataSetChanged();
+					}
+					selectedSeatIndex = position;
+					// adapter_xibie.notifyDataSetChanged();
+					ticket_price = Float.valueOf(ti.getSeatList().get(position)
+							.getPrice());
+					remainTicketCount = Integer.valueOf(ti.getSeatList()
+							.get(position).getShengyu());
+					caculateMoney();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				selectedSeatIndex = position;
-				// adapter_xibie.notifyDataSetChanged();
-				ticket_price = Float.valueOf(ti.getSeatList().get(position)
-						.getPrice());
-				remainTicketCount = Integer.valueOf(ti.getSeatList()
-						.get(position).getShengyu());
-				caculateMoney();
 			}
 		});
 		if (selectedSeatIndex == -1) {
@@ -309,46 +313,62 @@ public class ActivityTrainBooking extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "{\"uid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"Amount\": \"" + totalPrice + "\",\"sid\":\""
-						+ siteid + "\",\"vcode\":\""
-						+ yanzhengma_input_et.getText().toString().trim()
-						+ "\",\"TrainNo\":\"" + ti.getTrainID()
-						+ "\",\"SCity\":\"" + ti.getStationS()
-						+ "\",\"ECity\":\"" + ti.getStationE()
-						+ "\",\"ETime\":\"" + ti.getETime() + "\",\"STime\":\""
-						+ ti.getGoTime() + "\",\"SDate\":\"" + startdate
-						+ "\",\"Mobile\":\""
-						+ contact_person_phone_et.getText().toString().trim()
-						+ "\",\"Email\":\"123@163.com\",\"Name\":\""
-						+ sp.getString(SPkeys.username.getString(), "")
-						+ "\",\"TicketCount\":\"" + passengerList.size()
-						+ "\",\"PsgInfo\":" + getPassengers() + "}";
-				str = str.replace("null", "");
-				String param = "?action=trainorderv2&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "trainorderv2" + str);
-				// try {
-				// str = URLEncoder.encode(str, "utf-8");
-				// } catch (UnsupportedEncodingException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
-						"&str=" + str);
-				Message msg = new Message();
-				msg.what = COMMIT_ORDER_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String str = "{\"uid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"Amount\": \""
+							+ totalPrice
+							+ "\",\"sid\":\""
+							+ siteid
+							+ "\",\"vcode\":\""
+							+ yanzhengma_input_et.getText().toString().trim()
+							+ "\",\"TrainNo\":\""
+							+ ti.getTrainID()
+							+ "\",\"SCity\":\""
+							+ ti.getStationS()
+							+ "\",\"ECity\":\""
+							+ ti.getStationE()
+							+ "\",\"ETime\":\""
+							+ ti.getETime()
+							+ "\",\"STime\":\""
+							+ ti.getGoTime()
+							+ "\",\"SDate\":\""
+							+ startdate
+							+ "\",\"Mobile\":\""
+							+ contact_person_phone_et.getText().toString()
+									.trim()
+							+ "\",\"Email\":\"123@163.com\",\"Name\":\""
+							+ sp.getString(SPkeys.username.getString(), "")
+							+ "\",\"TicketCount\":\"" + passengerList.size()
+							+ "\",\"PsgInfo\":" + getPassengers() + "}";
+					str = str.replace("null", "");
+					String param = "?action=trainorderv2&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "trainorderv2" + str);
+					// try {
+					// str = URLEncoder.encode(str, "utf-8");
+					// } catch (UnsupportedEncodingException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// }
+					commitReturnJson = HttpUtils.myPost(ma.getServeUrl()
+							+ param, "&str=" + str);
+					Message msg = new Message();
+					msg.what = COMMIT_ORDER_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -753,17 +773,22 @@ public class ActivityTrainBooking extends Activity {
 				delete_imgbtn.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						int index = Integer.parseInt(v.getTag().toString());
-						passengerList.remove(index);
-						notifyDataSetChanged();
-						ActivityInlandAirlineticketBooking
-								.setListViewHeightBasedOnChildren(passenger_listview);
-						if (passengerList.size() == 0) {
-							add_passager_tv.setText(getResources().getString(
-									R.string.add_passenger));
-							passenger_head_divid_line.setVisibility(View.GONE);
+						try {
+							int index = Integer.parseInt(v.getTag().toString());
+							passengerList.remove(index);
+							notifyDataSetChanged();
+							ActivityInlandAirlineticketBooking
+									.setListViewHeightBasedOnChildren(passenger_listview);
+							if (passengerList.size() == 0) {
+								add_passager_tv.setText(getResources()
+										.getString(R.string.add_passenger));
+								passenger_head_divid_line
+										.setVisibility(View.GONE);
+							}
+							caculateMoney();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-						caculateMoney();
 					}
 				});
 			} catch (Exception e) {
@@ -890,10 +915,12 @@ public class ActivityTrainBooking extends Activity {
 			}
 			return convertView;
 		}
+
 		class Holder {
 			ImageView iv;
 			TextView seat_grad_tv, ticket_price_tv, remain_count_tv;
 		}
+
 		public void setCurrentID(int currentID) {
 			this.currentID = currentID;
 		}

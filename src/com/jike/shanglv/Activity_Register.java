@@ -92,7 +92,6 @@ public class Activity_Register extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(registerReturnJson);
 				try {
@@ -144,9 +143,10 @@ public class Activity_Register extends Activity {
 
 					if (state.equals("0000")) {
 						try {
-							interval = Integer.valueOf(data.getString("interval"));
+							interval = Integer.valueOf(data
+									.getString("interval"));
 						} catch (Exception ee) {
-							
+
 						}
 						if (interval != 0) {
 							timer.schedule(task, 1000, 1000);
@@ -179,19 +179,22 @@ public class Activity_Register extends Activity {
 	TimerTask task = new TimerTask() {
 		@Override
 		public void run() {
-
 			runOnUiThread(new Runnable() { // UI thread
 				@Override
 				public void run() {
-					interval--;
-					get_yanzhengma_tv.setText(interval + "秒后重发");
-					get_yanzhengma_tv.setTextColor(getResources().getColor(
-							R.color.deep_gray));
-					if (interval < 0) {
-						timer.cancel();
-						get_yanzhengma_tv.setText("重新发送");
+					try {
+						interval--;
+						get_yanzhengma_tv.setText(interval + "秒后重发");
 						get_yanzhengma_tv.setTextColor(getResources().getColor(
-								R.color.blue_title_color));
+								R.color.deep_gray));
+						if (interval < 0) {
+							timer.cancel();
+							get_yanzhengma_tv.setText("重新发送");
+							get_yanzhengma_tv.setTextColor(getResources()
+									.getColor(R.color.blue_title_color));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			});
@@ -211,9 +214,10 @@ public class Activity_Register extends Activity {
 						startRegister();
 					break;
 				case R.id.get_yanzhengma_tv:
-					if (!CommonFunc.isMobileNO(mobile_input_et.getText().toString().trim())) {
-						final CustomerAlertDialog cad = new CustomerAlertDialog(context,
-								true);
+					if (!CommonFunc.isMobileNO(mobile_input_et.getText()
+							.toString().trim())) {
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("手机号码格式不正确");
 						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
@@ -241,37 +245,41 @@ public class Activity_Register extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"regCode\":\""
-						+ recommend_input_et.getText().toString().trim()
-						+ "\",\"loginName\":\""
-						+ uername_input_et.getText().toString().trim()
-						+ "\",\"phone\":\""
-						+ mobile_input_et.getText().toString().trim()
-						+ "\",\"loginPass\":\""
-						+ password_input_et.getText().toString().trim()
-						+ "\",\"realName\":\""
-						+ realname_input_et.getText().toString().trim()
-						+ "\",\"smscode\":\""
-						+ checkcode_input_et.getText().toString().trim()
-						+ "\",\"email\":\""
-						+ email_input_et.getText().toString().trim() + "\"}";
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"regCode\":\""
+							+ recommend_input_et.getText().toString().trim()
+							+ "\",\"loginName\":\""
+							+ uername_input_et.getText().toString().trim()
+							+ "\",\"phone\":\""
+							+ mobile_input_et.getText().toString().trim()
+							+ "\",\"loginPass\":\""
+							+ password_input_et.getText().toString().trim()
+							+ "\",\"realName\":\""
+							+ realname_input_et.getText().toString().trim()
+							+ "\",\"smscode\":\""
+							+ checkcode_input_et.getText().toString().trim()
+							+ "\",\"email\":\""
+							+ email_input_et.getText().toString().trim()
+							+ "\"}";
 
-				String param = "action=userreg&str="
-						+  URLEncoder.encode(str)
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "userreg" + str);
-				registerReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+					String param = "action=userreg&str="
+							+ URLEncoder.encode(str)
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "userreg" + str);
+					registerReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -290,25 +298,29 @@ public class Activity_Register extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"phone\":\""
-						+ mobile_input_et.getText().toString().trim() + "\"}";
-				String param = "action=getregcode&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "getregcode" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				yanzhengmaReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = 2;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"phone\":\""
+							+ mobile_input_et.getText().toString().trim()
+							+ "\"}";
+					String param = "action=getregcode&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "getregcode" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					yanzhengmaReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 2;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 	}
@@ -425,9 +437,6 @@ public class Activity_Register extends Activity {
 		if (email_input_et.getText().toString().trim().length() != 0
 				&& !CommonFunc.isEmail(email_input_et.getText().toString()
 						.trim())) {
-			// new AlertDialog.Builder(context).setTitle("邮箱格式不正确")
-			// .setMessage("请输入合法的电子邮件名！").setPositiveButton("确定", null)
-			// .show();
 			final CustomerAlertDialog cad = new CustomerAlertDialog(context,
 					true);
 			cad.setTitle("邮箱格式不正确");
@@ -459,11 +468,9 @@ public class Activity_Register extends Activity {
 	// blue_title_color deep_gray
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
 }

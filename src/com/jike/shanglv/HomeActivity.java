@@ -28,52 +28,56 @@ public class HomeActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home2);
-		context = this;
-		((MyApplication) getApplication()).addActivity(this);
-		sp = this.getSharedPreferences("mySPData", Context.MODE_PRIVATE);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_home2);
+			context = this;
+			((MyApplication) getApplication()).addActivity(this);
+			sp = this.getSharedPreferences("mySPData", Context.MODE_PRIVATE);
 
-		// UpdateChecker.checkForDialog(MainActivity.this,"jike");
-		/*
-		 * btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp); btn_gjjp =
-		 * (ImageButton) findViewById(R.id.imgBtn_gjjp); btn_hbdt =
-		 * (ImageButton) findViewById(R.id.imgBtn_hbdt); btn_hfcz =
-		 * (ImageButton) findViewById(R.id.imgBtn_hfcz); btn_zhcz =
-		 * (ImageButton) findViewById(R.id.imgBtn_zhcz); btn_hcp = (ImageButton)
-		 * findViewById(R.id.imgBtn_hcp); btn_jd = (ImageButton)
-		 * findViewById(R.id.imgBtn_jd);
-		 * 
-		 * // btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg); // btn_jdmp =
-		 * (ImageButton) findViewById(R.id.imgBtn_jdmp); //
-		 * btn_tg.setOnClickListener(btnClickListner); //
-		 * btn_jdmp.setOnClickListener(btnClickListner);
-		 */
-		btn_gnjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gnjp);
-		btn_gjjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gjjp);
-		btn_hbdt = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hbdt);
-		btn_hfcz = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hfcz);
-		btn_zhcz = (MyRolateAnimImageView) findViewById(R.id.imgBtn_zhcz);
-		btn_hcp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hcp);
-		btn_jd = (MyRolateAnimImageView) findViewById(R.id.imgBtn_jd);
-		btn_gnjp.setOnClickListener(btnClickListner);
-		btn_gjjp.setOnClickListener(btnClickListner);
-		btn_hbdt.setOnClickListener(btnClickListner);
-		btn_jd.setOnClickListener(btnClickListner);
-		btn_hfcz.setOnClickListener(btnClickListner);
-		btn_zhcz.setOnClickListener(btnClickListner);
-		btn_hcp.setOnClickListener(btnClickListner);
+			// UpdateChecker.checkForDialog(MainActivity.this,"jike");
+			/*
+			 * btn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp); btn_gjjp
+			 * = (ImageButton) findViewById(R.id.imgBtn_gjjp); btn_hbdt =
+			 * (ImageButton) findViewById(R.id.imgBtn_hbdt); btn_hfcz =
+			 * (ImageButton) findViewById(R.id.imgBtn_hfcz); btn_zhcz =
+			 * (ImageButton) findViewById(R.id.imgBtn_zhcz); btn_hcp =
+			 * (ImageButton) findViewById(R.id.imgBtn_hcp); btn_jd =
+			 * (ImageButton) findViewById(R.id.imgBtn_jd);
+			 * 
+			 * // btn_tg = (ImageButton) findViewById(R.id.imgBtn_tg); //
+			 * btn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp); //
+			 * btn_tg.setOnClickListener(btnClickListner); //
+			 * btn_jdmp.setOnClickListener(btnClickListner);
+			 */
+			btn_gnjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gnjp);
+			btn_gjjp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_gjjp);
+			btn_hbdt = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hbdt);
+			btn_hfcz = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hfcz);
+			btn_zhcz = (MyRolateAnimImageView) findViewById(R.id.imgBtn_zhcz);
+			btn_hcp = (MyRolateAnimImageView) findViewById(R.id.imgBtn_hcp);
+			btn_jd = (MyRolateAnimImageView) findViewById(R.id.imgBtn_jd);
+			btn_gnjp.setOnClickListener(btnClickListner);
+			btn_gjjp.setOnClickListener(btnClickListner);
+			btn_hbdt.setOnClickListener(btnClickListner);
+			btn_jd.setOnClickListener(btnClickListner);
+			btn_hfcz.setOnClickListener(btnClickListner);
+			btn_zhcz.setOnClickListener(btnClickListner);
+			btn_hcp.setOnClickListener(btnClickListner);
 
-		MyApp mApp = new MyApp(getApplicationContext());
-		((ImageView) findViewById(R.id.menu_logo))
-				.setBackgroundResource((Integer) mApp.getHm().get(
-						PackageKeys.MENU_LOGO_DRAWABLE.getString()));
+			MyApp mApp = new MyApp(getApplicationContext());
+			((ImageView) findViewById(R.id.menu_logo))
+					.setBackgroundResource((Integer) mApp.getHm().get(
+							PackageKeys.MENU_LOGO_DRAWABLE.getString()));
 
-		// 检查更新
-		// UpdateChecker.checkForDialog(HomeActivity.this,"jike");
-		// appUpdate = AppUpdateService.getAppUpdate(this);
-		// appUpdate.checkLatestVersion("UPDATE_URL",
-		// new SimpleJSONParser());
+			// 检查更新
+			// UpdateChecker.checkForDialog(HomeActivity.this,"jike");
+			// appUpdate = AppUpdateService.getAppUpdate(this);
+			// appUpdate.checkLatestVersion("UPDATE_URL",
+			// new SimpleJSONParser());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

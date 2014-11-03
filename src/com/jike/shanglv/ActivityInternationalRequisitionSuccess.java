@@ -49,5 +49,4 @@ public class ActivityInternationalRequisitionSuccess extends Activity {
 			e.printStackTrace();
 		}
 	}
-
 }

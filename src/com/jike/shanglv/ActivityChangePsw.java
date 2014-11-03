@@ -38,26 +38,25 @@ public class ActivityChangePsw extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_changepsw);
-		((MyApplication)getApplication()).addActivity(this);
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_changepsw);
+			((MyApplication) getApplication()).addActivity(this);
 
-		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		context = this;
-		back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
-		back_iv.setOnClickListener(btnClickListner);
-		ok_button = (Button) findViewById(R.id.ok_button);
-		ok_button.setOnClickListener(btnClickListner);
-		oldpsw_cet = (ClearEditText) findViewById(R.id.oldpsw_cet);
-		newpsw_cet = (ClearEditText) findViewById(R.id.newpsw_cet);
-		confirmpsw_cet = (ClearEditText) findViewById(R.id.confirmpsw_cet);
+			sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+			context = this;
+			back_iv = (ImageButton) findViewById(R.id.back_imgbtn);
+			back_iv.setOnClickListener(btnClickListner);
+			ok_button = (Button) findViewById(R.id.ok_button);
+			ok_button.setOnClickListener(btnClickListner);
+			oldpsw_cet = (ClearEditText) findViewById(R.id.oldpsw_cet);
+			newpsw_cet = (ClearEditText) findViewById(R.id.newpsw_cet);
+			confirmpsw_cet = (ClearEditText) findViewById(R.id.confirmpsw_cet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
 			try {
@@ -113,31 +112,36 @@ public class ActivityChangePsw extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// uid:ÓÃ»§ID sid:ÍøÕ¾ID oldpass:ÀÏµÇÂ¼ÃÜÂë newpass:ÐÂµÇÂ¼ÃÜÂë
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"uid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"sid\":\""
-						+ sp.getString(SPkeys.siteid.getString(), "")
-						+ "\",\"oldpass\":\"" + oldpsw_cet.getText().toString()
-						+ "\",\"newpass\":\"" + newpsw_cet.getText().toString()
-						+ "\"}";
-				String param = "action=updatepass&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "updatepass" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				changePswReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					// uid:ÓÃ»§ID sid:ÍøÕ¾ID oldpass:ÀÏµÇÂ¼ÃÜÂë newpass:ÐÂµÇÂ¼ÃÜÂë
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"uid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"sid\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "")
+							+ "\",\"oldpass\":\""
+							+ oldpsw_cet.getText().toString()
+							+ "\",\"newpass\":\""
+							+ newpsw_cet.getText().toString() + "\"}";
+					String param = "action=updatepass&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "updatepass" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					changePswReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);

@@ -22,7 +22,7 @@ import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
 import com.jike.shanglv.Enums.SPkeys;
 
-/**
+/**Òýµ¼Ò³
  */
 public class GuideActivity extends Activity implements OnPageChangeListener {
 

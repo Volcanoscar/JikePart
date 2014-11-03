@@ -101,30 +101,34 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteID\":\""
-						+ sp.getString(SPkeys.siteid.getString(), "")
-						+ "\",\"phone\":\""
-						+ sp.getString(SPkeys.userphone.getString(), "")
-						+ "\"}";
-				String param = "action=restcode&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "restcode" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				yanzhengmaReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"siteID\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "")
+							+ "\",\"phone\":\""
+							+ sp.getString(SPkeys.userphone.getString(), "")
+							+ "\"}";
+					String param = "action=restcode&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "restcode" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					yanzhengmaReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -133,29 +137,34 @@ public class ActivityConfirmInfoBeforeFindZfpsw extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteID\":\""
-						+ sp.getString(SPkeys.siteid.getString(), "")
-						+ "\",\"cdk\":\""
-						+ yanzhengma_cet.getText().toString().trim() + "\"}";
-				String param = "action=chenkedcode&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "chenkedcode" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				verifyReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 2;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"siteID\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "")
+							+ "\",\"cdk\":\""
+							+ yanzhengma_cet.getText().toString().trim()
+							+ "\"}";
+					String param = "action=chenkedcode&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "chenkedcode" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					verifyReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 2;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);

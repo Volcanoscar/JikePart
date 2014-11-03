@@ -58,28 +58,32 @@ public class ActivityTrainBaoxian extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					if (position != currentID) {
-						adapter.setCurrentID(position);
-						adapter.notifyDataSetChanged();
+					try {
+						if (position != currentID) {
+							adapter.setCurrentID(position);
+							adapter.notifyDataSetChanged();
+						}
+						currentID = position;
+						switch (currentID) {
+						case 0:
+							curentBaoxian = No_Baoxian;
+							break;
+						case 1:
+							curentBaoxian = Baoxian_Five;
+							break;
+						case 2:
+							curentBaoxian = Baoxian_Ten;
+							break;
+						default:
+							break;
+						}
+						setResult(
+								0,
+								getIntent().putExtra(BAOXIAN_BUNDSTRING,
+										curentBaoxian));
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					currentID = position;
-					switch (currentID) {
-					case 0:
-						curentBaoxian = No_Baoxian;
-						break;
-					case 1:
-						curentBaoxian = Baoxian_Five;
-						break;
-					case 2:
-						curentBaoxian = Baoxian_Ten;
-						break;
-					default:
-						break;
-					}
-					setResult(
-							0,
-							getIntent().putExtra(BAOXIAN_BUNDSTRING,
-									curentBaoxian));
 				}
 			});
 		} catch (Exception e) {
@@ -224,9 +228,9 @@ public class ActivityTrainBaoxian extends Activity {
 			ImageView iv;
 			TextView title;
 		}
+
 		public void setCurrentID(int currentID) {
 			this.currentID = currentID;
 		}
 	}
-
 }

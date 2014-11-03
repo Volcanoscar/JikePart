@@ -2,6 +2,7 @@ package com.jike.shanglv;
 
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.SPkeys;
+import com.jike.shanglv.NetAndJson.HttpUtils;
 import com.jike.shanglv.Update.UpdateManager;
 
 import android.app.Activity;
@@ -78,11 +79,14 @@ public class MoreActivity extends Activity {
 							GuideActivity.class));
 					break;
 				case R.id.jcgx_rl:
-					UpdateManager manager = new UpdateManager(
-							MoreActivity.this, ma.getHm()
-									.get(PackageKeys.UPDATE_NOTE.getString())
-									.toString());
-					manager.checkForUpdates(true);
+					if (!HttpUtils.showNetCannotUse(MoreActivity.this)) {
+						UpdateManager manager = new UpdateManager(
+								MoreActivity.this, ma
+										.getHm()
+										.get(PackageKeys.UPDATE_NOTE
+												.getString()).toString());
+						manager.checkForUpdates(true);
+					}
 					break;
 				case R.id.gyslgj_rl:
 					String version = "2.1";

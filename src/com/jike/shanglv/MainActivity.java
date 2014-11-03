@@ -7,6 +7,7 @@ import android.app.ActivityGroup;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,24 +47,34 @@ public class MainActivity extends ActivityGroup implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		((MyApplication) getApplication()).addActivity(this);
 		try {
-			goB2BHome();
-			initView();
-			initHomePage();
-			radio_group.setOnCheckedChangeListener(this);
-
-			if (!((MyApplication) getApplication()).getHasCheckedUpdate()) {
-				MyApp ma = new MyApp(MainActivity.this);
-				UpdateManager manager = new UpdateManager(MainActivity.this, ma
-						.getHm().get(PackageKeys.UPDATE_NOTE.getString())
-						.toString());
-				manager.checkForUpdates(false);
-				((MyApplication) getApplication()).setHasCheckedUpdate(true);
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_main);
+			((MyApplication) getApplication()).addActivity(this);
+			try {
+				goB2BHome();
+				initView();
+				initHomePage();
+				radio_group.setOnCheckedChangeListener(this);
+				// 登录验证
+				if (!HttpUtils.showNetCannotUse(context)) {
+					if (!((MyApplication) getApplication())
+							.getHasCheckedUpdate()) {
+						MyApp ma = new MyApp(MainActivity.this);
+						UpdateManager manager = new UpdateManager(
+								MainActivity.this, ma
+										.getHm()
+										.get(PackageKeys.UPDATE_NOTE
+												.getString()).toString());
+						manager.checkForUpdates(false);
+						((MyApplication) getApplication())
+								.setHasCheckedUpdate(true);
+					}
+					queryUserInfo();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			queryUserInfo();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,35 +96,46 @@ public class MainActivity extends ActivityGroup implements
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int utype = 0;
-				MyApp ma = new MyApp(context);
-				Platform pf = (Platform) ma.getHm().get(
-						PackageKeys.PLATFORM.getString());
-				if (pf == Platform.B2B)
-					utype = 1;
-				else if (pf == Platform.B2C)
-					utype = 2;
-				String str = "{\"uname\":\""
-						+ sp.getString(SPkeys.lastUsername.getString(), "")
-						+ "\",\"upwd\":\""
-						+ sp.getString(SPkeys.lastPassword.getString(), "")
-						+ "\",\"utype\":\"" + utype + "\"}";
-				String param = "action=userlogin&sitekey=&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&str="
-						+ str
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "userlogin" + str);
-				loginReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Log.v("loginReturnJson", loginReturnJson);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					int utype = 0;
+					MyApp ma = new MyApp(context);
+					Platform pf = (Platform) ma.getHm().get(
+							PackageKeys.PLATFORM.getString());
+					String version = "";
+					try {
+						version = context.getPackageManager().getPackageInfo(
+								context.getPackageName(), 0).versionName;
+					} catch (NameNotFoundException e) {
+						e.printStackTrace();
+					}
+					if (pf == Platform.B2B)
+						utype = 1;
+					else if (pf == Platform.B2C)
+						utype = 2;
+					String str = "{\"uname\":\""
+							+ sp.getString(SPkeys.lastUsername.getString(), "")
+							+ "\",\"upwd\":\""
+							+ sp.getString(SPkeys.lastPassword.getString(), "")
+							+ "\",\"utype\":\"" + utype + "\",\"version\":\""
+							+ version + "\"}";
+					String param = "action=userlogin&sitekey=&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&str="
+							+ str
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "userlogin" + str);
+					loginReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Log.v("loginReturnJson", loginReturnJson);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 	}
@@ -123,7 +145,6 @@ public class MainActivity extends ActivityGroup implements
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:// 获取登录返回的数据
-
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(loginReturnJson);
 				try {
@@ -160,14 +181,44 @@ public class MainActivity extends ActivityGroup implements
 						sp.edit()
 								.putBoolean(SPkeys.loginState.getString(), true)
 								.commit();
-					} else if (state.equals("1003")) {
-						sp.edit().putString(SPkeys.userid.getString(), "")
+					} else {
+						sp.edit().remove(SPkeys.loginState.getString())
+						.commit();
+						sp.edit().remove(SPkeys.UserInfoJson.getString())
 								.commit();
-						sp.edit().putString(SPkeys.username.getString(), "")
+						sp.edit().remove(SPkeys.lastUsername.getString())
 								.commit();
-						sp.edit()
-								.putBoolean(SPkeys.loginState.getString(),
-										false).commit();
+						sp.edit().remove(SPkeys.lastPassword.getString())
+								.commit();
+						sp.edit().remove(SPkeys.autoLogin.getString()).commit();
+						sp.edit().remove(SPkeys.userid.getString()).commit();
+						sp.edit().remove(SPkeys.username.getString()).commit();
+						sp.edit().remove(SPkeys.siteid.getString()).commit();
+						sp.edit().remove(SPkeys.amount.getString()).commit();
+						sp.edit().remove(SPkeys.userphone.getString()).commit();
+						sp.edit().remove(SPkeys.useremail.getString()).commit();
+						if (state.equals("9999")) {// 需要做强制更新
+							MyApp ma = new MyApp(context);
+							UpdateManager manager = new UpdateManager(context,
+									ma.getHm()
+											.get(PackageKeys.UPDATE_NOTE
+													.getString()).toString());
+							manager.checkForUpdates(false);
+						}
+						if (state.equals("1003")) {// 用户名密码错误
+							sp.edit().putString(SPkeys.userid.getString(), "")
+									.commit();
+							sp.edit()
+									.putString(SPkeys.username.getString(), "")
+									.commit();
+							sp.edit()
+									.putBoolean(SPkeys.loginState.getString(),
+											false).commit();
+						}
+						if (state.equals("1919")) {
+							startActivity(new Intent(context,
+									Activity_Login.class));
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -195,13 +246,17 @@ public class MainActivity extends ActivityGroup implements
 		default:
 			break;
 		}
-		container.removeAllViews();
-		mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Window subActivity = getLocalActivityManager().startActivity(
-				"subActivity", mIntent);
-		container.addView(subActivity.getDecorView(),
-				new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-						LayoutParams.FILL_PARENT));
+		try {
+			container.removeAllViews();
+			mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			Window subActivity = getLocalActivityManager().startActivity(
+					"subActivity", mIntent);
+			container.addView(subActivity.getDecorView(),
+					new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+							LayoutParams.FILL_PARENT));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

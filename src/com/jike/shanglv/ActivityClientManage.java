@@ -139,66 +139,71 @@ public class ActivityClientManage extends Activity implements
 
 		@Override
 		public void onClick(View arg0) {
-			switch (arg0.getId()) {
-			case R.id.client_grad_set_rl:
-				Intent intent = new Intent(context,
-						ActivityClientManageSetGrad.class);
-				intent.putExtra(
-						ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
-						displayName);
-				startActivity(intent);
-				break;
-			case R.id.add_client_rl:
-				Intent intent1 = new Intent(context,
-						ActivityClientManageAddoredit.class);
-				intent1.putExtra(
-						ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
-						displayName);
-				intent1.putExtra(ActivityClientManageAddoredit.EDIT_OR_ADD, 0);
-				startActivity(intent1);
-				break;
-			case R.id.home_imgbtn:
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.bygrad_LL:
-				sort_arrow_grad_iv.setSelected(true);
-				sort_grad_tv.setSelected(true);
-				sort_state_tv.setSelected(false);
-				sort_arrow_state_iv.setSelected(false);
-				byGradAsc = !byGradAsc;
-				if (byGradAsc) {
-					sort_arrow_grad_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(customers_List, comparator_grad_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_arrow_grad_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(customers_List, comparator_grad_asc);
-					adapter.notifyDataSetChanged();
+			try {
+				switch (arg0.getId()) {
+				case R.id.client_grad_set_rl:
+					Intent intent = new Intent(context,
+							ActivityClientManageSetGrad.class);
+					intent.putExtra(
+							ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+							displayName);
+					startActivity(intent);
+					break;
+				case R.id.add_client_rl:
+					Intent intent1 = new Intent(context,
+							ActivityClientManageAddoredit.class);
+					intent1.putExtra(
+							ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+							displayName);
+					intent1.putExtra(ActivityClientManageAddoredit.EDIT_OR_ADD,
+							0);
+					startActivity(intent1);
+					break;
+				case R.id.home_imgbtn:
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.bygrad_LL:
+					sort_arrow_grad_iv.setSelected(true);
+					sort_grad_tv.setSelected(true);
+					sort_state_tv.setSelected(false);
+					sort_arrow_state_iv.setSelected(false);
+					byGradAsc = !byGradAsc;
+					if (byGradAsc) {
+						sort_arrow_grad_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(customers_List, comparator_grad_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_arrow_grad_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections.sort(customers_List, comparator_grad_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				case R.id.bystate_ll:
+					sort_arrow_grad_iv.setSelected(false);
+					sort_grad_tv.setSelected(false);
+					sort_state_tv.setSelected(true);
+					sort_arrow_state_iv.setSelected(true);
+					byStateAsc = !byStateAsc;
+					if (byStateAsc) {
+						sort_arrow_state_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(customers_List, comparator_state_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_arrow_state_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections.sort(customers_List, comparator_state_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			case R.id.bystate_ll:
-				sort_arrow_grad_iv.setSelected(false);
-				sort_grad_tv.setSelected(false);
-				sort_state_tv.setSelected(true);
-				sort_arrow_state_iv.setSelected(true);
-				byStateAsc = !byStateAsc;
-				if (byStateAsc) {
-					sort_arrow_state_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(customers_List, comparator_state_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_arrow_state_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(customers_List, comparator_state_asc);
-					adapter.notifyDataSetChanged();
-				}
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -255,13 +260,17 @@ public class ActivityClientManage extends Activity implements
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
-		startQueryCustomer();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+			startQueryCustomer();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void startQueryCustomer() {
@@ -276,31 +285,36 @@ public class ActivityClientManage extends Activity implements
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"pageSize\":\"" + 20 + "\",\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"pageIndex\":\"" + index + "\",\"userName\":\""
-						+ "" + "\",\"status\":\"" + "" + "\",\"tm1\":\"" + ""
-						+ "\",\"tm2\":\"" + "" + "\"}";
-				String param = "action="
-						+ ActionName
-						+ "&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ ActionName + str);
-				customerReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"pageSize\":\"" + 20 + "\",\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"pageIndex\":\"" + index
+							+ "\",\"userName\":\"" + "" + "\",\"status\":\""
+							+ "" + "\",\"tm1\":\"" + "" + "\",\"tm2\":\"" + ""
+							+ "\"}";
+					String param = "action="
+							+ ActionName
+							+ "&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ ActionName + str);
+					customerReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -340,20 +354,24 @@ public class ActivityClientManage extends Activity implements
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								CustomerUser cu = customers_List
-										.get(position - 1);
-								Intent intent1 = new Intent(context,
-										ActivityClientManageAddoredit.class);
-								intent1.putExtra(
-										ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
-										displayName);
-								intent1.putExtra(
-										ActivityClientManageAddoredit.EDIT_OR_ADD,
-										1);
-								intent1.putExtra(
-										ActivityClientManageAddoredit.CUSTOMERINFO_OF_EDIT,
-										JSONHelper.toJSON(cu));
-								startActivity(intent1);
+								try {
+									CustomerUser cu = customers_List
+											.get(position - 1);
+									Intent intent1 = new Intent(context,
+											ActivityClientManageAddoredit.class);
+									intent1.putExtra(
+											ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+											displayName);
+									intent1.putExtra(
+											ActivityClientManageAddoredit.EDIT_OR_ADD,
+											1);
+									intent1.putExtra(
+											ActivityClientManageAddoredit.CUSTOMERINFO_OF_EDIT,
+											JSONHelper.toJSON(cu));
+									startActivity(intent1);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 					} else {
@@ -416,20 +434,24 @@ public class ActivityClientManage extends Activity implements
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_customeruser_list,
-						null);
-			}
-			TextView username_tv = (TextView) convertView
-					.findViewById(R.id.username_tv);
-			TextView usergrad_tv = (TextView) convertView
-					.findViewById(R.id.usergrad_tv);
-			TextView state_tv = (TextView) convertView
-					.findViewById(R.id.state_tv);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_customeruser_list, null);
+				}
+				TextView username_tv = (TextView) convertView
+						.findViewById(R.id.username_tv);
+				TextView usergrad_tv = (TextView) convertView
+						.findViewById(R.id.usergrad_tv);
+				TextView state_tv = (TextView) convertView
+						.findViewById(R.id.state_tv);
 
-			username_tv.setText(str.get(position).getUserName());
-			usergrad_tv.setText(str.get(position).getDealerLevel());
-			state_tv.setText(str.get(position).getStatus());
+				username_tv.setText(str.get(position).getUserName());
+				usergrad_tv.setText(str.get(position).getDealerLevel());
+				state_tv.setText(str.get(position).getStatus());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return convertView;
 		}
 	}

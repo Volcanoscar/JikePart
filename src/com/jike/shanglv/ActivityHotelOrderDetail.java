@@ -46,17 +46,21 @@ public class ActivityHotelOrderDetail extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel_orderdetail);
 		try {
-			initView();
-			if (getOrderReceipt()) {
-				startQueryOrderDetail();
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hotel_orderdetail);
+			try {
+				initView();
+				if (getOrderReceipt()) {
+					startQueryOrderDetail();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			((MyApplication) getApplication()).addActivity(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		((MyApplication) getApplication()).addActivity(this);
 	}
 
 	@Override
@@ -229,24 +233,30 @@ public class ActivityHotelOrderDetail extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"orderID\":\"" + orderID + "\",\"siteid\":\""
-						+ sp.getString(SPkeys.siteid.getString(), "65") + "\"}";
-				String param = "action=hotelorderdetail&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "hotelorderdetail" + str);
-				orderDetailReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = ORDERDETAIL_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"orderID\":\"" + orderID
+							+ "\",\"siteid\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "65")
+							+ "\"}";
+					String param = "action=hotelorderdetail&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "hotelorderdetail" + str);
+					orderDetailReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = ORDERDETAIL_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}

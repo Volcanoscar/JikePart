@@ -185,9 +185,13 @@ public class ActivityHotelLocation extends Activity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								dialog.dismiss();
-								BaiduMapNavigation
-										.getLatestBaiduMapApp(ActivityHotelLocation.this);
+								try {
+									dialog.dismiss();
+									BaiduMapNavigation
+											.getLatestBaiduMapApp(ActivityHotelLocation.this);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 				builder.setNegativeButton("È¡Ïû",

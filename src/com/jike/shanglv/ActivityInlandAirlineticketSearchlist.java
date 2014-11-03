@@ -347,29 +347,34 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
-						+ arrivecity_code + "\",\"sd\":\"" + currentdate
-						+ "\",\"userid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\"" + siteid + "\"}";
-				String param = "action=flist&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "flist" + str);
-				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
+							+ arrivecity_code + "\",\"sd\":\"" + currentdate
+							+ "\",\"userid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"siteid\":\"" + siteid + "\"}";
+					String param = "action=flist&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "flist" + str);
+					flistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);

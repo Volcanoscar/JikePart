@@ -589,27 +589,31 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// url?action=flightisu&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&str={"userid":"","siteid":""}&sitekey=defage
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "");
-				String str = "{\"userid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\"" + siteid + "\"}";
-				String param = "action=flightisu&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "flightisu" + str);
-				baoxianReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = BAOXIAN_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					// url?action=flightisu&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&str={"userid":"","siteid":""}&sitekey=defage
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(), "");
+					String str = "{\"userid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"siteid\":\"" + siteid + "\"}";
+					String param = "action=flightisu&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "flightisu" + str);
+					baoxianReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = BAOXIAN_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -619,24 +623,29 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"alcode\":\"" + flightNo + "\",\"cabin\":\""
-						+ cabin + "\",\"fdate\":\"" + fdate + "\"}";
-				String param = "action=visor&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "visor" + str);
-				tuigaiqianReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = TUIGAIQIAN_mc;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"alcode\":\"" + flightNo
+							+ "\",\"cabin\":\"" + cabin + "\",\"fdate\":\""
+							+ fdate + "\"}";
+					String param = "action=visor&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "visor" + str);
+					tuigaiqianReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = TUIGAIQIAN_mc;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -645,45 +654,53 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// url?action=forder& "userid": "649","amount": "682","origin":
-				// "6","orderremark": "订单备注",
-				MyApp ma = new MyApp(context);
-				String flightString = "";
-				if (getOrderWayType() == SingleOrDouble.singleWay) {
-					flightString = getFlightsJsonString(SingleOrDouble.singleWay);
-				} else if (getOrderWayType() == SingleOrDouble.doubleWayBack) {
-					flightString = getFlightsJsonString(SingleOrDouble.singleWay)
-							+ ","
-							+ getFlightsJsonString(SingleOrDouble.doubleWayBack);
+				try {
+					// url?action=forder& "userid": "649","amount":
+					// "682","origin":
+					// "6","orderremark": "订单备注",
+					MyApp ma = new MyApp(context);
+					String flightString = "";
+					if (getOrderWayType() == SingleOrDouble.singleWay) {
+						flightString = getFlightsJsonString(SingleOrDouble.singleWay);
+					} else if (getOrderWayType() == SingleOrDouble.doubleWayBack) {
+						flightString = getFlightsJsonString(SingleOrDouble.singleWay)
+								+ ","
+								+ getFlightsJsonString(SingleOrDouble.doubleWayBack);
+					}
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String str = "{\"userid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"amount\": \""
+							+ totalPrice
+							+ "\",\"origin\":\"2\",\"orderremark\":\"Android客户端\""
+							+ ",\"flights\":[" + flightString
+							+ "],\"passenger\":" + getPassengerJsonString()
+							+ ",\"content\":" + getContentJsonString()
+							+ ",\"itinerary\":{}" + ",\"siteid\":\"" + siteid
+							+ "\"}";
+					str = str.replace("null", "");
+					String param = "?action=forder&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "forder" + str);
+					// try {
+					// str = URLEncoder.encode(str, "utf-8");
+					// } catch (UnsupportedEncodingException e) {
+					// e.printStackTrace();
+					// }
+					commitReturnJson = HttpUtils.myPost(ma.getServeUrl()
+							+ param, "&str=" + str);
+					Message msg = new Message();
+					msg.what = COMMIT_ORDER_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "{\"userid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"amount\": \"" + totalPrice
-						+ "\",\"origin\":\"2\",\"orderremark\":\"Android客户端\""
-						+ ",\"flights\":[" + flightString + "],\"passenger\":"
-						+ getPassengerJsonString() + ",\"content\":"
-						+ getContentJsonString() + ",\"itinerary\":{}"
-						+ ",\"siteid\":\"" + siteid + "\"}";
-				str = str.replace("null", "");
-				String param = "?action=forder&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "forder" + str);
-				// try {
-				// str = URLEncoder.encode(str, "utf-8");
-				// } catch (UnsupportedEncodingException e) {
-				// e.printStackTrace();
-				// }
-				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
-						"&str=" + str);
-				Message msg = new Message();
-				msg.what = COMMIT_ORDER_MSG_CODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -816,7 +833,6 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 		cf.setTax(flight.getTax());
 		cf.setType("1");// 单程
 		cf.setWt("");// "供应商上下班时间"
-
 		str = JSONHelper.toJSON(cf);
 		return str;
 	}

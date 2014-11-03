@@ -73,20 +73,25 @@ public class Activity_RetrievePassword extends Activity {
 			retrieve_btn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (yanzhengma_cet.getText().toString().trim().length() == 0) {
-						// new AlertDialog.Builder(context).setTitle("请输入验证码")
-						// .setPositiveButton("确定", null).show();
-						final CustomerAlertDialog cad = new CustomerAlertDialog(
-								context, true);
-						cad.setTitle("请输入验证码");
-						cad.setPositiveButton("确定", new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-								cad.dismiss();
-							}
-						});
-					} else {
-						startVerify();
+					try {
+						if (yanzhengma_cet.getText().toString().trim().length() == 0) {
+							// new
+							// AlertDialog.Builder(context).setTitle("请输入验证码")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle("请输入验证码");
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+						} else {
+							startVerify();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			});
@@ -97,38 +102,40 @@ public class Activity_RetrievePassword extends Activity {
 			get_yanzhengma_tv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (!CommonFunc.isMobileNO(phone_input_et.getText()
-							.toString().trim())) {
-						// new
-						// AlertDialog.Builder(Activity_RetrievePassword.this)
-						// .setTitle("手机号码格式不正确").setMessage("请输入合法的手机号码！")
-						// .setPositiveButton("确定", null).show();
-						final CustomerAlertDialog cad = new CustomerAlertDialog(
-								context, true);
-						cad.setTitle("手机号码格式不正确");
-						cad.setPositiveButton("确定", new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-								cad.dismiss();
-							}
-						});
-						return;
+					try {
+						if (!CommonFunc.isMobileNO(phone_input_et.getText()
+								.toString().trim())) {
+							// new
+							// AlertDialog.Builder(Activity_RetrievePassword.this)
+							// .setTitle("手机号码格式不正确").setMessage("请输入合法的手机号码！")
+							// .setPositiveButton("确定", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle("手机号码格式不正确");
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+							return;
+						}
+						if (username_input_et.getText().toString().trim()
+								.length() == 0) {
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle("用户名不能为空");
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+						}
+						startGetUserId();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					if (username_input_et.getText().toString().trim().length() == 0) {
-						// new AlertDialog.Builder(context).setTitle("用户名不能为空")
-						// .setMessage("请输入用户名！")
-						// .setPositiveButton("确定", null).show();
-						final CustomerAlertDialog cad = new CustomerAlertDialog(
-								context, true);
-						cad.setTitle("用户名不能为空");
-						cad.setPositiveButton("确定", new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-								cad.dismiss();
-							}
-						});
-					}
-					startGetUserId();
 				}
 			});
 		} catch (Exception e) {
@@ -140,26 +147,30 @@ public class Activity_RetrievePassword extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"userID\":\"" + userId + "\",\"siteID\":\""
-						+ siteId + "\",\"phone\":\""
-						+ phone_input_et.getText().toString().trim() + "\"}";
-				String param = "action=restcode&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "restcode" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				yanzhengmaReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = GET_YANZHENGMA_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"userID\":\"" + userId + "\",\"siteID\":\""
+							+ siteId + "\",\"phone\":\""
+							+ phone_input_et.getText().toString().trim()
+							+ "\"}";
+					String param = "action=restcode&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "restcode" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					yanzhengmaReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = GET_YANZHENGMA_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 	}
@@ -168,25 +179,29 @@ public class Activity_RetrievePassword extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"userName\":\""
-						+ username_input_et.getText().toString().trim() + "\"}";
-				String param = "action=checkuser&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "checkuser" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				useridReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = GET_USERID_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"userName\":\""
+							+ username_input_et.getText().toString().trim()
+							+ "\"}";
+					String param = "action=checkuser&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "checkuser" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					useridReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = GET_USERID_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 	}
@@ -195,26 +210,30 @@ public class Activity_RetrievePassword extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"userID\":\"" + userId + "\",\"siteID\":\""
-						+ siteId + "\",\"cdk\":\""
-						+ yanzhengma_cet.getText().toString().trim() + "\"}";
-				String param = "action=chenkedcode&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "chenkedcode" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				verifyReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = VERIFY_YANZHENGMA_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"userID\":\"" + userId + "\",\"siteID\":\""
+							+ siteId + "\",\"cdk\":\""
+							+ yanzhengma_cet.getText().toString().trim()
+							+ "\"}";
+					String param = "action=chenkedcode&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "chenkedcode" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					verifyReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = VERIFY_YANZHENGMA_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -237,8 +256,8 @@ public class Activity_RetrievePassword extends Activity {
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(useridReturnJson);
 				if (useridReturnJson.length() == 0) {// 未获取到用户id，提示发生错误
-				// new AlertDialog.Builder(context).setTitle("获取用户信息失败")
-				// .setPositiveButton("确认", null).show();
+					// new AlertDialog.Builder(context).setTitle("获取用户信息失败")
+					// .setPositiveButton("确认", null).show();
 					final CustomerAlertDialog cad = new CustomerAlertDialog(
 							context, true);
 					cad.setTitle("获取用户信息失败");
@@ -379,7 +398,6 @@ public class Activity_RetrievePassword extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			finish();
 		}

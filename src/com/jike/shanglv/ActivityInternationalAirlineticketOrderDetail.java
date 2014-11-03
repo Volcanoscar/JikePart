@@ -60,28 +60,33 @@ public class ActivityInternationalAirlineticketOrderDetail extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_international_airlineticket_orderdetail);
 		try {
-			initView();
-			if (getOrderReceipt()) {
-				startQueryOrderDetail();
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_international_airlineticket_orderdetail);
+			try {
+				initView();
+				if (getOrderReceipt()) {
+					startQueryOrderDetail();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			((MyApplication) getApplication()).addActivity(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		((MyApplication) getApplication()).addActivity(this);
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		try{
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();} catch (Exception e) {
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

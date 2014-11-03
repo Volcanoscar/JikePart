@@ -76,13 +76,17 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 	}
 
 	private void loadingAni() {
-		history_passenger_listview.setVisibility(View.GONE);
-		loading_ll.setVisibility(View.VISIBLE);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			history_passenger_listview.setVisibility(View.GONE);
+			loading_ll.setVisibility(View.VISIBLE);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void stopLoadingAni() {
@@ -261,28 +265,33 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// url?action=passenger&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&str={"userid":"","siteid":"","systype":"0国内 1国际 2火车票","psgtype":"1成人 2儿童 3婴儿"}&sitekey=defage
-				MyApp ma = new MyApp(context);
-				String siteid = sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "{\"systype\":\"" + systype + "\",\"psgtype\":\""
-						+ "1" + "\",\"userid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"siteid\":\"" + siteid + "\"}";
-				String param = "action=passenger&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "passenger" + str);
-				passengersReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					// url?action=passenger&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&str={"userid":"","siteid":"","systype":"0国内 1国际 2火车票","psgtype":"1成人 2儿童 3婴儿"}&sitekey=defage
+					MyApp ma = new MyApp(context);
+					String siteid = sp.getString(SPkeys.siteid.getString(),
+							"65");
+					String str = "{\"systype\":\"" + systype
+							+ "\",\"psgtype\":\"" + "1" + "\",\"userid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"siteid\":\"" + siteid + "\"}";
+					String param = "action=passenger&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "passenger" + str);
+					passengersReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -350,15 +359,19 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						int index = Integer.parseInt(v.getTag().toString());
-						Intent intent = new Intent(
-								context,
-								ActivityInlandAirlineticketAddoreditPassengers.class);
-						intent.putExtra(SYSTYPE, systype);
-						intent.putExtra("index", index);
-						intent.putExtra("passengerList",
-								JSONHelper.toJSON(passengerList));
-						activity.startActivityForResult(intent, 10);
+						try {
+							int index = Integer.parseInt(v.getTag().toString());
+							Intent intent = new Intent(
+									context,
+									ActivityInlandAirlineticketAddoreditPassengers.class);
+							intent.putExtra(SYSTYPE, systype);
+							intent.putExtra("index", index);
+							intent.putExtra("passengerList",
+									JSONHelper.toJSON(passengerList));
+							activity.startActivityForResult(intent, 10);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				});
 
@@ -409,21 +422,26 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 		View.OnClickListener selectedPassengerClickListener = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int index = Integer.parseInt(v.getTag().toString());
-				ImageButton the_select_imgbtn = (ImageButton) v;
-				// the_select_imgbtn.setSelected(!the_select_imgbtn.isSelected());
-				if (the_select_imgbtn.isSelected()) {
-					the_select_imgbtn.setSelected(false);
-					if (selectedPassengerList
-							.contains(passengerList.get(index))) {
-						selectedPassengerList.remove(passengerList.get(index));
+				try {
+					int index = Integer.parseInt(v.getTag().toString());
+					ImageButton the_select_imgbtn = (ImageButton) v;
+					// the_select_imgbtn.setSelected(!the_select_imgbtn.isSelected());
+					if (the_select_imgbtn.isSelected()) {
+						the_select_imgbtn.setSelected(false);
+						if (selectedPassengerList.contains(passengerList
+								.get(index))) {
+							selectedPassengerList.remove(passengerList
+									.get(index));
+						}
+					} else {
+						the_select_imgbtn.setSelected(true);
+						if (!selectedPassengerList.contains(passengerList
+								.get(index))) {
+							selectedPassengerList.add(passengerList.get(index));
+						}
 					}
-				} else {
-					the_select_imgbtn.setSelected(true);
-					if (!selectedPassengerList.contains(passengerList
-							.get(index))) {
-						selectedPassengerList.add(passengerList.get(index));
-					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		};
@@ -431,11 +449,15 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 
 	@Override
 	protected void onResume() {
-		super.onResume();
-		for (int i = 0; i < passengerList.size(); i++) {// 从编辑页面点击取消后会有空值，去除空值
-			if (passengerList.get(i).getPassengerName() == null
-					|| passengerList.get(i).getPassengerName().equals(""))
-				passengerList.remove(i);
+		try {
+			super.onResume();
+			for (int i = 0; i < passengerList.size(); i++) {// 从编辑页面点击取消后会有空值，去除空值
+				if (passengerList.get(i).getPassengerName() == null
+						|| passengerList.get(i).getPassengerName().equals(""))
+					passengerList.remove(i);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

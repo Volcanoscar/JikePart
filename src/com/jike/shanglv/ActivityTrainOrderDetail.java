@@ -62,27 +62,35 @@ public class ActivityTrainOrderDetail extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_train_orderdetail);
 		try {
-			initView();
-			if (getOrderReceipt()) {
-				startQueryOrderDetail();
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_train_orderdetail);
+			try {
+				initView();
+				if (getOrderReceipt()) {
+					startQueryOrderDetail();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			((MyApplication) getApplication()).addActivity(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		((MyApplication) getApplication()).addActivity(this);
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -115,7 +123,6 @@ public class ActivityTrainOrderDetail extends Activity {
 		order_totalmoney_tv = (TextView) findViewById(R.id.order_totalmoney_tv);
 		contact_person_phone_tv = (TextView) findViewById(R.id.contact_person_phone_tv);
 		// baoxian_tv=(TextView) findViewById(R.id.baoxian_tv);
-
 		passenger_listview = (ListView) findViewById(R.id.passenger_listview);
 	}
 
@@ -312,24 +319,30 @@ public class ActivityTrainOrderDetail extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"orderid\":\"" + orderID + "\",\"userid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "") + "\"}";
-				String param = "action=trainOrderConfirmV2&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "trainOrderConfirmV2" + str);
-				comfirmOrderReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = COMFIRMORDER_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"orderid\":\"" + orderID
+							+ "\",\"userid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\"}";
+					String param = "action=trainOrderConfirmV2&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "trainOrderConfirmV2" + str);
+					comfirmOrderReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = COMFIRMORDER_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -338,24 +351,30 @@ public class ActivityTrainOrderDetail extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"orderID\":\"" + orderID + "\",\"siteid\":\""
-						+ sp.getString(SPkeys.siteid.getString(), "65") + "\"}";
-				String param = "action=trainorderdetail&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "trainorderdetail" + str);
-				orderDetailReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = ORDERDETAIL_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"orderID\":\"" + orderID
+							+ "\",\"siteid\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "65")
+							+ "\"}";
+					String param = "action=trainorderdetail&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "trainorderdetail" + str);
+					orderDetailReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = ORDERDETAIL_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}

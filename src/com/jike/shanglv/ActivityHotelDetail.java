@@ -147,22 +147,33 @@ public class ActivityHotelDetail extends Activity {
 		hotel_js_rl.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context,
-						ActivityHotelIntroduce.class);
-				intent.putExtra("hotelDetail", JSONHelper.toJSON(hotelDetail));
-				startActivity(intent);
+				try {
+					Intent intent = new Intent(context,
+							ActivityHotelIntroduce.class);
+					intent.putExtra("hotelDetail",
+							JSONHelper.toJSON(hotelDetail));
+					startActivity(intent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
 		pinglun_rl.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, ActivityHotelComments.class);
-				intent.putExtra("commentObjectString", commentObject.toString());
-				intent.putExtra("pingfen", score_tv.getText().toString());
-				intent.putExtra("pingfencount", dianping_cout_tv.getText()
-						.toString());
-				startActivity(intent);
+				try {
+					Intent intent = new Intent(context,
+							ActivityHotelComments.class);
+					intent.putExtra("commentObjectString",
+							commentObject.toString());
+					intent.putExtra("pingfen", score_tv.getText().toString());
+					intent.putExtra("pingfencount", dianping_cout_tv.getText()
+							.toString());
+					startActivity(intent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -214,25 +225,35 @@ public class ActivityHotelDetail extends Activity {
 		adress_map_ll.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, ActivityHotelLocation.class);
-				intent.putExtra("hotel", JSONHelper.toJSON(hotelDetail));
-				startActivity(intent);
+				try {
+					Intent intent = new Intent(context,
+							ActivityHotelLocation.class);
+					intent.putExtra("hotel", JSONHelper.toJSON(hotelDetail));
+					startActivity(intent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		commit_order_tv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, ActivityHotelBooking.class);
-				intent.putExtra("hotelId", hotelId);
-				intent.putExtra("hotelName", hotelName);
-				intent.putExtra("starLevel", starLevel);
-				intent.putExtra("ruzhu_date", ruzhu_date);
-				intent.putExtra("lidian_date", lidian_date);
-				HotelRoom selectHotelRoom = hotelRoomsList.get(Integer
-						.valueOf(selectRoomIndexString));
-				String roomString = JSONHelper.toJSON(selectHotelRoom);
-				intent.putExtra("roomInfo", roomString);
-				startActivityForResult(intent, REQ_BOOKING_FOR_DISSMISS_POP);
+				try {
+					Intent intent = new Intent(context,
+							ActivityHotelBooking.class);
+					intent.putExtra("hotelId", hotelId);
+					intent.putExtra("hotelName", hotelName);
+					intent.putExtra("starLevel", starLevel);
+					intent.putExtra("ruzhu_date", ruzhu_date);
+					intent.putExtra("lidian_date", lidian_date);
+					HotelRoom selectHotelRoom = hotelRoomsList.get(Integer
+							.valueOf(selectRoomIndexString));
+					String roomString = JSONHelper.toJSON(selectHotelRoom);
+					intent.putExtra("roomInfo", roomString);
+					startActivityForResult(intent, REQ_BOOKING_FOR_DISSMISS_POP);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -282,31 +303,36 @@ public class ActivityHotelDetail extends Activity {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// url?action=hotelinfo&sign=7745955d2500de4d473e7badbe5c904d&userkey=2bfc0c48923cf89de19f6113c127ce81&str={'hid':'10153'}&sitekey=defage
-					MyApp ma = new MyApp(context);
-					String str = "";
 					try {
-						str = "{\"hid\":\"" + hotelId + "\"}";
+						// url?action=hotelinfo&sign=7745955d2500de4d473e7badbe5c904d&userkey=2bfc0c48923cf89de19f6113c127ce81&str={'hid':'10153'}&sitekey=defage
+						MyApp ma = new MyApp(context);
+						String str = "";
+						try {
+							str = "{\"hid\":\"" + hotelId + "\"}";
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						String param = "action=hotelinfo&str="
+								+ str
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "hotelinfo" + str);
+						hotelsDetailReturnJson = HttpUtils.getJsonContent(
+								ma.getServeUrl(), param);
+						Message msg = new Message();
+						msg.what = DETAIL_MSG;
+						handler.sendMessage(msg);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					String param = "action=hotelinfo&str="
-							+ str
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ "hotelinfo" + str);
-					hotelsDetailReturnJson = HttpUtils.getJsonContent(
-							ma.getServeUrl(), param);
-					Message msg = new Message();
-					msg.what = DETAIL_MSG;
-					handler.sendMessage(msg);
 				}
 			}).start();
 			progressdialog = CustomProgressDialog.createDialog(context);
@@ -328,36 +354,45 @@ public class ActivityHotelDetail extends Activity {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// action=rooms&sign=7745955d2500de4d473e7badbe5c904d&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-					// &str={'hid':'10011','tm1':'2014-05-12','tm2':'2014-05-15','uid':'3208','sid':'65'}
-					MyApp ma = new MyApp(context);
-					String str = "";
 					try {
-						str = "{\"hid\":\"" + hotelId + "\",\"tm1\":\""
-								+ ruzhu_date + "\",\"tm2\":\"" + lidian_date
-								+ "\",\"uid\":\""
-								+ sp.getString(SPkeys.userid.getString(), "")
-								+ "\",\"sid\":\"65\"}";
+						// action=rooms&sign=7745955d2500de4d473e7badbe5c904d&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+						// &str={'hid':'10011','tm1':'2014-05-12','tm2':'2014-05-15','uid':'3208','sid':'65'}
+						MyApp ma = new MyApp(context);
+						String str = "";
+						try {
+							str = "{\"hid\":\""
+									+ hotelId
+									+ "\",\"tm1\":\""
+									+ ruzhu_date
+									+ "\",\"tm2\":\""
+									+ lidian_date
+									+ "\",\"uid\":\""
+									+ sp.getString(SPkeys.userid.getString(),
+											"") + "\",\"sid\":\"65\"}";
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						String param = "action=rooms&str="
+								+ str
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "rooms" + str);
+						roomsReturnJson = HttpUtils.getJsonContent(
+								ma.getServeUrl(), param);
+						Message msg = new Message();
+						msg.what = ROOM_MSG;
+						handler.sendMessage(msg);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					String param = "action=rooms&str="
-							+ str
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ "rooms" + str);
-					roomsReturnJson = HttpUtils.getJsonContent(
-							ma.getServeUrl(), param);
-					Message msg = new Message();
-					msg.what = ROOM_MSG;
-					handler.sendMessage(msg);
 				}
 			}).start();
 		} catch (Exception e) {
@@ -366,10 +401,10 @@ public class ActivityHotelDetail extends Activity {
 	}
 
 	private void startQueryComments() {
-		try {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
 					// url?action=comments&sign=7745955d2500de4d473e7badbe5c904d&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
 					// &str={'hid':'10153',"pg":"1","hp":"1"}
 					MyApp ma = new MyApp(context);
@@ -397,11 +432,11 @@ public class ActivityHotelDetail extends Activity {
 					Message msg = new Message();
 					msg.what = COMMENTS_MSG;
 					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}).start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			}
+		}).start();
 	}
 
 	private Handler handler = new Handler() {
@@ -519,41 +554,48 @@ public class ActivityHotelDetail extends Activity {
 								@Override
 								public void onItemClick(AdapterView<?> parent,
 										View view, int position, long id) {
-									selectRoomIndexString = position + "";
-									int index = position;
-									imm.hideSoftInputFromWindow(
-											((Activity) context)
-													.getCurrentFocus()
-													.getWindowToken(),
-											InputMethodManager.HIDE_NOT_ALWAYS);
-									popupWindow_order.showAtLocation(
-											room_type_tv, Gravity.BOTTOM, 0, 0);
+									try {
+										selectRoomIndexString = position + "";
+										int index = position;
+										imm.hideSoftInputFromWindow(
+												((Activity) context)
+														.getCurrentFocus()
+														.getWindowToken(),
+												InputMethodManager.HIDE_NOT_ALWAYS);
+										popupWindow_order.showAtLocation(
+												room_type_tv, Gravity.BOTTOM,
+												0, 0);
 
-									if (hotelRoomsList.get(index).getImg() != null
-											&& hotelRoomsList.get(index)
-													.getImg().size() > 0) {
-										imageLoader.DisplayImage(hotelRoomsList
-												.get(index).getImg().get(0)
-												.getImgurl(), room_pic_iv);
+										if (hotelRoomsList.get(index).getImg() != null
+												&& hotelRoomsList.get(index)
+														.getImg().size() > 0) {
+											imageLoader.DisplayImage(
+													hotelRoomsList.get(index)
+															.getImg().get(0)
+															.getImgurl(),
+													room_pic_iv);
+										}
+										room_type_tv.setText(hotelRoomsList
+												.get(index).getTitle());
+										floor_tv.setText("Â¥²ã    "
+												+ hotelRoomsList.get(index)
+														.getFloor());
+										area_tv.setText("Ãæ»ý    "
+												+ hotelRoomsList.get(index)
+														.getArea());
+										breakfast_tv.setText("Ôç²Í    "
+												+ hotelRoomsList.get(index)
+														.getPlanname());
+										bedtype_tv.setText("´²ÐÍ    "
+												+ hotelRoomsList.get(index)
+														.getBed());
+										total_price_tv.setText(hotelRoomsList
+												.get(index).getTotalprice()
+												+ hotelRoomsList.get(index)
+														.getPriceCode());
+									} catch (Exception e) {
+										e.printStackTrace();
 									}
-									room_type_tv.setText(hotelRoomsList.get(
-											index).getTitle());
-									floor_tv.setText("Â¥²ã    "
-											+ hotelRoomsList.get(index)
-													.getFloor());
-									area_tv.setText("Ãæ»ý    "
-											+ hotelRoomsList.get(index)
-													.getArea());
-									breakfast_tv.setText("Ôç²Í    "
-											+ hotelRoomsList.get(index)
-													.getPlanname());
-									bedtype_tv.setText("´²ÐÍ    "
-											+ hotelRoomsList.get(index)
-													.getBed());
-									total_price_tv.setText(hotelRoomsList.get(
-											index).getTotalprice()
-											+ hotelRoomsList.get(index)
-													.getPriceCode());
 								}
 							});
 

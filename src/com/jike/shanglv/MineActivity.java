@@ -84,7 +84,6 @@ public class MineActivity extends Activity {
 	}
 
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
 			try {
@@ -142,10 +141,10 @@ public class MineActivity extends Activity {
 	}
 
 	private void queryUserInfo() {
-		try {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
 					int utype = 0;
 					MyApp ma = new MyApp(context);
 					Platform pf = (Platform) ma.getHm().get(
@@ -175,11 +174,11 @@ public class MineActivity extends Activity {
 					Message msg = new Message();
 					msg.what = 1;
 					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}).start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			}
+		}).start();
 	}
 
 	private Handler handler = new Handler() {// 在主界面判断用户名密码是否失效

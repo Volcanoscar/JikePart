@@ -221,7 +221,6 @@ public class ActivityOrderList extends Activity implements
 							((PhoneListAdapter) adapter)
 									.refreshData(order_List_phone);
 					}
-
 					wayType = SingleOrDouble.doubleWayGo;
 					singleline_tv.setTextColor(context.getResources().getColor(
 							R.color.black_txt_color));
@@ -885,20 +884,26 @@ public class ActivityOrderList extends Activity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (actionName.equals(FLIGHT_ORDERLIST)
-					|| actionName.equals(DEMAND_ORDERLIST)
-					|| actionName.equals(TRAIN_ORDERLIST)) {
-				if (order_List_airlineticket != null)
-					((AirlineTicketListAdapter) adapter)
-							.refreshData(order_List_airlineticket);
-			} else if (actionName.equals(HOTEL_ORDERLIST)) {
-				if (order_List_hotel != null)
-					((HotelListAdapter) adapter).refreshData(order_List_hotel);
-			} else if (actionName.equals(PHONE_ORDERLIST)) {
-				if (order_List_phone != null)
-					((PhoneListAdapter) adapter).refreshData(order_List_phone);
+			try {
+				if (actionName.equals(FLIGHT_ORDERLIST)
+						|| actionName.equals(DEMAND_ORDERLIST)
+						|| actionName.equals(TRAIN_ORDERLIST)) {
+					if (order_List_airlineticket != null)
+						((AirlineTicketListAdapter) adapter)
+								.refreshData(order_List_airlineticket);
+				} else if (actionName.equals(HOTEL_ORDERLIST)) {
+					if (order_List_hotel != null)
+						((HotelListAdapter) adapter)
+								.refreshData(order_List_hotel);
+				} else if (actionName.equals(PHONE_ORDERLIST)) {
+					if (order_List_phone != null)
+						((PhoneListAdapter) adapter)
+								.refreshData(order_List_phone);
+				}
+				listview.onRefreshComplete();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			listview.onRefreshComplete();
 		}
 	}
 
@@ -917,30 +922,35 @@ public class ActivityOrderList extends Activity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (actionName.equals(FLIGHT_ORDERLIST)
-					|| actionName.equals(DEMAND_ORDERLIST)
-					|| actionName.equals(TRAIN_ORDERLIST)) {
-				((AirlineTicketListAdapter) adapter)
-						.refreshData(order_List_airlineticket);
-				if (order_List_airlineticket.size() == Integer.valueOf(count)) {
-					listview.onLoadMoreComplete(true);
-				} else {
-					listview.onLoadMoreComplete(false);
+			try {
+				if (actionName.equals(FLIGHT_ORDERLIST)
+						|| actionName.equals(DEMAND_ORDERLIST)
+						|| actionName.equals(TRAIN_ORDERLIST)) {
+					((AirlineTicketListAdapter) adapter)
+							.refreshData(order_List_airlineticket);
+					if (order_List_airlineticket.size() == Integer
+							.valueOf(count)) {
+						listview.onLoadMoreComplete(true);
+					} else {
+						listview.onLoadMoreComplete(false);
+					}
+				} else if (actionName.equals(HOTEL_ORDERLIST)) {
+					((HotelListAdapter) adapter).refreshData(order_List_hotel);
+					if (order_List_hotel.size() == Integer.valueOf(count)) {
+						listview.onLoadMoreComplete(true);
+					} else {
+						listview.onLoadMoreComplete(false);
+					}
+				} else if (actionName.equals(PHONE_ORDERLIST)) {
+					((PhoneListAdapter) adapter).refreshData(order_List_phone);
+					if (order_List_phone.size() == Integer.valueOf(count)) {
+						listview.onLoadMoreComplete(true);
+					} else {
+						listview.onLoadMoreComplete(false);
+					}
 				}
-			} else if (actionName.equals(HOTEL_ORDERLIST)) {
-				((HotelListAdapter) adapter).refreshData(order_List_hotel);
-				if (order_List_hotel.size() == Integer.valueOf(count)) {
-					listview.onLoadMoreComplete(true);
-				} else {
-					listview.onLoadMoreComplete(false);
-				}
-			} else if (actionName.equals(PHONE_ORDERLIST)) {
-				((PhoneListAdapter) adapter).refreshData(order_List_phone);
-				if (order_List_phone.size() == Integer.valueOf(count)) {
-					listview.onLoadMoreComplete(true);
-				} else {
-					listview.onLoadMoreComplete(false);
-				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

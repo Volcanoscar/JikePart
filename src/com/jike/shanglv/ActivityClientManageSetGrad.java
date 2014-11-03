@@ -170,12 +170,16 @@ public class ActivityClientManageSetGrad extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void startQueryGrad() {
@@ -186,28 +190,33 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "") + "\"}";
-				String param = "action="
-						+ levellistActionName
-						+ "&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ levellistActionName + str);
-				dealerlevallistReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = DEALERLEVELMSGCODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\"}";
+					String param = "action="
+							+ levellistActionName
+							+ "&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ levellistActionName + str);
+					dealerlevallistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = DEALERLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -220,35 +229,40 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lname\":\"" + newName + "\"}";
-				String param = "";
 				try {
-					param = "action="
-							+ addlevelActionName
-							+ "&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ addlevelActionName + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lname\":\"" + newName + "\"}";
+					String param = "";
+					try {
+						param = "action="
+								+ addlevelActionName
+								+ "&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ addlevelActionName + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					addcustomerlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = ADDLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				addcustomerlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = ADDLEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -261,35 +275,40 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lID\":\"" + id + "\"}";
-				String param = "";
 				try {
-					param = "action="
-							+ setdefaultlevalActionName
-							+ "&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ setdefaultlevalActionName + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lID\":\"" + id + "\"}";
+					String param = "";
+					try {
+						param = "action="
+								+ setdefaultlevalActionName
+								+ "&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ setdefaultlevalActionName + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = SETDEFAULTLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = SETDEFAULTLEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -302,33 +321,38 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lID\":\"" + id + "\"}";
-				String param = "";
 				try {
-					param = "action=deletelevel&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ "deletelevel" + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lID\":\"" + id + "\"}";
+					String param = "";
+					try {
+						param = "action=deletelevel&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "deletelevel" + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = DELETELEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = DELETELEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -341,34 +365,39 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lname\":\"" + name + "\",\"lID\":\"" + id
-						+ "\"}";
-				String param = "";
 				try {
-					param = "action=modifylevel&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ "modifylevel" + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lname\":\"" + name + "\",\"lID\":\"" + id
+							+ "\"}";
+					String param = "";
+					try {
+						param = "action=modifylevel&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "modifylevel" + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = MODIFYLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = MODIFYLEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -532,36 +561,47 @@ public class ActivityClientManageSetGrad extends Activity {
 				modify_tv.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
-						final int index = Integer.valueOf(arg0.getTag()
-								.toString());
-						final EditText inputServer = new EditText(context);
-						inputServer.setFocusable(true);
-						inputServer.setText(customerlever_List.get(index)
-								.getLevalName());
-						AlertDialog.Builder builder = new AlertDialog.Builder(
-								context);
-						builder.setTitle("修改" + displayName + "级别")
-								.setView(inputServer)
-								.setNegativeButton("取消", null);
-						builder.setPositiveButton("确定",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
-										String inputName = inputServer
-												.getText().toString();
-										startModifyGrad(
-												customerlever_List.get(index)
-														.getLevalID(),
-												inputName);
-									}
-								});
-						// builder.setNeutralButton("删除", new
-						// DialogInterface.OnClickListener() {
-						// public void onClick(DialogInterface arg0, int arg1) {
-						// startDeleteGrad(customerlever_List.get(index).getLevalID());
-						// }
-						// });
-						builder.show();
+						try {
+							final int index = Integer.valueOf(arg0.getTag()
+									.toString());
+							final EditText inputServer = new EditText(context);
+							inputServer.setFocusable(true);
+							inputServer.setText(customerlever_List.get(index)
+									.getLevalName());
+							AlertDialog.Builder builder = new AlertDialog.Builder(
+									context);
+							builder.setTitle("修改" + displayName + "级别")
+									.setView(inputServer)
+									.setNegativeButton("取消", null);
+							builder.setPositiveButton("确定",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											try {
+												String inputName = inputServer
+														.getText().toString();
+												startModifyGrad(
+														customerlever_List.get(
+																index)
+																.getLevalID(),
+														inputName);
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+										}
+									});
+							// builder.setNeutralButton("删除", new
+							// DialogInterface.OnClickListener() {
+							// public void onClick(DialogInterface arg0, int
+							// arg1) {
+							// startDeleteGrad(customerlever_List.get(index).getLevalID());
+							// }
+							// });
+							builder.show();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				});
 			} catch (Exception e) {
@@ -591,14 +631,18 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				default_grad_tv
-						.setText(list1.get(position).get("title") != null ? list1
-								.get(position).get("title").toString()
-								: "");
-				currentID_XJ = position;
-				startSetDefaultGrad(customerlever_List.get(position)
-						.getLevalID());
-				pwMyPopWindow.dismiss();
+				try {
+					default_grad_tv
+							.setText(list1.get(position).get("title") != null ? list1
+									.get(position).get("title").toString()
+									: "");
+					currentID_XJ = position;
+					startSetDefaultGrad(customerlever_List.get(position)
+							.getLevalID());
+					pwMyPopWindow.dismiss();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		// 控制popupwindow的宽度和高度自适应
@@ -618,14 +662,18 @@ public class ActivityClientManageSetGrad extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}
@@ -680,27 +728,32 @@ public class ActivityClientManageSetGrad extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title
+						.setText(list.get(position).get("title") != null ? list
+								.get(position).get("title").toString() : "");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title
-					.setText(list.get(position).get("title") != null ? list
-							.get(position).get("title").toString() : "");
 			return convertView;
 		}
 
@@ -713,5 +766,4 @@ public class ActivityClientManageSetGrad extends Activity {
 			this.currentID = currentID;
 		}
 	}
-
 }

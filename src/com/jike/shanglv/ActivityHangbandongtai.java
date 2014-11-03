@@ -85,7 +85,6 @@ public class ActivityHangbandongtai extends Activity {
 		date_choose_single_rl = (RelativeLayout) findViewById(R.id.date_choose_single_rl);
 
 		startoff_date_tv.setText(DateUtil.GetDateAfterToday(1));
-
 		startcity_choose_ll = (LinearLayout) findViewById(R.id.startcity_choose_ll);
 		endcity_choose_ll = (LinearLayout) findViewById(R.id.endcity_choose_ll);
 		swith_city_iv = (ImageView) findViewById(R.id.swith_city_iv);

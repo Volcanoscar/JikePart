@@ -93,7 +93,6 @@ public class ActivityInternationalAirlineticket extends Activity {
 
 		date_choose_single_rl = (RelativeLayout) findViewById(R.id.date_choose_single_rl);
 		date_choose_double_rl = (RelativeLayout) findViewById(R.id.date_choose_double_rl);
-
 		startcity_choose_ll = (LinearLayout) findViewById(R.id.startcity_choose_ll);
 		endcity_choose_ll = (LinearLayout) findViewById(R.id.endcity_choose_ll);
 		swith_city_iv = (ImageView) findViewById(R.id.swith_city_iv);

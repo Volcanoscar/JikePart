@@ -150,20 +150,24 @@ public class ActivityTrainSearchlist extends Activity {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								TrainListItem ti = train_List.get(position);
-								Intent intents = new Intent(context,
-										ActivityTrainBooking.class);
-								String tiString = JSONHelper.toJSON(ti);
-								String seatListString = JSONHelper.toJSON(ti
-										.getSeatList());
-								intents.putExtra("TrainListItemString",
-										tiString);
-								intents.putExtra("SeatListString",
-										seatListString);
-								intents.putExtra("startcity", startcity);
-								intents.putExtra("arrivecity", arrivecity);
-								intents.putExtra("startdate", startoff_date);
-								startActivity(intents);
+								try {
+									TrainListItem ti = train_List.get(position);
+									Intent intents = new Intent(context,
+											ActivityTrainBooking.class);
+									String tiString = JSONHelper.toJSON(ti);
+									String seatListString = JSONHelper
+											.toJSON(ti.getSeatList());
+									intents.putExtra("TrainListItemString",
+											tiString);
+									intents.putExtra("SeatListString",
+											seatListString);
+									intents.putExtra("startcity", startcity);
+									intents.putExtra("arrivecity", arrivecity);
+									intents.putExtra("startdate", startoff_date);
+									startActivity(intents);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 
@@ -235,28 +239,33 @@ public class ActivityTrainSearchlist extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// url?action=trainlist&str={"s":"beijing","e":"shanghai","t":"2014-04-30"}&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				MyApp ma = new MyApp(context);
-				// String siteid=sp.getString(SPkeys.siteid.getString(), "65");
-				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
-						+ arrivecity_code + "\",\"t\":\"" + startoff_date
-						+ "\"}";
-				String param = "action=trainlistv2&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "trainlistv2" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				trainsReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					// url?action=trainlist&str={"s":"beijing","e":"shanghai","t":"2014-04-30"}&sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+					MyApp ma = new MyApp(context);
+					// String siteid=sp.getString(SPkeys.siteid.getString(),
+					// "65");
+					String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
+							+ arrivecity_code + "\",\"t\":\"" + startoff_date
+							+ "\"}";
+					String param = "action=trainlistv2&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "trainlistv2" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					trainsReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -462,41 +471,6 @@ public class ActivityTrainSearchlist extends Activity {
 								.getDrawable(R.drawable.train_over));
 					}
 				}
-				// if
-				// (!Boolean.valueOf(str.get(position).getYuDing().toLowerCase()))
-				// {
-				// train_num_tv.setTextColor(getResources().getColor(R.color.gray));
-				// train_type_tv.setTextColor(getResources().getColor(R.color.gray));
-				// start_time_tv.setTextColor(getResources().getColor(R.color.gray));
-				// arrive_time_tv.setTextColor(getResources().getColor(R.color.gray));
-				// used_time_tv.setTextColor(getResources().getColor(R.color.gray));
-				// start_station_tv.setTextColor(getResources().getColor(R.color.gray));
-				// end_station_tv.setTextColor(getResources().getColor(R.color.gray));
-				// seat_grad_tv.setTextColor(getResources().getColor(R.color.gray));
-				// price_tv.setTextColor(getResources().getColor(R.color.gray));
-				// remain_count_tv.setTextColor(getResources().getColor(R.color.gray));
-				// if (SFType.length() == 3) {
-				// String SType = SFType.substring(0, 1);
-				// String FType = SFType.substring(2, 3);
-				// if (SType.equals("ЪМ")) {
-				// start_station_icon_iv.setBackground(getResources()
-				// .getDrawable(R.drawable.trains_startgray));
-				// } else if (SType.equals("Й§")) {
-				// start_station_icon_iv.setBackground(getResources()
-				// .getDrawable(R.drawable.train_overgray));
-				// }
-				//
-				// if (FType.equals("же")) {
-				// end_station_icon_iv.setBackground(getResources()
-				// .getDrawable(R.drawable.train_finalgray));
-				// } else if (FType.equals("Й§")) {
-				// end_station_icon_iv.setBackground(getResources()
-				// .getDrawable(R.drawable.train_overgray));
-				// }
-				// }
-				// convertView.setEnabled(false);
-				// convertView.setOnClickListener(null);
-				// }
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

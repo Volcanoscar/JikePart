@@ -263,7 +263,8 @@ public class ActivityInternationalRequisitionForm extends Activity {
 										contact_person_phone_et.getText()
 												.toString()).commit();
 					}
-					if(getStr().equals(""))break;
+					if (getStr().equals(""))
+						break;
 					commitOrder();
 					break;
 				default:
@@ -295,8 +296,9 @@ public class ActivityInternationalRequisitionForm extends Activity {
 								orderID);
 						startActivityForResult(intent, NEW_DEMAND_SUCCEED_CODE);
 					} else {
-//						Toast.makeText(context, "发生未知异常，提交订单失败！", 0).show();
-						String message = jsonObject.getJSONObject("d").getString("msg");
+						// Toast.makeText(context, "发生未知异常，提交订单失败！", 0).show();
+						String message = jsonObject.getJSONObject("d")
+								.getString("msg");
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle(message);
@@ -323,38 +325,41 @@ public class ActivityInternationalRequisitionForm extends Activity {
 			public void run() {
 				// url?action=intdemand&str=str参数&sitekey=defage
 				// &sign=1232432&userkey=2bfc0c48923cf89de19f6113c127ce81
-
-				MyApp ma = new MyApp(context);
-				String str = getStr();
-				// String param = "action=intdemand&sitekey=&userkey=" +
-				// ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
-				// + "&sign="
-				// +
-				// CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
-				// + "intdemand" + str)+"&str=" + str;
-				// commitReturnJson =
-				// HttpUtils.getJsonContent(ma.getServeUrl(),param);
-				String param = "?action=createDemandOrder&sitekey="
-						+ MyApp.sitekey
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "createDemandOrder" + str);
-				// try {
-				// str=URLEncoder.encode(str, "utf-8");
-				// } catch (UnsupportedEncodingException e) {
-				// e.printStackTrace();
-				// }
-				commitReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
-						"&str=" + str);
-				Message msg = new Message();
-				Log.v("param", param);
-				msg.what = COMMIT_DEMAND_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = getStr();
+					// String param = "action=intdemand&sitekey=&userkey=" +
+					// ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+					// + "&sign="
+					// +
+					// CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+					// + "intdemand" + str)+"&str=" + str;
+					// commitReturnJson =
+					// HttpUtils.getJsonContent(ma.getServeUrl(),param);
+					String param = "?action=createDemandOrder&sitekey="
+							+ MyApp.sitekey
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "createDemandOrder" + str);
+					// try {
+					// str=URLEncoder.encode(str, "utf-8");
+					// } catch (UnsupportedEncodingException e) {
+					// e.printStackTrace();
+					// }
+					commitReturnJson = HttpUtils.myPost(ma.getServeUrl()
+							+ param, "&str=" + str);
+					Message msg = new Message();
+					Log.v("param", param);
+					msg.what = COMMIT_DEMAND_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -397,7 +402,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 		interDemandStr.setEmail("");
 		interDemandStr.setRemark(remark_et.getText().toString().trim());
 		// str=JSONHelper.toJSON(interDemandStr);//TODO 直接转化成json
-		String psgStr=getPsgInfo();
+		String psgStr = getPsgInfo();
 		if (psgStr.equals("")) {
 			return "";
 		}
@@ -434,16 +439,19 @@ public class ActivityInternationalRequisitionForm extends Activity {
 				interDemandPassenger.setGivenname(name[1]);
 			}
 			interDemandPassenger.setCardNo(passenger.getIdentificationNum());
-			interDemandPassenger.setSex(passenger.getGender().equals("男")?"1":"2");
+			interDemandPassenger.setSex(passenger.getGender().equals("男") ? "1"
+					: "2");
 			interDemandPassenger.setCardType(String
 					.valueOf(IdType.IdTypeReverse.get(passenger
 							.getIdentificationType())));
 			interDemandPassenger.setCusBirth(passenger.getBirthDay());
 			interDemandPassenger.setNumberValiddate(passenger.getIDdeadline());
-			if (passenger.getIDdeadline()==null||passenger.getIDdeadline().contains("null")) {
+			if (passenger.getIDdeadline() == null
+					|| passenger.getIDdeadline().contains("null")) {
 				final CustomerAlertDialog cad = new CustomerAlertDialog(
 						context, true);
-				cad.setTitle("用户信息非法，请编辑用户"+ passenger.getPassengerName()+"的证件有效期，再尝试提交需求单");
+				cad.setTitle("用户信息非法，请编辑用户" + passenger.getPassengerName()
+						+ "的证件有效期，再尝试提交需求单");
 				cad.setPositiveButton("确定", new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -465,7 +473,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 			cpList.add(interDemandPassenger);
 		}
 		str = JSONHelper.toJSON(cpList);
-		str=str.replace("\"null\"", "null").replace("null", "\"\"");
+		str = str.replace("\"null\"", "null").replace("null", "\"\"");
 		return str;
 	}
 
@@ -617,15 +625,20 @@ public class ActivityInternationalRequisitionForm extends Activity {
 				delete_imgbtn.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						int index = Integer.parseInt(v.getTag().toString());
-						passengerList.remove(index);
-						notifyDataSetChanged();
-						ActivityInlandAirlineticketBooking
-								.setListViewHeightBasedOnChildren(passenger_listview);
-						if (passengerList.size() == 0) {
-							add_passager_tv.setText(getResources().getString(
-									R.string.add_passenger));
-							passenger_head_divid_line.setVisibility(View.GONE);
+						try {
+							int index = Integer.parseInt(v.getTag().toString());
+							passengerList.remove(index);
+							notifyDataSetChanged();
+							ActivityInlandAirlineticketBooking
+									.setListViewHeightBasedOnChildren(passenger_listview);
+							if (passengerList.size() == 0) {
+								add_passager_tv.setText(getResources()
+										.getString(R.string.add_passenger));
+								passenger_head_divid_line
+										.setVisibility(View.GONE);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					}
 				});
@@ -667,22 +680,17 @@ public class ActivityInternationalRequisitionForm extends Activity {
 			super.onRestoreInstanceState(savedInstanceState);
 			if (savedInstanceState != null) {
 				String pl = savedInstanceState.getString("passengerList");
-				try {
-					passengerList.clear();
-					passengerList = (ArrayList<Passenger>) JSONHelper
-							.parseCollection(pl, List.class, Passenger.class);
-					PassengerListAdapter adapter = new PassengerListAdapter(
-							context, passengerList);
-					passenger_listview.setAdapter(adapter);
-					ActivityInlandAirlineticketBooking
-							.setListViewHeightBasedOnChildren(passenger_listview);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				passengerList.clear();
+				passengerList = (ArrayList<Passenger>) JSONHelper
+						.parseCollection(pl, List.class, Passenger.class);
+				PassengerListAdapter adapter = new PassengerListAdapter(
+						context, passengerList);
+				passenger_listview.setAdapter(adapter);
+				ActivityInlandAirlineticketBooking
+						.setListViewHeightBasedOnChildren(passenger_listview);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

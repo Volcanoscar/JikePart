@@ -261,13 +261,17 @@ public class ActivityHotelSearchlist extends Activity implements
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								Hotel ht = reqdata_List.get(position - 1);
-								Intent intents = new Intent(context,
-										ActivityHotelDetail.class);
-								intents.putExtra("hotelId", ht.getID());
-								intents.putExtra("ruzhu_date", ruzhu_date);
-								intents.putExtra("lidian_date", lidian_date);
-								startActivity(intents);
+								try {
+									Hotel ht = reqdata_List.get(position - 1);
+									Intent intents = new Intent(context,
+											ActivityHotelDetail.class);
+									intents.putExtra("hotelId", ht.getID());
+									intents.putExtra("ruzhu_date", ruzhu_date);
+									intents.putExtra("lidian_date", lidian_date);
+									startActivity(intents);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 					} else {
@@ -344,13 +348,17 @@ public class ActivityHotelSearchlist extends Activity implements
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View view, int position, long id) {
-								Hotel ht = reqdata_List.get(position - 1);
-								Intent intents = new Intent(context,
-										ActivityHotelDetail.class);
-								intents.putExtra("hotelId", ht.getID());
-								intents.putExtra("ruzhu_date", ruzhu_date);
-								intents.putExtra("lidian_date", lidian_date);
-								startActivity(intents);
+								try {
+									Hotel ht = reqdata_List.get(position - 1);
+									Intent intents = new Intent(context,
+											ActivityHotelDetail.class);
+									intents.putExtra("hotelId", ht.getID());
+									intents.putExtra("ruzhu_date", ruzhu_date);
+									intents.putExtra("lidian_date", lidian_date);
+									startActivity(intents);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 					} else {
@@ -484,25 +492,48 @@ public class ActivityHotelSearchlist extends Activity implements
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// action=hlist&sign=c12b01b80e4b2674229dd71a48b5af36&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				// &str={'city':'上海','pgsize':'10','pgindex':'1','hn':'','key':'','yufu':'','esdid':'','minprice':'','maxprice':'','lsid':'','areid':'','star':'','fw':''}
-				String strEm = "";
-				MyApp ma = new MyApp(context);
-				Message msg = new Message();
-				String str1 = "";
-				// URLEncoder.encode(city, "utf-8")
-				str1 = "{\"city\":\"" + city + "\",\"pgsize\":\"" + pgsize
-						+ "\",\"pgindex\":\"" + pgindex + "\",\"hn\":\""
-						+ keywords + "\",\"key\":\"" + strEm + "\",\"yufu\":\""
-						+ strEm + "\",\"esdid\":\"" + strEm
-						+ "\",\"minprice\":\"" + minprice
-						+ "\",\"maxprice\":\"" + maxprice + "\",\"lsid\":\""
-						+ strEm + "\",\"areid\":\"" + strEm + "\",\"star\":\""
-						+ star + "\",\"fw\":\"\"}";
-				String param1 = "";
 				try {
-					param1 = "action=hlist&str="
-							+ URLEncoder.encode(str1, "utf-8")
+					// action=hlist&sign=c12b01b80e4b2674229dd71a48b5af36&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+					// &str={'city':'上海','pgsize':'10','pgindex':'1','hn':'','key':'','yufu':'','esdid':'','minprice':'','maxprice':'','lsid':'','areid':'','star':'','fw':''}
+					String strEm = "";
+					MyApp ma = new MyApp(context);
+					Message msg = new Message();
+					String str1 = "";
+					// URLEncoder.encode(city, "utf-8")
+					str1 = "{\"city\":\"" + city + "\",\"pgsize\":\"" + pgsize
+							+ "\",\"pgindex\":\"" + pgindex + "\",\"hn\":\""
+							+ keywords + "\",\"key\":\"" + strEm
+							+ "\",\"yufu\":\"" + strEm + "\",\"esdid\":\""
+							+ strEm + "\",\"minprice\":\"" + minprice
+							+ "\",\"maxprice\":\"" + maxprice
+							+ "\",\"lsid\":\"" + strEm + "\",\"areid\":\""
+							+ strEm + "\",\"star\":\"" + star
+							+ "\",\"fw\":\"\"}";
+					String param1 = "";
+					try {
+						param1 = "action=hlist&str="
+								+ URLEncoder.encode(str1, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "hlist" + str1);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String str2 = "";
+					str2 = "{\"lng\":\"" + longtitude + "\",\"pagesize\":\""
+							+ pgsize + "\",\"pg\":\"" + pgindex
+							+ "\",\"lat\":\"" + latitude + "\"}";
+					String param2 = "action=nearby&str="
+							+ str2
 							+ "&userkey="
 							+ ma.getHm().get(PackageKeys.USERKEY.getString())
 									.toString()
@@ -512,37 +543,20 @@ public class ActivityHotelSearchlist extends Activity implements
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "hlist" + str1);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
+									+ "nearby" + str2);
+					if (!isNearby) {
+						hotelsReturnJson = HttpUtils.getJsonContent(
+								ma.getServeUrl(), param1);
+						msg.what = 1;
+					} else {
+						nearbyReturnJson = HttpUtils.getJsonContent(
+								ma.getServeUrl(), param2);
+						msg.what = 2;
+					}
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String str2 = "";
-				str2 = "{\"lng\":\"" + longtitude + "\",\"pagesize\":\""
-						+ pgsize + "\",\"pg\":\"" + pgindex + "\",\"lat\":\""
-						+ latitude + "\"}";
-				String param2 = "action=nearby&str="
-						+ str2
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "nearby" + str2);
-				if (!isNearby) {
-					hotelsReturnJson = HttpUtils.getJsonContent(
-							ma.getServeUrl(), param1);
-					msg.what = 1;
-				} else {
-					nearbyReturnJson = HttpUtils.getJsonContent(
-							ma.getServeUrl(), param2);
-					msg.what = 2;
-				}
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -789,15 +803,18 @@ public class ActivityHotelSearchlist extends Activity implements
 				mBaidumap.setOnMarkerClickListener(new OnMarkerClickListener() {
 					@Override
 					public boolean onMarkerClick(final Marker marker) {
-						// 获得marker中的数据
-						String info = (String) marker.getExtraInfo().get(
-								"hotelId");
-						Intent intents = new Intent(context,
-								ActivityHotelDetail.class);
-						intents.putExtra("hotelId", info);
-						intents.putExtra("ruzhu_date", ruzhu_date);
-						intents.putExtra("lidian_date", lidian_date);
-						startActivity(intents);
+						try {// 获得marker中的数据
+							String info = (String) marker.getExtraInfo().get(
+									"hotelId");
+							Intent intents = new Intent(context,
+									ActivityHotelDetail.class);
+							intents.putExtra("hotelId", info);
+							intents.putExtra("ruzhu_date", ruzhu_date);
+							intents.putExtra("lidian_date", lidian_date);
+							startActivity(intents);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 						return true;
 					}
 				});
@@ -860,43 +877,48 @@ public class ActivityHotelSearchlist extends Activity implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_hotel_searchlist,
-						null);
-			}
-			TextView hotel_name_tv = (TextView) convertView
-					.findViewById(R.id.hotel_name_tv);
-			TextView score_tv = (TextView) convertView
-					.findViewById(R.id.score_tv);
-			TextView starlevel_tv = (TextView) convertView
-					.findViewById(R.id.starlevel_tv);
-			TextView area_tv = (TextView) convertView
-					.findViewById(R.id.area_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView juli_tv = (TextView) convertView
-					.findViewById(R.id.juli_tv);
-			ImageView hotel_pic_iv = (ImageView) convertView
-					.findViewById(R.id.hotel_pic_iv);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_hotel_searchlist, null);
+				}
+				TextView hotel_name_tv = (TextView) convertView
+						.findViewById(R.id.hotel_name_tv);
+				TextView score_tv = (TextView) convertView
+						.findViewById(R.id.score_tv);
+				TextView starlevel_tv = (TextView) convertView
+						.findViewById(R.id.starlevel_tv);
+				TextView area_tv = (TextView) convertView
+						.findViewById(R.id.area_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView juli_tv = (TextView) convertView
+						.findViewById(R.id.juli_tv);
+				ImageView hotel_pic_iv = (ImageView) convertView
+						.findViewById(R.id.hotel_pic_iv);
 
-			String juli = str.get(position).getJuli();
-			if (juli != null && juli.length() > 0) {
-				juli_tv.setText(getJuli(juli));
-				area_tv.setText(str.get(position).getCBD());
-			} else {
-				juli_tv.setVisibility(View.GONE);
-				area_tv.setText(str.get(position).getCBD().replace("区域", "")
-						.replace(":", "").replace("：", "").replace(" ", ""));
+				String juli = str.get(position).getJuli();
+				if (juli != null && juli.length() > 0) {
+					juli_tv.setText(getJuli(juli));
+					area_tv.setText(str.get(position).getCBD());
+				} else {
+					juli_tv.setVisibility(View.GONE);
+					area_tv.setText(str.get(position).getCBD()
+							.replace("区域", "").replace(":", "")
+							.replace("：", "").replace(" ", ""));
+				}
+				hotel_name_tv.setText(str.get(position).getName());
+				score_tv.setText(Float.valueOf(str.get(position).getHaoping()) == -1f ? "暂无"
+						: (str.get(position).getHaoping() + "分"));
+				starlevel_tv.setText(StarLevel.Starlevel.get(str.get(position)
+						.getStar()));
+				price_tv.setText("￥" + str.get(position).getPrice());
+				// imageLoader.DisplayImage(data.get(position), hotel_pic_iv);
+				imageLoader.DisplayImage(str.get(position).getPicture(),
+						hotel_pic_iv);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			hotel_name_tv.setText(str.get(position).getName());
-			score_tv.setText(Float.valueOf(str.get(position).getHaoping()) == -1f ? "暂无"
-					: (str.get(position).getHaoping() + "分"));
-			starlevel_tv.setText(StarLevel.Starlevel.get(str.get(position)
-					.getStar()));
-			price_tv.setText("￥" + str.get(position).getPrice());
-			// imageLoader.DisplayImage(data.get(position), hotel_pic_iv);
-			imageLoader.DisplayImage(str.get(position).getPicture(),
-					hotel_pic_iv);
 			return convertView;
 		}
 

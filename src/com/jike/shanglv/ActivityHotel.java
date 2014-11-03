@@ -362,16 +362,20 @@ public class ActivityHotel extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (xjOrJg == 0) {// 0:星级
-					xingji_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_XJ = position;
-					pwMyPopWindow.dismiss();
-				} else if (xjOrJg == 1) {// 1：价格
-					jiage_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_JG = position;
-					pwMyPopWindow.dismiss();
+				try {
+					if (xjOrJg == 0) {// 0:星级
+						xingji_tv.setText(list1.get(position).get("title")
+								.toString());
+						currentID_XJ = position;
+						pwMyPopWindow.dismiss();
+					} else if (xjOrJg == 1) {// 1：价格
+						jiage_tv.setText(list1.get(position).get("title")
+								.toString());
+						currentID_JG = position;
+						pwMyPopWindow.dismiss();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
@@ -393,14 +397,18 @@ public class ActivityHotel extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}

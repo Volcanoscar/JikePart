@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.jike.shanglv.Common.CommonFunc;
 import com.jike.shanglv.Enums.PackageKeys;
 import com.jike.shanglv.Enums.Platform;
@@ -233,35 +232,39 @@ public class ActivityBMenu extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int utype = 0;
-				MyApp ma = new MyApp(context);
-				Platform pf = (Platform) ma.getHm().get(
-						PackageKeys.PLATFORM.getString());
-				if (pf == Platform.B2B)
-					utype = 1;
-				else if (pf == Platform.B2C)
-					utype = 2;
-				String str = "{\"uname\":\""
-						+ sp.getString(SPkeys.lastUsername.getString(), "")
-						+ "\",\"upwd\":\""
-						+ sp.getString(SPkeys.lastPassword.getString(), "")
-						+ "\",\"utype\":\"" + utype + "\"}";
-				String param = "action=userlogin&sitekey=&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&str="
-						+ str
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "userlogin" + str);
-				loginReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Log.v("loginReturnJson", loginReturnJson);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					int utype = 0;
+					MyApp ma = new MyApp(context);
+					Platform pf = (Platform) ma.getHm().get(
+							PackageKeys.PLATFORM.getString());
+					if (pf == Platform.B2B)
+						utype = 1;
+					else if (pf == Platform.B2C)
+						utype = 2;
+					String str = "{\"uname\":\""
+							+ sp.getString(SPkeys.lastUsername.getString(), "")
+							+ "\",\"upwd\":\""
+							+ sp.getString(SPkeys.lastPassword.getString(), "")
+							+ "\",\"utype\":\"" + utype + "\"}";
+					String param = "action=userlogin&sitekey=&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&str="
+							+ str
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "userlogin" + str);
+					loginReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Log.v("loginReturnJson", loginReturnJson);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}

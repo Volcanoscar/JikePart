@@ -134,62 +134,69 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				passengerList = (ArrayList<Passenger>) JSONHelper
 						.parseCollection(passengerString, List.class,
 								Passenger.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			editPassenger = passengerList.get(index);
-			if (editPassenger.getAddto() != null
-					&& !editPassenger.getAddto().equals("null")) {
-				saveAsContact = editPassenger.getAddto() == "1" ? true : false;
-				if (saveAsContact) {
+
+				editPassenger = passengerList.get(index);
+				if (editPassenger.getAddto() != null
+						&& !editPassenger.getAddto().equals("null")) {
+					saveAsContact = editPassenger.getAddto() == "1" ? true
+							: false;
+					if (saveAsContact) {
+						savecontact_checkbox_iv.setBackground(context
+								.getResources().getDrawable(
+										R.drawable.fuxuankuang_yes));
+					} else {
+						savecontact_checkbox_iv.setBackground(context
+								.getResources().getDrawable(
+										R.drawable.fuxuankuang_no));
+					}
+				}
+				if (editPassenger.getPassengerType() != null
+						&& !editPassenger.getPassengerType().equals("null"))
+					passengerType_tv.setText(editPassenger.getPassengerType());
+				if (editPassenger.getPassengerName() != null
+						&& !editPassenger.getPassengerName().equals("null"))
+					passengerName_et.setText(editPassenger.getPassengerName());
+				if (editPassenger.getIdentificationNum() != null
+						&& !editPassenger.getIdentificationNum().equals("null"))
+					identificationNum_et.setText(editPassenger
+							.getIdentificationNum());
+				if (editPassenger.getIdentificationType() != null
+						&& !editPassenger.getIdentificationType()
+								.equals("null"))
+					identificationType_tv.setText(editPassenger
+							.getIdentificationType());
+				if (editPassenger.getMobie() != null
+						&& !editPassenger.getMobie().equals("null"))
+					phoneNum_et.setText(editPassenger.getMobie());
+				if (systype.equals("1")) {// 若为国际机票
+					// issueAt_et,IDdeadline_et, nation_et, gender_et,
+					// birthDay_et
+					if (editPassenger.getIssueAt() != null
+							&& !editPassenger.getIssueAt().equals("null"))
+						issueAt_et.setText(editPassenger.getIssueAt());
+					if (editPassenger.getIDdeadline() != null
+							&& !editPassenger.getIDdeadline().equals("null"))
+						IDdeadline_et.setText(editPassenger.getIDdeadline());
+					if (editPassenger.getNation() != null
+							&& !editPassenger.getNation().equals("null"))
+						nation_et.setText(editPassenger.getNation());
+					if (editPassenger.getGender() != null
+							&& !editPassenger.getGender().equals("null"))
+						gender_et.setText(editPassenger.getGender());// .trim().equals("1")
+																		// ? "男"
+																		// : "女"
+					if (editPassenger.getBirthDay() != null
+							&& !editPassenger.getBirthDay().equals("null"))
+						birthDay_et.setText(editPassenger.getBirthDay());
+				}
+				if (passengerName_et.getText().toString().trim().equals("")) {// 新建联系人，默认选中保存为常用联系人
+					saveAsContact = true;
 					savecontact_checkbox_iv.setBackground(context
 							.getResources().getDrawable(
 									R.drawable.fuxuankuang_yes));
-				} else {
-					savecontact_checkbox_iv.setBackground(context
-							.getResources().getDrawable(
-									R.drawable.fuxuankuang_no));
 				}
-			}
-			if (editPassenger.getPassengerType() != null
-					&& !editPassenger.getPassengerType().equals("null"))
-				passengerType_tv.setText(editPassenger.getPassengerType());
-			if (editPassenger.getPassengerName() != null
-					&& !editPassenger.getPassengerName().equals("null"))
-				passengerName_et.setText(editPassenger.getPassengerName());
-			if (editPassenger.getIdentificationNum() != null
-					&& !editPassenger.getIdentificationNum().equals("null"))
-				identificationNum_et.setText(editPassenger
-						.getIdentificationNum());
-			if (editPassenger.getIdentificationType() != null
-					&& !editPassenger.getIdentificationType().equals("null"))
-				identificationType_tv.setText(editPassenger
-						.getIdentificationType());
-			if (editPassenger.getMobie() != null
-					&& !editPassenger.getMobie().equals("null"))
-				phoneNum_et.setText(editPassenger.getMobie());
-			if (systype.equals("1")) {// 若为国际机票
-				// issueAt_et,IDdeadline_et, nation_et, gender_et, birthDay_et
-				if (editPassenger.getIssueAt() != null
-						&& !editPassenger.getIssueAt().equals("null"))
-					issueAt_et.setText(editPassenger.getIssueAt());
-				if (editPassenger.getIDdeadline() != null
-						&& !editPassenger.getIDdeadline().equals("null"))
-					IDdeadline_et.setText(editPassenger.getIDdeadline());
-				if (editPassenger.getNation() != null
-						&& !editPassenger.getNation().equals("null"))
-					nation_et.setText(editPassenger.getNation());
-				if (editPassenger.getGender() != null
-						&& !editPassenger.getGender().equals("null"))
-					gender_et.setText(editPassenger.getGender());//.trim().equals("1") ? "男" : "女"
-				if (editPassenger.getBirthDay() != null
-						&& !editPassenger.getBirthDay().equals("null"))
-					birthDay_et.setText(editPassenger.getBirthDay());
-			}
-			if (passengerName_et.getText().toString().trim().equals("")) {// 新建联系人，默认选中保存为常用联系人
-				saveAsContact = true;
-				savecontact_checkbox_iv.setBackground(context.getResources()
-						.getDrawable(R.drawable.fuxuankuang_yes));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -267,10 +274,10 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 							.toString().trim());
 					passenger.setIdentificationType(identificationType_tv
 							.getText().toString().trim());
-//					passenger.setNation(nation);
-//					passenger.setGender(gender);
-//					passenger.setBirthDay(birthDay);
-//					passenger.setIDdeadline(IDdeadline);
+					// passenger.setNation(nation);
+					// passenger.setGender(gender);
+					// passenger.setBirthDay(birthDay);
+					// passenger.setIDdeadline(IDdeadline);
 					passenger.setNation(nation_et.getText().toString());
 					passenger.setGender(gender_et.getText().toString());
 					passenger.setBirthDay(birthDay_et.getText().toString());
@@ -315,8 +322,6 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 							ActivityInlandAirlineticketAddoreditPassengers.this
 									.getCurrentFocus().getWindowToken(),
 							InputMethodManager.HIDE_NOT_ALWAYS);
-					// popupWindow_ptype.showAtLocation(chengren_btn,
-					// Gravity.BOTTOM, 0, 0);
 
 					iniPopupWindow(0, initPassengerTypeData());
 					pwMyPopWindow.showAtLocation(finish_tv, Gravity.BOTTOM, 0,
@@ -642,16 +647,20 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (zjOrCk == 0) {// 0:证件类型
-					identificationType_tv.setText(list1.get(position)
-							.get("title").toString());
-					currentID_ZJ = position;
-					pwMyPopWindow.dismiss();
-				} else if (zjOrCk == 1) {// 1：乘客类型
-					passengerType_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_CK = position;
-					pwMyPopWindow.dismiss();
+				try {
+					if (zjOrCk == 0) {// 0:证件类型
+						identificationType_tv.setText(list1.get(position)
+								.get("title").toString());
+						currentID_ZJ = position;
+						pwMyPopWindow.dismiss();
+					} else if (zjOrCk == 1) {// 1：乘客类型
+						passengerType_tv.setText(list1.get(position)
+								.get("title").toString());
+						currentID_CK = position;
+						pwMyPopWindow.dismiss();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
@@ -673,7 +682,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
+				try{View layout = inflater.inflate(
 						R.layout.popupwindow_list_select, null);
 				int height = lvPopupList.getTop();
 				int y = (int) event.getY();
@@ -681,6 +690,8 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 					if (y < height) {
 						pwMyPopWindow.dismiss();
 					}
+				}	} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}
