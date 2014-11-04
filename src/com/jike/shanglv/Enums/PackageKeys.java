@@ -8,6 +8,7 @@ public enum PackageKeys {
 	RECOMMAND_CODE("RECOMMAND_CODE"),//默认推荐码
 	PLATFORM("PLATFORM"),//平台：B2B、B2C
 	USERKEY("USERKEY"),//userkey
+	ORGIN("ORGIN"),//orgin
 	
 	phoneNum("phoneNum")//
 	

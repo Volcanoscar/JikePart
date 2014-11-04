@@ -118,6 +118,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 	private PolicyList selectedPolicyB;// B2B用户自定义选择的政策信息
 	private CustomProgressDialog progressdialog;
 	private ImageLoader imageLoader;
+	private Boolean hasCommited = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -528,6 +529,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					String state = jsonObject.getString("c");
 
 					if (state.equals("0000")) {
+						hasCommited = true;
 						String orderID = jsonObject.getJSONObject("d")
 								.getString("orderid");
 						Intent intent = new Intent(context,
@@ -680,6 +682,8 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 							+ ",\"itinerary\":{}" + ",\"siteid\":\"" + siteid
 							+ "\"}";
 					str = str.replace("null", "");
+					String orgin=ma.getHm().get(PackageKeys.ORGIN.getString())
+							.toString();
 					String param = "?action=forder&userkey="
 							+ ma.getHm().get(PackageKeys.USERKEY.getString())
 									.toString()
@@ -687,7 +691,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "forder" + str);
+									+ "forder" + str)+"&orgin="+orgin;
 					// try {
 					// str = URLEncoder.encode(str, "utf-8");
 					// } catch (UnsupportedEncodingException e) {
@@ -892,41 +896,49 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					startActivityForResult(intent1, SELECTPOLICYREQUESTCODE3);
 					break;
 				case R.id.back_imgbtn:
-					final CustomerAlertDialog cad = new CustomerAlertDialog(
-							context, false);
-					cad.setTitle("您的订单尚未完成，确认放弃填写吗？");
-					cad.setPositiveButton("确认放弃", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							finish();
-							cad.dismiss();
-						}
-					});
-					cad.setNegativeButton1("继续填写", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-						}
-					});
+					if (!hasCommited) {
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, false);
+						cad.setTitle("您的订单尚未完成，确认放弃填写吗？");
+						cad.setPositiveButton("确认放弃", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								finish();
+								cad.dismiss();
+							}
+						});
+						cad.setNegativeButton1("继续填写", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+					} else {
+						finish();
+					}
 					break;
 				case R.id.home_imgbtn:
-					final CustomerAlertDialog cad1 = new CustomerAlertDialog(
-							context, false);
-					cad1.setTitle("您的订单尚未完成，确认放弃填写吗？");
-					cad1.setPositiveButton("返回主页", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							startActivity(new Intent(context,
-									MainActivity.class));
-							cad1.dismiss();
-						}
-					});
-					cad1.setNegativeButton1("继续填写", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							cad1.dismiss();
-						}
-					});
+					if (!hasCommited) {
+						final CustomerAlertDialog cad1 = new CustomerAlertDialog(
+								context, false);
+						cad1.setTitle("您的订单尚未完成，确认放弃填写吗？");
+						cad1.setPositiveButton("返回主页", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								startActivity(new Intent(context,
+										MainActivity.class));
+								cad1.dismiss();
+							}
+						});
+						cad1.setNegativeButton1("继续填写", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad1.dismiss();
+							}
+						});
+					} else {
+						startActivity(new Intent(context, MainActivity.class));
+					}
 					break;
 				case R.id.lianxiren_icon_imgbtn:
 					startActivityForResult(
@@ -1031,7 +1043,17 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						});
 						break;
 					}
-					commitOrder();
+					if(!hasCommited)commitOrder();
+					else{
+						final CustomerAlertDialog cad3 = new CustomerAlertDialog(
+							context, true);
+						cad3.setTitle("请不要重复提交订单");
+						cad3.setPositiveButton("确定", new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+							cad3.dismiss();
+						}
+					});}
 					break;
 				default:
 					break;

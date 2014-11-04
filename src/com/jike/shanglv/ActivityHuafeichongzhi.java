@@ -404,6 +404,8 @@ public class ActivityHuafeichongzhi extends Activity {
 							+ "\",\"uid\":\""
 							+ sp.getString(SPkeys.userid.getString(), "")
 							+ "\",\"sid\":\"" + siteid + "\"}";
+					String orgin=ma.getHm().get(PackageKeys.ORGIN.getString())
+							.toString();
 					String param = "action=phoneorder&str="
 							+ str
 							+ "&userkey="
@@ -415,7 +417,7 @@ public class ActivityHuafeichongzhi extends Activity {
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "phoneorder" + str);
+									+ "phoneorder" + str)+"&orgin="+orgin;
 					commitReturnJson = HttpUtils.getJsonContent(
 							ma.getServeUrl(), param);
 					Message msg = new Message();

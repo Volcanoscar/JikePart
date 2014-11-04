@@ -336,6 +336,8 @@ public class ActivityInternationalRequisitionForm extends Activity {
 					// + "intdemand" + str)+"&str=" + str;
 					// commitReturnJson =
 					// HttpUtils.getJsonContent(ma.getServeUrl(),param);
+					String orgin=ma.getHm().get(PackageKeys.ORGIN.getString())
+							.toString();
 					String param = "?action=createDemandOrder&sitekey="
 							+ MyApp.sitekey
 							+ "&userkey="
@@ -345,7 +347,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "createDemandOrder" + str);
+									+ "createDemandOrder" + str)+"&orgin="+orgin;
 					// try {
 					// str=URLEncoder.encode(str, "utf-8");
 					// } catch (UnsupportedEncodingException e) {

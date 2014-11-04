@@ -345,6 +345,8 @@ public class ActivityTrainBooking extends Activity {
 							+ "\",\"TicketCount\":\"" + passengerList.size()
 							+ "\",\"PsgInfo\":" + getPassengers() + "}";
 					str = str.replace("null", "");
+					String orgin=ma.getHm().get(PackageKeys.ORGIN.getString())
+							.toString();
 					String param = "?action=trainorderv2&userkey="
 							+ ma.getHm().get(PackageKeys.USERKEY.getString())
 									.toString()
@@ -354,7 +356,7 @@ public class ActivityTrainBooking extends Activity {
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "trainorderv2" + str);
+									+ "trainorderv2" + str)+"&orgin="+orgin;
 					// try {
 					// str = URLEncoder.encode(str, "utf-8");
 					// } catch (UnsupportedEncodingException e) {

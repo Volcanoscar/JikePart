@@ -103,7 +103,6 @@ public class Activity_Login extends Activity {
 						SPkeys.lastUsername.getString(), ""));
 				password_input_et.setText(sp.getString(
 						SPkeys.lastPassword.getString(), ""));
-
 			}
 
 			autologin_checkbox_iv = (ImageView) findViewById(R.id.autologin_checkbox_iv);

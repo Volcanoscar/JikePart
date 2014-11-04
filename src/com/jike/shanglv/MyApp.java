@@ -60,28 +60,28 @@ public class MyApp {
 	}
 	/**获取火车票验证码接口的地址
 	 */
-	public String getValidcodeServeUrl() {
+	public String getValidcodeServeUrl(){
 		if(RELEASE)
 			return context.getResources().getString(R.string.formal_train_validcode);
 		else return context.getResources().getString(R.string.test_train_validcode);
 	}
 	/**获取航空公司logo
 	 */
-	public String getFlightCompanyLogo() {
+	public String getFlightCompanyLogo(){
 		if(RELEASE)
 			return context.getResources().getString(R.string.formal_flight_company_logo);
 		else return context.getResources().getString(R.string.test_flight_company_logo);
 	}
 	/**关于软件说明Url
 	 */
-	public String getAbout() {
+	public String getAbout(){
 		if(RELEASE)
 			return context.getResources().getString(R.string.formal_about);
 		else return context.getResources().getString(R.string.test_about);
 	}
 	/**获取update接口的地址
 	 */
-	public String getUpdateServeUrl() {
+	public String getUpdateServeUrl(){
 		if(RELEASE)
 			return context.getResources().getString(R.string.formal_update_url);
 		else return context.getResources().getString(R.string.test_update_url);
@@ -97,6 +97,9 @@ public class MyApp {
 		self_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike");
 		self_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
 		self_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"ffdd14d2e6c26b70749c8b2c08067c69":"5b13658a9fc945e34893f806027d467a");
+		self_hm.put(PackageKeys.ORGIN.getString(),0);//该参数加于20141104，用于区分订单、请求的来源
+		/*Android商旅管家0 Android商旅助手1 IOS商旅管家2 IOS商旅助手3  梦航 管家4  梦航 助手5*/
+		
 		//商旅助手
 		self_b_hm.put(PackageKeys.WELCOME_DRAWABLE.getString(), R.drawable.welcome_b);
 		self_b_hm.put(PackageKeys.APP_NAME.getString(), R.string.app_name_b);
@@ -104,6 +107,8 @@ public class MyApp {
 		self_b_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike_b");
 		self_b_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2B);
 		self_b_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"ffdd14d2e6c26b70749c8b2c08067c69":"5b13658a9fc945e34893f806027d467a");
+		self_hm.put(PackageKeys.ORGIN.getString(),1);
+		
 		//梦航商旅
 		menghang_hm.put(PackageKeys.WELCOME_DRAWABLE.getString(), R.drawable.welcome_menghang);
 		menghang_hm.put(PackageKeys.APP_NAME.getString(), R.string.app_name_menghang);
@@ -111,5 +116,6 @@ public class MyApp {
 		menghang_hm.put(PackageKeys.UPDATE_NOTE.getString(), "menghangshanglv");
 		menghang_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
 		menghang_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"fc5865a78e9cb8b3d63c5428d4d32a4c":"5b13658a9fc945e34893f806027d467a");
+		self_hm.put(PackageKeys.ORGIN.getString(),4);
 	}
 }
