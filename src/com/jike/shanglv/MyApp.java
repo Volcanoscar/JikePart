@@ -107,7 +107,7 @@ public class MyApp {
 		self_b_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike_b");
 		self_b_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2B);
 		self_b_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"ffdd14d2e6c26b70749c8b2c08067c69":"5b13658a9fc945e34893f806027d467a");
-		self_hm.put(PackageKeys.ORGIN.getString(),1);
+		self_b_hm.put(PackageKeys.ORGIN.getString(),1);
 		
 		//√Œ∫Ω…Ã¬√
 		menghang_hm.put(PackageKeys.WELCOME_DRAWABLE.getString(), R.drawable.welcome_menghang);
@@ -116,6 +116,6 @@ public class MyApp {
 		menghang_hm.put(PackageKeys.UPDATE_NOTE.getString(), "menghangshanglv");
 		menghang_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
 		menghang_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"fc5865a78e9cb8b3d63c5428d4d32a4c":"5b13658a9fc945e34893f806027d467a");
-		self_hm.put(PackageKeys.ORGIN.getString(),4);
+		menghang_hm.put(PackageKeys.ORGIN.getString(),4);
 	}
 }
