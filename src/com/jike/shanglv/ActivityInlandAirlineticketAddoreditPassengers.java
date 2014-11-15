@@ -278,13 +278,14 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 					// passenger.setGender(gender);
 					// passenger.setBirthDay(birthDay);
 					// passenger.setIDdeadline(IDdeadline);
-					passenger.setNation(nation_et.getText().toString());
-					passenger.setGender(gender_et.getText().toString());
-					passenger.setBirthDay(birthDay_et.getText().toString());
-					passenger.setIDdeadline(IDdeadline_et.getText().toString());
-					if (systype.equals("1"))
+					if (systype.equals("1")){
+						passenger.setNation(nation_et.getText().toString());
+						passenger.setGender(gender_et.getText().toString());
+						passenger.setBirthDay(birthDay_et.getText().toString());
+						passenger.setIDdeadline(IDdeadline_et.getText().toString());
 						issueAt = issueAt_et.getText().toString().trim();
-					passenger.setIssueAt(issueAt);
+						passenger.setIssueAt(issueAt);
+					}
 					if (passenger.getPassengerName().equals(null)
 							|| passenger.getPassengerName().trim().equals("")) {
 						passengerList.remove(index);
